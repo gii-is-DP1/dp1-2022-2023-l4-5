@@ -6,7 +6,7 @@
     <groupId>org.springframework.samples</groupId>
     <artifactId>G4-05</artifactId>
     <version>2.2.0.BUILD-SNAPSHOT</version>
-    
+
     <developers>
         <developer>
             <id>alesanfe</id>
@@ -15,6 +15,20 @@
             <roles>
                 <role>patata</role>
             </roles>
+        </developer>
+
+        <developer>
+            <id>Yuuta094</id>
+            <name>Iván</name>
+            <email>YvanSan094@gmail.com</email>
+            <roles>
+                <role>Youtuber</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://www.idlewp.com/wp-content/uploads/2022/04/zenitsu-wallpaper-idlewp.jpg
+                </picUrl>
+            </properties>
         </developer>
     </developers>
 
