@@ -6,6 +6,17 @@
     <groupId>org.springframework.samples</groupId>
     <artifactId>G4-05</artifactId>
     <version>2.2.0.BUILD-SNAPSHOT</version>
+    
+    <developers>
+        <developer>
+            <id>alesanfe</id>
+            <name>Alejandro</name>
+            <email>alex.0002002@gmail.com</email>
+            <roles>
+                <role>patata</role>
+            </roles>
+        </developer>
+    </developers>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
