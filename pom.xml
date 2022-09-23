@@ -30,6 +30,20 @@
                 </picUrl>
             </properties>
         </developer>
+
+        <developer>
+            <id>laurolmer</id>
+            <name>Laura</name>
+            <email>laurolmer@alum.us.es</email>
+            <roles>
+                <role>Ingenieran't</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://i.pinimg.com/236x/64/6d/8b/646d8bf5a4b2dc031d9e7d04124aafdd.jpg
+                </picUrl>
+            </properties>
+        </developer>
     </developers>
 
     <parent>
