@@ -44,7 +44,25 @@
                 </picUrl>
             </properties>
         </developer>
+
+        <developer>
+            <id>alvhidrod</id>
+            <name>Alvaro</name>
+            <email>alvhidrod@alum.us.es</email>
+            <roles>
+                <role>KikoRiveraEnjoyer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://www.lecturas.com/medio/2021/10/12/kiko-rivera_e5975b09_1280x720.jpg
+                </picUrl>
+            </properties>
+        </developer>
+
+
     </developers>
+
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
