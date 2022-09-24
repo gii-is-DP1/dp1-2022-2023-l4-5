@@ -10,7 +10,7 @@ INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 -- Pedro thats me
 INSERT INTO users(username,password,enabled) VALUES ('pedruiagu1','mondongo',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (4,'pedruiagu1','owner');
+INSERT INTO authorities(id,username,authority) VALUES (7,'pedruiagu1','owner');
 
 -- Yuuta094 owner user
 INSERT INTO users(username,password,enabled) VALUES ('ivasansan1','094y',TRUE);
