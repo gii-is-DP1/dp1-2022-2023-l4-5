@@ -99,3 +99,12 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+INSERT INTO capacities(id, state_capacity, less_damage) VALUES
+        (1, 'magic', false),
+        (2, 'remote', false),
+        (3, 'expertise', false),
+        (4, 'melee', false),
+        (5, 'magic', true),
+        (6, 'remote', true),
+        (7, 'expertise', true),
+        (8, 'melee', true);
