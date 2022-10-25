@@ -1,4 +1,4 @@
-package org.springframework.nt4h.web;
+package org.springframework.samples.petclinic.web;
 
 import java.util.Map;
 

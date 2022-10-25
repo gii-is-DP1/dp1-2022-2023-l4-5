@@ -1,4 +1,4 @@
-package org.springframework.nt4h.configuration;
+package org.springframework.samples.petclinic.configuration;
 
 import javax.sql.DataSource;
 

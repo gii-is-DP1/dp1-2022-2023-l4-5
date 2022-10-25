@@ -1,4 +1,4 @@
-package org.springframework.nt4h.card.enemy.orc;
+package org.springframework.samples.petclinic.card.enemy.orc;
 
 import lombok.Getter;
 import lombok.Setter;

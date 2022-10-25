@@ -1,4 +1,4 @@
-package org.springframework.nt4h.user;
+package org.springframework.samples.petclinic.user;
 
 import java.util.Set;
 

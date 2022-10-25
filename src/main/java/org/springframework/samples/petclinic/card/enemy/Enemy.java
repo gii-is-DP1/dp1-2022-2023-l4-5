@@ -1,4 +1,4 @@
-package org.springframework.nt4h.card.enemy;
+package org.springframework.samples.petclinic.card.enemy;
 
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.model.NamedEntity;

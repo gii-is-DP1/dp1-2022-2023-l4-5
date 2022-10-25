@@ -1,4 +1,4 @@
-package org.springframework.nt4h.effect;
+package org.springframework.samples.petclinic.effect;
 
 
 

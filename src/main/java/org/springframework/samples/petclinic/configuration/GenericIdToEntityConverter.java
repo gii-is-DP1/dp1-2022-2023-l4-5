@@ -1,11 +1,9 @@
-package org.springframework.nt4h.configuration;
+package org.springframework.samples.petclinic.configuration;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Converter;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 
 import org.slf4j.Logger;

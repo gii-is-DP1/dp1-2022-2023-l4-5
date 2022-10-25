@@ -1,4 +1,4 @@
-package org.springframework.nt4h.card.enemy.nightLord;
+package org.springframework.samples.petclinic.card.enemy.nightLord;
 
 import lombok.Getter;
 import lombok.Setter;

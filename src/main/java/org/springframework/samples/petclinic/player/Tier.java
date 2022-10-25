@@ -1,4 +1,4 @@
-package org.springframework.nt4h.player;
+package org.springframework.samples.petclinic.player;
 
 public enum Tier {
     IRON,

@@ -1,4 +1,4 @@
-package org.springframework.nt4h.pet;
+package org.springframework.samples.petclinic.pet;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;

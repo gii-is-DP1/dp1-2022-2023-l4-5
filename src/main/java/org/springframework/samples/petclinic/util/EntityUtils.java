@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.nt4h.util;
+package org.springframework.samples.petclinic.util;
 
 import java.util.Collection;
 

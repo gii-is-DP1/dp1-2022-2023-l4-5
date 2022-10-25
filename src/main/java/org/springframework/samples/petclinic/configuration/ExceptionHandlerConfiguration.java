@@ -1,4 +1,4 @@
-package org.springframework.nt4h.configuration;
+package org.springframework.samples.petclinic.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
