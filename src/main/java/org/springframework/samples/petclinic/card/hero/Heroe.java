@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.card.hero;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.notimeforheroes.enumm.Role;
+import org.springframework.samples.petclinic.enumm.Role;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;

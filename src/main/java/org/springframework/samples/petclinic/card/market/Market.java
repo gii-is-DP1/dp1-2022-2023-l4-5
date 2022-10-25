@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.card.market;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.notimeforheroes.model.NamedEntity;
+import org.springframework.samples.petclinic.model.NamedEntity;
 
 import javax.persistence.Entity;
 

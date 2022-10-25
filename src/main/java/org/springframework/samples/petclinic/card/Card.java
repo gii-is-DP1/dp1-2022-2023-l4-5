@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.card;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.notimeforheroes.model.NamedEntity;
+import org.springframework.samples.petclinic.model.NamedEntity;
 
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Min;

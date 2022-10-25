@@ -2,7 +2,7 @@ package org.springframework.samples.petclinic.player;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.notimeforheroes.model.NamedEntity;
+import org.springframework.samples.petclinic.model.NamedEntity;
 
 import javax.persistence.Entity;
 
