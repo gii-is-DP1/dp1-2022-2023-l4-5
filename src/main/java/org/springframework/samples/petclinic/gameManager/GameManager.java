@@ -40,4 +40,6 @@ public class GameManager extends BaseEntity {
     private String password;
 
     private Accesibility accessibility;
+
+    //faltan las relaciones
 }
