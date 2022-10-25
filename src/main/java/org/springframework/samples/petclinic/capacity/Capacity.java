@@ -12,6 +12,6 @@ import javax.persistence.Table;
 @Setter
 @Table(name = "capacities")
 public class Capacity extends BaseEntity {
-    private String stateCapacity;
+    private StateCapacity stateCapacity;
     private Boolean lessDamage;
 }
