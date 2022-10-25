@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.card.hero;
+package org.springframework.samples.petclinic.enumer;
 
 public enum Role {
     WIZARD,
