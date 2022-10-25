@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.user;
 
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
@@ -13,10 +14,13 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Set;
 
+
+
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
+
 public class User extends NamedEntity {
 
     @Column(unique = true)
@@ -38,6 +42,7 @@ public class User extends NamedEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
+
 
 
 }

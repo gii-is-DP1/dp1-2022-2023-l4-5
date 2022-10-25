@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.user;
 
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,7 +24,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
+
 import java.util.Map;
+
 
 /**
  * @author Juergen Hoeller
@@ -32,6 +36,7 @@ import java.util.Map;
  */
 @Controller
 public class UserController {
+
 
     private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
 
@@ -53,5 +58,6 @@ public class UserController {
             return "redirect:/";
         }
     }
+
 
 }
