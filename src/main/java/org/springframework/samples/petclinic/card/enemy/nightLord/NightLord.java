@@ -10,9 +10,5 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class NightLord extends Enemy {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
 
 }

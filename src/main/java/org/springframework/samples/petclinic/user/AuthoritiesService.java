@@ -45,7 +45,7 @@ public class AuthoritiesService {
 	public void saveAuthorities(Authorities authorities) throws DataAccessException {
 		authoritiesRepository.save(authorities);
 	}
-	
+
 	@Transactional
 	public void saveAuthorities(String username, String role) throws DataAccessException {
 		Authorities authority = new Authorities();
