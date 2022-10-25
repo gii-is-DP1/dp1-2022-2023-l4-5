@@ -41,5 +41,5 @@ public class GameManager extends BaseEntity {
 
     private Accesibility accessibility;
 
-    //faltan las relaciones
+    //faltan las relaciones.
 }
