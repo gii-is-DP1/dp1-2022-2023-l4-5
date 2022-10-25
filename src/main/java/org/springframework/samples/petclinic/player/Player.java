@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.samples.petclinic.card.ability.Ability;
 import org.springframework.samples.petclinic.card.hero.Heroe;
+import org.springframework.samples.petclinic.gameManager.GameManager;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
 import javax.persistence.*;
@@ -31,4 +32,7 @@ public class Player extends NamedEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Ability> abilities;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<GameManager> gameManagers;
 }
