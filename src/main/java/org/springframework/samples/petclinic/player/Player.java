@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 @Entity
 @Getter
 @Setter
-
 public class Player extends NamedEntity {
 
     private Integer gold;
