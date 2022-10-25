@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.enumm.Role;
+import org.springframework.samples.petclinic.card.hero.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
