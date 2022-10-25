@@ -16,13 +16,13 @@ import lombok.Setter;
 @Entity
 @Table(name = "authorities")
 public class Authorities extends BaseEntity{
-	
+
 	@ManyToOne
 	@JoinColumn(name = "username")
 	User user;
-	
+
 	@Size(min = 3, max = 50)
 	String authority;
-	
-	
+
+
 }

@@ -60,7 +60,7 @@ import org.springframework.stereotype.Service;
 class VetServiceTests {
 
 	@Autowired
-	protected VetService vetService;	
+	protected VetService vetService;
 
 	@Test
 	void shouldFindVets() {
