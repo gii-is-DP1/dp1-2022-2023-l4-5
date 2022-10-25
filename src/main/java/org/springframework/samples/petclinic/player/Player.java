@@ -21,20 +21,6 @@ public class Player extends NamedEntity {
     private Integer numOrcsKilled;
     private Integer numWarLordKilled;
 
-    //Getters
-    public Integer getGold() { return gold; }
-    public Integer getGlory() { return glory; }
-    public Boolean getEvasion() { return evasion; }
-    public Integer getNumOrcsKilled() { return numOrcsKilled; }
-    public Integer getNumWarLordKilled() { return numWarLordKilled; }
-
-    //Setters
-    public void setGold(Integer gold) { this.gold = gold; }
-    public void setGlory(Integer glory) { this.glory = glory; }
-    public void setEvasion(Boolean evasion) { this.evasion = evasion; }
-    public void setNumOrcsKilled(Integer numOrcsKilled) { this.numOrcsKilled = numOrcsKilled; }
-    public void setNumWarLordKilled(Integer numWarLordKilled) {this.numWarLordKilled = numWarLordKilled; }
-
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Heroe> heroe;
