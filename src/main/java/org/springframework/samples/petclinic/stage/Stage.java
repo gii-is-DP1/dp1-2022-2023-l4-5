@@ -18,4 +18,6 @@ public class Stage extends Card {
 
     @ManyToOne(optional=false)
     private GameManager gameManager2;
+
+    //a
 }
