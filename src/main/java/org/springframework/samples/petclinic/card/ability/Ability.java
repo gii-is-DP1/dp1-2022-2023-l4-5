@@ -32,5 +32,6 @@ public class Ability extends Card {
     @NotNull
     @Range(min = 0, max = 4)
     private Integer attack;
+    //sexo
 
 }
