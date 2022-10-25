@@ -7,6 +7,63 @@
     <artifactId>G4-05</artifactId>
     <version>2.2.0.BUILD-SNAPSHOT</version>
 
+    <developers>
+        <developer>
+            <id>alesanfe</id>
+            <name>Alejandro</name>
+            <email>alex.0002002@gmail.com</email>
+            <roles>
+                <role>patata</role>
+            </roles>
+        </developer>
+
+        <developer>
+            <id>Yuuta094</id>
+            <name>Iván</name>
+            <email>YvanSan094@gmail.com</email>
+            <roles>
+                <role>Youtuber</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://www.idlewp.com/wp-content/uploads/2022/04/zenitsu-wallpaper-idlewp.jpg
+                </picUrl>
+            </properties>
+        </developer>
+
+        <developer>
+            <id>laurolmer</id>
+            <name>Laura</name>
+            <email>laurolmer@alum.us.es</email>
+            <roles>
+                <role>Ingenieran't</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://i.pinimg.com/236x/64/6d/8b/646d8bf5a4b2dc031d9e7d04124aafdd.jpg
+                </picUrl>
+            </properties>
+        </developer>
+
+        <developer>
+            <id>alvhidrod</id>
+            <name>Alvaro</name>
+            <email>alvhidrod@alum.us.es</email>
+            <roles>
+                <role>KikoRiveraEnjoyer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://www.lecturas.com/medio/2021/10/12/kiko-rivera_e5975b09_1280x720.jpg
+                </picUrl>
+            </properties>
+        </developer>
+
+
+    </developers>
+
+
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
