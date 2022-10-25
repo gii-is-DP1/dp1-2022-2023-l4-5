@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.player;
+package org.springframework.nt4h.player;
 
 import lombok.Getter;
 import lombok.Setter;

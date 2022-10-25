@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.model;
+package org.springframework.nt4h.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

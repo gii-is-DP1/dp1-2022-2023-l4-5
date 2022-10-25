@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic;
+package org.springframework.nt4h;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

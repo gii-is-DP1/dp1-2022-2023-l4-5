@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.card.product;
+package org.springframework.nt4h.card.product;
 
 import lombok.Getter;
 import lombok.Setter;

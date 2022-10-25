@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.pet;
+package org.springframework.nt4h.pet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,12 +65,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class PetServiceTests {        
+class PetServiceTests {
         @Autowired
 	protected PetService petService;
-        
+
         @Autowired
-	protected OwnerService ownerService;	
+	protected OwnerService ownerService;
 
 	@Test
 	void shouldFindPetWithCorrectId() {
@@ -116,7 +116,7 @@ class PetServiceTests {
 		// checks that id has been generated
 		assertThat(pet.getId()).isNotNull();
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldThrowExceptionInsertingPetsWithTheSameName() {
@@ -128,20 +128,20 @@ class PetServiceTests {
 		pet.setBirthDate(LocalDate.now());
 		owner6.addPet(pet);
 		try {
-			petService.savePet(pet);		
+			petService.savePet(pet);
 		} catch (DuplicatedPetNameException e) {
 			// The pet already exists!
 			e.printStackTrace();
 		}
-		
-		Pet anotherPetWithTheSameName = new Pet();		
+
+		Pet anotherPetWithTheSameName = new Pet();
 		anotherPetWithTheSameName.setName("wario");
 		anotherPetWithTheSameName.setType(EntityUtils.getById(types, PetType.class, 1));
 		anotherPetWithTheSameName.setBirthDate(LocalDate.now().minusWeeks(2));
 		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
 			owner6.addPet(anotherPetWithTheSameName);
 			petService.savePet(anotherPetWithTheSameName);
-		});		
+		});
 	}
 
 	@Test
@@ -157,7 +157,7 @@ class PetServiceTests {
 		pet7 = this.petService.findPetById(7);
 		assertThat(pet7.getName()).isEqualTo(newName);
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldThrowExceptionUpdatingPetsWithTheSameName() {
@@ -168,25 +168,25 @@ class PetServiceTests {
 		pet.setType(EntityUtils.getById(types, PetType.class, 2));
 		pet.setBirthDate(LocalDate.now());
 		owner6.addPet(pet);
-		
-		Pet anotherPet = new Pet();		
+
+		Pet anotherPet = new Pet();
 		anotherPet.setName("waluigi");
 		anotherPet.setType(EntityUtils.getById(types, PetType.class, 1));
 		anotherPet.setBirthDate(LocalDate.now().minusWeeks(2));
 		owner6.addPet(anotherPet);
-		
+
 		try {
 			petService.savePet(pet);
 			petService.savePet(anotherPet);
 		} catch (DuplicatedPetNameException e) {
 			// The pets already exists!
 			e.printStackTrace();
-		}				
-			
+		}
+
 		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
 			anotherPet.setName("wario");
 			petService.savePet(anotherPet);
-		});		
+		});
 	}
 
 	@Test

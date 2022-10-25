@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.user;
+package org.springframework.nt4h.user;
 
 
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class UserService {
 		user.setEnabled(true);
 		userRepository.save(user);
 	}
-	
+
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
 	}

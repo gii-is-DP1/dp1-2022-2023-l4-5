@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.user;
+package org.springframework.nt4h.user;
 
 import java.util.Set;
 
@@ -18,11 +18,11 @@ import lombok.Setter;
 public class User{
 	@Id
 	String username;
-	
+
 	String password;
-	
+
 	boolean enabled;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Authorities> authorities;
 }

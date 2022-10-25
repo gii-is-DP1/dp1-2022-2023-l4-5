@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.card.market;
+package org.springframework.nt4h.card.market;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.pet;
+package org.springframework.nt4h.pet;
 
 /*
  * Copyright 2012-2019 the original author or authors.
@@ -57,7 +57,7 @@ class PetControllerTests {
 
 	@MockBean
 	private PetService petService;
-        
+
         @MockBean
 	private OwnerService ownerService;
 
@@ -113,7 +113,7 @@ class PetControllerTests {
 				.andExpect(status().isOk()).andExpect(model().attributeExists("pet"))
 				.andExpect(view().name("pets/createOrUpdatePetForm"));
 	}
-    
+
     @WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
@@ -125,7 +125,7 @@ class PetControllerTests {
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/owners/{ownerId}"));
 	}
-    
+
     @WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateFormHasErrors() throws Exception {

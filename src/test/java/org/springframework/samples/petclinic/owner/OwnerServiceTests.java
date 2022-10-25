@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.owner;
+package org.springframework.nt4h.owner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,7 +58,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class OwnerServiceTests {                
+class OwnerServiceTests {
         @Autowired
 	protected OwnerService ownerService;
 
@@ -96,8 +96,8 @@ class OwnerServiceTests {
                 user.setUsername("Sam");
                 user.setPassword("supersecretpassword");
                 user.setEnabled(true);
-                owner.setUser(user);                
-                
+                owner.setUser(user);
+
 		this.ownerService.saveOwner(owner);
 		assertThat(owner.getId().longValue()).isNotEqualTo(0);
 

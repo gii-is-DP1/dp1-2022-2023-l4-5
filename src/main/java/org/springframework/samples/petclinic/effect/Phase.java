@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.effect;
+package org.springframework.nt4h.effect;
 
 public enum Phase {
     HERO_ATTACK,

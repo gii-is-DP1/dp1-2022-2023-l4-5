@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.capacity;
+package org.springframework.nt4h.capacity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

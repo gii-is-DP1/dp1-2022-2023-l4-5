@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.vet;
+package org.springframework.nt4h.vet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,7 +60,7 @@ import org.springframework.stereotype.Service;
 class VetServiceTests {
 
 	@Autowired
-	protected VetService vetService;	
+	protected VetService vetService;
 
 	@Test
 	void shouldFindVets() {

@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.card.enemy.orc;
+package org.springframework.nt4h.card.enemy.orc;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,10 +12,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Entity
 public class Orc extends Enemy {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
 
     @NotNull
     @Range(min = 1, max = 4)

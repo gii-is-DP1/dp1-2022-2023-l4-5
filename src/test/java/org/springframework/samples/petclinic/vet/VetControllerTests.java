@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.vet;
+package org.springframework.nt4h.vet;
 
 import static org.hamcrest.xml.HasXPath.hasXPath;
 import static org.mockito.BDDMockito.given;

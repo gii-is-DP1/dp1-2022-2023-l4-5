@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.user;
+package org.springframework.nt4h.user;
 
 
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class AuthoritiesService {
 	public void saveAuthorities(Authorities authorities) throws DataAccessException {
 		authoritiesRepository.save(authorities);
 	}
-	
+
 	@Transactional
 	public void saveAuthorities(String username, String role) throws DataAccessException {
 		Authorities authority = new Authorities();

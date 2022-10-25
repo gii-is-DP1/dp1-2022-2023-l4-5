@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.owner;
+package org.springframework.nt4h.owner;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;

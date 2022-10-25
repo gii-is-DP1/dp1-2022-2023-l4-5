@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package org.springframework.nt4h.web;
 
 import javax.servlet.http.HttpSession;
 

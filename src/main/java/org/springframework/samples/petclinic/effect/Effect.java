@@ -1,6 +1,6 @@
-package org.springframework.samples.petclinic.effect;
+package org.springframework.nt4h.effect;
 
-import org.springframework.notimeforheroes.enumm.Phase;
+
 
 public abstract class Effect {
 

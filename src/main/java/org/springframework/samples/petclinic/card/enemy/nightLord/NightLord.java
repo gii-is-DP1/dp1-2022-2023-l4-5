@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.card.enemy.nightLord;
+package org.springframework.nt4h.card.enemy.nightLord;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +10,5 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class NightLord extends Enemy {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
 
 }

@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.pet;
+package org.springframework.nt4h.pet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

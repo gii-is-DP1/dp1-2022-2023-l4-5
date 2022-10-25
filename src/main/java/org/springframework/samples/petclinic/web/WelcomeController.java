@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package org.springframework.nt4h.web;
 
 import java.util.Map;
 
@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WelcomeController {
-	
-	
+
+
 	  @GetMapping({"/","/welcome"})
-	  public String welcome(Map<String, Object> model) {	    
+	  public String welcome(Map<String, Object> model) {
 
 	    return "welcome";
 	  }

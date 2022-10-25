@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.configuration;
+package org.springframework.nt4h.configuration;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,11 +23,11 @@ public final class GenericIdToEntityConverter implements ConditionalGenericConve
     private static final Logger log = LoggerFactory.getLogger(GenericIdToEntityConverter.class);
 
     private final ConversionService conversionService=new DefaultConversionService();
-    
+
     @Autowired(required = false)
     private EntityManager entityManager;
 
-        
+
 
     public Set<ConvertiblePair> getConvertibleTypes() {
     	Set<ConvertiblePair> result=new HashSet<ConvertiblePair>();

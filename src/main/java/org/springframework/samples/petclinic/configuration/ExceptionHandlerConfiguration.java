@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.configuration;
+package org.springframework.nt4h.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * It's not ideal, but at least we can use classic MockMvc tests for testing error response + document it.
  */
 @ControllerAdvice
-public class ExceptionHandlerConfiguration 
+public class ExceptionHandlerConfiguration
 {
 	@Autowired
 	private BasicErrorController errorController;
