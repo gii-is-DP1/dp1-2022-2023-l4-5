@@ -1,20 +1,21 @@
 package org.springframework.samples.petclinic.user;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.achievement.Achievement;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.Tier;
-import org.springframework.samples.petclinic.statistic.Historic;
+import org.springframework.samples.petclinic.statistic.Statistic;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
-
-
 
 @Getter
 @Setter
@@ -23,6 +24,7 @@ import java.util.Set;
 
 public class User extends NamedEntity {
 
+    //Propiedades
     @Column(unique = true)
     private String username;
 
@@ -31,18 +33,23 @@ public class User extends NamedEntity {
 
     private Tier tier;
 
-    @NotBlank
+    @NotEmpty
     private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Historic> historic;
-
+    //Relaciones
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Achievement> achievements;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Player players;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Statistic statistics;
 
 }

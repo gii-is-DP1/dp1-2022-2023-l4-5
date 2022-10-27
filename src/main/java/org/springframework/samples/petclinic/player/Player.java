@@ -2,10 +2,12 @@ package org.springframework.samples.petclinic.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.card.ability.Ability;
 import org.springframework.samples.petclinic.card.hero.Heroe;
 import org.springframework.samples.petclinic.gameManager.GameManager;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.statistic.Statistic;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -24,7 +26,9 @@ public class Player extends NamedEntity {
     private Boolean evasion;
     private Integer numOrcsKilled;
     private Integer numWarLordKilled;
-    private Integer  order;
+    private Integer order;
+    @Range(min = 1, max = 5 )
+    private Integer position;
 
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL)
@@ -33,6 +37,6 @@ public class Player extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Ability> abilities;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<GameManager> gameManagers;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Statistic statistics;
 }
