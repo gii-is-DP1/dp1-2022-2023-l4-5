@@ -14,17 +14,18 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Set;
 
-
-
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-
 public class User extends NamedEntity {
 
     @Column(unique = true)
     private String username;
+
+    private String password;
+
+    private String enable;
 
     @URL
     private String avatar;
@@ -34,6 +35,9 @@ public class User extends NamedEntity {
     @NotBlank
     private String description;
 
+    @NotBlank
+    private String authority;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
 
@@ -42,7 +46,4 @@ public class User extends NamedEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
-
-
-
 }

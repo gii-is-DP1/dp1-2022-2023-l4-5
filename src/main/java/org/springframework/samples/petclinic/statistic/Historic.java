@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+// Eliminar
 @Entity
 @Getter
 @Setter

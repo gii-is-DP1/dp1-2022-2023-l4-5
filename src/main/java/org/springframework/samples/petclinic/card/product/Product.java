@@ -13,17 +13,11 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-
+@Table(name = "products")
 public class Product extends Card {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
-    private Integer id;
-
-    @Range (min=3, max=8)
+    @Range(min = 3, max = 8)
     private Integer price;
-    @Range(min=0, max=4)
+    @Range(min = 0, max = 4)
     private Integer attack;
     @OneToOne(optional = false)
     private Ability ability;
