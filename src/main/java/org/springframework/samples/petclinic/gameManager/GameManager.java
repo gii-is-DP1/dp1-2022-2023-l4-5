@@ -9,11 +9,9 @@ import org.springframework.samples.petclinic.enumer.Accesibility;
 import org.springframework.samples.petclinic.enumer.NumHeroes;
 import org.springframework.samples.petclinic.enumer.Phase;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.player.Player;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -54,4 +52,6 @@ public class GameManager extends BaseEntity {
     private List<Orc> orcosEnDeck;
     @OneToOne(cascade = CascadeType.ALL)
     private NightLord señoresDeLaGuerra;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Player> jugadores;
 }
