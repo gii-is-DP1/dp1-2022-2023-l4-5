@@ -3,15 +3,21 @@ package org.springframework.samples.petclinic.gameManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.samples.petclinic.card.enemy.nightLord.NightLord;
+import org.springframework.samples.petclinic.card.enemy.orc.Orc;
 import org.springframework.samples.petclinic.enumer.Accesibility;
 import org.springframework.samples.petclinic.enumer.NumHeroes;
 import org.springframework.samples.petclinic.enumer.Phase;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,5 +47,11 @@ public class GameManager extends BaseEntity {
 
     private Accesibility accessibility;
 
-    //faltan las relaciones.
+    //Relaciones.
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Orc> orcosActivos;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Orc> orcosEnDeck;
+    @OneToOne(cascade = CascadeType.ALL)
+    private NightLord señoresDeLaGuerra;
 }
