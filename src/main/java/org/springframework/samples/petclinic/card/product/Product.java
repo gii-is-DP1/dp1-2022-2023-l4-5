@@ -21,9 +21,9 @@ public class Product extends Card {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Range (min=3, max=8)
+    @Range(min = 3, max = 8)
     private Integer price;
-    @Range(min=0, max=4)
+    @Range(min = 0, max = 4)
     private Integer attack;
     @OneToOne(optional = false)
     private Ability ability;

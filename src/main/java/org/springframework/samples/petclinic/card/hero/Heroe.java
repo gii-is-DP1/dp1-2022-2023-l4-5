@@ -8,6 +8,7 @@ import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.enumer.Role;
 import org.springframework.samples.petclinic.card.ability.Ability;
 import org.springframework.samples.petclinic.card.enemy.Enemy;
+import org.springframework.samples.petclinic.enumer.Role;
 
 
 import javax.persistence.CascadeType;
