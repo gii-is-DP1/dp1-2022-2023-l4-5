@@ -1,7 +1,7 @@
 package org.springframework.samples.petclinic.card.enemy;
 
 import org.hibernate.validator.constraints.Range;
-import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.card.hero.Heroe;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -27,4 +27,8 @@ public class Enemy {
     @NotNull
     @Range(min = 2, max = 10)
     private Integer attack;
+
+    //Relaciones
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Heroe heroes;
 }

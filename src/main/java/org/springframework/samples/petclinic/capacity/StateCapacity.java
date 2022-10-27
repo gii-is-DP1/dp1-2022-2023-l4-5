@@ -4,5 +4,5 @@ public enum StateCapacity {
     MELEE,
     RANGED,
     MAGIC,
-    EXPERTISE;
+    EXPERTISE
 }

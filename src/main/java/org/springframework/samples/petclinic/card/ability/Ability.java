@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.card.hero.Role;
+import org.springframework.samples.petclinic.enumer.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -32,4 +32,5 @@ public class Ability extends Card {
     @NotNull
     @Range(min = 0, max = 4)
     private Integer attack;
+
 }
