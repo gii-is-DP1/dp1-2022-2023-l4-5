@@ -5,21 +5,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.enumer.Role;
+import org.springframework.samples.petclinic.card.hero.Role;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "abilities")
 public class Ability extends Card {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
-    private Integer id;
 
     @NotNull
     @NotEmpty

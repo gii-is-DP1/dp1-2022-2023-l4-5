@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.configuration;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,9 +8,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.sql.DataSource;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,21 +31,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
-				.antMatchers("/users/new").permitAll()
-				.antMatchers("/session/**").permitAll()
+        http.authorizeRequests()
+            .antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+            .antMatchers("/users/new").permitAll()
+            .antMatchers("/session/**").permitAll()
             .antMatchers("/capacities/**").permitAll()
-				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
-				.antMatchers("/vets/**").authenticated()
-				.anyRequest().denyAll()
-				.and()
-				 	.formLogin()
-				 	/*.loginPage("/login")*/
-				 	.failureUrl("/login-error")
-				.and()
+            .antMatchers("/admin/**").hasAnyAuthority("DOKTOL")
+            .antMatchers("/owners/**").hasAnyAuthority("DOKTOL")
+            .antMatchers("/vets/**").authenticated()
+            .anyRequest().denyAll()
+            .and()
+            .formLogin()
+            /*.loginPage("/login")*/
+            .failureUrl("/login-error")
+            .and()
 					.logout()
 						.logoutSuccessUrl("/");
                 // Configuración para que funcione la consola de administración
@@ -62,20 +61,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.jdbcAuthentication()
 	      .dataSource(dataSource)
 	      .usersByUsernameQuery(
-	       "select username,password,enabled "
+              "select username,password, enable "
 	        + "from users "
 	        + "where username = ?")
 	      .authoritiesByUsernameQuery(
-	       "select username, authority "
-	        + "from authorities "
-	        + "where username = ?")
+              "select username, authority "
+                  + "from users "
+                  + "where username = ?")
 	      .passwordEncoder(passwordEncoder());
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();
-	    return encoder;
+        return NoOpPasswordEncoder.getInstance();
 	}
 
 }
