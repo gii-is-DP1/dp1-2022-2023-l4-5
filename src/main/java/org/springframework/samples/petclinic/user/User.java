@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Tier;
 import org.springframework.samples.petclinic.statistic.Historic;
 
@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users")
-public class User extends NamedEntity {
+public class User extends BaseEntity {
 
     @Column(unique = true)
     private String username;

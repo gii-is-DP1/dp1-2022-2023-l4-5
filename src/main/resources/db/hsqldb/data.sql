@@ -1,8 +1,13 @@
 -- Creación de usuarios.
 INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable)
-VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg',
-        0, 'I am a description', 'DOKTOL', '2002-02-01', 1);
+VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'I am a description', 'DOKTOL', '2002-02-01', 1),
+       ('antonio', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'I am a description', 'DOKTOL', '2002-02-01', 1);
 
+INSERT INTO message(id, content, time, receiver_id, sender_id)
+VALUES (1, 'Hola, soy Alesanfe', '2020-02-01 12:00:00', 1, 2),
+       (2, 'Hola, soy Antonio', '2020-02-01 12:00:00', 2, 1);
 -- Creación de capacidades.
 INSERT INTO capacities(id, state_capacity, less_damage)
 VALUES (1, 0, false),
