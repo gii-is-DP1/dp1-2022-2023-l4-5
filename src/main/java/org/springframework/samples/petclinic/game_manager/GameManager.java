@@ -37,7 +37,7 @@ public class GameManager extends BaseEntity {
     @NotEmpty
     private String password;
 
-    private Accesibility accessibility;
+    private Accessibility accessibility;
 
     //faltan las relaciones.
 }

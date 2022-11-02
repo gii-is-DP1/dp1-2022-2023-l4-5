@@ -20,17 +20,17 @@ import java.util.Set;
 @Table(name = "players")
 public class Player extends NamedEntity {
 
-    //Propiedades
     private Integer gold;
     private Integer glory;
     private Boolean evasion;
     private Integer numOrcsKilled;
     private Integer numWarLordKilled;
-    private Integer order;
+    private Integer sequence;
 
     // Reducir número de relaciones.
 
     //Relaciones
+
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Heroe> heroes;
 
@@ -39,4 +39,7 @@ public class Player extends NamedEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<GameManager> gameManagers;
+
+    //Propiedades
+
 }

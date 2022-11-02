@@ -20,10 +20,6 @@ public class Ability extends Card {
 
     @NotNull
     @NotEmpty
-    private String name;
-
-    @NotNull
-    @NotEmpty
     private Role role;
 
     @NotNull
