@@ -28,4 +28,9 @@ public class Message extends BaseEntity {
     @ManyToOne
     private User receiver;
 
+    @Override
+    public String toString() {
+        return sender.getUsername() + ": " + content;
+    }
+
 }
