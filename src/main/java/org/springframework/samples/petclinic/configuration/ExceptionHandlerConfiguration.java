@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * It's not ideal, but at least we can use classic MockMvc tests for testing error response + document it.
  */
 @ControllerAdvice
-public class ExceptionHandlerConfiguration 
+public class ExceptionHandlerConfiguration
 {
 	@Autowired
 	private BasicErrorController errorController;
