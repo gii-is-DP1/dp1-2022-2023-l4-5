@@ -37,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/users/new").permitAll()
             .antMatchers("/session/**").permitAll()
             .antMatchers("/capacities/**").permitAll()
-            .antMatchers("/message/send").permitAll()
+            .antMatchers("/message/**").authenticated()
             .antMatchers("/admin/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/owners/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/vets/**").authenticated()
@@ -47,8 +47,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             /*.loginPage("/login")*/
             .failureUrl("/login-error")
             .and()
-					.logout()
-						.logoutSuccessUrl("/");
+            .logout()
+            .logoutSuccessUrl("/");
                 // Configuración para que funcione la consola de administración
                 // de la BD H2 (deshabilitar las cabeceras de protección contra
                 // ataques de tipo csrf y habilitar los framesets si su contenido
