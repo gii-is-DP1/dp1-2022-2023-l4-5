@@ -37,12 +37,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/users/new").permitAll()
             .antMatchers("/session/**").permitAll()
             .antMatchers("/capacities/**").permitAll()
-            .antMatchers("/message/send").permitAll()
             .antMatchers("/message/**").authenticated()
             .antMatchers("/admin/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/owners/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/vets/**").authenticated()
-            .anyRequest().denyAll()
+            // .anyRequest().denyAll()
             .and()
             .formLogin()
             /*.loginPage("/login")*/
