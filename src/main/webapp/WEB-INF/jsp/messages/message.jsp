@@ -41,6 +41,7 @@
         });
     }
 
+    console.log("hola")
     username = window.location.pathname.split("/")[2];
 
     reset('/message/update/' + username, function (responseText) {
