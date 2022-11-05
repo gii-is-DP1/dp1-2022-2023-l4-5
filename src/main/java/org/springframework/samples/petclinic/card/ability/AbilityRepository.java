@@ -13,7 +13,6 @@ public interface AbilityRepository {
 
     Ability findById(Integer id);
     List<Ability> findAllAbilityCard();
-
     @Query("SELECT a FROM Ability a WHERE a.name=:name")
     List<Ability> findAllAbilityCardByName(String name);
 }

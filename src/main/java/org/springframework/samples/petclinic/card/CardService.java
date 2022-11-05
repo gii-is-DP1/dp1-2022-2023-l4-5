@@ -15,6 +15,5 @@ public class CardService {
     public Optional<Card> getHeroeById(Integer id){return cardRepository.findById(id); }
     public List<Card> getAllHeroeCards(){ return cardRepository.findAllCards(); }
     public Card getAllHeroeCardsByName(String name){ return cardRepository.findCardByName(name); }
-
 }
 

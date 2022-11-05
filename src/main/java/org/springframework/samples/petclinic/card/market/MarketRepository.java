@@ -15,9 +15,4 @@ public interface MarketRepository extends CrudRepository<Market, Integer> {
 
     @Query("SELECT m FROM Market m WHERE m.name=:name")
     List<Market> findAllMarketCardByName(String name);
-
-
-
-
-
 }

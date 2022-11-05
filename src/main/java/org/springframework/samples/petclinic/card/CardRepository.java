@@ -13,8 +13,4 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
     Card findCardByName (String name);
     List<Card> findAllCards();
     Optional<Card> findById(Integer id);
-
-
-
-
 }

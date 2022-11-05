@@ -15,5 +15,4 @@ public class HeroeService {
     public Heroe getHeroeById(Integer id){return heroeRepository.findById(id); }
     public List<Heroe> getAllHeroeCards(){ return heroeRepository.findAllHeroCard(); }
     public List<Heroe> getAllHeroeCardsByName(String name){ return heroeRepository.findAllHeroCardByName(name); }
-
 }

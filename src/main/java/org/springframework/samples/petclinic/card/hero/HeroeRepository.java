@@ -14,4 +14,5 @@ public interface HeroeRepository {
     List<Heroe> findAllHeroCard();
     @Query("SELECT h FROM Heroe h WHERE h.name=:name")
     List<Heroe> findAllHeroCardByName(String name);
+
 }
