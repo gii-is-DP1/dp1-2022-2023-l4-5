@@ -37,17 +37,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/users/new").permitAll()
             .antMatchers("/session/**").permitAll()
             .antMatchers("/capacities/**").permitAll()
+            .antMatchers("/message/send").permitAll()
             .antMatchers("/admin/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/owners/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/vets/**").authenticated()
-            .anyRequest().denyAll()
+            // .anyRequest().denyAll()
             .and()
             .formLogin()
             /*.loginPage("/login")*/
             .failureUrl("/login-error")
             .and()
-					.logout()
-						.logoutSuccessUrl("/");
+            .logout()
+            .logoutSuccessUrl("/");
                 // Configuración para que funcione la consola de administración
                 // de la BD H2 (deshabilitar las cabeceras de protección contra
                 // ataques de tipo csrf y habilitar los framesets si su contenido
@@ -73,8 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();
-	    return encoder;
+        return NoOpPasswordEncoder.getInstance();
 	}
 
 }

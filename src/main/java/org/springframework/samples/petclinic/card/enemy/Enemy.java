@@ -1,8 +1,8 @@
 package org.springframework.samples.petclinic.card.enemy;
 
 import org.hibernate.validator.constraints.Range;
-import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.card.hero.Heroe;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
