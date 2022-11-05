@@ -1,6 +1,9 @@
 package org.springframework.samples.petclinic.message;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +35,8 @@ public class MessageController {
         UserDetails ud = null;
         if (principal instanceof UserDetails)
             ud = ((UserDetails) principal);
+
+        model.addAttribute("receiver", username);
         model.addAttribute("chat", new Message());
         model.addAttribute("messages", messageService.getBySenderWithReceiver(ud.getUsername(), username));
         return "messages/message";
@@ -39,9 +44,6 @@ public class MessageController {
 
     @PostMapping("/message/{username}")
     public String sendMessage(@Valid Message message, @PathVariable String username, BindingResult result) {
-        System.out.println("MessageController.sendMessage");
-        if (result.hasErrors())
-            System.out.println("Error");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails ud = null;
         if (principal instanceof UserDetails)
@@ -54,18 +56,16 @@ public class MessageController {
         return "redirect:/message/{username}";
     }
 
-    /*
-    @GetMapping("/message")
-    public ResponseEntity<String> showMessages() {
-        System.out.println("MessageController.showMessages");
+    @GetMapping("/message/update/{username}")
+    public ResponseEntity<String> updateMessages(@PathVariable String username) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = null;
-        if (principal instanceof User) {
-            user = (User) principal;
-        }
+        UserDetails ud = null;
+        if (principal instanceof UserDetails)
+            ud = ((UserDetails) principal);
         JsonObject jsonObject = new JsonObject();
-        jsonObject.put("messages", messageService.getBySenderOrReceiver(user.getId()));
+        jsonObject.put("messages", messageService.getBySenderWithReceiver(ud.getUsername(), username).stream()
+            .map(Message::toString).toArray());
+        System.out.println(jsonObject.toJson());
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
-     */
 }
