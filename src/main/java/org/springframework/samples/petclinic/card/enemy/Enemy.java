@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.card.enemy;
 
 import org.hibernate.validator.constraints.Range;
+import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.hero.Heroe;
 
 import javax.persistence.*;
@@ -10,15 +11,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Enemy {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    protected Integer id;
-
-    @Size(min = 3, max = 50)
-    @Column(name = "name")
-    private String name;
+public class Enemy extends Card {
 
     @NotNull
     @Max(value = 10)
