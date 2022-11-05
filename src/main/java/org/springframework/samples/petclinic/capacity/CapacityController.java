@@ -25,7 +25,6 @@ public class CapacityController {
 
     @Autowired
     public CapacityController(CapacityService capacityService) {
-        System.out.println("CapacityController");
         this.capacityService = capacityService;
     }
 

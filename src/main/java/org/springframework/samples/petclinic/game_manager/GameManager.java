@@ -1,11 +1,9 @@
-package org.springframework.samples.petclinic.gameManager;
+package org.springframework.samples.petclinic.game_manager;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.samples.petclinic.enumer.Accesibility;
-import org.springframework.samples.petclinic.enumer.NumHeroes;
-import org.springframework.samples.petclinic.enumer.Phase;
+import org.springframework.samples.petclinic.effect.Phase;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 import javax.persistence.Entity;
@@ -39,7 +37,7 @@ public class GameManager extends BaseEntity {
     @NotEmpty
     private String password;
 
-    private Accesibility accessibility;
+    private Accessibility accessibility;
 
     //faltan las relaciones.
 }
