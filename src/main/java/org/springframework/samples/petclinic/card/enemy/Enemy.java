@@ -17,10 +17,6 @@ public class Enemy extends Card {
     @Max(value = 10)
     private Integer health;
 
-    @NotNull
-    @Range(min = 2, max = 10)
-    private Integer attack;
-
     //Relaciones
     @ManyToOne(cascade = CascadeType.ALL)
     private Heroe heroes;
