@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Table(name = "cards")
 public class Card extends NamedEntity {
+
     @NotEmpty
     @URL
     private String backImage;

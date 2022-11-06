@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Tier;
-import org.springframework.samples.petclinic.statistic.Historic;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -40,9 +39,6 @@ public class User extends BaseEntity {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Historic> historic;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
