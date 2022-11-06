@@ -42,4 +42,4 @@ public class User extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
-}
+    }

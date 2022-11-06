@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Heroe extends Card {
+public class Hero extends Card {
 
     @NotNull
     private Integer health;
