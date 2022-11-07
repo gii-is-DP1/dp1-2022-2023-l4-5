@@ -10,9 +10,9 @@ public class RetrieveCards extends Effect {
     public boolean useEffect(Player player) {
 
         for (int i = 0; i < quantity; i++) {
-            var card = player.getInDiscard().get(0);
-            player.getInDiscard().remove(card);
-            player.getInDeck().add(card);
+            var abilityInGame = player.getInDiscard().get(0);
+            player.getInDiscard().remove(abilityInGame);
+            player.getInDeck().add(abilityInGame);
         }
         return true;
     }

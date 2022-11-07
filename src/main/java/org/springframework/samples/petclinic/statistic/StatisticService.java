@@ -9,11 +9,11 @@ public class StatisticService {
 
     private final StatisticRepository statisticRepository;
 
-    public Statistic findStatisticById(int id) {
+    public Statistic getStatisticById(int id) {
         return statisticRepository.findById(id).orElse(null);
     }
 
-    public Iterable<Statistic> findAllStatistics() {
+    public Iterable<Statistic> getAllStatistics() {
         return statisticRepository.findAll();
     }
 

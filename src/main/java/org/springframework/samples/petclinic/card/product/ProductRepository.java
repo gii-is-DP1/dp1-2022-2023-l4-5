@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.card.product;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
     Optional<Product> findById(int id);
 
     List<Product> findAll();
+
+    @Query("SELECT p FROM Product p WHERE p.quantity > 0")
+    List<Product> findWhatIsAvailable();
 }

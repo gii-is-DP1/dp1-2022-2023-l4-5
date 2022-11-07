@@ -6,21 +6,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
-public class AchivementService {
+public class AchievementService {
     private final AchievementRepository achievementRepository;
 
     @Transactional(readOnly = true)
-    public Achievement findAchievementByName(String name) {
+    public Achievement getAchievementByName(String name) {
         return achievementRepository.findByName(name).orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public Achievement findAchievementById(int id) {
+    public Achievement getAchievementById(int id) {
         return achievementRepository.findById(id).orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Achievement> findAllAchievements() {
+    public Iterable<Achievement> getAllAchievements() {
         return achievementRepository.findAll();
     }
 

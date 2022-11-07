@@ -7,6 +7,7 @@ import java.util.Optional;
 
 @Repository
 public interface CapacityRepository extends CrudRepository<Capacity, Integer> {
-    Optional<Capacity> findByStateCapacity(String name);
+    Optional<Capacity> findByStateCapacity(StateCapacity stateCapacity);
+
     Optional<Capacity> findById(int id);
 }

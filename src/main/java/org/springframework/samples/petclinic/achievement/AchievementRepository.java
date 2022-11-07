@@ -3,12 +3,15 @@ package org.springframework.samples.petclinic.achievement;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface AchievementRepository extends CrudRepository<Achievement, Integer> {
-    java.util.Optional<Achievement> findByName(String name);
+    Optional<Achievement> findByName(String name);
 
-    java.util.Optional<Achievement> findById(int id);
+    Optional<Achievement> findById(int id);
 
-    java.util.List<Achievement> findAll();
+    List<Achievement> findAll();
 }
 

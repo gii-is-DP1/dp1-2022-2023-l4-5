@@ -1,13 +1,14 @@
 package org.springframework.samples.petclinic.effect;
 
 
-import org.springframework.samples.petclinic.card.enemy.Enemy;
-import org.springframework.samples.petclinic.card.hero.Hero;
+import org.springframework.samples.petclinic.card.ability.AbilityInGame;
+import org.springframework.samples.petclinic.card.enemy.EnemyInGame;
+import org.springframework.samples.petclinic.card.hero.HeroInGame;
 import org.springframework.samples.petclinic.player.Player;
 
 public abstract class Effect {
 
-    private Phase phase;
+    public Phase phase;
 
     boolean useEffect() {
         return false;
@@ -17,15 +18,24 @@ public abstract class Effect {
         return false;
     }
 
-    boolean UseEffect(Enemy enemy) {
+    boolean useEffect(Player player, EnemyInGame enemyInGame) {
         return false;
     }
 
-    boolean useEffect(Player player, Enemy enemy) {
+    boolean useEffect(HeroInGame... herosInGame) {
         return false;
     }
 
-    boolean useEffect(Hero... heros) {
+
+    boolean useEffect(Player player, EnemyInGame... enemiesInGame) {
+        return false;
+    }
+
+    boolean useEffect(Player player, EnemyInGame enemyInGame, AbilityInGame abilityInGame) {
+        return false;
+    }
+
+    boolean useEffect(HeroInGame heroesInGame) {
         return false;
     }
 }

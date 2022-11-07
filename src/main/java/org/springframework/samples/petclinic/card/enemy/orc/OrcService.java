@@ -10,12 +10,12 @@ public class OrcService {
     private final OrcRepository orcRepository;
 
     @Transactional(readOnly = true)
-    public Orc findOrcByName(String name) {
+    public Orc getOrcByName(String name) {
         return orcRepository.findByName(name).orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Orc> findAllOrcs() {
+    public Iterable<Orc> getAllOrcs() {
         return orcRepository.findAll();
     }
 

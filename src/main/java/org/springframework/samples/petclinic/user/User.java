@@ -10,6 +10,7 @@ import org.springframework.samples.petclinic.player.Tier;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
@@ -19,16 +20,19 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity {
 
+    @NotNull
     @Column(unique = true)
-    private String username;
+    private String username; // decidir un tamaño.
 
-    private String password;
+
+    private String password; // Decidir un tamaño.
 
     private String enable;
 
     @URL
     private String avatar;
 
+    @Enumerated(EnumType.STRING)
     private Tier tier;
 
     @NotBlank
@@ -37,7 +41,7 @@ public class User extends BaseEntity {
     @NotBlank
     private String authority;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private Date birthDate;
 
     @OneToMany(cascade = CascadeType.ALL)
