@@ -17,10 +17,13 @@ import java.util.Collection;
 public class Product extends Card {
     @Range(min = 3, max = 8)
     private Integer price;
+
     @Range(min = 0, max = 4)
     private Integer attack;
+
     @OneToOne(optional = false)
     private Ability ability;
+
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<Capacity> capacity;
 }
