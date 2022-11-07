@@ -17,7 +17,7 @@ public class GetGoldFromKilling extends Effect {
     @Override
     public boolean useEffect(Player player, EnemyInGame enemyInGame, AbilityInGame abilityInGame) {
         var ability = abilityInGame.getAbility();
-        var enemy = enemyInGame.getEnemy();
+        var enemy = enemyInGame.isNightLord() ? enemyInGame.getNightLord() : enemyInGame.getOrc();
         if (enemy.getHealth() - ability.getAttack() <= 0 && !abilities.contains(ability)) {
             abilities.add(ability);
             player.setGold(player.getGold() + gold);

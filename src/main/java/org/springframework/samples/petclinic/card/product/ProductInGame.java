@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Setter
 @Table(name = "products_in_game")
 public class ProductInGame extends NamedEntity {
-    @Column(columnDefinition = "default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer timesUsed;
 
     // El producto.

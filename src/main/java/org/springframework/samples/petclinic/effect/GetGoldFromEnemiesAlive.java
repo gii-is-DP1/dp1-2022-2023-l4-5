@@ -12,8 +12,7 @@ public class GetGoldFromEnemiesAlive extends Effect {
     @Override
     public boolean useEffect(Player player, EnemyInGame... enemiesInGame) {
         player.setGold((int) (player.getGold() + Arrays.stream(enemiesInGame)
-            .map(EnemyInGame::getEnemy)
-            .filter(enemy -> enemy.getHealth() > 0).count()));
+            .filter(enemy -> enemy.getActualHealth() > 0).count()));
         return true;
     }
 }

@@ -2,6 +2,8 @@ package org.springframework.samples.petclinic.card.enemy;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.samples.petclinic.card.enemy.night_lord.NightLord;
+import org.springframework.samples.petclinic.card.enemy.orc.Orc;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 import javax.persistence.Entity;
@@ -19,6 +21,12 @@ public class EnemyInGame extends BaseEntity {
     @Max(value = 10)
     private Integer actualHealth;
 
+    private boolean isNightLord;
+
+    // Consultar
     @ManyToOne
-    private Enemy enemy;
+    private Orc orc;
+
+    @ManyToOne
+    private NightLord nightLord;
 }

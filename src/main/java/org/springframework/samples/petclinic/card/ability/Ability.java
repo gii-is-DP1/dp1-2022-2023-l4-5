@@ -28,4 +28,6 @@ public class Ability extends Card {
 
     @ManyToMany
     private List<Hero> hero;
+
+    private Integer quantity;
 }
