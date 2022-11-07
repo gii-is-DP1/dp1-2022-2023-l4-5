@@ -3,7 +3,17 @@ INSERT INTO users(username, password, avatar, tier, description, authority, birt
 VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'I am a description', 'DOKTOL', '2002-02-01', 1),
        ('antonio', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 'DOKTOL', '2002-02-01', 1);
+        'I am a description', 'DOKTOL', '2002-02-01', 1),
+       ('laurolmer', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'awanabumbambam', 'DOKTOL', '2002-08-21', 1),
+       ('alvhidrod', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'drakorion', 'DOKTOL', '2002-02-23', 1),
+       ('ismruijur', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'er jefe brrr', 'DOKTOL', '2002-10-27', 1),
+       ('ivasansan1', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'bético encubierto', 'DOKTOL', '2002-11-12', 1),
+       ('pedruiagu', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'sácame del bolsillo', 'DOKTOL', '2002-10-01', 1);
 
 INSERT INTO message(id, content, time, receiver_id, sender_id)
 VALUES (1, 'Hola, soy Alesanfe', '2020-02-01 12:00:00', 1, 2),
