@@ -17,7 +17,7 @@ public class SecondStrike extends Effect {
 
     @Override
     public boolean useEffect(Player player, EnemyInGame enemyInGame, AbilityInGame abilityInGame) {
-        var enemy = enemyInGame.getEnemy();
+        var enemy = enemyInGame.isNightLord() ? enemyInGame.getNightLord() : enemyInGame.getOrc();
         var ability = abilityInGame.getAbility();
         if (enemies.contains(enemy) && abilities.contains(ability)) {
             abilityInGame.setAttack(ability.getAttack() + 1);

@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.capacity.Capacity;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.ability.Ability;
+import org.springframework.samples.petclinic.card.ability.AbilityInGame;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -22,8 +23,6 @@ public class Product extends Card {
     private Integer price;
     @Range(min = 0, max = 4)
     private Integer attack;
-    @OneToOne(optional = false)
-    private Ability ability;
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<Capacity> capacity;
 }

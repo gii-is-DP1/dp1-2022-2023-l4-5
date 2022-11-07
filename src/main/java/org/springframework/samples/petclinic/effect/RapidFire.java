@@ -10,7 +10,7 @@ public class RapidFire extends Effect {
     @Override
     public boolean useEffect(Player player, EnemyInGame enemyInGame) {
 
-        var enemy = enemyInGame.getEnemy();
+        var enemy = enemyInGame.isNightLord() ? enemyInGame.getNightLord() : enemyInGame.getOrc();
         var abilityInGame = player.getInDeck().get(0);
         var ability = abilityInGame.getAbility();
         if (ability.getName().equals("Disparo Rápido")) {

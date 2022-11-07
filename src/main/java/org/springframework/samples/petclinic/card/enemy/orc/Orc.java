@@ -20,7 +20,7 @@ public class Orc extends Enemy {
     private Integer glory;
 
     @NotNull
-    @Range(min = 1, max = 3)
+    @Range(min = 0, max = 3)
     private Integer gold;
 
     @NotNull
