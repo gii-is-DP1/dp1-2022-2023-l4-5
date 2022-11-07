@@ -5,12 +5,8 @@ import lombok.Setter;
 import org.springframework.samples.petclinic.capacity.Capacity;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.ability.Ability;
-import org.springframework.samples.petclinic.card.enemy.Enemy;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -18,25 +14,17 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "heroes")
-public class Heroe extends Card {
+public class Hero extends Card {
 
     @NotNull
     private Integer health;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Ability> deck;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Ability> hand;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Ability> discard;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Enemy> enemies;
+    @OneToMany
+    private List<Ability> abilities;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacities;
