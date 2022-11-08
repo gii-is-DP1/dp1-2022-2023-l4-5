@@ -22,6 +22,4 @@ public class Card extends NamedEntity {
     @NotEmpty
     private String frontImage;
 
-    @ManyToOne
-    private Turn turn;
 }

@@ -34,10 +34,10 @@ public class Player extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<HeroInGame> heroes;
 
-    @OneToOne
-    private Turn turn;
 
     // Se crean al crear al jugador.
+    @OneToOne
+    private Turn turn;
     @OneToMany
     private List<AbilityInGame> inHand;
 
