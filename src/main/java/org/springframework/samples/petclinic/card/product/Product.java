@@ -23,6 +23,6 @@ public class Product extends Card {
     private Integer price;
     @Range(min = 0, max = 4)
     private Integer attack;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private Collection<Capacity> capacity;
 }
