@@ -40,9 +40,6 @@ public class Game extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
-    @Enumerated(EnumType.STRING)
-    private NumHeroes numHeroes;
-
     @NotEmpty
     private String password;
 
