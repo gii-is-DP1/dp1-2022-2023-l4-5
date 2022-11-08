@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "heroes")
-public class Hero extends Card {
+public class  Hero extends Card {
 
     @NotNull
     private Integer health;
