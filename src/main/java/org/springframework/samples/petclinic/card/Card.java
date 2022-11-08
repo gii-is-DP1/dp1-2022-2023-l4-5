@@ -6,15 +6,11 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
-@Setter
-@Getter
-@Table(name = "cards")
 public class Card extends NamedEntity {
+
     @NotEmpty
     @URL
     private String backImage;
@@ -22,8 +18,4 @@ public class Card extends NamedEntity {
     @URL
     @NotEmpty
     private String frontImage;
-
-    @NotNull
-    @Min(value = 0)
-    private Integer timesUsed;
 }

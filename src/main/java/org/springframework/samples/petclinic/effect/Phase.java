@@ -8,5 +8,5 @@ public enum Phase {
     MARKET,
     MARKET_ALLY,
     RESUPPLY,
-    RESUPPLY_ALLY;
+    RESUPPLY_ALLY
 }

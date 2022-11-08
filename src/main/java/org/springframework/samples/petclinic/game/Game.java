@@ -1,42 +1,52 @@
-package org.springframework.samples.petclinic.game_manager;
+package org.springframework.samples.petclinic.game;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.effect.Phase;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
-public class GameManager extends BaseEntity {
+@Table(name = "games")
+public class Game extends BaseEntity {
 
     @NotNull
-    private Date startDate;
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    private LocalDate startDate;
 
     @NotNull
-    private Date finishDate;
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    private LocalDate finishDate;
 
     @NotNull
     @Range(min = 1, max = 4)
     private Integer actualPlayer;
 
     @NotNull
-    @Range(min = 1, max = 2)
-    private Integer mode;
+    @Enumerated(EnumType.STRING)
+    private Mode mode;
 
+    @Enumerated(EnumType.STRING)
     private Phase phase;
 
+    @Enumerated(EnumType.STRING)
     private NumHeroes numHeroes;
 
     @NotEmpty
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
     //faltan las relaciones.
