@@ -38,7 +38,7 @@ public class MessageController {
 
         model.addAttribute("receiver", username);
         model.addAttribute("chat", new Message());
-        model.addAttribute("messages", messageService.getBySenderWithReceiver(ud.getUsername(), username));
+        model.addAttribute("messages", messageService.getMessageBySenderWithReceiver(ud.getUsername(), username));
         return "messages/message";
     }
 
@@ -52,7 +52,7 @@ public class MessageController {
         User sender = userService.getByUsername(ud.getUsername());
         message.setReceiver(receiver);
         message.setSender(sender);
-        messageService.save(message);
+        messageService.saveMessage(message);
         return "redirect:/message/{username}";
     }
 
@@ -63,7 +63,7 @@ public class MessageController {
         if (principal instanceof UserDetails)
             ud = ((UserDetails) principal);
         JsonObject jsonObject = new JsonObject();
-        jsonObject.put("messages", messageService.getBySenderWithReceiver(ud.getUsername(), username).stream()
+        jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(ud.getUsername(), username).stream()
             .map(Message::toString).toArray());
         System.out.println(jsonObject.toJson());
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);

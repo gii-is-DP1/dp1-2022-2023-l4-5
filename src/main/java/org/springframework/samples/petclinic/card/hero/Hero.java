@@ -7,6 +7,7 @@ import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.ability.Ability;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class  Hero extends Card {
 
     @NotNull
+    @Min(0)
     private Integer health;
 
     @NotNull

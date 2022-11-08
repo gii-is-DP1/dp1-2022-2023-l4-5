@@ -19,6 +19,7 @@ public class HeroInGame extends BaseEntity {
 
     @NotNull
     private Integer actualHealth;
+
     @Column(columnDefinition = "int default 0")
     private Integer timesUsed;
 

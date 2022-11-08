@@ -27,7 +27,6 @@ public class HeroService {
 
     @Transactional(readOnly = true)
     public Optional<Hero> getHeroByName(String name) {
-
         return heroRepository.findByName(name);
     }
 

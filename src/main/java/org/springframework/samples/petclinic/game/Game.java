@@ -11,7 +11,9 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.turn.Turn;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,16 +35,19 @@ public class Game extends BaseEntity {
     @Range(min = 1, max = 4)
     private Integer actualPlayer;
 
+    // TODO: Decidir si son obligatorios.
     @NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
+    // TODO: Decidir si son obligatorios.
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
     @NotEmpty
     private String password;
 
+    // TODO: Decidir si son obligatorios.
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
@@ -50,6 +55,7 @@ public class Game extends BaseEntity {
     @OneToMany
     private List<Turn> turn;
 
+    // TODO: decidir si son EnemiesInGame.
     @OneToMany
     @Size(max = 3)
     private List<Orc> orc;

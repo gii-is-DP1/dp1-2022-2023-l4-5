@@ -15,7 +15,7 @@
  */
 package org.springframework.samples.petclinic.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.player.Tier;
 import org.springframework.stereotype.Service;
@@ -31,42 +31,53 @@ import java.util.List;
  * @author Michael Isvy
  */
 @Service
+@AllArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public void saveUser(User user) throws DataAccessException {
         userRepository.save(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User getById(int id) {
         return userRepository.findById(id);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User getByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> getByAuthority(String authority) {
         return userRepository.findByAuthority(authority);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> getByTier(Tier tier) {
         return userRepository.findByTier(tier);
     }
 
+    @Transactional(readOnly = true)
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean exists(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
+
     @Transactional
-    public List<User> getFriends() {
-        return userRepository.findFriends();
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public void deleteById(int id) {
+        userRepository.deleteById(id);
     }
 }

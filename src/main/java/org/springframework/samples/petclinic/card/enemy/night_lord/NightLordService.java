@@ -12,12 +12,12 @@ public class NightLordService {
     private final NightLordRepository nightLordRepository;
 
     @Transactional(readOnly = true)
-    public NightLord findNightLordByName(String name) {
+    public NightLord getNightLordByName(String name) {
         return nightLordRepository.findByName(name).orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public List<NightLord> findAllNightLords() {
+    public List<NightLord> getAllNightLords() {
         return nightLordRepository.findAll();
     }
 
@@ -25,8 +25,6 @@ public class NightLordService {
     public void saveNightLord(NightLord nightLord) {
         nightLordRepository.save(nightLord);
     }
-
-    // TODO: Actualizar NightLord.
 
     @Transactional
     public void deleteNightLord(NightLord nightLord) {

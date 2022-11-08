@@ -34,8 +34,6 @@ public class AbilityService {
         abilityRepository.save(ability);
     }
 
-    // TODO: Actualizar Ability.
-
     @Transactional
     public void deleteAbility(Ability ability) {
         abilityRepository.delete(ability);
@@ -62,7 +60,6 @@ public class AbilityService {
         abilityInGameRepository.save(abilityInGame);
     }
 
-    // TODO: Actualizar AbilityInGame.
     @Transactional
     public void deleteAbilityInGame(AbilityInGame abilityInGame) {
         abilityInGameRepository.delete(abilityInGame);
