@@ -22,6 +22,8 @@ public class AbilityInGame extends BaseEntity {
 
     private Integer attack;
 
+    private boolean isProduct;
+
     @ManyToOne
     private Ability ability;
 

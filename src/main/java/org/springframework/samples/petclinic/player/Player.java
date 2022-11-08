@@ -6,6 +6,7 @@ import org.springframework.samples.petclinic.card.ability.AbilityInGame;
 import org.springframework.samples.petclinic.card.hero.HeroInGame;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.turn.Turn;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,7 +34,10 @@ public class Player extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<HeroInGame> heroes;
 
+
     // Se crean al crear al jugador.
+    @OneToOne
+    private Turn turn;
     @OneToMany
     private List<AbilityInGame> inHand;
 
@@ -45,4 +49,5 @@ public class Player extends NamedEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
+
 }
