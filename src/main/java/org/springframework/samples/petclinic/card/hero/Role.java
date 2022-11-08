@@ -4,5 +4,5 @@ public enum Role {
     WIZARD,
     KNIGHT,
     EXPLORER,
-    THIEF;
+    THIEF
 }

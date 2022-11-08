@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
 public class NamedEntity extends BaseEntity {
 
     @Size(min = 3, max = 50)
-	@Column(name = "name")
+    @Column(name = "name")
 	private String name;
 
 	public String getName() {
