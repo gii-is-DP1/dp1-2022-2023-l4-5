@@ -10,7 +10,9 @@ import org.springframework.samples.petclinic.player.Tier;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
@@ -22,10 +24,13 @@ public class User extends BaseEntity {
 
     @NotNull
     @Column(unique = true)
-    private String username; // decidir un tamaño.
+    @Size(min = 1, max = 20)
+    private String username;
 
-
-    private String password; // Decidir un tamaño.
+    @NotNull
+    @NotEmpty
+    @Size(min = 1, max = 20)
+    private String password;
 
     private String enable;
 

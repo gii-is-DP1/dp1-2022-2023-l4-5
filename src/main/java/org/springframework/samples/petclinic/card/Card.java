@@ -10,9 +10,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 @MappedSuperclass
-@Setter
-@Getter
-@Table(name = "cards")
 public class Card extends NamedEntity {
 
     @NotEmpty

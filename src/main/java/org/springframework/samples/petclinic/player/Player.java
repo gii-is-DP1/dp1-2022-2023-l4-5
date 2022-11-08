@@ -17,15 +17,15 @@ import java.util.Set;
 @Table(name = "players")
 public class Player extends NamedEntity {
 
-    @Column(columnDefinition = "default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer gold;
-    @Column(columnDefinition = "default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer glory;
-    @Column(columnDefinition = "default 1")
+    @Column(columnDefinition = "int default 1")
     private Boolean evasion;
-    @Column(columnDefinition = "default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer numOrcsKilled;
-    @Column(columnDefinition = "default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer numWarLordKilled;
     private Integer sequence;  // Para elegir a quien le toca.
 
