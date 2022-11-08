@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "heroes")
-public class Hero extends Card {
+public class  Hero extends Card {
 
     @NotNull
     private Integer health;
@@ -26,6 +26,6 @@ public class Hero extends Card {
     @ManyToMany
     private List<Ability> abilities;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Capacity> capacities;
 }

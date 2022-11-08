@@ -26,8 +26,5 @@ public class Ability extends Card {
     @Range(min = 0, max = 4)
     private Integer attack;
 
-    @ManyToMany
-    private List<Hero> hero;
-
     private Integer quantity;
 }
