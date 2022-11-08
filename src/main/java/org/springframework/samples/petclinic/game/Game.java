@@ -6,11 +6,9 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.effect.Phase;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.turn.Turn;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -50,4 +48,7 @@ public class Game extends BaseEntity {
     private Accessibility accessibility;
 
     //faltan las relaciones.
+
+    @OneToMany
+    private Turn turn;
 }
