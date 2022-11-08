@@ -49,7 +49,7 @@ public class CapacityController {
     @GetMapping("/{id}/edit")
     public ModelAndView updateCapacity(@PathVariable("id") int id) {
         ModelAndView mav = new ModelAndView(CAPACITIES_CREATE_OR_UPDATE_CAPACITY_FORM);
-        mav.addObject("capacity", capacityService.findCapacityById(id));
+        mav.addObject("capacity", capacityService.getCapacityById(id));
         return mav;
     }
 
@@ -59,7 +59,7 @@ public class CapacityController {
         if (result.hasErrors()) {
             return new ModelAndView(CAPACITIES_CREATE_OR_UPDATE_CAPACITY_FORM, result.getModel());
         }
-        Capacity capacityToUpdate = capacityService.findCapacityById(id);
+        Capacity capacityToUpdate = capacityService.getCapacityById(id);
         BeanUtils.copyProperties(capacity, capacityToUpdate, "id");
         capacityService.saveCapacity(capacityToUpdate);
         ModelAndView mav = showCapacities();

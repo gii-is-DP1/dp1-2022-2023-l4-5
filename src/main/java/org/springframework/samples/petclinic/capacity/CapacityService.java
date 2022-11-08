@@ -1,31 +1,41 @@
 package org.springframework.samples.petclinic.capacity;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class CapacityService {
     private final CapacityRepository capacityRepository;
 
-    @Autowired
-    public CapacityService(CapacityRepository capacityRepository) {
-        this.capacityRepository = capacityRepository;
-    }
 
-    public Capacity findCapacityById(int id) {
+    @Transactional(readOnly = true)
+    public Capacity getCapacityById(int id) {
         return capacityRepository.findById(id).orElse(null);
     }
 
+    @Transactional(readOnly = true)
+    public Capacity getCapacityByStateCapacity(StateCapacity stateCapacity) {
+        return capacityRepository.findByStateCapacity(stateCapacity).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public Iterable<Capacity> findAllCapacities() {
+        return capacityRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public void saveCapacity(Capacity capacity) {
         capacityRepository.save(capacity);
     }
 
+    // TODO: Actualizar Capacity.
+
+    @Transactional
     public void deleteCapacityById(int id) {
         capacityRepository.deleteById(id);
     }
 
-    public Iterable<Capacity> findAllCapacities() {
-        return capacityRepository.findAll();
-    }
 
 }

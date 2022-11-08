@@ -5,12 +5,14 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.card.enemy.Enemy;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "orcs")
 public class Orc extends Enemy {
 
     @NotNull
@@ -18,9 +20,11 @@ public class Orc extends Enemy {
     private Integer glory;
 
     @NotNull
-    @Range(min = 1, max = 3)
+    @Range(min = 0, max = 3)
     private Integer gold;
 
     @NotNull
-    private Boolean hasCure, lessDamageWizard;
+    private Boolean hasCure;
+    @NotNull
+    private Boolean lessDamageWizard;
 }
