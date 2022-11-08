@@ -23,9 +23,9 @@ public class Hero extends Card {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
+    @ManyToMany
     private List<Ability> abilities;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacities;
 }
