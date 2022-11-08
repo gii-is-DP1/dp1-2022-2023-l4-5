@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.effect;
 
 
 import org.springframework.samples.petclinic.card.enemy.Enemy;
-import org.springframework.samples.petclinic.enumer.Phase;
+import org.springframework.samples.petclinic.effect.Phase;
 import org.springframework.samples.petclinic.player.Player;
 
 import java.util.Random;
@@ -28,7 +28,7 @@ public abstract class Effect {
         }
     }
     public void damageToHero(Enemy enemy){
-        n=enemy.getHealth();
+       Integer n=enemy.getHealth();
         for(int i=0; i<n; i++){
             this.player.deck.remove(0);
             if(player.deck.isEmpty()){
@@ -42,6 +42,9 @@ public abstract class Effect {
     public void preventDamageEnemy(Enemy enemy){
 
     }
+    public void shuffle(Player player){}
+    public void conseguirGloria(Player player,Enemy enemy){}
 
-    abstract void useEffect();
+
+
 }
