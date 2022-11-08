@@ -23,10 +23,7 @@ public class Product extends Card {
 
     @Range(min = 0, max = 4)
     private Integer attack;
-
-    @OneToOne(optional = false)
-    private Ability ability;
-
-    @OneToMany(cascade = CascadeType.ALL)
+  
+    @ManyToMany(cascade = CascadeType.ALL)
     private Collection<Capacity> capacity;
 }

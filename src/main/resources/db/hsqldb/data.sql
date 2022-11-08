@@ -19,13 +19,6 @@ INSERT INTO messages(content, time, receiver_id, sender_id)
 VALUES ('Hola, soy Alesanfe', '2020-02-01 12:00', 1, 2),
        ('Hola, soy Antonio', '2020-02-01 12:00', 2, 1);
 
-<<<<<<<<< Temporary merge branch 1
-INSERT INTO message(id, content, time, receiver_id, sender_id)
-VALUES (1, 'Hola, soy Alesanfe', '2020-02-01 12:00:00', 1, 2),
-       (2, 'Hola, soy Antonio', '2020-02-01 12:00:00', 2, 1);
-
-=========
->>>>>>>>> Temporary merge branch 2
 -- Creación de capacidades.
 INSERT INTO capacities(state_capacity, less_damage)
 VALUES ('MELEE', false),
@@ -37,69 +30,6 @@ VALUES ('MELEE', false),
        ('MAGIC', true),
        ('EXPERTISE', true);
 
-<<<<<<<<< Temporary merge branch 1
--- Héroes
-INSERT INTO heroes(id, name, frontImage, backImage, timesUsed, aux, health, role, deck, hand, discard, enemies, capacities)
-VALUES (1, 'Valèrys', 'src/main/resources/static/resources/images/heroes/valerys_hero_front.png', 'src/main/resources/static/resources/images/heroes/lisavette_hero_back.png', 0, 0, 3, KNIGHT, ?, ?, ?, ?, MELEE),
-       (2, 'Lisavette', 'src/main/resources/static/resources/images/heroes/lisavette_hero_back.png', 'src/main/resources/static/resources/images/heroes/valerys_hero_front.png', 0, 0, 3, KNIGHT, ?, ?, ?, ?, MELEE),
-       (3, 'Beleth-Il', 'src/main/resources/static/resources/images/heroes/belethil_hero_front.png', 'src/main/resources/static/resources/images/heroes/idril_hero_back.png', 0, 0, 3, EXPLORER, ?, ?, ?, ?, RANGED, MELEE),
-       (4, 'Idril', 'src/main/resources/static/resources/images/heroes/idril_hero_back.png', 'src/main/resources/static/resources/images/heroes/belethil_hero_front.png', 0, 0, 3, EXPLORER, ?, ?, ?, ?, [RANGED, MELEE]),
-       (5, 'Neddia', 'src/main/resources/static/resources/images/heroes/neddia_hero_back.png', 'src/main/resources/static/resources/images/heroes/feldon_hero_front.png', 0, 0, 2, THIEF, ?, ?, ?, ?, [EXPERTISE, RANGED]),
-       (4, 'Feldon', 'src/main/resources/static/resources/images/heroes/feldon_hero_back.png', 'src/main/resources/static/resources/images/heroes/neddia_hero_front.png', 0, 0, 2, THIEF, ?, ?, ?, ?, [EXPERTISE, RANGED]),
-       (4, 'Aranel', 'src/main/resources/static/resources/images/heroes/aranel_hero_back.png', 'src/main/resources/static/resources/images/heroes/taheral_hero_front.png', 0, 0, 2, WIZARD, ?, ?, ?, ?, [MAGIC]),
-       (4, 'Taheral', 'src/main/resources/static/resources/images/heroes/taheral_hero_back.png', 'src/main/resources/static/resources/images/heroes/aranel_hero_front.png', 0, 0, 2, WIZARD, ?, ?, ?, ?, [MAGIC]);
-
--- Productos
-INSERT INTO products(id, name, frontImage, backImage, timesUsed, aux, price, attack, ability, capacity)
-VALUES (1, 'Daga élfica', 'src/main/resources/static/resources/images/products/dagaelfica_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 2, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (2, 'Daga élfica', 'src/main/resources/static/resources/images/products/dagaelfica_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 2, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (3, 'Poción curativa', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 8, 0, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (4, 'Poción curativa', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 8, 0, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (5, 'Poción curativa', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 8, 0, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (6, 'Piedra de amolar', 'src/main/resources/static/resources/images/products/piedraamolar_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 4, 0, ?, [RANGED, MELEE, EXPERTISE]),
-       (7, 'Vial de conjuración', 'src/main/resources/static/resources/images/products/vialconjuracion_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 0, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (8, 'Vial de conjuración', 'src/main/resources/static/resources/images/products/vialconjuracion_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 0, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (9, 'Elixir de concentración', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 0, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (10, 'Elixir de concentración', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 0, ?, [RANGED, MELEE, EXPERTISE, MAGIC]),
-       (11, 'Capa élfica', 'src/main/resources/static/resources/images/products/capaelfica_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 0, ?, [RANGED, MAGIC]),
-       (12, 'Armadura de placas', 'src/main/resources/static/resources/images/products/armaduraplacas_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 4, 0, ?, [MELEE]),
-       (13, 'Alabarda orca', 'src/main/resources/static/resources/images/products/alabardaorca_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 4, ?, [MELEE]),
-       (14, 'Arco compuesto', 'src/main/resources/static/resources/images/products/arcocompuesto_product_front.png', 'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 4, ?, [RANGED]);
-
--- Ability
-INSERT INTO abilities(id, name, frontImage, backImage, timesUsed, aux, role, attack)
-VALUES (1, 'Aura protectora', 'src/main/resources/static/resources/images/abilities/auraprotectora_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 0),
-       (2, 'Bola de fuego', 'src/main/resources/static/resources/images/abilities/boladefuego_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 2),
-       (3, 'Disparo gélido', 'src/main/resources/static/resources/images/abilities/disparogelido_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 1),
-       (4, 'Disparo gélido', 'src/main/resources/static/resources/images/abilities/disparogelido_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 1),
-       (5, 'Flecha corrosiva', 'src/main/resources/static/resources/images/abilities/flechacorrosiva_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 1),
-       (6, 'Golpe de bastón', 'src/main/resources/static/resources/images/abilities/golpebaston_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 1),
-       (7, 'Golpe de bastón', 'src/main/resources/static/resources/images/abilities/golpebaston_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 1),
-       (8, 'Golpe de bastón', 'src/main/resources/static/resources/images/abilities/golpebaston_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 1),
-       (9, 'Golpe de bastón', 'src/main/resources/static/resources/images/abilities/golpebaston_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 1),
-       (10, 'Orbe curativo', 'src/main/resources/static/resources/images/abilities/orbecurativo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 0),
-       (11, 'Proyectil ígneo', 'src/main/resources/static/resources/images/abilities/proyectiligneo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 2),
-       (12, 'Proyectil ígneo', 'src/main/resources/static/resources/images/abilities/proyectiligneo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 2),
-       (13, 'Proyectil ígneo', 'src/main/resources/static/resources/images/abilities/proyectiligneo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 2),
-       (14, 'Reconstitución', 'src/main/resources/static/resources/images/abilities/reconstitucion_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 0),
-       (15, 'Torrente de luz', 'src/main/resources/static/resources/images/abilities/torrentedeluz_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, WIZARD, 2),
-       (16, 'Al corazón', 'src/main/resources/static/resources/images/abilities/alcorazon_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 4),
-       (17, 'Al corazón', 'src/main/resources/static/resources/images/abilities/alcorazon_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 4),
-       (18, 'Ataque furtivo', 'src/main/resources/static/resources/images/abilities/ataquefurtivo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 2),
-       (19, 'Ataque furtivo', 'src/main/resources/static/resources/images/abilities/ataquefurtivo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 2),
-       (20, 'Ataque furtivo', 'src/main/resources/static/resources/images/abilities/ataquefurtivo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 2),
-       (21, 'Ballesta precisa', 'src/main/resources/static/resources/images/abilities/ballestaprecisa_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 2),
-       (22, 'Ballesta precisa', 'src/main/resources/static/resources/images/abilities/ballestaprecisa_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 2),
-       (23, 'Ballesta precisa', 'src/main/resources/static/resources/images/abilities/ballestaprecisa_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 2),
-       (24, 'En las sombras', 'src/main/resources/static/resources/images/abilities/enlassombras_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 1),
-       (25, 'En las sombras', 'src/main/resources/static/resources/images/abilities/enlassombras_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 1),
-       (26, 'Engañar', 'src/main/resources/static/resources/images/abilities/engañar_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 0),
-       (27, 'Robar bolsillo', 'src/main/resources/static/resources/images/abilities/robarbolsillos_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 0),
-       (28, 'Saqueo', 'src/main/resources/static/resources/images/abilities/saqueo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 0),
-       (29, 'Saqueo', 'src/main/resources/static/resources/images/abilities/saqueo_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 0),
-       (30, 'Trampa', 'src/main/resources/static/resources/images/abilities/trampa_ability_front.png', 'src/main/resources/static/resources/images/abilities/ability_back.png', 0, 1, THIEF, 0);
-
-=========
 -- Creación de habilidades.
 INSERT INTO abilities(name, front_image, back_image, role, attack, hero_id)
 VALUES ('Compañero Lobo', 'src/main/resources/static/resources/images/juego/wolf_abilities_front.png',
@@ -260,80 +190,110 @@ VALUES ('Gurdrug', 'src/main/resources/static/resources/images/juego/nightlord_b
        ('Shriekknifer', 'src/main/resources/static/resources/images/juego/nightlord_back.png',
         'src/main/resources/static/resources/images/juego/shriek_nightlord_front.png', 10);
 
--- Creación de héroes.
-INSERT INTO heroes(id, name, frontImage, backImage, timesUsed, aux, health, role, deck, hand, discard, enemies,
-                   capacities)
-VALUES (1, 'Valèrys', 'src/main/resources/static/resources/images/heroes/valerys_hero_front.png',
-        'src/main/resources/static/resources/images/heroes/lisavette_hero_back.png', 0, 0, 3, KNIGHT, ?, ?, ?, ?,
-        MELEE),
-       (2, 'Lisavette', 'src/main/resources/static/resources/images/heroes/lisavette_hero_back.png',
-        'src/main/resources/static/resources/images/heroes/valerys_hero_front.png', 0, 0, 3, KNIGHT, ?, ?, ?, ?, MELEE),
-       (3, 'Beleth-Il', 'src/main/resources/static/resources/images/heroes/belethil_hero_front.png',
-        'src/main/resources/static/resources/images/heroes/idril_hero_back.png', 0, 0, 3, EXPLORER, ?, ?, ?, ?, RANGED,
-        MELEE),
-       (4, 'Idril', 'src/main/resources/static/resources/images/heroes/idril_hero_back.png',
-        'src/main/resources/static/resources/images/heroes/belethil_hero_front.png', 0, 0, 3, EXPLORER, ?, ?, ?, ?, [RANGED,
-        MELEE]),
-       (5, 'Neddia', 'src/main/resources/static/resources/images/heroes/neddia_hero_back.png',
-        'src/main/resources/static/resources/images/heroes/feldon_hero_front.png', 0, 0, 2, THIEF, ?, ?, ?, ?, [EXPERTISE,
-        RANGED]),
-       (4, 'Feldon', 'src/main/resources/static/resources/images/heroes/feldon_hero_back.png',
-        'src/main/resources/static/resources/images/heroes/neddia_hero_front.png', 0, 0, 2, THIEF, ?, ?, ?, ?, [EXPERTISE,
-        RANGED]),
-       (4, 'Aranel', 'src/main/resources/static/resources/images/heroes/aranel_hero_back.png',
-        'src/main/resources/static/resources/images/heroes/taheral_hero_front.png', 0, 0, 2, WIZARD, ?, ?, ?,
-        ?, [MAGIC]),
-       (4, 'Taheral', 'src/main/resources/static/resources/images/heroes/taheral_hero_back.png',
-        'src/main/resources/static/resources/images/heroes/aranel_hero_front.png', 0, 0, 2, WIZARD, ?, ?, ?,
-        ?, [MAGIC]);
+-- Nuevo
 
--- Productos
-INSERT INTO products(id, name, frontImage, backImage, timesUsed, aux, price, attack, ability, capacity)
-VALUES (1, 'Daga élfica', 'src/main/resources/static/resources/images/products/dagaelfica_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 2, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (2, 'Daga élfica', 'src/main/resources/static/resources/images/products/dagaelfica_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 2, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (3, 'Poción curativa', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 8, 0, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (4, 'Poción curativa', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 8, 0, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (5, 'Poción curativa', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 8, 0, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (6, 'Piedra de amolar', 'src/main/resources/static/resources/images/products/piedraamolar_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 4, 0, ?, [RANGED, MELEE,
-        EXPERTISE]),
-       (7, 'Vial de conjuración',
-        'src/main/resources/static/resources/images/products/vialconjuracion_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 0, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (8, 'Vial de conjuración',
-        'src/main/resources/static/resources/images/products/vialconjuracion_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 0, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (9, 'Elixir de concentración',
-        'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 0, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (10, 'Elixir de concentración',
-        'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 0, ?, [RANGED, MELEE,
-        EXPERTISE, MAGIC]),
-       (11, 'Capa élfica', 'src/main/resources/static/resources/images/products/capaelfica_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 3, 0, ?, [RANGED, MAGIC]),
-       (12, 'Armadura de placas',
-        'src/main/resources/static/resources/images/products/armaduraplacas_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 4, 0, ?, [MELEE]),
-       (13, 'Alabarda orca', 'src/main/resources/static/resources/images/products/alabardaorca_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 4, ?, [MELEE]),
-       (14, 'Arco compuesto', 'src/main/resources/static/resources/images/products/arcocompuesto_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 0, 0, 5, 4, ?, [RANGED]);
+-- Creación de la relación entre capacidades y productos.
+INSERT INTO products_capacity(product_id, capacity_id) VALUES
+(3, 1), (3, 2), (3,4), (6, 3), (6, 4),
+(7, 2), (8, 2), (9, 4);
 
--- Ability
-INSERT INTO abilities(id, name, frontImage, backImage, timesUsed, aux, role, attack)
-VALUES
->>>>>>>>> Temporary merge branch 2
+-- Creación de logros.
+INSERT INTO achievements(name, description, image, threshold) VALUES
+('Primera partida', 'Se le otorga un logro al usuario cuando completa su primera partida. ', 'awanakimkum', '1'),
+('Primera victoria', 'Se le otorga un logro al usuario cuando gana su primera partida. ', 'awanakimkum', '1'),
+('Última Sangre', 'Se le otorga un logro al usuario cuando gana su primera partida.', 'awanakimkum', '1'),
+('Aficionado', 'Se le otorga un logro al usuario cuando mata a 10 orcos. ', 'awanakimkum', '10'),
+('Veterano', 'Se le otorga un logro al usuario cuando mata a 50 orcos. ', 'awanakimkum', '50'),
+('Maestro', 'Se le otorga un logro al usuario cuando mata a 100 orcos. ', 'awanakimkum', '100'),
+('Exterminador', 'Se le otorga un logro al usuario cuando mata a 200 orcos. ', 'awanakimkum', '200'),
+('Asesino', 'Se le otorga un logro al usuario cuando mata a 500 orcos. ', 'awanakimkum', '500'),
+('Mataorcos', 'Se le otorga un logro al usuario cuando mata a 1000 orcos. ', 'awanakimkum', '1000'),
+('Primeros pasos', 'Se le otorga un logro al usuario cuando compra su primer producto. ', 'awanakimkum', '1'),
+('Comprador', 'Se le otorga un logro al usuario cuando compra 10 productos. ', 'awanakimkum', '10'),
+('Comprador experto', 'Se le otorga un logro al usuario cuando compra 50 productos. ', 'awanakimkum', '50'),
+('Comprador maestro', 'Se le otorga un logro al usuario cuando compra 100 productos. ', 'awanakimkum', '100'),
+('Touch Some Grass', 'Se le otorga un logro al usuario cuando juega 20 partidas.', 'awanakimkum', '20'),
+('Un poco de todo', 'Se le otorga un logro al usuario cuando completa su primera partida en modo multiclase.',
+ 'awanakimkum', '1');
+
+-- Habilidades de los heroes
+INSERT INTO heroes_abilities(hero_id, abilities_id)
+VALUES (1, 8),
+       (1, 9),
+       (1, 10),
+       (1, 11),
+       (1, 12),
+       (1, 13),
+       (1, 14),
+       (1, 15),
+       (2, 8),
+       (2, 9),
+       (2, 10),
+       (2, 11),
+       (2, 12),
+       (2, 13),
+       (2, 14),
+       (2, 15),
+       (3, 1),
+       (3, 2),
+       (3, 3),
+       (3, 4),
+       (3, 5),
+       (3, 6),
+       (3, 7),
+       (4, 1),
+       (4, 2),
+       (4, 3),
+       (4, 4),
+       (4, 5),
+       (4, 6),
+       (4, 7),
+       (5, 16),
+       (5, 17),
+       (5, 18),
+       (5, 19),
+       (5, 20),
+       (5, 21),
+       (5, 22),
+       (5, 23),
+       (5, 24),
+       (6, 16),
+       (6, 17),
+       (6, 18),
+       (6, 19),
+       (6, 20),
+       (6, 21),
+       (6, 22),
+       (6, 23),
+       (6, 24),
+       (7, 25),
+       (7, 26),
+       (7, 27),
+       (7, 28),
+       (7, 29),
+       (7, 30),
+       (7, 31),
+       (7, 32),
+       (8, 25),
+       (8, 26),
+       (8, 27),
+       (8, 28),
+       (8, 29),
+       (8, 30),
+       (8, 31),
+       (8, 32);
+
+-- Capacidades de los heroes
+INSERT INTO heroes_capacities(hero_id, capacities_id)
+VALUES (1, 1),
+       (2, 1),
+       (3, 2),
+       (3, 5),
+       (4, 2),
+       (4, 5),
+       (5, 4),
+       (5, 6),
+       (6, 4),
+       (6, 6),
+       (7, 3),
+       (8, 3);

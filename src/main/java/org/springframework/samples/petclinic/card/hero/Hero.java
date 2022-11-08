@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "heroes")
-public class Hero extends Card {
+public class  Hero extends Card {
 
     @NotNull
     private Integer health;
@@ -23,9 +23,9 @@ public class Hero extends Card {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
+    @ManyToMany
     private List<Ability> abilities;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Capacity> capacities;
 }
