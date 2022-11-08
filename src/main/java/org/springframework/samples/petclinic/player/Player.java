@@ -2,15 +2,12 @@ package org.springframework.samples.petclinic.player;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.samples.petclinic.card.ability.Ability;
-import org.springframework.samples.petclinic.card.hero.Heroe;
-import org.springframework.samples.petclinic.game_manager.GameManager;
+import org.springframework.samples.petclinic.card.ability.AbilityInGame;
+import org.springframework.samples.petclinic.card.hero.HeroInGame;
+import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
@@ -20,26 +17,32 @@ import java.util.Set;
 @Table(name = "players")
 public class Player extends NamedEntity {
 
+    @Column(columnDefinition = "int default 0")
     private Integer gold;
+    @Column(columnDefinition = "int default 0")
     private Integer glory;
+    @Column(columnDefinition = "int default 1")
     private Boolean evasion;
+    @Column(columnDefinition = "int default 0")
     private Integer numOrcsKilled;
+    @Column(columnDefinition = "int default 0")
     private Integer numWarLordKilled;
-    private Integer sequence;
-
-    // Reducir número de relaciones.
+    private Integer sequence;  // Para elegir a quien le toca.
 
     //Relaciones
-
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<Heroe> heroes;
+    private Set<HeroInGame> heroes;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Ability> abilities;
+    // Se crean al crear al jugador.
+    @OneToMany
+    private List<AbilityInGame> inHand;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<GameManager> gameManagers;
+    @OneToMany
+    private List<AbilityInGame> inDeck;
 
-    //Propiedades
+    @OneToMany
+    private List<AbilityInGame> inDiscard;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Game game;
 }

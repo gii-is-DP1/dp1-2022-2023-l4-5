@@ -16,15 +16,16 @@
 package org.springframework.samples.petclinic.user;
 
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-
+import javax.validation.Valid;
 import java.util.Map;
 
 
@@ -35,8 +36,11 @@ import java.util.Map;
  * @author Michael Isvy
  */
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
 
     private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
 
@@ -45,19 +49,22 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
-    @GetMapping(value = "/users/new")
+    @GetMapping(value = "/new")
     public String initCreationForm(Map<String, Object> model) {
         return VIEWS_OWNER_CREATE_FORM;
     }
 
-    @PostMapping(value = "/users/new")
-    public String processCreationForm(BindingResult result) {
+    @PostMapping(value = "/new")
+    public String processCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return VIEWS_OWNER_CREATE_FORM;
         } else {
+            userService.saveUser(user);
             return "redirect:/";
         }
     }
+
+
 
 
 }

@@ -17,8 +17,11 @@ package org.springframework.samples.petclinic.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.player.Tier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 /**
@@ -29,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class UserService {
-
 
     private final UserRepository userRepository;
 
@@ -43,8 +45,28 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public User getById(int id) {
+        return userRepository.findById(id);
+    }
 
+    @Transactional
     public User getByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Transactional
+    public List<User> getByAuthority(String authority) {
+        return userRepository.findByAuthority(authority);
+    }
+
+    @Transactional
+    public List<User> getByTier(Tier tier) {
+        return userRepository.findByTier(tier);
+    }
+
+    @Transactional
+    public List<User> getFriends() {
+        return userRepository.findFriends();
     }
 }
