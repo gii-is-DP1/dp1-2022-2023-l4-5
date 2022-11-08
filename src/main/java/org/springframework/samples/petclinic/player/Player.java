@@ -27,6 +27,10 @@ public class Player extends NamedEntity {
     private Integer numOrcsKilled;
     @Column(columnDefinition = "int default 0")
     private Integer numWarLordKilled;
+    @Column(columnDefinition = "int default 0")
+    private Integer damageDealed;
+    @Column(columnDefinition = "int default 0")
+    private Integer damageDealedToNightLords;
     private Integer sequence;  // Para elegir a quien le toca.
 
     //Relaciones
