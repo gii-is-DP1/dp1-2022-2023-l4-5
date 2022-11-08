@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.turn.Turn;
 
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -19,4 +21,7 @@ public class Card extends NamedEntity {
     @URL
     @NotEmpty
     private String frontImage;
+
+    @ManyToOne
+    private Turn turn;
 }
