@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.message;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,24 +13,40 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
 
-    public Message save(Message message) {
-        /*
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = null;
-        if (principal instanceof User)
-            user = (User) principal;
-        message.setSender(user);
-         */
+    @Transactional
+    public void saveMessage(Message message) {
         message.setTime(LocalDateTime.now());
-        return messageRepository.save(message);
+        messageRepository.save(message);
 
     }
 
-    public Message findById(int id) {
+    @Transactional(readOnly = true)
+    public Message getMessageById(int id) {
         return messageRepository.findById(id).orElse(null);
     }
 
-    public List<Message> getBySenderWithReceiver(String usernameSender, String usernameReceiver) {
+    @Transactional(readOnly = true)
+    public List<Message> getMessageBySenderWithReceiver(String usernameSender, String usernameReceiver) {
         return messageRepository.getBySenderWithReceiver(usernameSender, usernameReceiver);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Message> getAllMessages(Integer id) {
+        return messageRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteMessage(Message message) {
+        messageRepository.delete(message);
+    }
+
+    @Transactional
+    public void deleteMessageById(int id) {
+        messageRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean exists(int id) {
+        return messageRepository.existsById(id);
     }
 }

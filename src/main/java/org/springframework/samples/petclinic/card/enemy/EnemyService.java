@@ -13,12 +13,12 @@ public class EnemyService {
 
     // EnemyInGame
     @Transactional(readOnly = true)
-    public EnemyInGame findEnemyInGameById(int id) {
+    public EnemyInGame getEnemyInGameById(int id) {
         return enemyInGameRepository.findById(id).orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public List<EnemyInGame> findAllEnemyInGame() {
+    public List<EnemyInGame> getAllEnemyInGame() {
         return enemyInGameRepository.findAll();
     }
 

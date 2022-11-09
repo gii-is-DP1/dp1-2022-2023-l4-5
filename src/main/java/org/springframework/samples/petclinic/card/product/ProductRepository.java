@@ -10,10 +10,8 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Integer> {
 
-    @Query("SELECT p FROM Product p WHERE p.name = :name")
     Optional<Product> findByName(String name);
 
-    @Query("SELECT p FROM Product p WHERE p.id = :id")
     Optional<Product> findById(int id);
 
     List<Product> findAll();

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class CapacityService {
@@ -21,20 +23,23 @@ public class CapacityService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Capacity> findAllCapacities() {
+    public List<Capacity> getAllCapacities() {
         return capacityRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void saveCapacity(Capacity capacity) {
         capacityRepository.save(capacity);
     }
 
-    // TODO: Actualizar Capacity.
-
     @Transactional
     public void deleteCapacityById(int id) {
         capacityRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteCapacity(Capacity capacity) {
+        capacityRepository.delete(capacity);
     }
 
 

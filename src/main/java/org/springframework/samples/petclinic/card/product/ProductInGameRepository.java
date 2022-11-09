@@ -8,8 +8,6 @@ import java.util.Optional;
 public interface ProductInGameRepository extends CrudRepository<ProductInGame, Integer> {
     Optional<ProductInGame> findById(Integer id);
 
-    Optional<ProductInGame> findByName(String name);
-
     List<ProductInGame> findAll();
 
 }

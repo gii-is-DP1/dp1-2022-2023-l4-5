@@ -24,8 +24,6 @@ public class OrcService {
         orcRepository.save(orc);
     }
 
-    // TODO: Actualizar Orc.
-
     @Transactional
     public void deleteOrc(Orc orc) {
         orcRepository.delete(orc);

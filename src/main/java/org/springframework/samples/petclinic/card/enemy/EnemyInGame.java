@@ -23,7 +23,6 @@ public class EnemyInGame extends BaseEntity {
 
     private boolean isNightLord;
 
-    // Consultar
     @ManyToOne
     private Orc orc;
 

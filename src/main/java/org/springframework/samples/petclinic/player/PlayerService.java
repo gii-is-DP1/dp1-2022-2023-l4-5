@@ -1,9 +1,8 @@
 package org.springframework.samples.petclinic.player;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.petclinic.card.ability.Ability;
-import org.springframework.samples.petclinic.card.ability.AbilityInGame;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,26 +11,34 @@ import java.util.List;
 public class PlayerService {
     private final PlayerRepository playerRepository;
 
-    public Player findPlayerById(int id) { return playerRepository.findById(id).orElse(null);}
+    @Transactional(readOnly = true)
+    public Player getPlayerById(int id) {
+        return playerRepository.findById(id).orElse(null);
+    }
 
+    @Transactional
     public void savePlayer(Player player) {
         playerRepository.save(player);
     }
 
+    @Transactional
     public void deletePlayerById(int id) {
         playerRepository.deleteById(id);
     }
 
-    public List<Player> findAllPlayers() {
+    @Transactional(readOnly = true)
+    public List<Player> getAllPlayers() {
         return playerRepository.findAll();
     }
 
-    public Player findPlayerByName(String name) { return playerRepository.findByName(name).orElse(null); }
+    @Transactional(readOnly = true)
+    public Player getPlayerByName(String name) {
+        return playerRepository.findByName(name).orElse(null);
+    }
 
-    public AbilityInGame getCardInHand() { return (AbilityInGame) playerRepository.getCardInHand(); }
-
-    public AbilityInGame getCardInDeck() { return (AbilityInGame) playerRepository.getCardInDeck(); }
-
-    public AbilityInGame getCardInDiscard() { return (AbilityInGame) playerRepository.getCardInDiscard(); }
+    @Transactional(readOnly = true)
+    public boolean exists(int id) {
+        return playerRepository.existsById(id);
+    }
 
 }

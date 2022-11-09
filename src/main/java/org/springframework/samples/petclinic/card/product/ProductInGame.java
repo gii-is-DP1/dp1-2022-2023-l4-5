@@ -16,6 +16,7 @@ import javax.persistence.Table;
 @Setter
 @Table(name = "products_in_game")
 public class ProductInGame extends NamedEntity {
+    // TODO: decidir si necesita un mínimo.
     @Column(columnDefinition = "int default 0")
     private Integer timesUsed;
 
