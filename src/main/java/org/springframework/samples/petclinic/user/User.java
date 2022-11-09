@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Tier;
+import org.springframework.samples.petclinic.statistic.Statistic;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -53,4 +54,7 @@ public class User extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Statistic statistic;
     }

@@ -41,8 +41,7 @@ public class Statistic extends BaseEntity {
     @Column(columnDefinition = "int default 0")
     private Integer allDamageDealedToNightLords;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private User usuario;
+
 
 
 }
