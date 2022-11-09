@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -87,12 +86,4 @@ public class UserController {
         mav.addObject(this.userService.getById(userId));
         return mav;
     }
-
-    @GetMapping()
-    public String getUsers(Map<String, Object> model) {
-        List<User> result = userService.getAll();
-        model.put("selections", result);
-        return "users/usersList";
-    }
-
 }

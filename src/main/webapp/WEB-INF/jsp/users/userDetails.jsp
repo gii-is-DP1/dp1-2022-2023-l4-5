@@ -38,6 +38,7 @@
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit User</a>
 
     <spring:url value="/welcome"  var="goToLobby">
+        <spring:param name="welcome"/>
     </spring:url>
     <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Lobby</a>
 
