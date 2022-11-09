@@ -22,8 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -62,5 +64,11 @@ public class UserController {
             userService.saveUser(user);
             return "redirect:/welcome";
         }
+    }
+    @GetMapping()
+    public String getUsers(Map<String, Object> model){
+        List<User> result=userService.getAll();
+        model.put("users", result);
+        return "users";
     }
 }
