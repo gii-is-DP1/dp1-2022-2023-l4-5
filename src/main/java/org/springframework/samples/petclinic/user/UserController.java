@@ -60,7 +60,7 @@ public class UserController {
             return VIEWS_OWNER_CREATE_FORM;
         } else {
             userService.saveUser(user);
-            return "redirect:/users";
+            return "redirect:/welcome";
         }
     }
 }
