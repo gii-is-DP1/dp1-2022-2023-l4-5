@@ -32,24 +32,24 @@ public class User extends BaseEntity {
     @Size(min = 1, max = 20)
     private String password;
 
-    private String enable;
+    private String enable; // TODO: Revisar si es necesario.
 
     @URL
     private String avatar;
 
-    @Enumerated(EnumType.STRING)
-    private Tier tier;
+    // @Enumerated(EnumType.STRING)
+    private Tier tier; // TODO: Poner un valor por defecto.
 
     // TODO: Decidir tamaño.
     @NotBlank
     private String description;
 
     // TODO: Decidir tamaño.
-    @NotBlank
-    private String authority;
+    //@NotBlank
+    private String authority; // TODO: Dar un valor por defecto.
 
     @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private Date birthDate;
+    private Date birthDate; // TODO: Revisar si es obligatorio.
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
