@@ -22,8 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -40,17 +42,11 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
+    //Crear usuario
     @GetMapping(value = "/new")
     public String initCreationForm(Map<String, Object> model) {
         User user = new User();
         model.put("user", user);
-        return VIEWS_OWNER_CREATE_FORM;
-    }
-
-    @GetMapping(value = "/{userId}/edit")
-    public String initUpdateOwnerForm(@PathVariable("userId") int userId, Model model) {
-        User user= this.userService.getById(userId);
-        model.addAttribute(user);
         return VIEWS_OWNER_CREATE_FORM;
     }
 
@@ -60,7 +56,43 @@ public class UserController {
             return VIEWS_OWNER_CREATE_FORM;
         } else {
             userService.saveUser(user);
-            return "redirect:/users";
+            return "redirect:/welcome";
         }
     }
+
+    //Editar usuario
+    @GetMapping(value = "/{userId}/edit")
+    public String initUpdateUserForm(@PathVariable("userId") int userId, Model model) {
+        User user= this.userService.getById(userId);
+        model.addAttribute(user);
+        return VIEWS_OWNER_CREATE_FORM;
+    }
+
+    @PostMapping(value = "/{userId}/edit")
+    public String processUpdateUserForm(@Valid User user, BindingResult result,
+                                         @PathVariable("userId") int ownerId) {
+        if (result.hasErrors()) {
+            return VIEWS_OWNER_CREATE_FORM;
+        }
+        else {
+            user.setId(ownerId);
+            this.userService.saveUser(user);
+            return "redirect:/users/{userId}";
+        }
+    }
+
+    @GetMapping("/{userId}")
+    public ModelAndView showOwner(@PathVariable("userId") int userId) {
+        ModelAndView mav = new ModelAndView("users/userDetails");
+        mav.addObject(this.userService.getById(userId));
+        return mav;
+    }
+
+    @GetMapping()
+    public String getUsers(Map<String, Object> model) {
+        List<User> result = userService.getAll();
+        model.put("selections", result);
+        return "users/usersList";
+    }
+
 }
