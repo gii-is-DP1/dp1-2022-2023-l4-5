@@ -1,9 +1,13 @@
 package org.springframework.samples.petclinic.user;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
+import net.bytebuddy.implementation.bind.annotation.Default;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Tier;
@@ -31,6 +35,7 @@ public class User extends BaseEntity {
     @NotEmpty // TODO: revisar si es necesario.
     @Size(min = 1, max = 20)
     private String password;
+
 
     private String enable; // TODO: Revisar si es necesario.
 
