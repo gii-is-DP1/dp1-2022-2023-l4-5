@@ -15,5 +15,5 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
     @Query("SELECT g FROM Game g LEFT JOIN FETCH Player p WHERE p.id = ?1")
     List<Game> findByPlayer(Integer playerId);
 
-    List<Game> findByMode(Integer mode);
+    List<Game> findByMode(Mode mode);
 }

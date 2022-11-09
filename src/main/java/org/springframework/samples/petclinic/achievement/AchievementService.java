@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class AchievementService {
@@ -20,7 +22,7 @@ public class AchievementService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Achievement> getAllAchievements() {
+    public List<Achievement> getAllAchievements() {
         return achievementRepository.findAll();
     }
 
@@ -28,8 +30,6 @@ public class AchievementService {
     public void saveAchievement(Achievement achievement) {
         achievementRepository.save(achievement);
     }
-
-    // TODO: Actualizar Achievement.
 
     @Transactional
     public void deleteAchievement(Achievement achievement) {

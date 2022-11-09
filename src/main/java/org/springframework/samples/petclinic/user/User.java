@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     private String username;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty // TODO: revisar si es necesario.
     @Size(min = 1, max = 20)
     private String password;
 
@@ -40,9 +40,11 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Tier tier;
 
+    // TODO: Decidir tamaño.
     @NotBlank
     private String description;
 
+    // TODO: Decidir tamaño.
     @NotBlank
     private String authority;
 

@@ -32,8 +32,6 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    // TODO: Actualizar producto.
-
     @Transactional
     public void deleteProduct(Product product) {
         productRepository.delete(product);
@@ -54,8 +52,6 @@ public class ProductService {
     public Iterable<ProductInGame> getAllProductInGameCards() {
         return productInGameRepository.findAll();
     }
-
-    // TODO: Actualizar producto en juego.
 
     @Transactional
     public void saveProductInGame(ProductInGame productInGame) {

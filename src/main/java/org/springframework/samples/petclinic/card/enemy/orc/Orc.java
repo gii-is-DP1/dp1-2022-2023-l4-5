@@ -25,6 +25,7 @@ public class Orc extends Enemy {
 
     @NotNull
     private Boolean hasCure;
+
     @NotNull
     private Boolean lessDamageWizard;
 }

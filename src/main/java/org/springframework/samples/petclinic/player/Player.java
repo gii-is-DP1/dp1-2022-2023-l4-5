@@ -18,6 +18,7 @@ import java.util.Set;
 @Table(name = "players")
 public class Player extends NamedEntity {
 
+    // TODO: decidir si es necesario un mínimo.
     @Column(columnDefinition = "int default 0")
     private Integer gold;
     @Column(columnDefinition = "int default 0")

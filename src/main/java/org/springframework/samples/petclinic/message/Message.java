@@ -23,6 +23,7 @@ public class Message extends BaseEntity {
     @Size(min = 1, max = 100)
     private String content;
 
+    // TODO: Decidir si son obligatorios.
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     private LocalDateTime time;
 

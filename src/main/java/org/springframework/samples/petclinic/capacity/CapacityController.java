@@ -33,7 +33,7 @@ public class CapacityController {
     public ModelAndView showCapacities() {
         System.out.println("CapacityController.showCapacities");
         ModelAndView mav = new ModelAndView(CAPACITIES_LISTING_VIEW);
-        mav.addObject("capacities", capacityService.findAllCapacities());
+        mav.addObject("capacities", capacityService.getAllCapacities());
         return mav;
     }
 

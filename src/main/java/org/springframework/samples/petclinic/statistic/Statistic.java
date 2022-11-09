@@ -14,9 +14,9 @@ import javax.persistence.OneToOne;
 @Getter
 @Setter
 @Entity
-
 public class Statistic extends BaseEntity {
 
+    // TODO: decidir si hace fañta decidir un mínimo.
     @Column(columnDefinition = "int default 0")
     private Integer allGold;
 
