@@ -16,32 +16,29 @@
     </jsp:attribute>
     <jsp:body>
         <h2>
-            <c:if test="${users['new']}">New </c:if> User
+            <c:if test="${user['new']}">New </c:if> User
         </h2>
 
         <form:form modelAttribute="user" class="form-horizontal" id="add-user-form">
             <div class="form-group has-feedback">
-                <!--
-                UserName:
-                <input label="UserName" name="username"/>
-                Description
-                <input label="description" name="description"/>
-                Password:
-                <input type="password" label="Password" name="password"/>
-                BirthDate:
-                <input type="date" label="BirthDate" name="BirthDate"/>
-                Avatar:
-                <input type="url" label="Avatar" name="avatar"/>
-                -->
+
                 <petclinic:inputField label="Username" name="username"/>
                 <petclinic:inputField label="Password" name="password"/>
                 <petclinic:inputField label="Avatar" name="avatar"/>
                 <petclinic:inputField label="Birth Date" name="birthDate"/>
                 <petclinic:inputField label="Description" name="description"/>
+
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-default" type="submit">Add User</button>
+                    <c:choose>
+                        <c:when test="${user['new']}">
+                            <button class="btn btn-default" type="submit">Add User</button>
+                        </c:when>
+                        <c:otherwise>
+                            <button class="btn btn-default" type="submit">Update User</button>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </form:form>
