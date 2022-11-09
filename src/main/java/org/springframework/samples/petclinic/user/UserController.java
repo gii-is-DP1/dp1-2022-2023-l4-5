@@ -18,12 +18,10 @@ package org.springframework.samples.petclinic.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Map;
@@ -44,6 +42,15 @@ public class UserController {
 
     @GetMapping(value = "/new")
     public String initCreationForm(Map<String, Object> model) {
+        User user = new User();
+        model.put("user", user);
+        return VIEWS_OWNER_CREATE_FORM;
+    }
+
+    @GetMapping(value = "/{userId}/edit")
+    public String initUpdateOwnerForm(@PathVariable("userId") int userId, Model model) {
+        User user= this.userService.getById(userId);
+        model.addAttribute(user);
         return VIEWS_OWNER_CREATE_FORM;
     }
 
@@ -53,11 +60,7 @@ public class UserController {
             return VIEWS_OWNER_CREATE_FORM;
         } else {
             userService.saveUser(user);
-            return "redirect:/";
+            return "redirect:/users";
         }
     }
-
-
-
-
 }
