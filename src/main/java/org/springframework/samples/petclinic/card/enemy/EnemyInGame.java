@@ -21,6 +21,7 @@ public class EnemyInGame extends BaseEntity {
     @Max(value = 10)
     private Integer actualHealth;
 
+    @NotNull
     private boolean isNightLord;
 
     @ManyToOne
