@@ -45,8 +45,8 @@ public class TurnService {
     }
 
     @Transactional(readOnly = true)
-    public boolean exists(int id) {
-        return turnRepository.findById(id).orElse(null) != null;
+    public boolean turnExists(int id) {
+        return turnRepository.existsById(id);
     }
 
 }

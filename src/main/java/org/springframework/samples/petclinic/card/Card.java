@@ -7,6 +7,7 @@ import org.springframework.samples.petclinic.model.NamedEntity;
 
 import org.springframework.samples.petclinic.turn.Turn;
 
+import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
@@ -17,13 +18,14 @@ import javax.validation.constraints.NotNull;
 @MappedSuperclass
 public class Card extends NamedEntity {
 
-    @NotEmpty
+    @NotNull
     @URL
     private String backImage;
 
     @URL
-    @NotEmpty
+    @NotNull
     private String frontImage;
+
 
     @Min(0)
     // @NotNull

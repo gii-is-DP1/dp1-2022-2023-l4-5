@@ -18,81 +18,82 @@ package org.springframework.samples.petclinic.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    // Constantes.
+    private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "users/createUserForm";
+    private static final String VIEWS_OWNER_LIST = "users/usersList";
+    private static final String PAGE_WELCOME = "redirect:/welcome";
+    private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
+    // Servicios.
+    private final UserService userService;
 
-    private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
     }
 
+    // Obtener todos los usuarios.
+    @GetMapping
+    public String getUsers(ModelMap model) {
+        model.put("selections", userService.getAllUsers());
+        return VIEWS_OWNER_LIST;
+    }
+
+    // Obtener información detallada de un usuario.
+    @GetMapping("/{userId}")
+    public String showOwner(@PathVariable("userId") int userId, ModelMap model) {
+        model.addAttribute(this.userService.getUserById(userId));
+        return PAGE_USER_DETAILS;
+    }
+
     //Crear usuario
     @GetMapping(value = "/new")
-    public String initCreationForm(Map<String, Object> model) {
-        User user = new User();
-        model.put("user", user);
-        return VIEWS_OWNER_CREATE_FORM;
+    public String initCreationForm(ModelMap model) {
+        model.put("user", new User());
+        return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "/new")
     public String processCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            return VIEWS_OWNER_CREATE_FORM;
+            return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
         } else {
             userService.saveUser(user);
-            return "redirect:/welcome";
+            return PAGE_WELCOME;
         }
     }
 
     //Editar usuario
     @GetMapping(value = "/{userId}/edit")
-    public String initUpdateUserForm(@PathVariable("userId") int userId, Model model) {
-        User user= this.userService.getById(userId);
+    public String initUpdateUserForm(@PathVariable("userId") int userId, ModelMap model) {
+        User user = this.userService.getUserById(userId);
         model.addAttribute(user);
-        return VIEWS_OWNER_CREATE_FORM;
+        return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "/{userId}/edit")
-    public String processUpdateUserForm(@Valid User user, BindingResult result,
-                                         @PathVariable("userId") int ownerId) {
+    public String processUpdateUserForm(@Valid User user, BindingResult result, @PathVariable("userId") int ownerId) {
         if (result.hasErrors()) {
-            return VIEWS_OWNER_CREATE_FORM;
-        }
-        else {
+            return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+        } else {
             user.setId(ownerId);
             this.userService.saveUser(user);
-            return "redirect:/users/{userId}";
+            return PAGE_USER_DETAILS;
         }
     }
-
-    @GetMapping("/{userId}")
-    public ModelAndView showOwner(@PathVariable("userId") int userId) {
-        ModelAndView mav = new ModelAndView("users/userDetails");
-        mav.addObject(this.userService.getById(userId));
-        return mav;
-    }
-
-    @GetMapping()
-    public String getUsers(Map<String, Object> model) {
-        List<User> result = userService.getAll();
-        model.put("selections", result);
-        return "users/usersList";
-    }
-
 }

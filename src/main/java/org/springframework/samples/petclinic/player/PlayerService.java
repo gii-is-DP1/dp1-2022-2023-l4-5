@@ -37,7 +37,7 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true)
-    public boolean exists(int id) {
+    public boolean playerExists(int id) {
         return playerRepository.existsById(id);
     }
 

@@ -5,5 +5,6 @@ public enum Tier {
     BRONZE,
     SILVER,
     GOLD,
-    PLATINUM
+    PLATINUM,
+    RETADOR
 }

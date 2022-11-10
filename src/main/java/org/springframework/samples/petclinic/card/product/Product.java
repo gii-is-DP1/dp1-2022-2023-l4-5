@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -18,18 +19,20 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product extends Card {
-    // TODO: decidir si es obligatorio.
-    @Min(0)
+    @NotNull
+    @Min(1)
     private Integer quantity;
 
-    // TODO: decidir si es obligatorio.
+    @NotNull
     @Range(min = 3, max = 8)
     private Integer price;
 
-    // TODO: decidir si es obligatorio.
+    @NotNull
     @Range(min = 0, max = 4)
     private Integer attack;
 
+    //TODO probar si se puede mandar una lista vacía
+    @NotNull
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacity;
 }

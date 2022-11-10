@@ -37,5 +37,10 @@ public class EnemyService {
         enemyInGameRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public boolean enemyInGameExists(int id) {
+        return enemyInGameRepository.existsById(id);
+    }
+
 
 }

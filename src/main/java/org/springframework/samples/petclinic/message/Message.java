@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.user.User;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -20,16 +21,17 @@ import java.time.LocalDateTime;
 public class Message extends BaseEntity {
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 0, max = 500)
     private String content;
 
-    // TODO: Decidir si son obligatorios.
+    @Column(columnDefinition = "varchar(36) default NOW()")
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     private LocalDateTime time;
 
     @ManyToOne
     private User sender;
 
+    //TODO probar Many To Many para un chat de grupo
     @ManyToOne
     private User receiver;
 

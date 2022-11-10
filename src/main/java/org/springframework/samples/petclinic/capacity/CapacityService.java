@@ -42,5 +42,10 @@ public class CapacityService {
         capacityRepository.delete(capacity);
     }
 
+    @Transactional(readOnly = true)
+    public boolean capacityExists(int id) {
+        return capacityRepository.existsById(id);
+    }
+
 
 }
