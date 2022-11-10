@@ -4,8 +4,6 @@
 
 <petclinic:layout pageName="error">
 
-    <spring:url value="/resources/images/LogoNT4H.png" var="logoImage"/>
-    <img src="${logoImage}"/>
 
     <h2>Something happened...</h2>
 
