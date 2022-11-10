@@ -33,4 +33,9 @@ public class OrcService {
     public void deleteOrcById(int id) {
         orcRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public boolean orcExists(int id) {
+        return orcRepository.existsById(id);
+    }
 }

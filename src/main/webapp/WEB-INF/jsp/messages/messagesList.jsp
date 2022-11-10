@@ -16,9 +16,6 @@
         </div>
         <form:form modelAttribute="chat" class="form-horizontal">
             <petclinic:inputField label="Content" name="content"/>
-            <!---
-            <button class="btn btn-default" type="submit">Send</button>
-            -->
         </form:form>
 
     </div>
@@ -44,7 +41,7 @@
     console.log("hola")
     username = window.location.pathname.split("/")[2];
 
-    reset('/message/update/' + username, function (responseText) {
+    reset('/messages/update/' + username, function (responseText) {
         const resultado = JSON.parse(responseText)
         chat = document.getElementById("chat");
         lis = resultado.messages.map(function (m) {

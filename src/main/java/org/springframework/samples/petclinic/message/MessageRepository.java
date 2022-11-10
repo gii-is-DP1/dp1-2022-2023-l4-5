@@ -14,7 +14,7 @@ public interface MessageRepository extends CrudRepository<Message, Integer> {
     List<Message> findBySenderOrReceiver(Integer id);
 
     @Query("SELECT m FROM Message m WHERE (m.sender.username = :sender AND m.receiver.username = :receiver) OR (m.sender.username = :receiver AND m.receiver.username = :sender)")
-    List<Message> getBySenderWithReceiver(String sender, String receiver);
+    List<Message> findBySenderWithReceiver(String sender, String receiver);
 
     Optional<Message> findById(Integer id);
 

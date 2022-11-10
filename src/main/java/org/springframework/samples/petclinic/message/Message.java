@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.user.User;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -23,7 +24,7 @@ public class Message extends BaseEntity {
     @Size(min = 0, max = 500)
     private String content;
 
-    @NotNull
+    @Column(columnDefinition = "varchar(36) default NOW()")
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     private LocalDateTime time;
 

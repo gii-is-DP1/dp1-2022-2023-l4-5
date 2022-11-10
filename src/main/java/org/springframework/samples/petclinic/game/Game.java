@@ -5,15 +5,11 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.card.enemy.EnemyInGame;
-import org.springframework.samples.petclinic.card.enemy.night_lord.NightLord;
-import org.springframework.samples.petclinic.card.enemy.orc.Orc;
 import org.springframework.samples.petclinic.effect.Phase;
-import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.turn.Turn;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -36,10 +32,6 @@ public class Game extends NamedEntity {
     @NotNull
     @Range(min = 1, max = 4)
     private Integer maxPlayers;
-
-    @NotNull
-    @Range(min = 1, max = 4)
-    private Integer maxPlayer;
 
 
 

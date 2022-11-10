@@ -35,4 +35,9 @@ public class NightLordService {
     public void deleteNightLordById(int id) {
         nightLordRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public boolean nightLordExists(int id) {
+        return nightLordRepository.existsById(id);
+    }
 }

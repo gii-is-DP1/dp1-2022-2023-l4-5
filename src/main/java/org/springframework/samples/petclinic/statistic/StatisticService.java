@@ -36,7 +36,7 @@ public class StatisticService {
     }
 
     @Transactional(readOnly = true)
-    public boolean exists(int id) {
-        return statisticRepository.findById(id).orElse(null) != null;
+    public boolean statisticExists(int id) {
+        return statisticRepository.existsById(id);
     }
 }

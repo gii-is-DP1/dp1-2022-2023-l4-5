@@ -45,6 +45,11 @@ public class HeroService {
         heroRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public boolean heroExists(int id) {
+        return heroRepository.existsById(id);
+    }
+
     // HeroInGame
     @Transactional(readOnly = true)
     public Optional<HeroInGame> getHeroInGameById(Integer id) {
@@ -69,5 +74,10 @@ public class HeroService {
     @Transactional
     public void deleteHeroInGameById(Integer id) {
         heroInGameRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean heroInGameExists(int id) {
+        return heroInGameRepository.existsById(id);
     }
 }

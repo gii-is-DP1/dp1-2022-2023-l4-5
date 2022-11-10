@@ -45,42 +45,47 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User getById(int id) {
+    public User getUserById(int id) {
         return userRepository.findById(id);
     }
 
     @Transactional(readOnly = true)
-    public User getByUsername(String username) {
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Transactional(readOnly = true)
-    public List<User> getByAuthority(String authority) {
+    public List<User> getUserByAuthority(String authority) {
         return userRepository.findByAuthority(authority);
     }
 
     @Transactional(readOnly = true)
-    public List<User> getByTier(Tier tier) {
+    public List<User> getUserByTier(Tier tier) {
         return userRepository.findByTier(tier);
     }
 
     @Transactional(readOnly = true)
-    public List<User> getAll() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public boolean exists(String username) {
+    public boolean userExists(String username) {
         return userRepository.findByUsername(username) != null;
     }
 
     @Transactional
-    public void delete(User user) {
+    public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
     @Transactional
-    public void deleteById(int id) {
+    public void deleteUserById(int id) {
         userRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean userExists(int id) {
+        return userRepository.existsById(id);
     }
 }
