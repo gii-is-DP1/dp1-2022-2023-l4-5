@@ -29,7 +29,7 @@
             <div class="form-group">
                 <petclinic:selectField name="Mode" label="Mode" names="${mode}" size="2"/>
                 <petclinic:selectField name="Accessibility" label="Accesibilidad" names="${accesibility}" size="2"/>
-                <petclinic:selectField name="MaxPlayers" label="Jugadores maximos" names="${[1,2,3,4]}" size="4"/>
+                <petclinic:selectField name="MaxPlayers" label="Jugadores maximos" names="${[2,3,4]}" size="4"/>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
