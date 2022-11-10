@@ -40,7 +40,7 @@ public class UserService {
     public void saveUser(User user) throws DataAccessException {
         if (user.getEnable() == null) user.setEnable("1");
         if (user.getTier()== null) user.setTier(Tier.IRON);
-        if (user.getAuthority()== null) user.setAuthority("USER");
+        if (user.getAuthority()== null) user.setAuthority(Authority.USER);
         userRepository.save(user);
     }
 

@@ -49,7 +49,7 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private String authority;
+    private Authority authority;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
