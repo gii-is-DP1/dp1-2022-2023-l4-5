@@ -82,6 +82,14 @@
 												<a href="<c:url value="/logout" />"
 													class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
+											<p class="text-left">
+                                            	<a href="<c:url value="/users/edit" />"
+                                            		class="btn btn-primary btn-block btn-sm">Edit</a>
+                                            </p>
+                                            <p class="text-left">
+                                                <a href="<c:url value="/users/delete" />"
+                                                    class="btn btn-primary btn-block btn-sm">Delete</a>
+                                            </p>
 										</div>
 									</div>
 								</div>
