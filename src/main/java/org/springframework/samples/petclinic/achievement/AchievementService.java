@@ -40,4 +40,9 @@ public class AchievementService {
     public void deleteAchievementById(int id) {
         achievementRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public boolean achievementExists(int id) {
+        return achievementRepository.existsById(id);
+    }
 }

@@ -16,4 +16,6 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
     List<Game> findByPlayer(Integer playerId);
 
     List<Game> findByMode(Mode mode);
+
+    Optional<Game> findByName(String name);
 }

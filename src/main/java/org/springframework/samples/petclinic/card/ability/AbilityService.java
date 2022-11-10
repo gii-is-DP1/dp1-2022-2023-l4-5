@@ -44,6 +44,11 @@ public class AbilityService {
         abilityRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public boolean abilityExists(int id) {
+        return abilityRepository.existsById(id);
+    }
+
     // AbilityInGame
     @Transactional(readOnly = true)
     public Optional<AbilityInGame> getAbilityInGameById(Integer id) {
@@ -68,6 +73,11 @@ public class AbilityService {
     @Transactional
     public void deleteAbilityInGameById(Integer id) {
         abilityInGameRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean abilityInGameExists(int id) {
+        return abilityInGameRepository.existsById(id);
     }
 
 }

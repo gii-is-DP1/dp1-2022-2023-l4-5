@@ -42,6 +42,11 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public boolean productExists(int id) {
+        return productRepository.existsById(id);
+    }
+
     // ProductInGame
     @Transactional(readOnly = true)
     public ProductInGame getProductInGameById(int id) {
@@ -66,5 +71,10 @@ public class ProductService {
     @Transactional
     public void deleteProductInGameById(int id) {
         productInGameRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean productInGameExists(int id) {
+        return productInGameRepository.existsById(id);
     }
 }

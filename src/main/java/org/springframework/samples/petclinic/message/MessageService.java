@@ -27,7 +27,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<Message> getMessageBySenderWithReceiver(String usernameSender, String usernameReceiver) {
-        return messageRepository.getBySenderWithReceiver(usernameSender, usernameReceiver);
+        return messageRepository.findBySenderWithReceiver(usernameSender, usernameReceiver);
     }
 
     @Transactional(readOnly = true)
@@ -46,7 +46,7 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public boolean exists(int id) {
+    public boolean messageExists(int id) {
         return messageRepository.existsById(id);
     }
 }

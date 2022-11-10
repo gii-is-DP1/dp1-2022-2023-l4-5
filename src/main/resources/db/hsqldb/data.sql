@@ -322,4 +322,3 @@ VALUES (1, 1),
        (6, 6),
        (7, 3),
        (8, 3);
-INSERT INTO games(start_date,finish_date,max_players,mode,phase,password,accessibility) VALUES ('2002-02-01','2002-02-01',3,'UNI_CLASS','HERO_ATTACK','patata','PUBLIC');
