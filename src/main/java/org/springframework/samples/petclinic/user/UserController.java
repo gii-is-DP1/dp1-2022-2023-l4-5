@@ -35,7 +35,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+    private static final String VIEWS_OWNER_CREATE_FORM = "users/createUserForm";
 
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
