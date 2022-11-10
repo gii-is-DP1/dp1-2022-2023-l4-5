@@ -58,7 +58,11 @@ public class GameController {
         List<Mode> ls = new ArrayList<Mode>();
         ls.add(Mode.MULTI_CLASS);
         ls.add(Mode.UNI_CLASS);
+        List<Accessibility> ls2 = new ArrayList<Accessibility>();
+        ls2.add(Accessibility.PRIVATE);
+        ls2.add(Accessibility.PUBLIC);
         model.put("mode", ls);
+        model.put("accesibility", ls2);
         model.put("game", new Game());
         return VIEW_GAME_CREATE;
     }

@@ -37,18 +37,18 @@ public class Game extends NamedEntity {
 
 
 
-    //@NotNull
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
-    //@NotNull
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
-    //@NotNull
+    @NotNull
     private String password;
 
-    //@NotNull
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
