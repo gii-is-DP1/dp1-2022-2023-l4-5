@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.user;
 
-public enum Authorities {
+public enum Authority {
     DOKTOL,
     USER
 }
