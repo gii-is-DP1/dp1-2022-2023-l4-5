@@ -28,7 +28,6 @@ public class Ability extends Card {
     @Range(min = 0, max = 4)
     private Integer attack;
 
-    // TODO: Decidir si es necesario.
-    @Min(0)
+    @Min(1)
     private Integer quantity;
 }

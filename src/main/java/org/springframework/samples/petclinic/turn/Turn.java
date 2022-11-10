@@ -8,17 +8,29 @@ import org.springframework.samples.petclinic.effect.Phase;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 public class Turn extends BaseEntity {
+
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer gold;
+
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer glory;
+
+    @NotNull
     private Boolean evasion;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Phase phase;
 

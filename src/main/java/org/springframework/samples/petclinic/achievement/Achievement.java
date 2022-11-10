@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @Table(name = "achievements")
 public class Achievement extends NamedEntity {
 
-    @NotEmpty
+    @NotNull
     @Size(min = 3, max = 255)
     private String description;
 
@@ -26,6 +26,8 @@ public class Achievement extends NamedEntity {
     @Min(value = 0)
     private Integer threshold;
 
+
+    //TODO probar si la tabla se crea con un null, un string vacio y algo que no sea una URL
     @NotEmpty
     @URL
     private String image;
