@@ -5,7 +5,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 <%@ attribute name="name" required="true" rtexprvalue="true"
-	description="Name of the active menu: home, owners, vets or error"%>
+	description="Name of the active menu: home, games, vets or error"%>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -28,10 +28,12 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'user'}" url="/users"
-					title="find users">
+
+				<petclinic:menuItem active="${name eq 'games'}" url="/games"
+					title="find games">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find owners AAAAAAA</span>
+					<span>Find Games</span>
+
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
@@ -57,6 +59,7 @@
 					<li><a href="<c:url value="/users/new" />">Register</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
+
                     <li class="dropdown"><a href="#" class="dropdown-toggle"
                                             data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
                         <strong><sec:authentication property="name"/></strong> <span

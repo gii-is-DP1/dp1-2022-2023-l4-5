@@ -35,7 +35,7 @@ public class Game extends NamedEntity {
 
     @NotNull
     @Range(min = 1, max = 4)
-    private Integer actualPlayer;
+    private Integer maxPlayers;
 
     @NotNull
     @Range(min = 1, max = 4)
