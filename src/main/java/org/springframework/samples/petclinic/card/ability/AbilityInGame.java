@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "abilities_in_game")
 public class AbilityInGame extends BaseEntity {
-    // TODO: Decidir si hace falta un mínimo.
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer timesUsed;
 
@@ -26,12 +26,13 @@ public class AbilityInGame extends BaseEntity {
     @NotNull
     private Integer attack;
 
-    // TODO: Decidir si es necesario.
+    @NotNull
     private boolean isProduct;
 
     @ManyToOne
     private Ability ability;
 
+    @NotNull
     @ManyToOne
     private Player player;
 

@@ -9,6 +9,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 // TODO: darle un prop?sito a esta clase.
 @Getter
@@ -16,33 +18,47 @@ import javax.persistence.OneToOne;
 @Entity
 public class Statistic extends BaseEntity {
 
-    // TODO: decidir si hace fañta decidir un mínimo.
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer allGold;
 
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer allGlory;
 
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer numOrcsKilled;
 
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer numWarLordKilled;
 
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer numWinnedGames;
 
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer numPlayedGames;
 
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer allDamgeDealed;
 
+    @NotNull
+    @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer allDamageDealedToNightLords;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private User usuario;
+
 
 
 }

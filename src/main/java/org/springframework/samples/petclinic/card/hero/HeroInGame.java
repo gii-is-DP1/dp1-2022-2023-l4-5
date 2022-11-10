@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -18,10 +19,11 @@ import javax.validation.constraints.NotNull;
 public class HeroInGame extends BaseEntity {
 
     @NotNull
+    @Max(3)
     private Integer actualHealth;
 
-    @Column(columnDefinition = "int default 0")
-    private Integer timesUsed;
+    @Column(columnDefinition ="int default 0")
+    private Integer effectUsed;
 
     @ManyToOne
     private Hero hero;
