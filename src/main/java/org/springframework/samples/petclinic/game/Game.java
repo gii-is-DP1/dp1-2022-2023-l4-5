@@ -33,7 +33,7 @@ public class Game extends BaseEntity {
 
     @NotNull
     @Range(min = 1, max = 4)
-    private Integer actualPlayer;
+    private Integer maxPlayers;
 
     // TODO: Decidir si son obligatorios.
     @NotNull
