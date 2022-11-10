@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.message.Message;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Tier;
 import org.springframework.samples.petclinic.statistic.Statistic;
@@ -12,9 +13,9 @@ import org.springframework.samples.petclinic.statistic.Statistic;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -32,8 +33,6 @@ public class User extends BaseEntity {
     @Size(min = 1, max = 20)
     private String password;
 
-    @NotNull
-    @Pattern(regexp = "^([10])$") //TODO revisar por si falla(bastante probable no se que estoy haciendo)
     private String enable;
 
     @URL
@@ -47,7 +46,6 @@ public class User extends BaseEntity {
     private String description;
 
     @Enumerated
-    @NotNull
     private Authority authority;
 
     @NotNull
@@ -59,4 +57,10 @@ public class User extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Statistic statistic;
-    }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
+    private List<Message> sendedMessages; // TODO: Solucionar de una mejor forma.
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
+    private List<Message> receivedMessages; // TODO: Solucionar de una mejor forma.
+}

@@ -24,6 +24,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -57,10 +58,20 @@ public class UserController {
     }
 
     // Obtener información detallada de un usuario.
+    /*
     @GetMapping(value = "/{userId}")
     public String showOwner(@PathVariable("userId") int userId, ModelMap model) {
-        model.addAttribute(this.userService.getUserById(userId));
+        System.out.println(model);
+        model.put("user", this.userService.getUserById(userId));
         return PAGE_USER_DETAILS;
+    }
+     */
+
+    @GetMapping("/{userId}")
+    public ModelAndView showOwner(@PathVariable("userId") int userId) {
+        ModelAndView mav = new ModelAndView("users/userDetails");
+        mav.addObject(this.userService.getUserById(userId));
+        return mav;
     }
 
     // Crear usuario
@@ -82,7 +93,7 @@ public class UserController {
 
     //Editar usuario
     @GetMapping(value = "/edit")
-    public String initUpdateUserForm(@PathVariable("userId") int userId, ModelMap model) {
+    public String initUpdateUserForm(ModelMap model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails ud = null;
         if (principal instanceof UserDetails) {
@@ -93,7 +104,7 @@ public class UserController {
         return VIEW_USER_CREATE_OR_UPDATE_FORM;
     }
 
-    @PutMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public String processUpdateUserForm(@Valid User user, BindingResult result) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails ud = null;
@@ -104,13 +115,16 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEW_USER_CREATE_OR_UPDATE_FORM;
         } else {
+            System.out.println("User: " + user);
             user.setId(oldUser.getId());
+            user.setEnable(oldUser.getEnable());
+            user.setTier(oldUser.getTier());
             this.userService.saveUser(user);
-            return PAGE_USER_DETAILS;
+            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
         }
     }
 
-    @DeleteMapping(value = "/delete")
+    @GetMapping(value = "/delete")
     public String processDeleteUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails ud = null;
@@ -119,6 +133,7 @@ public class UserController {
         }
         User oldUser = this.userService.getUserByUsername(ud.getUsername());
         userService.deleteUser(oldUser);
+        // TODO deslogearse
         return PAGE_WELCOME;
     }
 
