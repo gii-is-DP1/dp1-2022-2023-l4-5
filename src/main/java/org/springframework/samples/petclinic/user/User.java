@@ -11,12 +11,10 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Tier;
+import org.springframework.samples.petclinic.statistic.Statistic;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.Set;
 
@@ -32,30 +30,34 @@ public class User extends BaseEntity {
     private String username;
 
     @NotNull
-    @NotEmpty // TODO: revisar si es necesario.
     @Size(min = 1, max = 20)
     private String password;
 
-
-    private String enable; // TODO: Revisar si es necesario.
+    @NotNull
+    @Pattern(regexp = "^([10])$") //TODO revisar por si falla(bastante probable no se que estoy haciendo)
+    private String enable;
 
     @URL
     private String avatar;
 
-    // @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Tier tier; // TODO: Poner un valor por defecto.
 
     // TODO: Decidir tamaño.
     @NotBlank
     private String description;
 
-    // TODO: Decidir tamaño.
-    //@NotBlank
-    private String authority; // TODO: Dar un valor por defecto.
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private String authority;
 
+    @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private Date birthDate; // TODO: Revisar si es obligatorio.
+    private Date birthDate;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Statistic statistic;
     }

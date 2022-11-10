@@ -6,10 +6,9 @@ import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.player.Player;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -18,7 +17,12 @@ import javax.persistence.Table;
 public class ProductInGame extends NamedEntity {
     // TODO: decidir si necesita un mínimo.
     @Column(columnDefinition = "int default 0")
+    @Min(0)
     private Integer timesUsed;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private StateProduct stateProduct;
 
     // El producto.
     @ManyToOne
@@ -29,6 +33,7 @@ public class ProductInGame extends NamedEntity {
     private Player player;
 
     // A que partida pertenece el producto.
+    @NotNull
     @ManyToOne
     private Game game;
 }
