@@ -15,6 +15,7 @@
             <th style="width: 200px;">Max Players</th>
             <th style="width: 200px">Mode</th>
             <th style="width: 200px;">Accessibility</th>
+            <th style="width: 200px;">Unirse</th>
         </tr>
         </thead>
         <tbody>
@@ -32,7 +33,9 @@
                 <td>
                     <c:out value="${game.accessibility}"/>
                 </td>
-
+                <td>
+                    <input type="BUTTON" value="Join Game kbron"><a href="show me your balls"></a>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
