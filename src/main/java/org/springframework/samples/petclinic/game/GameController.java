@@ -2,13 +2,16 @@ package org.springframework.samples.petclinic.game;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/games")
@@ -20,6 +23,8 @@ public class GameController {
     private static final String VIEW_GAME_DETAILS = "games/gameDetails";
     // Servicios
     private final GameService gameService;
+
+
 
     @Autowired
     public GameController(GameService gameService) {
@@ -48,7 +53,24 @@ public class GameController {
     // Crear una partida.
     @GetMapping(value = "/new")
     public String initCreationForm(ModelMap model) {
+
+        //Hacer lo mismo con: maxPlayer y con phase, accssesibilit, y los denas atributos
+        List<Mode> ls = new ArrayList<Mode>();
+        ls.add(Mode.MULTI_CLASS);
+        ls.add(Mode.UNI_CLASS);
+        model.put("mode", ls);
         model.put("game", new Game());
         return VIEW_GAME_CREATE;
+    }
+
+
+    @PostMapping(value = "/new")
+    public String processCreationForm(@Valid Game game, BindingResult result) {
+        if (result.hasErrors()) {
+            return VIEW_GAME_CREATE;
+        } else {
+            gameService.saveGame(game);
+            return VIEW_GAME_DETAILS;
+        }
     }
 }

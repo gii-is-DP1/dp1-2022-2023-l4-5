@@ -21,36 +21,38 @@ import java.util.List;
 @Table(name = "games")
 public class Game extends NamedEntity {
 
-    @NotNull
+    //DESCOMENAR CUANDO FUFE EL JSP COMPLETO
+
+   // @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @NotNull
+   // @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate finishDate;
 
-    @NotNull
+    //@NotNull
     @Range(min = 1, max = 4)
     private Integer maxPlayers;
 
 
 
-    @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
-    @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
-    @NotNull
+    //@NotNull
     private String password;
 
-    @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
-    @NotNull
+    //@NotNull
     private boolean hasStages;
 
 
@@ -61,7 +63,7 @@ public class Game extends NamedEntity {
     @Size(max = 3)
     private List<EnemyInGame> orcs;
 
-    @NotNull
+    //@NotNull
     @OneToMany
     private List<EnemyInGame> passiveOrcs;
 }
