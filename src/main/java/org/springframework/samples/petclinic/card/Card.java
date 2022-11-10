@@ -28,7 +28,7 @@ public class Card extends NamedEntity {
 
 
     @Min(0)
-    @NotNull
+    // @NotNull
     private Integer maxUses;
 
 }
