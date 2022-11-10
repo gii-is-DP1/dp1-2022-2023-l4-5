@@ -23,23 +23,31 @@
         <form:form modelAttribute="game" class="form-horizontal" id="add-game-form">
             <div class="form-group has-feedback">
 
-
+                <petclinic:inputField label="Name" name="name"/>
                 <petclinic:inputField label="Password" name="password"/>
-
-            <div class="form-group">
-                Mode:
-                <select name="Mode">
-                    <option value="1">UNI_CLASS</option>
-                    <option value="2">MULTI_CLASS</option>
-                </select>
             </div>
             <div class="form-group">
-                Accessibility:
-                <select name="Accessibility">
-                    <option value="1">Private</option>
-                    <option value="2">Public</option>
+                MaxPlayer:
+                <select name="maxPlayer">
+                    <option value="2">2</option>
+                    <option value="1">3</option>
+                    <option value="2">4</option>
                 </select>
             </div>
+                <div class="form-group">
+                    Mode:
+                    <select name="Mode">
+                        <option value="1">UNI_CLASS</option>
+                        <option value="2">MULTI_CLASS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    Accessibility:
+                    <select name="Accessibility">
+                        <option value="1">Private</option>
+                        <option value="2">Public</option>
+                    </select>
+                </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
