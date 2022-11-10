@@ -30,6 +30,10 @@
             <th>Authority</th>
             <td><c:out value="${user.authority}"/></td>
         </tr>
+        <tr>
+            <th>Description</th>
+            <td><c:out value="${user.description}"/></td>
+        </tr>
     </table>
 
     <spring:url value="{userId}/edit" var="editUrl">
@@ -37,7 +41,7 @@
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit User</a>
 
-    <spring:url value="/welcome"  var="goToLobby">
+    <spring:url value="/welcome" var="goToLobby">
     </spring:url>
     <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Lobby</a>
 

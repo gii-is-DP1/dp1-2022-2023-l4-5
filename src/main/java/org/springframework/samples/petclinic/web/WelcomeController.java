@@ -1,12 +1,12 @@
 package org.springframework.samples.petclinic.web;
 
+import org.springframework.samples.petclinic.model.Person;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.samples.petclinic.model.Person;
 
 
 @Controller
@@ -15,27 +15,29 @@ public class WelcomeController {
 
 	  @GetMapping({"/","/welcome"})
 	  public String welcome(Map<String, Object> model) {
-          List<Person> persons= new ArrayList<Person>();
-          Person p= new Person();
-          p.setFirstName("Pedro ");
-          p.setLastName("Ruiz Aguilar");
-          persons.add(p);
-          p.setFirstName("Ismael ");
-          p.setLastName("Ruiz Jurado");
-          persons.add(p);
-          p.setFirstName("Laura ");
-          p.setLastName("Roldan Merat");
-          persons.add(p);
-          p.setFirstName("Alejandro ");
-          p.setLastName("Ni idea");
-          persons.add(p);
-          p.setFirstName("Ivan ");
-          p.setLastName("Sanchez San jose");
-          persons.add(p);
-          model.put("persons",persons);
-          model.put("title","My project");
-          model.put("group","Teachers");
-
-	    return "welcome";
-	  }
+          List<Person> people = new ArrayList<Person>();
+          Person p1 = new Person();
+          p1.setFirstName("Pedro ");
+          p1.setLastName("Ruiz Aguilar");
+          people.add(p1);
+          Person p2 = new Person();
+          p2.setFirstName("Ismael ");
+          p2.setLastName("Ruiz Jurado");
+          people.add(p2);
+          Person p3 = new Person();
+          p3.setFirstName("Laura ");
+          p3.setLastName("Roldan Merat");
+          people.add(p3);
+          Person p4 = new Person();
+          p4.setFirstName("Alejandro ");
+          p4.setLastName("Santiago Felix");
+          people.add(p4);
+          Person p5 = new Person();
+          p5.setFirstName("Ivan ");
+          p5.setLastName("Sanchez San jose");
+          people.add(p5);
+          model.put("people", people);
+          model.put("title", "No Time For Heroes");
+          return "welcome";
+      }
 }
