@@ -78,7 +78,7 @@ public class Player extends NamedEntity {
     @OneToMany
     private List<AbilityInGame> inDiscard;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Game game;
 
 }

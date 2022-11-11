@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.message.Message;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.Tier;
 import org.springframework.samples.petclinic.statistic.Statistic;
 
@@ -63,4 +64,7 @@ public class User extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
     private List<Message> receivedMessages; // TODO: Solucionar de una mejor forma.
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Player player;
 }
