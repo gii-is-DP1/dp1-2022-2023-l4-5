@@ -9,12 +9,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -52,8 +52,8 @@ public class GameController {
     public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails ud = null;
-        if(principal instanceof UserDetails) {
-            ud = ((UserDetails)principal);
+        if (principal instanceof UserDetails) {
+            ud = ((UserDetails) principal);
         }
         User user = userService.getUserByUsername(ud.getUsername());
         Game game = gameService.getGameById(gameId).get();
@@ -65,11 +65,35 @@ public class GameController {
         return VIEW_GAME_LOBBY;
     }
 
+
+
+
     // Crear una partida.
     @GetMapping(value = "/new")
     public String initCreationForm(ModelMap model) {
+
+        //Hacer lo mismo con: maxPlayer y con phase, accssesibilit, y los denas atributos
+        List<Mode> ls = new ArrayList<Mode>();
+        ls.add(Mode.MULTI_CLASS);
+        ls.add(Mode.UNI_CLASS);
+        List<Accessibility> ls2 = new ArrayList<Accessibility>();
+        ls2.add(Accessibility.PRIVATE);
+        ls2.add(Accessibility.PUBLIC);
+        model.put("mode", ls);
+        model.put("accesibility", ls2);
         model.put("game", new Game());
         return VIEW_GAME_CREATE;
+    }
+
+
+    @PostMapping(value = "/new")
+    public String processCreationForm(@Valid Game game, BindingResult result) {
+        if (result.hasErrors()) {
+            return VIEW_GAME_CREATE;
+        } else {
+            gameService.saveGame(game);
+            return VIEW_GAME_LOBBY;
+        }
     }
 
     // Clase auxiliar

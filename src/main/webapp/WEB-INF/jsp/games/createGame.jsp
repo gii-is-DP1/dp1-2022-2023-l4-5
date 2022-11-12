@@ -27,33 +27,19 @@
                 <petclinic:inputField label="Password" name="password"/>
             </div>
             <div class="form-group">
-                MaxPlayer:
-                <select name="maxPlayer">
-                    <option value="2">2</option>
-                    <option value="1">3</option>
-                    <option value="2">4</option>
-                </select>
-            </div>
-                <div class="form-group">
-                    Mode:
-                    <select name="Mode">
-                        <option value="1">UNI_CLASS</option>
-                        <option value="2">MULTI_CLASS</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    Accessibility:
-                    <select name="Accessibility">
-                        <option value="1">Private</option>
-                        <option value="2">Public</option>
-                    </select>
-                </div>
+                <petclinic:selectField name="Mode" label="Mode" names="${mode}" size="2"/>
+                <petclinic:selectField name="Accessibility" label="Accesibilidad" names="${accesibility}" size="2"/>
+                <petclinic:selectField name="MaxPlayers" label="Jugadores maximos" names="${[2,3,4]}" size="4"/>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-default" type="submit">Create game</button>
                 </div>
             </div>
+
         </form:form>
     </jsp:body>
+
+
+
 </petclinic:layout>

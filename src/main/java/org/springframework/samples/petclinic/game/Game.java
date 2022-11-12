@@ -22,15 +22,17 @@ import java.util.List;
 @Table(name = "games")
 public class Game extends NamedEntity {
 
-    @NotNull
+    //DESCOMENAR CUANDO FUFE EL JSP COMPLETO
+
+   // @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @NotNull
+   // @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate finishDate;
 
-    @NotNull
+    //@NotNull
     @Range(min = 1, max = 4)
     private Integer maxPlayers;
 
@@ -51,7 +53,7 @@ public class Game extends NamedEntity {
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
-    @NotNull
+    //@NotNull
     private boolean hasStages;
 
 
@@ -62,7 +64,7 @@ public class Game extends NamedEntity {
     @Size(max = 3)
     private List<EnemyInGame> orcs;
 
-    @NotNull
+    //@NotNull
     @OneToMany
     private List<EnemyInGame> passiveOrcs;
 
