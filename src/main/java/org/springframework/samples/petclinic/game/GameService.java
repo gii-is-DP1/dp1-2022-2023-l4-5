@@ -6,7 +6,7 @@ import org.springframework.samples.petclinic.effect.Phase;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +30,24 @@ public class GameService {
         return gameRepository.findByName(name);
     }
 
+    //TODO: actualizar la Date_finish cuadno acabe la partida
     @Transactional
     public void saveGame(Game game) {
-        if(game.getPhase() == null){
+
+
+
+        if (game.getPhase() == null) {
             game.setPhase(Phase.START);
         }
-        if(game.getStartDate() == null){
-            game.setStartDate(LocalDate.now());
+        if (game.getStartDate() == null) {
+            game.setStartDate(LocalDateTime.now());
+        }
+        if (game.getPassword() == "") {
+            if (game.getAccessibility() == null) {
+                game.setAccessibility(Accessibility.PUBLIC);
+            }
+        } else {
+            game.setAccessibility(Accessibility.PRIVATE);
         }
         gameRepository.save(game);
     }

@@ -14,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,17 +23,16 @@ import java.util.List;
 @Table(name = "games")
 public class Game extends NamedEntity {
 
-    //DESCOMENAR CUANDO FUFE EL JSP COMPLETO
+    //TODO: DESCOMENAR CUANDO FUFE EL JSP COMPLETO
 
-   // @NotNull
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private LocalDate startDate;
+    //@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
+    private LocalDateTime startDate;
 
-   // @NotNull
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private LocalDate finishDate;
 
-    //@NotNull
+    //@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
+    private LocalDateTime finishDate;
+
+    @NotNull
     @Range(min = 1, max = 4)
     private Integer maxPlayers;
 
@@ -42,14 +42,14 @@ public class Game extends NamedEntity {
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
-    @NotNull
+
     private String password;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 

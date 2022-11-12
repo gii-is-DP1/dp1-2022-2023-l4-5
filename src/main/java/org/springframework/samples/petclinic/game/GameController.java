@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.game;
 
 
+import com.fasterxml.jackson.databind.deser.impl.PropertyValueBuffer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.user.User;
@@ -72,13 +73,15 @@ public class GameController {
     @GetMapping(value = "/new")
     public String initCreationForm(ModelMap model) {
 
-        //Hacer lo mismo con: maxPlayer y con phase, accssesibilit, y los denas atributos
+
         List<Mode> ls = new ArrayList<Mode>();
         ls.add(Mode.MULTI_CLASS);
         ls.add(Mode.UNI_CLASS);
         List<Accessibility> ls2 = new ArrayList<Accessibility>();
         ls2.add(Accessibility.PRIVATE);
         ls2.add(Accessibility.PUBLIC);
+
+        model.put("hasStage", true);
         model.put("mode", ls);
         model.put("accesibility", ls2);
         model.put("game", new Game());
