@@ -36,13 +36,12 @@
         </tr>
     </table>
 
-    <spring:url value="{userId}/edit" var="editUrl">
-        <spring:param name="userId" value="${user.id}"/>
+    <spring:url value="/users/edit" var="editUrl">
+
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit User</a>
-
     <spring:url value="/welcome" var="goToLobby">
     </spring:url>
-    <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Lobby</a>
+    <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Menu</a>
 
 </petclinic:layout>
