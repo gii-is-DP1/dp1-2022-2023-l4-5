@@ -10,13 +10,35 @@
     <h2>Game Lobby</h2>
     <c:forEach items="${selections}" var="player">
         <h1>"${player.name}"</h1>
-
-        <form:form action="submitForm" modelAttribute="p">
-            <div class="form-group">
-                <petclinic:selectField name="Hero" label="Hero" names="${[A,B,C]}" size="2"/>
-            </div>
-            <input type="submit"  value="Ready" />
-        </form:form>
-
     </c:forEach>
 </petclinic:layout>
+
+<script type="text/javascript">
+
+    function reset(url, action) {
+        $(document).ready(function () {
+            setInterval(function () {
+                const http = new XMLHttpRequest();
+                http.open('GET', url, true);
+                http.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        action(this.responseText)
+                    }
+                }
+                http.send()
+            }, 1000);
+        });
+    }
+
+    console.log("hola")
+    username = window.location.pathname.split("/")[2];
+
+    reset('/messages/update/' + username, function (responseText) {
+        const resultado = JSON.parse(responseText)
+        chat = document.getElementById("patata");
+        lis = resultado.messages.map(function (m) {
+            return "<li>" + m + "</li>"
+        })
+        chat.innerHTML = lis.join("")
+    })
+</script>

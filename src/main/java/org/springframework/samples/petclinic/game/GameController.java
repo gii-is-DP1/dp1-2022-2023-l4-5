@@ -72,17 +72,15 @@ public class GameController {
         return VIEW_GAME_LOBBY;
     }
     @PostMapping(value = "/{gameId}")
-    public String processCreationHero(@Valid Player player, BindingResult result) {
+    public String processCreationPlayerReady(@Valid Player player, BindingResult result) {
         if (result.hasErrors()) {
             return VIEW_GAME_LOBBY;
         } else {
+            player.setReady(Boolean.TRUE);
             playerService.savePlayer(player);
             return VIEW_GAME_LOBBY;
         }
     }
-
-
-
 
     // Crear una partida.
     @GetMapping(value = "/new")
@@ -126,6 +124,7 @@ public class GameController {
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
         player.setSequence(1);
+        player.setReady(Boolean.FALSE);
         //Set<HeroInGame> shg = Set.of();
         //player.setHeroes();
         //faltan algunos atributos
