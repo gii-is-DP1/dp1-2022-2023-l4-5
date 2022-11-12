@@ -12,7 +12,7 @@
         <thead>
         <tr>
             <th style="width: 200px;">Start Date</th>
-            <th style="width: 200px;">Max Players</th>
+            <th style="width: 200px;">Players</th>
             <th style="width: 200px">Mode</th>
             <th style="width: 200px;">Accessibility</th>
             <th style="width: 200px;">Unirse</th>
@@ -25,7 +25,7 @@
                     <c:out value="${game.startDate}"/>
                 </td>
                 <td>
-                    <c:out value="${game.maxPlayers}"/>
+                    <c:out value="${fn:length(game.players)}/${game.maxPlayers}"/>
                 </td>
                 <td>
                     <c:out value="${game.mode}"/>

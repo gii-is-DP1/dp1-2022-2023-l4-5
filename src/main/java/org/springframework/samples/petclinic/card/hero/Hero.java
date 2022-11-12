@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.capacity.Capacity;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.ability.Ability;
+import org.springframework.samples.petclinic.player.Player;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -33,4 +34,5 @@ public class  Hero extends Card {
     @NotNull
     @ManyToMany
     private List<Capacity> capacities;
+
 }

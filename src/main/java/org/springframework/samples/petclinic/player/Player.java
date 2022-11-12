@@ -59,8 +59,11 @@ public class Player extends NamedEntity {
     @Range(min = 1, max= 4)
     private Integer sequence;  // Para elegir a quien le toca.
 
-    //Relaciones
     @NotNull
+    @Column(columnDefinition = "boolean default false")
+    private Boolean ready;
+
+    //Relaciones
     @OneToMany(cascade = CascadeType.ALL)
     private Set<HeroInGame> heroes;
 

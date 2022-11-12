@@ -18,7 +18,12 @@ public class PlayerService {
 
     @Transactional
     public void savePlayer(Player player) {
+        System.out.println("Antes");
+        if(player.getReady()==null){
+            player.setReady(false);
+        }
         playerRepository.save(player);
+        System.out.println("Despues");
     }
 
     @Transactional
@@ -40,5 +45,6 @@ public class PlayerService {
     public boolean playerExists(int id) {
         return playerRepository.existsById(id);
     }
+
 
 }

@@ -14,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -70,4 +71,13 @@ public class Game extends NamedEntity {
 
     @OneToMany
     private List<Player> players;
+
+    public void addPlayer(Player player){
+        if(this.players== null){
+            List<Player> ls = new ArrayList<Player>();
+            ls.add(player);
+            this.setPlayers(ls);
+        }else{this.players.add(player);}
+    }
+
 }
