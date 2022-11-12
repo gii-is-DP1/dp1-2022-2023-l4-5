@@ -2,7 +2,10 @@ package org.springframework.samples.petclinic.game;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.card.hero.Hero;
+import org.springframework.samples.petclinic.card.hero.HeroService;
 import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,11 +31,16 @@ public class GameController {
     // Servicios
     private final GameService gameService;
     private final UserService userService;
+    private final HeroService heroService;
+
+    private final PlayerService playerService;
 
     @Autowired
-    public GameController(GameService gameService, UserService userService) {
+    public GameController(GameService gameService, UserService userService, HeroService heroService, PlayerService playerService) {
         this.gameService = gameService;
         this.userService = userService;
+        this.heroService = heroService;
+        this.playerService= playerService;
     }
 
     @InitBinder
@@ -58,11 +66,19 @@ public class GameController {
         User user = userService.getUserByUsername(ud.getUsername());
         Game game = gameService.getGameById(gameId).get();
         Player player = nuevoPlayer(user);
-        List<Player> pl = game.getPlayers();
-        pl.add(player);
-        game.setPlayers(pl);
+        game.addPlayer(player);
         model.put("selections", game.getPlayers());
+        model.put("p", player);
         return VIEW_GAME_LOBBY;
+    }
+    @PostMapping(value = "/{gameId}")
+    public String processCreationHero(@Valid Player player, BindingResult result) {
+        if (result.hasErrors()) {
+            return VIEW_GAME_LOBBY;
+        } else {
+            playerService.savePlayer(player);
+            return VIEW_GAME_LOBBY;
+        }
     }
 
 
@@ -72,7 +88,6 @@ public class GameController {
     @GetMapping(value = "/new")
     public String initCreationForm(ModelMap model) {
 
-        //Hacer lo mismo con: maxPlayer y con phase, accssesibilit, y los denas atributos
         List<Mode> ls = new ArrayList<Mode>();
         ls.add(Mode.MULTI_CLASS);
         ls.add(Mode.UNI_CLASS);
@@ -95,6 +110,7 @@ public class GameController {
             return VIEW_GAME_LOBBY;
         }
     }
+
 
     // Clase auxiliar
     public Player nuevoPlayer(User user) {
