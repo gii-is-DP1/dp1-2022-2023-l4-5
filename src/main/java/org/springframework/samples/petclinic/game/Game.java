@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.card.enemy.EnemyInGame;
 import org.springframework.samples.petclinic.effect.Phase;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.turn.Turn;
 
 import javax.persistence.*;
@@ -66,4 +67,7 @@ public class Game extends NamedEntity {
     //@NotNull
     @OneToMany
     private List<EnemyInGame> passiveOrcs;
+
+    @OneToMany
+    private List<Player> players;
 }
