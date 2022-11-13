@@ -18,12 +18,31 @@ public class PlayerService {
 
     @Transactional
     public void savePlayer(Player player) {
-        System.out.println("Antes");
+        if (player.getGold() == null) {
+            player.setGold(0);
+        }
+        if (player.getGlory() == null) {
+            player.setGlory(0);
+        }
+        if (player.getEvasion() == null) {
+            player.setEvasion(true);
+        }
+        if (player.getNumOrcsKilled() == null) {
+            player.setNumOrcsKilled(0);
+        }
+        if (player.getNumWarLordKilled() == null) {
+            player.setNumWarLordKilled(0);
+        }
+        if (player.getDamageDealed() == null) {
+            player.setDamageDealed(0);
+        }
+        if (player.getDamageDealedToNightLords() == null) {
+            player.setDamageDealedToNightLords(0);
+        }
         if(player.getReady()==null){
             player.setReady(false);
         }
         playerRepository.save(player);
-        System.out.println("Despues");
     }
 
     @Transactional

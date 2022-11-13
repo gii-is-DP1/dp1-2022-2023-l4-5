@@ -21,46 +21,46 @@ import java.util.Set;
 @Table(name = "players")
 public class Player extends NamedEntity {
 
-    @NotNull
+    // @NotNull
     @Min(0)
-    @Column(columnDefinition = "int default 0")
+    // @Column(columnDefinition = "int default 0")
     private Integer gold;
 
-    @NotNull
+    // @NotNull
     @Min(0)
-    @Column(columnDefinition = "int default 0")
+    // @Column(columnDefinition = "int default 0")
     private Integer glory;
 
-    @NotNull
-    @Column(columnDefinition = "int default 1")
+    // @NotNull
+    // @Column(columnDefinition = "int default 1")
     private Boolean evasion;
 
-    @NotNull
+    // @NotNull
     @Min(0)
-    @Column(columnDefinition = "int default 0")
+    // @Column(columnDefinition = "int default 0")
     private Integer numOrcsKilled;
 
-    @NotNull
+    // @NotNull
     @Min(0)
-    @Column(columnDefinition = "int default 0")
-    private Integer numWarLordKilled;
+    // @Column(columnDefinition = "int default 0")
+    private Integer numWarLordKilled; // TODO: Cambiar por night lord.
 
-    @NotNull
+    // @NotNull
     @Min(0)
-    @Column(columnDefinition = "int default 0")
+    // @Column(columnDefinition = "int default 0")
     private Integer damageDealed;
 
-    @NotNull
+    // @NotNull
     @Min(0)
-    @Column(columnDefinition = "int default 0")
+    // @Column(columnDefinition = "int default 0")
     private Integer damageDealedToNightLords;
 
-    @NotNull
+    // @NotNull
     @Range(min = 1, max= 4)
     private Integer sequence;  // Para elegir a quien le toca.
 
-    @NotNull
-    @Column(columnDefinition = "boolean default false")
+    // @NotNull
+    // @Column(columnDefinition = "boolean default false")
     private Boolean ready;
 
     //Relaciones

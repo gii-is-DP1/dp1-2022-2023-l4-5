@@ -69,7 +69,7 @@ public class Game extends NamedEntity {
     @OneToMany
     private List<EnemyInGame> passiveOrcs;
 
-    @OneToMany
+    @OneToMany(mappedBy = "game")
     private List<Player> players;
 
     public void addPlayer(Player player){

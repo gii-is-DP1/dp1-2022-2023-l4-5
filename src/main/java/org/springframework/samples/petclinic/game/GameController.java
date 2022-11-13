@@ -1,9 +1,13 @@
 package org.springframework.samples.petclinic.game;
 
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.card.hero.Hero;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.card.hero.HeroService;
+import org.springframework.samples.petclinic.message.Message;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
@@ -17,8 +21,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/games")
@@ -28,6 +31,7 @@ public class GameController {
     private static final String VIEW_GAME_CREATE = "games/createGame";
     private static final String VIEW_GAME_LIST = "games/gamesList";
     private static final String VIEW_GAME_LOBBY = "games/gameLobby";
+    private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
     // Servicios
     private final GameService gameService;
     private final UserService userService;
@@ -58,42 +62,42 @@ public class GameController {
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
     public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails ud = null;
-        if (principal instanceof UserDetails) {
-            ud = ((UserDetails) principal);
-        }
-        User user = userService.getUserByUsername(ud.getUsername());
-        Game game = gameService.getGameById(gameId).get();
-        Player player = nuevoPlayer(user);
-        game.addPlayer(player);
+        Game game = gameService.getGameById(gameId).get(); // TODO: Lanzar error si no se encuentra partida.
         model.put("selections", game.getPlayers());
-        model.put("p", player);
+        model.put("p", new Player());
         return VIEW_GAME_LOBBY;
     }
     @PostMapping(value = "/{gameId}")
-    public String processCreationPlayerReady(@Valid Player player, BindingResult result) {
+    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId, BindingResult result) {
         if (result.hasErrors()) {
-            return VIEW_GAME_LOBBY;
+            return PAGE_GAME_LOBBY;
         } else {
-            player.setReady(Boolean.TRUE);
-            playerService.savePlayer(player);
-            return VIEW_GAME_LOBBY;
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserDetails ud = null;
+            if (principal instanceof UserDetails) {
+                ud = ((UserDetails) principal);
+            }
+            User user = userService.getUserByUsername(ud.getUsername());
+            Game game = gameService.getGameById(gameId).get(); // TODO: Lanzar error si no se encuentra partida.
+            player.setName(ud.getUsername());
+            if (game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
+                game.addPlayer(player);
+                player.setGame(game);
+                playerService.savePlayer(player);
+                gameService.saveGame(game);
+            } else {
+                // TODO: Lanzar una excepción para indicar que el jugador ya se ha unido a la partida.
+            }
+
+            return PAGE_GAME_LOBBY;
         }
     }
 
     // Crear una partida.
     @GetMapping(value = "/new")
     public String initCreationForm(ModelMap model) {
-
-        List<Mode> ls = new ArrayList<Mode>();
-        ls.add(Mode.MULTI_CLASS);
-        ls.add(Mode.UNI_CLASS);
-        List<Accessibility> ls2 = new ArrayList<Accessibility>();
-        ls2.add(Accessibility.PRIVATE);
-        ls2.add(Accessibility.PUBLIC);
-        model.put("mode", ls);
-        model.put("accesibility", ls2);
+        model.put("mode", Lists.newArrayList(Mode.UNI_CLASS, Mode.MULTI_CLASS));
+        model.put("accessibility", Lists.newArrayList(Accessibility.PRIVATE, Accessibility.PUBLIC));
         model.put("game", new Game());
         return VIEW_GAME_CREATE;
     }
@@ -109,25 +113,24 @@ public class GameController {
         }
     }
 
+    // Acrualizar los jugadores en el lobby.
+    @GetMapping("/update/{gameId}")
+    public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put("messages",
+            gameService.getGameById(gameId).get()
+                .getPlayers().stream().map(Player::getName)
+                .collect(Collectors.toList()));
+        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+    }
+
 
     // Clase auxiliar
-    public Player nuevoPlayer(User user) {
-        Player player = new Player();
+    public Player newPlayer(User user, Player player) {
         user.setPlayer(player);
-        player.setId(user.getId());
         player.setName(user.getUsername());
-        player.setGold(0);
-        player.setGlory(0);
-        player.setEvasion(Boolean.TRUE);
-        player.setNumOrcsKilled(0);
-        player.setNumWarLordKilled(0);
-        player.setDamageDealed(0);
-        player.setDamageDealedToNightLords(0);
         player.setSequence(1);
         player.setReady(Boolean.FALSE);
-        //Set<HeroInGame> shg = Set.of();
-        //player.setHeroes();
-        //faltan algunos atributos
         return player;
     }
 }
