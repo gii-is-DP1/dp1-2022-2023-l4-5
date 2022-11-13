@@ -3,16 +3,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 
-<petclinic:layout pageName="owners">
+<nt4h:layout pageName="owners">
 
     <h2>Find Owners</h2>
 
-    
+
     <form:form modelAttribute="owner" action="/owners" method="get" class="form-horizontal"
                id="search-owner-form">
         <div class="form-group">
@@ -32,9 +32,9 @@
 
     </form:form>
 
-    <br/> 
+    <br/>
     <sec:authorize access="hasAuthority('admin')">
 		<a class="btn btn-default" href='<spring:url value="/owners/new" htmlEscape="true"/>'>Add Owner</a>
 	</sec:authorize>
-	
-</petclinic:layout>
+
+</nt4h:layout>

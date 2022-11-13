@@ -3,9 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="owners">
+<nt4h:layout pageName="owners">
     <h2>Owners</h2>
 
     <table id="ownersTable" class="table table-striped">
@@ -41,19 +41,19 @@
                         <c:out value="${pet.name} "/>
                     </c:forEach>
                 </td>
-                
-      
+
+
 <!--
-                <td> 
-                    <c:out value="${owner.user.username}"/> 
+                <td>
+                    <c:out value="${owner.user.username}"/>
                 </td>
-                <td> 
-                   <c:out value="${owner.user.password}"/> 
-                </td> 
+                <td>
+                   <c:out value="${owner.user.password}"/>
+                </td>
 -->
-                
+
             </tr>
         </c:forEach>
         </tbody>
     </table>
-</petclinic:layout>
+</nt4h:layout>
