@@ -2,9 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="capacities">
+<nt4h:layout pageName="capacities">
     <jsp:attribute name="customScript">
         <script>
             $(function () {
@@ -20,8 +20,8 @@
                    class="form-horizontal">
             <input type="hidden" name="id" value="${capacity.id}"/>
             <div class="form-group has-feedback">
-                <petclinic:inputField label="State capacity" name="stateCapacity"/>
-                <petclinic:inputField label="Less damage" name="lessDamage"/>
+                <nt4h:inputField label="State capacity" name="stateCapacity"/>
+                <nt4h:inputField label="Less damage" name="lessDamage"/>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -37,4 +37,4 @@
             </div>
         </form:form>
     </jsp:body>
-</petclinic:layout>
+</nt4h:layout>

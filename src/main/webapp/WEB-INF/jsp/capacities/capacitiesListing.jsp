@@ -2,9 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="capacities">
+<nt4h:layout pageName="capacities">
     <h2>Capacities</h2>
 
     <table id="capacitiesTable" class="table table-striped">
@@ -41,4 +41,4 @@
         </tbody>
     </table>
     <a class="btn btn-default" href="/capacities/new">Create new capacity</a>
-</petclinic:layout>
+</nt4h:layout>

@@ -4,9 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="CreateUsers">
+<nt4h:layout pageName="CreateUsers">
     <jsp:attribute name="customScript">
         <script>
             $(function () {
@@ -22,11 +22,11 @@
         <form:form modelAttribute="user" class="form-horizontal" id="add-user-form">
             <div class="form-group has-feedback">
 
-                <petclinic:inputField label="Username" name="username"/>
-                <petclinic:inputField label="Password" name="password"/>
-                <petclinic:inputField label="Avatar" name="avatar"/>
-                <petclinic:inputField label="Birth Date" name="birthDate"/>
-                <petclinic:inputField label="Description" name="description"/>
+                <nt4h:inputField label="Username" name="username"/>
+                <nt4h:inputField label="Password" name="password"/>
+                <nt4h:inputField label="Avatar" name="avatar"/>
+                <nt4h:inputField label="Birth Date" name="birthDate"/>
+                <nt4h:inputField label="Description" name="description"/>
 
             </div>
             <div class="form-group">
@@ -43,4 +43,4 @@
             </div>
         </form:form>
     </jsp:body>
-</petclinic:layout>
+</nt4h:layout>

@@ -3,12 +3,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sec"
            uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 
-<petclinic:layout pageName="User">
+<nt4h:layout pageName="User">
 
     <h2>Find User</h2>
 
@@ -37,4 +37,4 @@
         <a class="btn btn-default" href='<spring:url value="/users/new" htmlEscape="true"/>'>Add Owner</a>
     </sec:authorize>
 
-</petclinic:layout>
+</nt4h:layout>
