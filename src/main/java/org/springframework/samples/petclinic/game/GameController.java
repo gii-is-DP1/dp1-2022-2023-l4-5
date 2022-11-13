@@ -48,6 +48,7 @@ public class GameController {
         dataBinder.setDisallowedFields("id");
     }
 
+
     // Obtener todas las partidas.
     @GetMapping
     public String getGames(ModelMap model) {
@@ -72,12 +73,13 @@ public class GameController {
         return VIEW_GAME_LOBBY;
     }
     @PostMapping(value = "/{gameId}")
-    public String processCreationPlayerReady(@Valid Player player, BindingResult result) {
+    public String processCreationPlayerReady(@Valid Player player, BindingResult result, ModelMap model, @RequestParam("a") List<Player> lp) {
         if (result.hasErrors()) {
             return VIEW_GAME_LOBBY;
         } else {
             player.setReady(Boolean.TRUE);
             playerService.savePlayer(player);
+            model.put("selections", lp);
             return VIEW_GAME_LOBBY;
         }
     }

@@ -10,6 +10,19 @@
     <h2>Game Lobby</h2>
     <c:forEach items="${selections}" var="player">
         <h1>"${player.name}"</h1>
+        <form:form modelAttribute="p" class="form-horizontal">
+            <button class="btn btn-default" type="submit">
+                <input name="a" value="${selections}" type="hidden"/>
+                <c:choose>
+                    <c:when test="${player.ready}">
+                        Ready!
+                    </c:when>
+                    <c:otherwise>
+                        Not Ready
+                    </c:otherwise>
+                </c:choose>
+            </button>
+        </form:form>
     </c:forEach>
 </petclinic:layout>
 
