@@ -28,14 +28,19 @@
             </div>
             <div class="form-group">
                 <petclinic:selectField name="Mode" label="Mode" names="${mode}" size="2"/>
-                <petclinic:selectField name="Accessibility" label="Accesibilidad" names="${accesibility}" size="2"/>
-                <petclinic:selectField name="MaxPlayers" label="Jugadores maximos" names="${[2,3,4]}" size="4"/>
+                <petclinic:selectField name="MaxPlayers" label="Max players" names="${[2,3,4]}" size="3"/>
+
+            <div class="form-group">
+             Play with stages <input type="checkbox" name="hasStage" value="false"/>
             </div>
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-default" type="submit">Create game</button>
                 </div>
             </div>
+
+
 
         </form:form>
     </jsp:body>

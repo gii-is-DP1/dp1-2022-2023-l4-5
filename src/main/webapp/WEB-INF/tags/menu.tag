@@ -36,10 +36,10 @@
 
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
-					title="veterinarians">
+				<petclinic:menuItem active="${name eq 'games'}" url="/games/new"
+					title="Create Game">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Veterinarians</span>
+					<span>Create Game</span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'capacities'}" url="/capacities"
@@ -49,8 +49,6 @@
 				</petclinic:menuItem>
 
 			</ul>
-
-
 
 
 			<ul class="nav navbar-nav navbar-right">
