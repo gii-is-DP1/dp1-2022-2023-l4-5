@@ -6,7 +6,10 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
+import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.user.User;
@@ -32,6 +35,8 @@ public class GameController {
     private static final String VIEW_GAME_LIST = "games/gamesList";
     private static final String VIEW_GAME_LOBBY = "games/gameLobby";
     private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
+    private static final String VIEW_GAME_HERO_SELECT = "games/heroSelect";
+
     // Servicios
     private final GameService gameService;
     private final UserService userService;
@@ -55,6 +60,11 @@ public class GameController {
     @ModelAttribute("mode")
     public List<Mode> getMode() {
         return Lists.newArrayList(Mode.UNI_CLASS, Mode.MULTI_CLASS);
+    }
+
+    @ModelAttribute("heroes")
+    public List<Integer> getHeroes() {
+        return Lists.newArrayList(heroService.getAllHeros().stream().map(x -> x.getId()).collect(Collectors.toList()));
     }
 
     @ModelAttribute("accessibility")
@@ -99,8 +109,22 @@ public class GameController {
                 // TODO: Lanzar una excepción para indicar que el jugador ya se ha unido a la partida.
             }
 
-            return PAGE_GAME_LOBBY;
+            return VIEW_GAME_HERO_SELECT;
         }
+    }
+
+    //Elegir heroe
+    @GetMapping(value = "/{gameId}/{playerId}")
+    public String initHeroSelectForm(@PathVariable Integer gameId, @PathVariable Integer playerId, ModelMap model) {
+        model.put("game", gameService.getGameById(gameId));
+        model.put("player", playerService.getPlayerById(playerId));
+        model.put("hero", new HeroInGame());
+        return VIEW_GAME_HERO_SELECT;
+    }
+
+    @PostMapping()
+    public String processHeroSelect() {
+        return "";
     }
 
     // Crear una partida.
@@ -132,15 +156,5 @@ public class GameController {
                 .getPlayers().stream().map(Player::getName)
                 .collect(Collectors.toList()));
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
-    }
-
-
-    // Clase auxiliar
-    public Player newPlayer(User user, Player player) {
-        user.setPlayer(player);
-        player.setName(user.getUsername());
-        player.setSequence(1);
-        player.setReady(Boolean.FALSE);
-        return player;
     }
 }
