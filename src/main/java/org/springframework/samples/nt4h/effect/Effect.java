@@ -4,6 +4,7 @@ package org.springframework.samples.nt4h.effect;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 
 public abstract class Effect {
@@ -38,4 +39,6 @@ public abstract class Effect {
     boolean useEffect(HeroInGame heroesInGame) {
         return false;
     }
+
+    boolean useEffect(Player player, Game game){return false;}
 }
