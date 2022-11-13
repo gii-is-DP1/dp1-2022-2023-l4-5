@@ -1,6 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
@@ -22,31 +22,31 @@
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 
-				<petclinic:menuItem active="${name eq 'home'}" url="/"
+				<nt4h:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Home</span>
-				</petclinic:menuItem>
+				</nt4h:menuItem>
 
 
-				<petclinic:menuItem active="${name eq 'games'}" url="/games"
+				<nt4h:menuItem active="${name eq 'games'}" url="/games"
 					title="find games">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Find Games</span>
 
-				</petclinic:menuItem>
+				</nt4h:menuItem>
 
-				<petclinic:menuItem active="${name eq 'games'}" url="/games/new"
+				<nt4h:menuItem active="${name eq 'games'}" url="/games/new"
 					title="Create Game">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Create Game</span>
-				</petclinic:menuItem>
+				</nt4h:menuItem>
 
-				<petclinic:menuItem active="${name eq 'capacities'}" url="/capacities"
+				<nt4h:menuItem active="${name eq 'capacities'}" url="/capacities"
 					title="capacities">
 					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
 					<span>Capacities</span>
-				</petclinic:menuItem>
+				</nt4h:menuItem>
 
 			</ul>
 
@@ -93,8 +93,8 @@
 								</div>
 							</li>
 							<li class="divider"></li>
-<!-- 							
-                            <li> 
+<!--
+                            <li>
 								<div class="navbar-login navbar-login-session">
 									<div class="row">
 										<div class="col-lg-12">

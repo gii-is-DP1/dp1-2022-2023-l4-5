@@ -4,9 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="lobby">
+<nt4h:layout pageName="lobby">
     <h2>Game Lobby</h2>
     <div id="ready">
 
@@ -24,7 +24,7 @@
             </c:otherwise>
         </c:choose>
     </div>
-</petclinic:layout>
+</nt4h:layout>
 
 <script type="text/javascript">
 

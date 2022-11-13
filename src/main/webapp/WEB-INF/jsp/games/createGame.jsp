@@ -4,9 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="CreateGames">
+<nt4h:layout pageName="CreateGames">
     <jsp:attribute name="customScript">
         <script>
             $(function () {
@@ -22,19 +22,11 @@
 
         <form:form modelAttribute="game" class="form-horizontal" id="add-game-form">
             <div class="form-group has-feedback">
-
-                <petclinic:inputField label="Name" name="name"/>
-                <petclinic:inputField label="Password" name="password"/>
-            </div>
-            <div class="form-group">
-                <petclinic:selectField name="Mode" label="Mode" names="${mode}" size="2"/>
-                <petclinic:selectField name="MaxPlayers" label="Max players" names="${[2,3,4]}" size="3"/>
-
-            <div class="form-group">
-             Play with stages <input type="checkbox" name="hasStage" value="false"/>
-            </div>
-
-            <div class="form-group">
+                <nt4h:inputField label="Name" name="name"/>
+                <nt4h:inputField label="Password" name="password"/>
+                <nt4h:selectField name="Mode" label="Mode" names="${mode}" size="2"/>
+                <nt4h:selectField name="MaxPlayers" label="Max players" names="${[2,3,4]}" size="3"/>
+                <form:checkbox path="hasStages" label="Play with stages"/>
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-default" type="submit">Create game</button>
                 </div>
@@ -47,4 +39,4 @@
 
 
 
-</petclinic:layout>
+</nt4h:layout>
