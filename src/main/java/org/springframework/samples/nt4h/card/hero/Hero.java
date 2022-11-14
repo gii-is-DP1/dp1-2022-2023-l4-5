@@ -17,19 +17,19 @@ import java.util.List;
 @Table(name = "heroes")
 public class  Hero extends Card {
 
-    @NotNull
-    @Range(min = 2, max = 3)
+    //@NotNull
+    //@Range(min = 2, max = 3)
     private Integer health;
 
-    @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @NotNull
+    //@NotNull
     @ManyToMany
     private List<Ability> abilities;
 
-    @NotNull
+    //@NotNull
     @ManyToMany
     private List<Capacity> capacities;
 
