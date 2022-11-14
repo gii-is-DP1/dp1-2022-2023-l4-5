@@ -9,11 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.card.hero.Role;
+import org.springframework.samples.nt4h.model.BaseEntity;
+import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.user.User;
-import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -36,18 +35,18 @@ public class GameController {
     private static final String VIEW_GAME_LOBBY = "games/gameLobby";
     private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
     private static final String VIEW_GAME_HERO_SELECT = "games/heroSelect";
+    private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/{gameId}/{playerId}";
 
     // Servicios
     private final GameService gameService;
-    private final UserService userService;
+
     private final HeroService heroService;
 
     private final PlayerService playerService;
 
     @Autowired
-    public GameController(GameService gameService, UserService userService, HeroService heroService, PlayerService playerService) {
+    public GameController(GameService gameService, HeroService heroService, PlayerService playerService) {
         this.gameService = gameService;
-        this.userService = userService;
         this.heroService = heroService;
         this.playerService= playerService;
     }
@@ -63,8 +62,8 @@ public class GameController {
     }
 
     @ModelAttribute("heroes")
-    public List<Integer> getHeroes() {
-        return Lists.newArrayList(heroService.getAllHeros().stream().map(x -> x.getId()).collect(Collectors.toList()));
+    public List<Hero> getHeroes() {
+        return heroService.getAllHeros();
     }
 
     @ModelAttribute("accessibility")
@@ -97,7 +96,7 @@ public class GameController {
             if (principal instanceof UserDetails) {
                 ud = ((UserDetails) principal);
             }
-            User user = userService.getUserByUsername(ud.getUsername());
+
             Game game = gameService.getGameById(gameId);
             player.setName(ud.getUsername());
             if (game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
@@ -106,25 +105,43 @@ public class GameController {
                 playerService.savePlayer(player);
                 gameService.saveGame(game);
             } else {
+                player.setId(playerService.getPlayerByName(player.getName()).getId());
                 // TODO: Lanzar una excepción para indicar que el jugador ya se ha unido a la partida.
             }
-
-            return VIEW_GAME_HERO_SELECT;
+            return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString());
         }
     }
 
     //Elegir heroe
     @GetMapping(value = "/{gameId}/{playerId}")
     public String initHeroSelectForm(@PathVariable Integer gameId, @PathVariable Integer playerId, ModelMap model) {
+        System.out.println("initHeroSelectForm");
         model.put("game", gameService.getGameById(gameId));
         model.put("player", playerService.getPlayerById(playerId));
         model.put("hero", new HeroInGame());
         return VIEW_GAME_HERO_SELECT;
     }
 
-    @PostMapping()
-    public String processHeroSelect() {
-        return "";
+    @PostMapping(value = "/{gameId}/{playerId}")
+    public String processHeroSelectForm(HeroInGame heroInGame, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) {
+        Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
+        if (result.hasErrors()) {
+            return PAGE_GAME_HERO_SELECT;
+        } else {
+            Game game = gameService.getGameById(gameId);
+            Player player = playerService.getPlayerById(playerId);
+            heroInGame.setActualHealth(hero.getHealth());
+            heroInGame.setPlayer(player);
+            player.addHero(heroInGame);
+            playerService.savePlayer(player);
+            gameService.saveGame(game);
+            return PAGE_GAME_LOBBY.replace("{gameId}", gameId.toString());
+        }
+    }
+
+    @ModelAttribute("heroes")
+    public List<Integer> processHeroSelect() {
+        return heroService.getAllHeros().stream().map(BaseEntity::getId).collect(Collectors.toList());
     }
 
     // Crear una partida.
@@ -142,7 +159,6 @@ public class GameController {
             return VIEW_GAME_CREATE;
         } else {
             gameService.saveGame(game);
-            System.out.println(game);
             return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
         }
     }
