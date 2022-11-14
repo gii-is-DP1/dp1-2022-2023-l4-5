@@ -6,9 +6,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<nt4h:layout pageName="hero selection">
+<nt4h:layout pageName="Hero selection">
     <h2>Hero Selection</h2>
-    <form:form modelAttribute="hero" class="form-horizontal" id="choose-hero-form">
-        <nt4h:selectField name="hero" label="hero" names="${heroes}" size="8"/>
+    <form:form modelAttribute= "heroInGame" >
+        <div class="form-group has-feedback">
+        <nt4h:selectField name="actualHealth" label="Hero" names="${[1,2,3]}" size="3"/>
+        <button class="btn btn-default" type="submit">Confirm hero</button>
+        </div>
     </form:form>
 </nt4h:layout>
