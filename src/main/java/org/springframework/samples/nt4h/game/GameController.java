@@ -139,11 +139,6 @@ public class GameController {
         }
     }
 
-    @ModelAttribute("heroes")
-    public List<Integer> processHeroSelect() {
-        return heroService.getAllHeros().stream().map(BaseEntity::getId).collect(Collectors.toList());
-    }
-
     // Crear una partida.
     @GetMapping(value = "/new")
     public String initCreationForm(ModelMap model) {
