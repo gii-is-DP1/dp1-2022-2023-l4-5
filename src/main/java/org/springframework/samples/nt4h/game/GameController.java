@@ -19,11 +19,6 @@ import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
-import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.user.User;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,10 +26,11 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -149,9 +145,9 @@ public class GameController {
             return PAGE_GAMES;
         } catch (PlayerInOtherGameException e) {
             Game currentGame = gameService.getAllGames().stream().filter(g -> g.getPlayers().stream().anyMatch(p -> p.getName().equals(user.getUsername()))).findFirst().get();
-            model.put("message", "Has sido redirigido a otra partida.");
+            model.put("message", "Ya estás en una partida y esa es  " + currentGame.getName() + ".");
             model.put("messageType", "danger");
-            return PAGE_GAMES;
+            return getGames(model);
         }
         return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString());
     }
@@ -177,6 +173,7 @@ public class GameController {
         heroInGame.setActualHealth(hero.getHealth());
         heroInGame.setPlayer(player);
         player.addHero(heroInGame);
+        playerService.addDeckFromRoles(player, hero.getRole());
         if (player.getHeroes().size() == game.getMode().getNumHeroes()) player.setReady(true);
         // Si el héroe ya ha sido elegido o ya tenía uno de ese rol, se le impedirá elegirlo.
         try {
@@ -231,18 +228,23 @@ public class GameController {
     @GetMapping("/update/{gameId}")
     public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
         JsonObject jsonObject = new JsonObject();
+        Game game = gameService.getGameById(gameId);
+        LocalTime time = LocalTime.now();
         jsonObject.put("messages",
-            gameService.getGameById(gameId)
-                .getPlayers().stream().map(player -> player.getName() + " { " +
-                    player.getHeroes().stream().map(hero -> hero.getHero().getName()).reduce((s, s2) -> s + ", " + s2)
-                        .orElse("No hero selected") + " }" + " " + (player.getReady() ? "Ready": "Not ready"))
+            game.getPlayers().stream().map(player -> player.getName() + " { " +
+                    player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
+                        .orElse("No hero selected") + " }" + " " + (player.getReady() ? "Ready" : "Not ready"))
                 .collect(Collectors.toList()));
+        jsonObject.put("timer", 20 - (time.getMinute() * 60 + time.getSecond() - game.getStartDate().getMinute() * 60 + game.getStartDate().getSecond()));
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
-    @GetMapping("/selectOrder")
+
+    @GetMapping("/selectOrder/{gameId}")
     public String orderRule(@PathVariable Integer gameId) {
+        System.out.println("Order rule");
         Game game = gameService.getGameById(gameId);
         List<Player> players = game.getPlayers();
+        System.out.println("Players: " + players);
         List<Triplet<Integer, Player, Integer>> datos = new ArrayList<>();
         for (var i = 0; i < players.size(); i++) {
             Player player = players.get(i);

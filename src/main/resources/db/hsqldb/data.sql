@@ -116,7 +116,7 @@ VALUES ('Compañero Lobo', 'src/main/resources/static/resources/images/juego/wol
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 0, 1),
        ('Trampa', 'src/main/resources/static/resources/images/abilities/trampa_ability_front.png',
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 0, 1);
-
+/*
 -- Creación de orcos.
 INSERT INTO orcs(name, back_image, front_image, max_uses, health, glory, gold, has_cure, less_damage_wizard)
 VALUES ('Honda', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
@@ -183,7 +183,7 @@ VALUES ('Gurdrug', 'src/main/resources/static/resources/images/juego/nightlord_b
         'src/main/resources/static/resources/images/juego/rogh_nightlord_front.png', -1, 9),
        ('Shriekknifer', 'src/main/resources/static/resources/images/juego/nightlord_back.png',
         'src/main/resources/static/resources/images/juego/shriek_nightlord_front.png', -1, 10);
-
+*/
 
 -- Productos
 INSERT INTO products(name, front_image, back_image, max_uses, price, attack, quantity)
@@ -322,5 +322,6 @@ VALUES (1, 1),
        (6, 6),
        (7, 3),
        (8, 3);
+
 INSERT INTO games(name, start_date, finish_date, max_players, mode, phase, password, accessibility, has_stages)
 VALUES ('pipo', '2020-02-01', '2020-02-01', 4, 'UNI_CLASS', 'HERO_ATTACK', 'patata', 'PRIVATE', TRUE);

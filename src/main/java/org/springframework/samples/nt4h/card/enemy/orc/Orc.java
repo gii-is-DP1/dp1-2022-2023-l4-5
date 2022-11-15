@@ -5,14 +5,14 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.card.enemy.Enemy;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "orcs")
+@DiscriminatorValue("orc")
 public class Orc extends Enemy {
 
     @NotNull

@@ -1,44 +1,28 @@
 package org.springframework.samples.nt4h.effect;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
-import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.player.Player;
 
+import java.util.List;
+
+@Getter
+@Setter
 public abstract class Effect {
 
-    public Phase phase;
+    // Cuando empieza y acaba.
+    Phase openTurn;
+    // Datos
+    private List<AbilityInGame> abilities;
+    private List<EnemyInGame> enemies;
+    private List<HeroInGame> heroes;
+    private Phase closeTurn;
 
-    boolean useEffect() {
-        return false;
-    }
+    // Para empezar y terminar el efecto.
+    abstract void openEffect();
 
-    boolean useEffect(Player player) {
-        return false;
-    }
-
-    boolean useEffect(Player player, EnemyInGame enemyInGame) {
-        return false;
-    }
-
-    boolean useEffect(HeroInGame... herosInGame) {
-        return false;
-    }
-
-
-    boolean useEffect(Player player, EnemyInGame... enemiesInGame) {
-        return false;
-    }
-
-    boolean useEffect(Player player, EnemyInGame enemyInGame, AbilityInGame abilityInGame) {
-        return false;
-    }
-
-    boolean useEffect(HeroInGame heroesInGame) {
-        return false;
-    }
-
-    boolean useEffect(Player player, Game game){return false;}
+    abstract void closeEffect();
 }

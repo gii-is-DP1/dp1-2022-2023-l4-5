@@ -6,16 +6,16 @@ import org.springframework.samples.nt4h.card.enemy.night_lord.NightLord;
 import org.springframework.samples.nt4h.card.enemy.orc.Orc;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "enemies_in_game")
+@DiscriminatorValue("enemy_in_game")
 public class EnemyInGame extends BaseEntity {
     @NotNull
     @Max(value = 10)

@@ -1,8 +1,12 @@
 package org.springframework.samples.nt4h.player;
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.card.ability.Ability;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
+import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PlayerService {
     private final PlayerRepository playerRepository;
+    private final AbilityService abilityRepository;
 
     @Transactional(readOnly = true)
     public Player getPlayerById(int id) {
@@ -62,5 +67,33 @@ public class PlayerService {
         return playerRepository.existsById(id);
     }
 
+    @Transactional
+    public void addDeckFromRoles(Player player, Role role) {
 
+        for (Integer abilityId : role.getAbilities()) {
+            Ability ability = abilityRepository.getAbilityById(abilityId);
+            for (int i = 0; i < ability.getQuantity(); i++) {
+                System.out.println("Adding " + ability.getName() + " to " + player.getName());
+                System.out.println(ability.getQuantity());
+                AbilityInGame abilityInGame = new AbilityInGame();
+                abilityInGame.setPlayer(player);
+                abilityInGame.setAttack(ability.getAttack());
+                abilityInGame.setTimesUsed(abilityInGame.getTimesUsed());
+                abilityInGame.setProduct(true);
+                abilityInGame.setAbility(ability);
+                abilityRepository.saveAbilityInGame(abilityInGame);
+                player.addAbilityInDeck(abilityInGame);
+                System.out.println(player.getInDeck().stream().map(AbilityInGame::getId).collect(Collectors.toList()));
+            }
+
+        }
+
+        if (player.getHeroes().size() == 2) {
+            List<AbilityInGame> abilities = player.shuffleDeck();
+            for (AbilityInGame destroy : abilities.subList(16, abilities.size()))
+                abilityRepository.deleteAbilityInGame(destroy);
+            System.out.println(abilities);
+            player.setInDeck(abilities.subList(0, 16));
+        }
+    }
 }
