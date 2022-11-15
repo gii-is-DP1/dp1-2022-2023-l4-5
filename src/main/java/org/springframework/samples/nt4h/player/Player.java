@@ -1,7 +1,10 @@
 package org.springframework.samples.nt4h.player;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
@@ -21,6 +24,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "players")
+// @ToString(of = {"name"})
 public class Player extends NamedEntity {
 
     // @NotNull
@@ -89,5 +93,13 @@ public class Player extends NamedEntity {
 
     @ManyToOne
     private Game game;
+
+    public void addHero(HeroInGame hero) {
+        if (heroes == null) {
+            heroes = Sets.newHashSet(hero);
+        } else {
+            heroes.add(hero);
+        }
+    }
 
 }
