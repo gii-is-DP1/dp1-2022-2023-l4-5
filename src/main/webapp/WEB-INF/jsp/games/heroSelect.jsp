@@ -8,10 +8,8 @@
 
 <nt4h:layout pageName="Hero selection">
     <h2>Hero Selection</h2>
-    <form:form modelAttribute= "heroInGame" >
-        <div class="form-group has-feedback">
-        <nt4h:selectField name="actualHealth" label="Hero" names="${[1,2,3]}" size="3"/>
-        <button class="btn btn-default" type="submit">Confirm hero</button>
-        </div>
+    <form:form modelAttribute="hero" class="form-horizontal" id="choose-hero-form">
+        <nt4h:selectField name="hero" label="Hero in game" names="${heroes}" size="8"/>
+        <button class="btn btn-default" type="submit">Hero choose</button>
     </form:form>
 </nt4h:layout>
