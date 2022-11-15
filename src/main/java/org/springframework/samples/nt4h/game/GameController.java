@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-
-import org.springframework.samples.nt4h.model.BaseEntity;
-import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.user.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -39,6 +39,8 @@ public class GameController {
     private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
     private static final String VIEW_GAME_HERO_SELECT = "games/heroSelect";
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/{gameId}/{playerId}";
+    private static final String VIEW_GAME_ORDER = "games/selectOrder";
+
     // Servicios
     private final GameService gameService;
 

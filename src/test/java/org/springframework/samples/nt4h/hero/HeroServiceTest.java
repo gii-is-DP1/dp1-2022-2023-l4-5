@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.hero;
 
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,15 +13,10 @@ import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,15 +39,15 @@ import static org.junit.jupiter.api.Assertions.*;
     }
     @Test
     public void findByNameTrue() {
-        Optional<Hero> hero = heroService.getHeroByName("Lisavette");
+        Hero hero = heroService.getHeroByName("Lisavette");
         assertNotNull(hero);
-        assertEquals(3,hero.get().getHealth());
+        assertEquals(3, hero.getHealth());
     }
     @Test
     public void findByNameFalse() {
-        Optional<Hero> hero = heroService.getHeroByName("Lisavette");
+        Hero hero = heroService.getHeroByName("Lisavette");
         assertNotNull(hero);
-        assertNotEquals(2,hero.get().getHealth());
+        assertNotEquals(2, hero.getHealth());
     }
     @Test
     void shouldFindAllHero() {
@@ -79,7 +73,7 @@ import static org.junit.jupiter.api.Assertions.*;
         List<Ability>abilities= List.of(ability);
         hero.setAbilities(abilities);
         this.heroService.saveHero(hero);
-        assertEquals(heroService.getHeroByName("Lis").get(),hero);
+        assertEquals(heroService.getHeroByName("Lis"), hero);
 
     }
     @Test
