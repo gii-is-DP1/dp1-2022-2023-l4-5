@@ -35,13 +35,12 @@ public class Game extends NamedEntity {
     // @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime finishDate;
 
-    //@NotNull
+    @NotNull
     // @Range(min = 1, max = 4)
     private Integer maxPlayers;
 
 
-
-    // @NotNull
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
@@ -52,7 +51,7 @@ public class Game extends NamedEntity {
     // @NotNull
     private String password;
 
-    // @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 

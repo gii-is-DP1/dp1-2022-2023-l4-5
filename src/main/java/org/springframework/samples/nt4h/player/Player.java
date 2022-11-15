@@ -51,6 +51,8 @@ public class Player extends NamedEntity {
     // @Column(columnDefinition = "int default 0")
     private Integer numWarLordKilled; // TODO: Cambiar por night lord.
 
+
+
     // @NotNull
     @Min(0)
     // @Column(columnDefinition = "int default 0")
@@ -69,7 +71,7 @@ public class Player extends NamedEntity {
     // @Column(columnDefinition = "boolean default false")
     private Boolean ready;
 
-    @NotNull
+    //@NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private Date birthDate;
 

@@ -1,4 +1,6 @@
 package org.springframework.samples.nt4h.turn;
+/*
+
 
 import org.hibernate.sql.Select;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,7 @@ obeter una lista de los enemiggos
         return ls2;
     }
 
- */
+
 
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
@@ -75,13 +77,8 @@ obeter una lista de los enemiggos
         //Confirmo ataque
 
         //Fin de turno
-
-
-
-
-
-
-
         return VIEW_PHASES_ATTACK;
     }
-}
+
+    }
+*/

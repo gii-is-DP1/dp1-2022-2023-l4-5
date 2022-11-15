@@ -11,9 +11,10 @@ import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -44,16 +45,17 @@ public class GameController {
 
     // Servicios
     private final GameService gameService;
-
+    private final UserService userService;
     private final HeroService heroService;
 
     private final PlayerService playerService;
 
     @Autowired
-    public GameController(GameService gameService, HeroService heroService, PlayerService playerService) {
+    public GameController(GameService gameService, HeroService heroService, PlayerService playerService, UserService userService) {
         this.gameService = gameService;
         this.heroService = heroService;
         this.playerService= playerService;
+        this.userService= userService;
     }
 
     @InitBinder
@@ -101,10 +103,11 @@ public class GameController {
             if (principal instanceof UserDetails) {
                 ud = ((UserDetails) principal);
             }
-
+            User user = userService.getUserByUsername(ud.getUsername());
             Game game = gameService.getGameById(gameId);
             player.setName(ud.getUsername());
             if (game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
+                player.setBirthDate(user.getBirthDate());
                 game.addPlayer(player);
                 player.setGame(game);
                 playerService.savePlayer(player);
@@ -113,20 +116,9 @@ public class GameController {
                 player.setId(playerService.getPlayerByName(player.getName()).getId());
                 // TODO: Lanzar una excepción para indicar que el jugador ya se ha unido a la partida.
             }
-            return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString());
+            return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString() );
         }
     }
-
-    //Elegir heroe
-    @GetMapping(value = "/{gameId}/{playerId}")
-    public String initHeroSelectForm(@PathVariable Integer gameId, @PathVariable Integer playerId, ModelMap model) {
-        System.out.println("initHeroSelectForm");
-        model.put("game", gameService.getGameById(gameId));
-        model.put("player", playerService.getPlayerById(playerId));
-        model.put("hero", new HeroInGame());
-        return VIEW_GAME_HERO_SELECT;
-    }
-
     @PostMapping(value = "/{gameId}/{playerId}")
     public String processHeroSelectForm(HeroInGame heroInGame, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) {
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
@@ -144,10 +136,18 @@ public class GameController {
         }
     }
 
-    @ModelAttribute("heroes")
-    public List<Integer> processHeroSelect() {
-        return heroService.getAllHeros().stream().map(BaseEntity::getId).collect(Collectors.toList());
+    //Elegir heroe
+    @GetMapping(value = "/{gameId}/{playerId}")
+    public String initHeroSelectForm(@PathVariable Integer gameId, @PathVariable Integer playerId, ModelMap model) {
+        System.out.println("initHeroSelectForm");
+        model.put("game", gameService.getGameById(gameId));
+        model.put("player", playerService.getPlayerById(playerId));
+        model.put("hero", new HeroInGame());
+        return VIEW_GAME_HERO_SELECT;
     }
+
+
+
 
     // Crear una partida.
     @GetMapping(value = "/new")
@@ -180,7 +180,7 @@ public class GameController {
     }
 
     //Indicar turno de los players
-    @GetMapping("/selectOrder")
+    @GetMapping("/{gameId}/selectOrder")
     public String orderRule(@PathVariable Integer gameId) {
         Game game = gameService.getGameById(gameId);
         List<Player> players = game.getPlayers();

@@ -16,12 +16,14 @@
         <c:choose>
             <c:when test="${!player.ready}">
                 <form:form modelAttribute="player" class="form-horizontal" id="add-game-form">
-                <button class="btn btn-default" type="submit">Ready?</button>
+                <button class="btn btn-default" type="submit">Join to this lobby</button>
                 </form:form>
             </c:when>
-            <c:otherwise>
-                <h1>You are ready!</h1>
-            </c:otherwise>
+                <c:otherwise>
+                    <form:form modelAttribute="player" class="form-horizontal" id="add-game-form">
+                    <button class="btn btn-default" type="submit">Ready?</button>
+                    </form:form>
+                </c:otherwise>
         </c:choose>
     </div>
 </nt4h:layout>
