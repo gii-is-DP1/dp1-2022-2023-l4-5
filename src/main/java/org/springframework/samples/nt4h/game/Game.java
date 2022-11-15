@@ -2,8 +2,6 @@ package org.springframework.samples.nt4h.game;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.effect.Phase;
 import org.springframework.samples.nt4h.model.NamedEntity;
@@ -14,7 +12,6 @@ import org.springframework.samples.nt4h.turn.Turn;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +38,7 @@ public class Game extends NamedEntity {
 
 
 
-    // @NotNull
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
