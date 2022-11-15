@@ -9,10 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.model.BaseEntity;
+import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -43,12 +46,14 @@ public class GameController {
     private final HeroService heroService;
 
     private final PlayerService playerService;
+    private final UserService userService;
 
     @Autowired
-    public GameController(GameService gameService, HeroService heroService, PlayerService playerService) {
+    public GameController(GameService gameService, HeroService heroService, PlayerService playerService, UserService userService) {
         this.gameService = gameService;
         this.heroService = heroService;
         this.playerService= playerService;
+        this.userService = userService;
     }
 
     @InitBinder
@@ -82,34 +87,38 @@ public class GameController {
     @GetMapping("/{gameId}")
     public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
         Game game = gameService.getGameById(gameId);
+        User user = userService.currentUser();
+        if (game.getPlayers().stream().anyMatch(player -> player.getName().equals(user.getUsername()))) {
+            Player player = game.getPlayers().stream().filter(p -> p.getName().equals(user.getUsername())).findFirst().get();
+            model.put("p", player);
+        } else {
+            model.put("p", new Player());
+        }
         model.put("selections", game.getPlayers());
-        model.put("p", new Player());
+
+        model.put("numHeroes", game.getMode() == Mode.UNI_CLASS ? 1 : 2);
         return VIEW_GAME_LOBBY;
     }
     @PostMapping(value = "/{gameId}")
-    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId, BindingResult result) {
+    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId, BindingResult result) throws RoleAlreadyChosenException, HeroAlreadyChosenException {
         if (result.hasErrors()) {
             return PAGE_GAME_LOBBY;
-        } else {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            UserDetails ud = null;
-            if (principal instanceof UserDetails) {
-                ud = ((UserDetails) principal);
-            }
-
-            Game game = gameService.getGameById(gameId);
-            player.setName(ud.getUsername());
-            if (game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
-                game.addPlayer(player);
-                player.setGame(game);
-                playerService.savePlayer(player);
-                gameService.saveGame(game);
-            } else {
-                player.setId(playerService.getPlayerByName(player.getName()).getId());
-                // TODO: Lanzar una excepción para indicar que el jugador ya se ha unido a la partida.
-            }
-            return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString());
         }
+        User user = userService.currentUser();
+        Game game = gameService.getGameById(gameId);
+        player.setName(user.getUsername());
+        if (game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
+            game.addPlayer(player);
+            player.setGame(game);
+            playerService.savePlayer(player);
+            gameService.saveGame(game);
+            System.out.println("Player " + player.getName() + " added to game " + game.getId());
+
+        } else {
+            player.setId(playerService.getPlayerByName(player.getName()).getId());
+            // TODO: Lanzar una excepción para indicar que el jugador ya se ha unido a la partida.
+        }
+        return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString());
     }
 
     //Elegir heroe
@@ -124,19 +133,40 @@ public class GameController {
 
     @PostMapping(value = "/{gameId}/{playerId}")
     public String processHeroSelectForm(HeroInGame heroInGame, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) {
-        Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         if (result.hasErrors()) {
             return PAGE_GAME_HERO_SELECT;
-        } else {
-            Game game = gameService.getGameById(gameId);
-            Player player = playerService.getPlayerById(playerId);
-            heroInGame.setActualHealth(hero.getHealth());
+        }
+        Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
+        Game game = gameService.getGameById(gameId);
+        Player player = playerService.getPlayerById(playerId);
+        heroInGame.setActualHealth(hero.getHealth());
+        try {
             heroInGame.setPlayer(player);
             player.addHero(heroInGame);
+            if (player.getHeroes() != null && (player.getHeroes().size() == game.getMode().getNumHeroes()))
+                player.setReady(true);
             playerService.savePlayer(player);
             gameService.saveGame(game);
-            return PAGE_GAME_LOBBY.replace("{gameId}", gameId.toString());
+        } catch (RoleAlreadyChosenException e) {
+            System.out.println("RoleAlreadyChosenException");
+            result.rejectValue("hero", "role already chosen");
+            return PAGE_GAME_HERO_SELECT;
+        } catch (HeroAlreadyChosenException e) {
+            System.out.println("HeroAlreadyChosenException");
+            result.rejectValue("hero", "hero already chosen");
+            return PAGE_GAME_HERO_SELECT;
         }
+
+        System.out.println("----------------------");
+        System.out.println(player.getHeroes().stream().map(HeroInGame::getHero).map(NamedEntity::getName).collect(Collectors.toList()));
+        System.out.println(game.getMode().getNumHeroes());
+        System.out.println(player.getHeroes().size() == game.getMode().getNumHeroes());
+        System.out.println(player.getHeroes() != null);
+        System.out.println(player.getReady());
+        System.out.println("----------------------");
+
+        return PAGE_GAME_LOBBY.replace("{gameId}", gameId.toString());
+
     }
 
     // Crear una partida.
@@ -148,8 +178,7 @@ public class GameController {
 
 
     @PostMapping(value = "/new")
-    public String processCreationForm(@Valid Game game, BindingResult result) {
-        System.out.println(result.getAllErrors());
+    public String processCreationForm(@Valid Game game, BindingResult result) throws HeroAlreadyChosenException {
         if (result.hasErrors()) {
             return VIEW_GAME_CREATE;
         } else {
@@ -162,9 +191,12 @@ public class GameController {
     @GetMapping("/update/{gameId}")
     public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
         JsonObject jsonObject = new JsonObject();
+        System.out.println(gameService.getGameById(gameId).getPlayers().stream().flatMap(player -> player.getHeroes().stream()).map(HeroInGame::getHero).map(NamedEntity::getName).collect(Collectors.toList()));
         jsonObject.put("messages",
             gameService.getGameById(gameId)
-                .getPlayers().stream().map(Player::getName)
+                .getPlayers().stream().map(player -> player.getName() + " { " +
+                    player.getHeroes().stream().map(hero -> hero.getHero().getName()).reduce((s, s2) -> s + ", " + s2)
+                        .orElse("No hero selected") + " }" + " " + (player.getReady() ? "Ready": "Not ready"))
                 .collect(Collectors.toList()));
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }

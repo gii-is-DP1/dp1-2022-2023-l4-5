@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.player;
+package org.springframework.samples.nt4h.card.hero;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;

@@ -67,7 +67,7 @@ public class Player extends NamedEntity {
     private Boolean ready;
 
     //Relaciones
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     private Set<HeroInGame> heroes;
 
 

@@ -2,14 +2,20 @@ package org.springframework.samples.nt4h.game;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.effect.Phase;
+import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
+import org.springframework.samples.nt4h.player.Player;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -33,20 +39,14 @@ public class GameService {
 
     //TODO: actualizar la Date_finish cuadno acabe la partida
     @Transactional
-    public void saveGame(Game game) {
-        if (game.getPhase() == null) {
-            game.setPhase(Phase.START);
-        }
-        if (game.getStartDate() == null) {
-            game.setStartDate(LocalDateTime.now());
-        }
-        if (game.getPassword() == "") {
-            if (game.getAccessibility() == null) {
-                game.setAccessibility(Accessibility.PUBLIC);
-            }
-        } else {
-            game.setAccessibility(Accessibility.PRIVATE);
-        }
+    public void saveGame(Game game) throws HeroAlreadyChosenException {
+        if (game.getPlayers().stream().flatMap(player -> player.getHeroes() != null ? player.getHeroes().stream().map(HeroInGame::getHero): null)
+            .filter(Objects::nonNull).collect(Collectors.groupingBy(Hero::getName)).values().stream().anyMatch(l -> l.size() > 1))
+            throw new HeroAlreadyChosenException();
+        if (game.getPhase() == null) game.setPhase(Phase.START);
+        if (game.getStartDate() == null) game.setStartDate(LocalDateTime.now());
+        if (game.getPassword().isEmpty() ) game.setAccessibility(Accessibility.PUBLIC);
+        else game.setAccessibility(Accessibility.PRIVATE);
         gameRepository.save(game);
     }
 
