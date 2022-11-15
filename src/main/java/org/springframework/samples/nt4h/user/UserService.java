@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,5 +86,15 @@ public class UserService {
     @Transactional(readOnly = true)
     public boolean userExists(int id) {
         return userRepository.existsById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public User currentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails ud = null;
+        if (principal instanceof UserDetails) {
+            ud = ((UserDetails) principal);
+        }
+        return getUserByUsername(ud.getUsername());
     }
 }
