@@ -15,6 +15,7 @@ import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

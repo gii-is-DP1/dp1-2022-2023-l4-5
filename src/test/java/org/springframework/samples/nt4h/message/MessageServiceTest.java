@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class MessageServiceTest {
     public void findByIDTrue(){
         Message message = messageService.getMessageById(1);
         assertNotNull(message);
-        assertEquals("Hola",message.getContent() );
+        assertEquals("Hola, soy Alesanfe",message.getContent() );
     }
     @Test
     public void findByIDFalse(){
@@ -41,7 +42,13 @@ public class MessageServiceTest {
         assertFalse(messages.isEmpty());
         assertEquals(2,messages.size());
     }
-    //TO DO
+    @Test
+    public void findAll(){
+        List<Message>ls= messageService.getAllMessages();
+        assertNotNull(ls);
+        assertFalse(ls.isEmpty());
+        assertEquals(2,ls.size());
+    }
     @Test
     public void shouldInsertMessage(){
         Message message = new Message();

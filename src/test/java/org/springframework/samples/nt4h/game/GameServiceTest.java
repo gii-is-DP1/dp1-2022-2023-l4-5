@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.effect.Phase;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -59,6 +60,14 @@ public class GameServiceTest {
         Game game = gameService.getGameByName("Prueba");
         assertNotNull(game);
         assertNotEquals(2,game.getMaxPlayers());
+    }
+    @Test
+    public void findAll(){
+        ini();
+        List<Game>ls= gameService.getAllGames();
+        assertNotNull(ls);
+        assertFalse(ls.isEmpty());
+        assertEquals(2,ls.size());
     }
     @Test
     public void shouldInsertGame() {
