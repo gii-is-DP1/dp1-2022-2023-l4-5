@@ -38,7 +38,7 @@ public class GameService {
     }
 
     //TODO: actualizar la Date_finish cuadno acabe la partida
-    @Transactional
+    @Transactional(rollbackFor = HeroAlreadyChosenException.class)
     public void saveGame(Game game) throws HeroAlreadyChosenException {
         if (game.getPlayers().stream().flatMap(player -> player.getHeroes() != null ? player.getHeroes().stream().map(HeroInGame::getHero): null)
             .filter(Objects::nonNull).collect(Collectors.groupingBy(Hero::getName)).values().stream().anyMatch(l -> l.size() > 1))

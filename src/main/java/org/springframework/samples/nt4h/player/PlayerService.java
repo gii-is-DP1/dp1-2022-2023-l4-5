@@ -21,7 +21,7 @@ public class PlayerService {
         return playerRepository.findById(id).orElseThrow(() -> new NotFoundException("Player not found"));
     }
 
-    @Transactional
+    @Transactional(rollbackFor = RoleAlreadyChosenException.class)
     public void savePlayer(Player player) throws RoleAlreadyChosenException {
         if (player.getHeroes() != null && player.getHeroes().stream().map(HeroInGame::getHero).collect(Collectors.groupingBy(Hero::getRole)).values().stream().anyMatch(l -> l.size() > 1)) {
             throw new RoleAlreadyChosenException();

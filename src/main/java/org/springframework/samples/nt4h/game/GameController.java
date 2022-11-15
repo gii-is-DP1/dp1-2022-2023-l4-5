@@ -107,7 +107,8 @@ public class GameController {
         User user = userService.currentUser();
         Game game = gameService.getGameById(gameId);
         player.setName(user.getUsername());
-        if (game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
+        // Comprobar
+        if (game.getPlayers() == null || game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
             game.addPlayer(player);
             player.setGame(game);
             playerService.savePlayer(player);
@@ -132,29 +133,46 @@ public class GameController {
     }
 
     @PostMapping(value = "/{gameId}/{playerId}")
-    public String processHeroSelectForm(HeroInGame heroInGame, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) {
+    public String processHeroSelectForm(HeroInGame heroInGame,ModelMap model, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) {
         if (result.hasErrors()) {
-            return PAGE_GAME_HERO_SELECT;
+            model.put("game", gameService.getGameById(gameId));
+            model.put("player", playerService.getPlayerById(playerId));
+            model.put("hero", new HeroInGame());
+            return VIEW_GAME_HERO_SELECT;
         }
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         Game game = gameService.getGameById(gameId);
         Player player = playerService.getPlayerById(playerId);
         heroInGame.setActualHealth(hero.getHealth());
+        // Añadir rollback.ç
+        System.out.println("Hero " + hero.getName() + " added to player " + player.getName());
         try {
             heroInGame.setPlayer(player);
             player.addHero(heroInGame);
             if (player.getHeroes() != null && (player.getHeroes().size() == game.getMode().getNumHeroes()))
                 player.setReady(true);
             playerService.savePlayer(player);
-            gameService.saveGame(game);
+
         } catch (RoleAlreadyChosenException e) {
             System.out.println("RoleAlreadyChosenException");
-            result.rejectValue("hero", "role already chosen");
-            return PAGE_GAME_HERO_SELECT;
+            model.put("game", gameService.getGameById(gameId));
+            model.put("player", playerService.getPlayerById(playerId));
+            model.put("hero", new HeroInGame());
+            model.put("message", "Role already chosen.");
+            result.rejectValue("hero", "alreadyChosen", "Role already chosen.");
+            return VIEW_GAME_HERO_SELECT;
+        }
+        try {
+            gameService.saveGame(game);
         } catch (HeroAlreadyChosenException e) {
             System.out.println("HeroAlreadyChosenException");
-            result.rejectValue("hero", "hero already chosen");
-            return PAGE_GAME_HERO_SELECT;
+            model.put("game", gameService.getGameById(gameId));
+            model.put("player", playerService.getPlayerById(playerId));
+            model.put("hero", new HeroInGame());
+            // Asegurar que el mensaje se envía.
+            model.put("message", "Hero already chosen");
+            result.rejectValue("hero", "alreadyChosen", "Hero already chosen.");
+            return VIEW_GAME_HERO_SELECT;
         }
 
         System.out.println("----------------------");
@@ -179,9 +197,14 @@ public class GameController {
 
     @PostMapping(value = "/new")
     public String processCreationForm(@Valid Game game, BindingResult result) throws HeroAlreadyChosenException {
+        User user = userService.currentUser();
         if (result.hasErrors()) {
             return VIEW_GAME_CREATE;
         } else {
+            // Añadir anfitrión.
+            Player player = new Player();
+            player.setName(user.getUsername());
+            game.addPlayer(player);
             gameService.saveGame(game);
             return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
         }
@@ -192,7 +215,9 @@ public class GameController {
     public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
         JsonObject jsonObject = new JsonObject();
         System.out.println(gameService.getGameById(gameId).getPlayers().stream().flatMap(player -> player.getHeroes().stream()).map(HeroInGame::getHero).map(NamedEntity::getName).collect(Collectors.toList()));
+        Game game = gameService.getGameById(gameId);
         jsonObject.put("messages",
+
             gameService.getGameById(gameId)
                 .getPlayers().stream().map(player -> player.getName() + " { " +
                     player.getHeroes().stream().map(hero -> hero.getHero().getName()).reduce((s, s2) -> s + ", " + s2)
