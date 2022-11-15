@@ -31,7 +31,7 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public List<Message> getAllMessages(Integer id) {
+    public List<Message> getAllMessages() {
         return messageRepository.findAll();
     }
 

@@ -34,8 +34,8 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Game> getGameByName(String name) {
-        return gameRepository.findByName(name);
+    public Game getGameByName(String name) {
+        return gameRepository.findByName(name).orElseThrow(() -> new NotFoundException("Game not found"));
     }
 
     //TODO: actualizar la Date_finish cuadno acabe la partida
