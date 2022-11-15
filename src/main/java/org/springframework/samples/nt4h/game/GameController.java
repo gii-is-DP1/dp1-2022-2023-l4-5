@@ -3,16 +3,17 @@ package org.springframework.samples.nt4h.game;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.google.common.collect.Lists;
+import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.model.BaseEntity;
-import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.user.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -36,6 +39,7 @@ public class GameController {
     private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
     private static final String VIEW_GAME_HERO_SELECT = "games/heroSelect";
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/{gameId}/{playerId}";
+    private static final String VIEW_GAME_ORDER = "games/selectOrder";
 
     // Servicios
     private final GameService gameService;
@@ -167,5 +171,36 @@ public class GameController {
                 .getPlayers().stream().map(Player::getName)
                 .collect(Collectors.toList()));
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+    }
+    @GetMapping("/selectOrder")
+    public String orderRule(@PathVariable Integer gameId) {
+        Game game = gameService.getGameById(gameId);
+        List<Player> players = game.getPlayers();
+        List<Triplet<Integer, Player, Integer>> datos = new ArrayList<>();
+        for (var i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            List<AbilityInGame> abilities = player.getInDeck();
+            datos.add(new Triplet<>(i, player,abilities.get(0).getAttack() + abilities.get(1).getAttack()));
+        }
+        datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
+        if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
+            datos.get(0).getValue1().getBirthDate().after(datos.get(1).getValue1().getBirthDate())) {
+            var first = datos.get(0);
+            var second = datos.get(1);
+            datos.set(0, second);
+            datos.set(1, first);
+        }
+        datos.forEach(triplet -> triplet.getValue1().setSequence(triplet.getValue0() + 1));
+        return VIEW_GAME_ORDER;
+    }
+
+
+    // Clase auxiliar
+    public Player newPlayer(User user, Player player) {
+        user.setPlayer(player);
+        player.setName(user.getUsername());
+        player.setSequence(1);
+        player.setReady(Boolean.FALSE);
+        return player;
     }
 }
