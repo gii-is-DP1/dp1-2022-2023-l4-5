@@ -28,18 +28,23 @@ public class PlayerService {
         }
         if (player.getGold() == null) player.setGold(0);
         if (player.getGlory() == null) player.setGlory(0);
-        if (player.getEvasion() == null) player.setEvasion(true);
+        if (player.getHasEvasion() == null) player.setHasEvasion(true);
         if (player.getNumOrcsKilled() == null) player.setNumOrcsKilled(0);
         if (player.getNumWarLordKilled() == null) player.setNumWarLordKilled(0);
         if (player.getDamageDealed() == null) player.setDamageDealed(0);
         if (player.getDamageDealedToNightLords() == null) player.setDamageDealedToNightLords(0);
-        if(player.getReady()==null)player.setReady(false);
+        if (player.getReady() == null) player.setReady(false);
         playerRepository.save(player);
     }
 
     @Transactional
     public void deletePlayerById(int id) {
         playerRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deletePlayer(Player player) {
+        playerRepository.delete(player);
     }
 
     @Transactional(readOnly = true)

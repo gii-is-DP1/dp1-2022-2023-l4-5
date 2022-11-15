@@ -2,9 +2,9 @@ package org.springframework.samples.nt4h.player;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
@@ -24,19 +24,16 @@ import java.util.Set;
 // @ToString(of = {"name"})
 public class Player extends NamedEntity {
 
-    // @NotNull
     @Min(0)
-    // @Column(columnDefinition = "int default 0")
+
     private Integer gold;
 
-    // @NotNull
+
     @Min(0)
-    // @Column(columnDefinition = "int default 0")
+
     private Integer glory;
 
-    // @NotNull
-    // @Column(columnDefinition = "int default 1")
-    private Boolean evasion;
+    private Boolean hasEvasion;
 
     // @NotNull
     @Min(0)
@@ -55,34 +52,69 @@ public class Player extends NamedEntity {
 
     // @NotNull
     @Min(0)
-    // @Column(columnDefinition = "int default 0")
     private Integer damageDealedToNightLords;
 
     // @NotNull
-    @Range(min = 1, max= 4)
+    @Range(min = 1, max = 4)
     private Integer sequence;  // Para elegir a quien le toca.
 
-    // @NotNull
-    // @Column(columnDefinition = "boolean default false")
+
     private Boolean ready;
+
+    private Boolean host;
 
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
+    @Getter(AccessLevel.NONE)
     private Set<HeroInGame> heroes;
-
-
     // Se crean al crear al jugador.
     @OneToMany
+    @Getter(AccessLevel.NONE)
     private List<Turn> turn;
-
     @OneToMany
+    @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inHand;
-
     @OneToMany
+    @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDeck;
-
     @OneToMany
+    @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDiscard;
+
+    public Set<HeroInGame> getHeroes() {
+        if (heroes == null) {
+            heroes = Sets.newHashSet();
+        }
+        return heroes;
+    }
+
+    public List<Turn> getTurn() {
+        if (turn == null) {
+            turn = Lists.newArrayList();
+        }
+        return turn;
+    }
+
+    public List<AbilityInGame> getInHand() {
+        if (inHand == null) {
+            inHand = Lists.newArrayList();
+        }
+        return inHand;
+    }
+
+    public List<AbilityInGame> getInDeck() {
+        if (inDeck == null) {
+            inDeck = Lists.newArrayList();
+        }
+        return inDeck;
+    }
+
+    public List<AbilityInGame> getInDiscard() {
+        if (inDiscard == null) {
+            inDiscard = Lists.newArrayList();
+        }
+        return inDiscard;
+    }
 
     @ManyToOne
     private Game game;

@@ -14,7 +14,7 @@
 
     <div>
         <c:choose>
-            <c:when test="${p.ready}">
+            <c:when test="${player.ready}">
                 <h1>You are ready!</h1>
             </c:when>
             <c:otherwise>
@@ -27,7 +27,6 @@
 </nt4h:layout>
 
 <script type="text/javascript">
-
     function reset(url, action) {
         $(document).ready(function () {
             setInterval(function () {

@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.effect.Phase;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
-import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
-import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.game.exceptions.PlayerInOtherGameException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,17 +39,21 @@ public class GameService {
     }
 
     //TODO: actualizar la Date_finish cuadno acabe la partida
-    @Transactional(rollbackFor = {HeroAlreadyChosenException.class, UserInAGameException.class})
-    public void saveGame(Game game) throws HeroAlreadyChosenException, UserInAGameException {
-        List<Game> games = gameRepository.findAll().stream().filter(g-> !Objects.equals(g.getId(), game.getId())).collect(Collectors.toList());
-        if (games.stream().anyMatch(g -> g.getPlayers().stream().anyMatch(p -> game.getPlayers().contains(p))))
-            throw new UserInAGameException("User already in a game");
-        if (game.getPlayers().stream().flatMap(player -> player.getHeroes() != null ? player.getHeroes().stream().map(HeroInGame::getHero): null)
+    @Transactional(rollbackFor = {HeroAlreadyChosenException.class, FullGameException.class})
+    public void saveGame(Game game) throws HeroAlreadyChosenException, FullGameException, PlayerInOtherGameException {
+        System.out.println("----");
+        /*
+        if ()))
+            throw new PlayerInOtherGameException();
+       */
+        if (game.getPlayers().size() > game.getMaxPlayers())
+            throw new FullGameException();
+        if (game.getPlayers().stream().flatMap(player -> player.getHeroes() != null ? player.getHeroes().stream().map(HeroInGame::getHero) : null)
             .filter(Objects::nonNull).collect(Collectors.groupingBy(Hero::getName)).values().stream().anyMatch(l -> l.size() > 1))
             throw new HeroAlreadyChosenException();
         if (game.getPhase() == null) game.setPhase(Phase.START);
         if (game.getStartDate() == null) game.setStartDate(LocalDateTime.now());
-        if (game.getPassword().isEmpty() ) game.setAccessibility(Accessibility.PUBLIC);
+        if (game.getPassword().isEmpty()) game.setAccessibility(Accessibility.PUBLIC);
         else game.setAccessibility(Accessibility.PRIVATE);
         gameRepository.save(game);
     }
