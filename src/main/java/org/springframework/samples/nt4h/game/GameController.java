@@ -10,6 +10,7 @@ import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
+import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
@@ -100,7 +101,7 @@ public class GameController {
         return VIEW_GAME_LOBBY;
     }
     @PostMapping(value = "/{gameId}")
-    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId, BindingResult result) throws RoleAlreadyChosenException, HeroAlreadyChosenException {
+    public String processCreationPlayerReady(@Valid Player player, ModelMap model, @PathVariable Integer gameId, BindingResult result) throws RoleAlreadyChosenException, HeroAlreadyChosenException {
         if (result.hasErrors()) {
             return PAGE_GAME_LOBBY;
         }
@@ -110,9 +111,16 @@ public class GameController {
         // Comprobar
         if (game.getPlayers() == null || game.getPlayers().stream().map(Player::getName).noneMatch(name -> name.equals(player.getName()))) {
             game.addPlayer(player);
-            player.setGame(game);
-            playerService.savePlayer(player);
-            gameService.saveGame(game);
+            try {
+                player.setGame(game);
+                // playerService.savePlayer(player);
+                gameService.saveGame(game);
+            } catch (UserInAGameException e) {
+                model.put("message", "User already in a game.");
+                model.put("messageType", "danger");
+                return PAGE_GAME_LOBBY;
+            }
+
             System.out.println("Player " + player.getName() + " added to game " + game.getId());
 
         } else {
@@ -133,7 +141,7 @@ public class GameController {
     }
 
     @PostMapping(value = "/{gameId}/{playerId}")
-    public String processHeroSelectForm(HeroInGame heroInGame,ModelMap model, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) {
+    public String processHeroSelectForm(HeroInGame heroInGame,ModelMap model, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) throws UserInAGameException {
         if (result.hasErrors()) {
             model.put("game", gameService.getGameById(gameId));
             model.put("player", playerService.getPlayerById(playerId));
@@ -159,6 +167,7 @@ public class GameController {
             model.put("player", playerService.getPlayerById(playerId));
             model.put("hero", new HeroInGame());
             model.put("message", "Role already chosen.");
+            model.put("messageType", "danger");
             result.rejectValue("hero", "alreadyChosen", "Role already chosen.");
             return VIEW_GAME_HERO_SELECT;
         }
@@ -171,6 +180,7 @@ public class GameController {
             model.put("hero", new HeroInGame());
             // Asegurar que el mensaje se envía.
             model.put("message", "Hero already chosen");
+            model.put("messageType", "danger");
             result.rejectValue("hero", "alreadyChosen", "Hero already chosen.");
             return VIEW_GAME_HERO_SELECT;
         }
@@ -196,7 +206,7 @@ public class GameController {
 
 
     @PostMapping(value = "/new")
-    public String processCreationForm(@Valid Game game, BindingResult result) throws HeroAlreadyChosenException {
+    public String processCreationForm(@Valid Game game, BindingResult result, ModelMap model) throws HeroAlreadyChosenException {
         User user = userService.currentUser();
         if (result.hasErrors()) {
             return VIEW_GAME_CREATE;
@@ -204,8 +214,15 @@ public class GameController {
             // Añadir anfitrión.
             Player player = new Player();
             player.setName(user.getUsername());
-            game.addPlayer(player);
-            gameService.saveGame(game);
+            try {
+                game.addPlayer(player);
+                gameService.saveGame(game);
+            } catch (UserInAGameException e) {
+                model.put("message", "User already in a game.");
+                model.put("messageType", "danger");
+                return PAGE_GAME_LOBBY;
+            }
+
             return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
         }
     }
