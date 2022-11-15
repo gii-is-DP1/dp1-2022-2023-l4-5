@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -14,6 +15,8 @@ import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -65,6 +68,10 @@ public class Player extends NamedEntity {
     // @NotNull
     // @Column(columnDefinition = "boolean default false")
     private Boolean ready;
+
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    private Date birthDate;
 
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL)

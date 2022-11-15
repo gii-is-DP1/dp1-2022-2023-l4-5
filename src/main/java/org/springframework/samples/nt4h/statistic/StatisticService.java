@@ -5,6 +5,8 @@ import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class StatisticService {
@@ -17,7 +19,7 @@ public class StatisticService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Statistic> getAllStatistics() {
+    public List<Statistic> getAllStatistics() {
         return statisticRepository.findAll();
     }
 
