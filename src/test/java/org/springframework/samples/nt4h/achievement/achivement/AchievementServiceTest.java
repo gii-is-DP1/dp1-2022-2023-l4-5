@@ -1,12 +1,15 @@
-package achievement;
+package org.springframework.samples.nt4h.achievement.achivement;
 
 
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.nt4h.achievement.Achievement;
 import org.springframework.samples.nt4h.achievement.AchievementRepository;
 import org.springframework.samples.nt4h.achievement.AchievementService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +17,10 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class AchievementServiceTest {
     @Autowired
-    AchievementService acs;
+   protected AchievementService acs;
 
     @Test
     public void findByNameTrue(){
@@ -29,7 +32,7 @@ public class AchievementServiceTest {
     public void findByNameFalse(){
         Achievement logro = acs.getAchievementByName("Primeros pasos");
         assertNotNull(logro);
-        assertEquals(20,logro.getThreshold());
+        assertNotEquals(20,logro.getThreshold());
     }
     @Test
     public void findByIdTrue(){
@@ -41,7 +44,7 @@ public class AchievementServiceTest {
     public void findByIdFalse(){
         Achievement logro = acs.getAchievementById(5);
         assertNotNull(logro);
-        assertEquals(1,logro.getThreshold());
+        assertNotEquals(1,logro.getThreshold());
     }
 
     @Test
@@ -52,12 +55,6 @@ public class AchievementServiceTest {
         assertEquals(15, ls.size());
     }
 
-    @Test
-    public void findAllTestFalse(){
-        List<Achievement> ls = acs.getAllAchievements();
-        assertNotNull(ls);
-        assertTrue(ls.isEmpty());
-    }
 
 
 }
