@@ -14,7 +14,6 @@ import javax.validation.constraints.Max;
 @Table(name = "heroes_in_game")
 public class HeroInGame extends BaseEntity {
 
-    //@NotNull
     @Max(3)
     private Integer actualHealth;
 

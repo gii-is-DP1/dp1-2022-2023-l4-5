@@ -7,8 +7,13 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
+import org.springframework.samples.nt4h.card.hero.Role;
+import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Service;
@@ -19,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PlayerServiceTest {
     @Autowired
     protected PlayerService playerService;
+    @Autowired
+    protected GameService gameService;
 
     @Autowired
     protected HeroService heroService;
@@ -93,8 +101,6 @@ public class PlayerServiceTest {
     }
     @Test
     public void shouldUpdatePlayer() throws RoleAlreadyChosenException {
-        List<Player> players = playerService.getAllPlayers();
-        System.out.println(players);
         Player player = playerService.getPlayerById(1);
         String OldName = player.getName();
         String NewName = OldName +"X";
@@ -103,15 +109,30 @@ public class PlayerServiceTest {
         assertEquals(NewName, playerService.getPlayerById(1).getName());
     }
     @Test
-    public void shouldRoleAlreadyChosen(){
+    public void shouldRoleExceptPlayer() throws RoleAlreadyChosenException {
         Player player = playerService.getPlayerById(1);
-        HeroInGame hero1= new HeroInGame();
-        hero1.setHero(heroService.getHeroByName("Neddia"));
-        HeroInGame hero2= new HeroInGame();
-        hero2.setHero(heroService.getHeroByName("Feldon"));
-        Set<HeroInGame> heroes= Set.of(hero1,hero2);
-        player.setHeroes(heroes);
-        assertThrows(RoleAlreadyChosenException.class,()->playerService.savePlayer(player));
+        HeroInGame hero = new HeroInGame();
+        hero.setHero(heroService.getHeroByName("Beleth-Il"));
+        HeroInGame hero1 = new HeroInGame();
+        hero1.setHero(heroService.getHeroByName("Idril"));
+        player.addHero(hero);
+        player.addHero(hero1);
+        assertThrows(RoleAlreadyChosenException.class,()->playerService.savePlayer(player, Mode.MULTI_CLASS));
+    }
+    @Test
+    public void shouldAddDeckFromRole(){
+        Player player = playerService.getPlayerById(1);
+        HeroInGame hero = new HeroInGame();
+        hero.setHero(heroService.getHeroById(1));
+        Role esperado= heroService.getHeroById(1).getRole();
+        player.setHeroes(Set.of(hero));
+        Game game= gameService.getGameById(1);
+        game.setPlayers(List.of(player));
+        playerService.addDeckFromRole(player,game.getMode());
+        Role[] roles = player.getHeroes().stream().map(h -> h.getHero().getRole()).distinct().toArray(Role[]::new);
+        List<Integer> idHabilidades= player.getInDeck().stream().map(a->a.getAbility().getId()).collect(Collectors.toList());
+        assertTrue(esperado.getAbilities().containsAll(idHabilidades));
+
     }
     @Test
     public void deletePlayerTest(){
