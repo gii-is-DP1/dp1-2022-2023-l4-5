@@ -47,8 +47,10 @@ public class GameServiceTest {
         game.setPassiveOrcs(passive);
         game.setPassword("");
         game.setName("Prueba");
+
             this.gameService.saveGame(game);
     }
+
     @Test
     public void findByIDTrue(){
         Game game = gameService.getGameById(1);
@@ -105,6 +107,7 @@ public class GameServiceTest {
             this.gameService.saveGame(game);
         assertEquals(newValue,gameService.getGameByName("Prueba").getPhase());
     }
+
     @Test
     public void shouldHeroAlreadyChosenException() {
         Game game = gameService.getGameByName("Prueba");

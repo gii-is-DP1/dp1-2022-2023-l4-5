@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PlayerServiceTest {
     @Autowired
     protected PlayerService playerService;
+
     @Autowired
     protected HeroService heroService;
     @BeforeAll
@@ -117,6 +118,8 @@ public class PlayerServiceTest {
         playerService.deletePlayerById(1);
         assertFalse(playerService.playerExists(1));
     }
+
+
 
 
 }

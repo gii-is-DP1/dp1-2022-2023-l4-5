@@ -6,8 +6,10 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.samples.nt4h.model.NamedEntity;
 
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
+@Getter
+@Setter
 @MappedSuperclass
 @Getter
 @Setter
@@ -21,9 +23,8 @@ public class Card extends NamedEntity {
     //@NotNull
     private String frontImage;
 
-
-    //@Min(0)
     @NotNull
+    @Min(-1)
     private Integer maxUses;
 
 }
