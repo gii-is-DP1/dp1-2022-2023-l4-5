@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -78,11 +79,9 @@ import static org.junit.jupiter.api.Assertions.*;
     public void shouldInsertHero() {
 
         Hero hero = new Hero();
-        hero.setMaxUses(1);
         hero.setName("Lis");
         hero.setHealth(3);
         hero.setRole(Role.EXPLORER);
-        hero.setMaxUses(1);
         Capacity capacity= new Capacity();
         capacity.setStateCapacity(StateCapacity.EXPERTISE);
         capacity.setLessDamage(true);
@@ -95,6 +94,7 @@ import static org.junit.jupiter.api.Assertions.*;
         ability.setRole(Role.EXPLORER);
         List<Ability>abilities= List.of(ability);
         hero.setAbilities(abilities);
+        hero.setMaxUses(1);
         this.heroService.saveHero(hero);
         assertEquals(heroService.getHeroByName("Lis"), hero);
 
@@ -127,7 +127,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Hero h= heroService.getHeroById(1);
         hero.setHero(h);
         Player p = new Player();
-        p.setBirthDate(Date.from(Instant.now()));
+        p.setBirthDate(LocalDate.now());
         hero.setPlayer(p);
         this.heroService.saveHeroInGame(hero);
         assertEquals(this.heroService.getHeroInGameById(2),hero);

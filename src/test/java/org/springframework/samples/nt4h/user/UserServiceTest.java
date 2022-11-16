@@ -9,6 +9,7 @@ import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class UserServiceTest {
         user.setUsername("Prueba");
         user.setPassword("Prueba");
         user.setDescription("Prueba");
-        user.setBirthDate(Date.from(Instant.now()));
+        user.setBirthDate(LocalDate.now());
         userService.saveUser(user);
         assertEquals(user.getUsername(),userService.getUserById(n+1).getUsername());
     }
