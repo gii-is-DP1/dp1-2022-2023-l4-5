@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -73,6 +74,11 @@ public class HeroService {
     @Transactional
     public void deleteHeroInGameById(Integer id) {
         heroInGameRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAllHeroInGame(Set<HeroInGame> heroInGames) {
+        heroInGameRepository.deleteAll(heroInGames);
     }
 
     @Transactional(readOnly = true)

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
@@ -54,13 +55,15 @@ public class GameController {
 
     private final PlayerService playerService;
     private final UserService userService;
+    private final AbilityService abilityService;
 
     @Autowired
-    public GameController(GameService gameService, HeroService heroService, PlayerService playerService, UserService userService) {
+    public GameController(GameService gameService, HeroService heroService, PlayerService playerService, UserService userService, AbilityService abilityService) {
         this.gameService = gameService;
         this.heroService = heroService;
-        this.playerService= playerService;
+        this.playerService = playerService;
         this.userService = userService;
+        this.abilityService = abilityService;
     }
 
     @InitBinder
@@ -165,19 +168,26 @@ public class GameController {
 
     // Analizamos la elección del héroe.
     @PostMapping(value = "/{gameId}/{playerId}")
-    public String processHeroSelectForm(HeroInGame heroInGame, ModelMap model, @PathVariable Integer gameId, @PathVariable Integer playerId, BindingResult result) throws FullGameException, PlayerInOtherGameException {
+    public String processHeroSelectForm(HeroInGame heroInGame, ModelMap model, @PathVariable Integer gameId, @PathVariable Integer playerId) throws FullGameException, PlayerInOtherGameException {
         // Obtenemos los datos.
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         Game game = gameService.getGameById(gameId);
         Player player = playerService.getPlayerById(playerId);
+
         // Vinculamos el héroe al jugador.
         heroInGame.setActualHealth(hero.getHealth());
         heroInGame.setPlayer(player);
+
         player.addHero(heroInGame);
-        playerService.addDeckFromRoles(player, hero.getRole());
         if (player.getHeroes().size() == game.getMode().getNumHeroes()) player.setReady(true);
+
+        System.out.println("HeroInGame: " + heroInGame);
         // Si el héroe ya ha sido elegido o ya tenía uno de ese rol, se le impedirá elegirlo.
+        playerService.addDeckFromRole(player, hero.getRole());
+
+
         try {
+
             playerService.savePlayer(player);
         } catch (RoleAlreadyChosenException e) {
             model.put("message", "Role already chosen.");
@@ -191,6 +201,10 @@ public class GameController {
             model.put("messageType", "danger");
             return initHeroSelectForm(gameId, playerId, model);
         }
+        System.out.println("Hero: " + heroInGame);
+        heroService.saveHeroInGame(heroInGame);
+        System.out.println("Player: " + player.getInDeck());
+        abilityService.saveAllAbilityInGame(player.getInDeck());
         return PAGE_GAME_LOBBY.replace("{gameId}", gameId.toString());
 
     }
