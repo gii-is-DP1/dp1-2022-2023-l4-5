@@ -14,6 +14,7 @@ import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.StateProduct;
+import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
@@ -38,6 +39,18 @@ public class ProductServiceTest {
     protected GameService gameService;
     @Autowired
     protected PlayerService playerService;
+
+    void createProductInGame() {
+        ProductInGame product= new ProductInGame();
+        Product p = productService.getProductById(1);
+        product.setProduct(p);
+        product.setStateProduct(StateProduct.INSALE);
+        Game game = gameService.getGameById(1);
+        product.setGame(game);
+        product.setName("Prueba");
+        product.setTimesUsed(5);
+        productService.saveProductInGame(product);
+    }
 
     @Test
     public void findByIDTrue(){
@@ -71,7 +84,6 @@ public class ProductServiceTest {
         assertFalse(list.isEmpty());
     }
     @Test
-    @Transactional
     public void shouldInsertProduct() {
         Product product= new Product();
         product.setName("Prueba");
@@ -89,7 +101,6 @@ public class ProductServiceTest {
 
     }
     @Test
-    @Transactional
     void shouldUpdateProduct(){
         Product product = this.productService.getProductById(1);
         String oldName = product.getName();
@@ -100,70 +111,53 @@ public class ProductServiceTest {
         assertEquals(product.getName(),newName);
     }
     @Test
-    @Transactional
     void existProduct(){
         productService.productExists(1);
     }
 
     //ProductInGame
-    @BeforeAll
-    void createProductInGame() throws RoleAlreadyChosenException {
+
+    @Test
+    public void shouldInsertProductInGame() {
+        createProductInGame();
         ProductInGame product= new ProductInGame();
         Product p = productService.getProductById(1);
         product.setProduct(p);
         product.setStateProduct(StateProduct.INSALE);
         Game game = gameService.getGameById(1);
         product.setGame(game);
-        Player player = new Player();
-        player.setBirthDate(Date.from(Instant.now()));
-        playerService.savePlayer(player);
-        product.setPlayer(player);
         product.setName("Prueba");
         product.setTimesUsed(5);
+        product.setId(1);
         productService.saveProductInGame(product);
-    }
-    @Test
-    @Transactional
-    public void shouldInsertProductInGame(){
-        ProductInGame product= new ProductInGame();
-        Product p = productService.getProductById(1);
-        product.setProduct(p);
-        product.setStateProduct(StateProduct.INSALE);
-        Game game = gameService.getGameById(1);
-        product.setGame(game);
-        Player player = new Player();
-        player.setBirthDate(Date.from(Instant.now()));
-        product.setPlayer(player);
-        product.setName("Prueba2");
-        product.setTimesUsed(5);
-        productService.saveProductInGame(product);
-        assertEquals(productService.getProductInGameById(2),product);
+        ProductInGame encontrado= productService.getProductInGameById(1);
+        assertEquals(encontrado,product);
 
     }
     @Test
-    @Transactional
-    void shouldUpdateProductInGame(){
-        ProductInGame product= productService.getProductInGameById(1);
+    void shouldUpdateProductInGame()  {
+        createProductInGame();
+        ProductInGame p= productService.getProductInGameById(1);
         StateProduct newSta= StateProduct.PLAYER1;
-        product.setStateProduct(newSta);
-        productService.saveProductInGame(product);
-        product= productService.getProductInGameById(1);
-        assertEquals(product.getStateProduct(),newSta);
+        p.setStateProduct(newSta);
+        productService.saveProductInGame(p);
+        p= productService.getProductInGameById(1);
+        assertEquals(p.getStateProduct(),newSta);
     }
     @Test
-    @Transactional
     void existProductInGame(){
         productService.productInGameExists(1);
     }
     @Test
     public void deleteProductTest(){
         productService.deleteProductById(1);
-        assertThrows(DataIntegrityViolationException.class,()->productService.productExists(1));
+        assertFalse(productService.productExists(1));
     }
     @Test
-    public void deleteProductInGameTest(){
-        productService.deleteProductInGameById(1);
-        assertFalse(productService.productInGameExists(1));
+    public void deleteProductInGameTest() throws Exception {
+        createProductInGame();
+        productService.deleteProductInGameById(2);
+        assertFalse(productService.productInGameExists(2));
     }
 
 }
