@@ -21,6 +21,8 @@ import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenExcep
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -113,6 +115,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Hero h= heroService.getHeroById(1);
         hero.setHero(h);
         Player p = new Player();
+        p.setBirthDate(Date.from(Instant.now()));
         hero.setPlayer(p);
         playerService.savePlayer(p);
         this.heroService.saveHeroInGame(hero);
@@ -129,6 +132,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Hero h= heroService.getHeroById(1);
         hero.setHero(h);
         Player p = new Player();
+        p.setBirthDate(Date.from(Instant.now()));
         hero.setPlayer(p);
         this.heroService.saveHeroInGame(hero);
         assertEquals(this.heroService.getHeroInGameById(2),hero);
