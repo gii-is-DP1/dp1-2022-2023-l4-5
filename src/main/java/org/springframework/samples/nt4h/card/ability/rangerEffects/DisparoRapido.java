@@ -1,6 +1,6 @@
 package org.springframework.samples.nt4h.card.ability.rangerEffects;
 
-import org.springframework.samples.nt4h.action.actions.Attack;
+import org.springframework.samples.nt4h.action.Attack;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;

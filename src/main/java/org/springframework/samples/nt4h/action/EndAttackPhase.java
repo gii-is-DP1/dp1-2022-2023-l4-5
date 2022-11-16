@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.action.actions;
+package org.springframework.samples.nt4h.action;
 
 
 import lombok.AllArgsConstructor;
