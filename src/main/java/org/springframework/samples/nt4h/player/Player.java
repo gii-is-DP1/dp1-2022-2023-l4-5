@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.player;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +14,9 @@ import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -68,21 +66,21 @@ public class Player extends NamedEntity {
     private Integer damageProtect;
 
     @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     @Getter(AccessLevel.NONE)
-    private Set<HeroInGame> heroes;
+    private List<HeroInGame> heroes;
     // Se crean al crear al jugador.
     @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<Turn> turn;
 
 
-    public Set<HeroInGame> getHeroes() {
+    public List<HeroInGame> getHeroes() {
         if (heroes == null) {
-            heroes = Sets.newHashSet();
+            heroes = Lists.newArrayList();
         }
         return heroes;
     }
@@ -109,7 +107,7 @@ public class Player extends NamedEntity {
 
     public void addHero(HeroInGame hero) {
         if (heroes == null) {
-            heroes = Sets.newHashSet(hero);
+            heroes = Lists.newArrayList();
         } else {
             heroes.add(hero);
         }
