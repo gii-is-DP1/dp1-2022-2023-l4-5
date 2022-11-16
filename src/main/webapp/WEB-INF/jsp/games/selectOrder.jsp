@@ -8,22 +8,28 @@
 
 <nt4h:layout pageName="selectOrder">
 
-    <c:forEach var="players" items="${game.players}">
+    <table id="games" class="table table-striped">
+        <thead>
         <tr>
-            <td>
-                <c:out value="${players.name}"/>
-            </td>
-            <td>
-                Turno que te toca pelotudo:
-                <c:out value="${players.sequence}"/>
-            </td>
-            <td>
-                <c:out value="${players.inDeck.get(0).getName()} + ${players.inDeck.get(1).getName()} = ${players.inDeck.get(0).getAttack()+players.inDeck.get(1).getAttack()}"/>
-            </td>
-
+            <th style="width: 200px;">Player</th>
+            <th style="width: 200px;">Order</th>
+            <th style="width: 200px">Reasons</th>
         </tr>
-
-    </c:forEach>
-
-
+        </thead>
+        <c:forEach var="player" items="${game.players}">
+            <tbody>
+            <tr>
+                <td>
+                    <c:out value="${player.name}"/>
+                </td>
+                <td>
+                    <c:out value="${player.sequence}"/>
+                </td>
+                <td>
+                    <c:out value="${player.birthDate.year} - ${player.birthDate.month.value} - ${player.birthDate.dayOfMonth} | ${player.inDeck.get(0).ability.name} + ${player.inDeck.get(1).ability.name} = ${player.inDeck.get(0).ability.attack+player.inDeck.get(1).ability.attack}"/>
+                </td>
+            </tr>
+            </tbody>
+        </c:forEach>
+    </table>
 </nt4h:layout>
