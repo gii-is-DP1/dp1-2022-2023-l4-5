@@ -22,6 +22,8 @@ import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenExcep
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,6 +115,7 @@ public class ProductServiceTest {
         Game game = gameService.getGameById(1);
         product.setGame(game);
         Player player = new Player();
+        player.setBirthDate(Date.from(Instant.now()));
         playerService.savePlayer(player);
         product.setPlayer(player);
         product.setName("Prueba");
@@ -129,6 +132,7 @@ public class ProductServiceTest {
         Game game = gameService.getGameById(1);
         product.setGame(game);
         Player player = new Player();
+        player.setBirthDate(Date.from(Instant.now()));
         product.setPlayer(player);
         product.setName("Prueba2");
         product.setTimesUsed(5);
