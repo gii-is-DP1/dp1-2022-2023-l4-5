@@ -103,14 +103,7 @@ public class GameController {
     public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
         Game game = gameService.getGameById(gameId);
         User user = userService.currentUser();
-        System.out.println("User: " + user);
-        if (gameService.getAllGames().stream().filter(g -> g.getId() != gameId)
-            .anyMatch(g -> g.getPlayers().stream().map(Player::getName).anyMatch(n -> n.equals(user.getUsername())))) {
-            Game currentGame = gameService.getAllGames().stream().filter(g -> g.getPlayers().stream().anyMatch(p -> p.getName().equals(user.getUsername()))).findFirst().get();
-            model.put("message", "Ya estás en una partida y esa es  " + currentGame.getName() + ".");
-            model.put("messageType", "danger");
-            return getGames(model);
-        }
+        if (userInOtherGame(model, gameId, user)) return getGames(model);
         Optional<Player> player = game.getPlayers().stream().filter(p -> p.getName().equals(user.getUsername())).findFirst();
         model.put("player", player.orElseGet(Player::new));
         model.put("selections", game.getPlayers());
@@ -125,13 +118,14 @@ public class GameController {
         User user = userService.currentUser();
         Game game = gameService.getGameById(gameId);
         Optional<Player> oldPlayer = game.getPlayers().stream().filter(p -> p.getName().equals(user.getUsername())).findFirst();
+        // Comprobamos si el usuario estaba en otra partida.
+        if (userInOtherGame(model, gameId, user)) return getGames(model);
         // Comprobamos si el usuario ya se había unido a la partida.
         if (oldPlayer.isPresent()) return PAGE_GAME_HERO_SELECT
             .replace("{gameId}", gameId.toString())
             .replace("{playerId}", oldPlayer.get().getId().toString());
         // Si la partida está llena se le
-        if (game.getPlayers().size() + 1 > game.getMaxPlayers())
-            return PAGE_GAMES;
+        if (game.getPlayers().size() + 1 > game.getMaxPlayers()) return PAGE_GAMES;
         // Creamos el jugador si el usuario no se había unido a la partida.
         player.setName(user.getUsername());
         player.setHost(false);
@@ -147,13 +141,19 @@ public class GameController {
             model.put("message", "La partida está llena.");
             model.put("messageType", "danger");
             return PAGE_GAMES;
-        } catch (PlayerInOtherGameException e) {
+        }
+        return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString());
+    }
+
+    private boolean userInOtherGame(ModelMap model, Integer gameId, User user) {
+        if (gameService.getAllGames().stream().filter(g -> !Objects.equals(g.getId(), gameId))
+            .anyMatch(g -> g.getPlayers().stream().map(Player::getName).anyMatch(n -> n.equals(user.getUsername())))) {
             Game currentGame = gameService.getAllGames().stream().filter(g -> g.getPlayers().stream().anyMatch(p -> p.getName().equals(user.getUsername()))).findFirst().get();
             model.put("message", "Ya estás en una partida y esa es  " + currentGame.getName() + ".");
             model.put("messageType", "danger");
-            return getGames(model);
+            return true;
         }
-        return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", player.getId().toString());
+        return false;
     }
 
     //Elegir heroe
@@ -180,17 +180,7 @@ public class GameController {
 
         player.addHero(heroInGame);
         if (player.getHeroes().size() == game.getMode().getNumHeroes()) player.setReady(true);
-
-        System.out.println("HeroInGame: " + heroInGame);
         // Si el héroe ya ha sido elegido o ya tenía uno de ese rol, se le impedirá elegirlo.
-        try {
-
-            playerService.savePlayer(player, game.getMode());
-        } catch (RoleAlreadyChosenException e) {
-            model.put("message", "Role already chosen.");
-            model.put("messageType", "danger");
-            return initHeroSelectForm(gameId, playerId, model);
-        }
         try {
             gameService.saveGame(game);
         } catch (HeroAlreadyChosenException e) {
@@ -198,10 +188,13 @@ public class GameController {
             model.put("messageType", "danger");
             return initHeroSelectForm(gameId, playerId, model);
         }
-        System.out.println("Hero: " + heroInGame);
-        //heroService.saveHeroInGame(heroInGame);
-        System.out.println("Player: " + player.getInDeck());
-        //abilityService.saveAllAbilityInGame(player.getInDeck());
+        try {
+            playerService.savePlayer(player, game.getMode());
+        } catch (RoleAlreadyChosenException e) {
+            model.put("message", "Role already chosen.");
+            model.put("messageType", "danger");
+            return initHeroSelectForm(gameId, playerId, model);
+        }
         return PAGE_GAME_LOBBY.replace("{gameId}", gameId.toString());
 
     }

@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/*
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EnemyServiceTest {
@@ -88,3 +88,4 @@ public class EnemyServiceTest {
         assertFalse(ens.enemyInGameExists(1));
     }
 }
+*/
