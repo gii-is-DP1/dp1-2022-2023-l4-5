@@ -87,7 +87,7 @@ public class OrcServiceTest {
         nuevo.setLessDamageWizard(false);
         nuevo.setHasCure(false);
         ors.saveOrc(nuevo);
-        assertEquals(nuevo,ors.getOrcByName("GOAT"));
+        assertEquals(nuevo,ors.getOrcByName("GOAT").get(0));
     }
     @Test
     public void shouldUpdateOrc(){
