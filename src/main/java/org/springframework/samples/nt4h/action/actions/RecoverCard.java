@@ -1,13 +1,14 @@
-package org.springframework.samples.nt4h.action;
+package org.springframework.samples.nt4h.action.actions;
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.player.Player;
 
 import java.util.List;
 
 @AllArgsConstructor
-public class RecoverCard implements Action{
+public class RecoverCard implements Action {
 
     private Player playerFrom;
 

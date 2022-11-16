@@ -1,6 +1,7 @@
-package org.springframework.samples.nt4h.action;
+package org.springframework.samples.nt4h.action.actions;
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.player.Player;
 
 @AllArgsConstructor

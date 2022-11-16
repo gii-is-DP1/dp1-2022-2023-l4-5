@@ -1,8 +1,9 @@
-package org.springframework.samples.nt4h.action;
+package org.springframework.samples.nt4h.action.actions;
 
+import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.player.Player;
 
-public class HealWound implements Action{
+public class HealWound implements Action {
 
     private Player playerFrom;
 

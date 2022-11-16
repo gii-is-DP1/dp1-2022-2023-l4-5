@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.action;
+package org.springframework.samples.nt4h.action.actions;
 
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
