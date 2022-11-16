@@ -1,6 +1,5 @@
 package org.springframework.samples.nt4h.game;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -65,11 +64,8 @@ public class GameService {
     public void deleteGameById(int id) {
         gameRepository.deleteById(id);
     }
-
     @Transactional(readOnly = true)
     public boolean gameExists(int id) {
         return gameRepository.existsById(id);
     }
-
-
 }

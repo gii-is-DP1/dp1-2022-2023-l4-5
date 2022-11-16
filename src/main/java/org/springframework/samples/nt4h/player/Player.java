@@ -94,6 +94,8 @@ public class Player extends NamedEntity {
         return turn;
     }
 
+    private Integer wounds;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
     // Cartas
