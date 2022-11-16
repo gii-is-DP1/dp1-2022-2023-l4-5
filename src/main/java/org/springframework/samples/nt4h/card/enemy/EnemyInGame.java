@@ -24,4 +24,7 @@ public class EnemyInGame extends BaseEntity {
 
     // falta relacion
     private List<AbilityEffectEnum> playedCardsOnMeInTurn;
+
+    private Boolean NoAttackThisTurn;
+
 }

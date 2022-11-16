@@ -1,7 +1,9 @@
 package org.springframework.samples.nt4h.night_lord;
 
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,9 +17,24 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NightLordServiceTest {
     @Autowired
     NightLordService nls;
+
+    @BeforeAll
+    void setUp() throws Exception {
+        NightLord night= new NightLord();
+        night.setHealth(8);
+        night.setName("Gurdrug");
+        night.setMaxUses(1);
+        nls.saveNightLord(night);
+        NightLord night2= new NightLord();
+        night2.setHealth(9);
+        night2.setMaxUses(1);
+        night2.setName("Shriekknifer");
+        nls.saveNightLord(night2);
+    }
 
     @Test
     public void findByNameTrue() {
@@ -51,7 +68,7 @@ public class NightLordServiceTest {
         List<NightLord> ls = nls.getAllNightLords();
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
-        assertEquals(3, ls.size());
+        assertEquals(2, ls.size());
     }
     @Test
     public void findAllTestFalse() {
@@ -76,19 +93,19 @@ public class NightLordServiceTest {
     public void shouldInsertOrc(){
         NightLord nuevo = new NightLord();
         nuevo.setName("GOAT");
-        nuevo.setMaxUses(-1);
         nuevo.setHealth(9);
+        nuevo.setMaxUses(1);
         nls.saveNightLord(nuevo);
         assertEquals(nuevo, nls.getNightLordByName("GOAT"));
     }
     @Test
     public void shouldUpdateOrc(){
-        NightLord nuevo = nls.getNightLordById(3);
+        NightLord nuevo = nls.getNightLordById(2);
         Integer OldHealth = nuevo.getHealth();
         Integer NewHealth = OldHealth + 1;
         nuevo.setHealth(NewHealth);
         nls.saveNightLord(nuevo);
-        assertEquals(NewHealth, nls.getNightLordById(3).getHealth());
+        assertEquals(NewHealth, nls.getNightLordById(2).getHealth());
     }
 
     @Test

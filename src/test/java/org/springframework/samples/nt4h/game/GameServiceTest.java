@@ -111,7 +111,7 @@ public class GameServiceTest {
         Player player2= new Player();
         HeroInGame h= new HeroInGame();
         h.setHero(heroService.getHeroByName("Aranel"));
-        Set<HeroInGame> hero = Set.of(h);
+        List<HeroInGame> hero = List.of(h);
         player1.setHeroes(hero);
         player2.setHeroes(hero);
         game.addPlayer(player1);
