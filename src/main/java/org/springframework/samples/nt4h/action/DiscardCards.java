@@ -1,6 +1,5 @@
-package org.springframework.samples.nt4h.action.actions;
+package org.springframework.samples.nt4h.action;
 
-import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.player.Player;
 

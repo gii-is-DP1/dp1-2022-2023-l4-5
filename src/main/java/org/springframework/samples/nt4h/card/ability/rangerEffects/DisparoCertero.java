@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.card.ability.rangerEffects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.actions.Attack;
+import org.springframework.samples.nt4h.action.Attack;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
