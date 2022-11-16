@@ -1,7 +1,9 @@
 package org.springframework.samples.nt4h.statistic;
 
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,10 +15,11 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StatisticServiceTest {
     @Autowired
     StatisticService statisticService;
-
+    @BeforeAll
     void ini() {
         Statistic statistic= new Statistic();
         statistic.setAllDamgeDealed(0);
@@ -31,21 +34,18 @@ public class StatisticServiceTest {
     }
     @Test
     public void findByIdTrue(){
-        ini();
         Statistic stat = statisticService.getStatisticById(1);
         assertNotNull(stat);
         assertEquals(0, stat.getAllDamageDealedToNightLords());
     }
     @Test
     public void findByIdFalse(){
-        ini();
         Statistic stat = statisticService.getStatisticById(1);
         assertNotNull(stat);
         assertNotEquals(1, stat.getAllDamageDealedToNightLords());
     }
     @Test
     public void findAll(){
-        ini();
         List<Statistic>ls= statisticService.getAllStatistics();
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
@@ -63,17 +63,21 @@ public class StatisticServiceTest {
         statistic.setNumWinnedGames(0);
         statistic.setNumPlayedGames(0);
         statisticService.saveStatistic(statistic);
-        assertEquals(statistic,statisticService.getStatisticById(1));
+        assertEquals(statistic,statisticService.getStatisticById(2));
     }
     @Test
     public void shouldUpdateStatistic(){
-        ini();
         Statistic stat = statisticService.getStatisticById(1);
         Integer oldGold= stat.getAllGold();
         Integer newGold= oldGold+1;
         stat.setAllGold(newGold);
         statisticService.saveStatistic(stat);
         assertEquals(newGold,statisticService.getStatisticById(1).getAllGold());
+    }
+    @Test
+    public void deleteStatisticTest(){
+        statisticService.deleteStatisticById(1);
+        assertFalse(statisticService.statisticExists(1));
     }
 
 }

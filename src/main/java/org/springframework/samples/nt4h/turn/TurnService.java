@@ -3,7 +3,7 @@ package org.springframework.samples.nt4h.turn;
 
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.nt4h.effect.Phase;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

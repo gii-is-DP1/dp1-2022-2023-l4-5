@@ -61,5 +61,10 @@ public class MessageServiceTest {
         Message m= messageService.getMessageBySenderWithReceiver("alesanfe","antonio").get(2);
         assertEquals(message,m);
     }
+    @Test
+    public void deleteMessageTest(){
+        messageService.deleteMessageById(1);
+        assertFalse(messageService.messageExists(1));
+    }
 
 }

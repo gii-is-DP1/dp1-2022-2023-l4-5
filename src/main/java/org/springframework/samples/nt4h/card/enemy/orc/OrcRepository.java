@@ -8,9 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface OrcRepository extends CrudRepository<Orc, Integer> {
-    Optional<Orc> findByName(String name);
+    List<Orc> findByName(String name);
 
-    Optional<Orc> findById(int id);
+    Orc findById(int id);
 
     List<Orc> findAll();
 }
