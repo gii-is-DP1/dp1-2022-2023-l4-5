@@ -120,7 +120,7 @@ public class GameController {
 
     // Crear un jugador y vincularlo con la partida.
     @PostMapping(value = "/{gameId}")
-    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId, ModelMap model) throws RoleAlreadyChosenException, HeroAlreadyChosenException {
+    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId, ModelMap model) throws HeroAlreadyChosenException {
         // Obtenemos los datos.
         User user = userService.currentUser();
         Game game = gameService.getGameById(gameId);
@@ -183,12 +183,9 @@ public class GameController {
 
         System.out.println("HeroInGame: " + heroInGame);
         // Si el héroe ya ha sido elegido o ya tenía uno de ese rol, se le impedirá elegirlo.
-        playerService.addDeckFromRole(player, hero.getRole());
-
-
         try {
 
-            playerService.savePlayer(player);
+            playerService.savePlayer(player, game.getMode());
         } catch (RoleAlreadyChosenException e) {
             model.put("message", "Role already chosen.");
             model.put("messageType", "danger");
@@ -202,9 +199,9 @@ public class GameController {
             return initHeroSelectForm(gameId, playerId, model);
         }
         System.out.println("Hero: " + heroInGame);
-        heroService.saveHeroInGame(heroInGame);
+        //heroService.saveHeroInGame(heroInGame);
         System.out.println("Player: " + player.getInDeck());
-        abilityService.saveAllAbilityInGame(player.getInDeck());
+        //abilityService.saveAllAbilityInGame(player.getInDeck());
         return PAGE_GAME_LOBBY.replace("{gameId}", gameId.toString());
 
     }

@@ -74,7 +74,7 @@ public class Player extends NamedEntity {
     @Getter(AccessLevel.NONE)
     private Set<HeroInGame> heroes;
     // Se crean al crear al jugador.
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<Turn> turn;
 
@@ -93,16 +93,16 @@ public class Player extends NamedEntity {
         return turn;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
     // Cartas
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inHand;
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDeck;
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDiscard;
 
@@ -187,6 +187,4 @@ public class Player extends NamedEntity {
             inDiscard.remove(ability);
         }
     }
-
-
 }

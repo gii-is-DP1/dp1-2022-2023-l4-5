@@ -35,9 +35,9 @@ public class Turn extends BaseEntity {
     private Phase phase;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<AbilityInGame> usedAbilities;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> usedEnemies;
 }
