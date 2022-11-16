@@ -56,6 +56,8 @@ public class Game extends NamedEntity {
     //@NotNull
     private boolean hasStages;
 
+    // Falta relacion
+    private List<Player> alivePlayersInTurnOrder;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Turn> turn;
