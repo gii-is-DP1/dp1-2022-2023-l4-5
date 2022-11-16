@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface NightLordRepository extends CrudRepository<NightLord, Integer> {
     Optional<NightLord> findByName(String name);
 
-    Optional<NightLord> findById(int id);
+    NightLord findById(int id);
 
     List<NightLord> findAll();
 }

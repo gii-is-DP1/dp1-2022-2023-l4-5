@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PlayerServiceTest {
     @Autowired
     protected PlayerService playerService;
+    /*
 
     void ini() {
         //OMG quiero poner esto en model de Player
@@ -97,4 +98,6 @@ public class PlayerServiceTest {
         assertEquals(NewName, playerService.getPlayerById(1).getName());
     }
 
+
+     */
 }

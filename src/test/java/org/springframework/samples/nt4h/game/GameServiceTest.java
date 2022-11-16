@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameServiceTest {
     @Autowired
     protected GameService gameService;
+    /*
     void ini(){
         Game game= new Game();
         game.setAccessibility(Accessibility.PUBLIC);
@@ -33,7 +34,10 @@ public class GameServiceTest {
         game.setPassword("");
         game.setName("Prueba");
         gameService.saveGame(game);
+
+
     }
+
     @Test
     public void findByIDTrue(){
         ini();
@@ -95,4 +99,6 @@ public class GameServiceTest {
         this.gameService.saveGame(game);
         assertEquals(newValue,gameService.getGameByName("Prueba").getPhase());
     }
+
+     */
 }
