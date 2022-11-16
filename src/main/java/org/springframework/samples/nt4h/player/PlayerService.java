@@ -39,6 +39,7 @@ public class PlayerService {
         if (player.getDamageDealed() == null) player.setDamageDealed(0);
         if (player.getDamageDealedToNightLords() == null) player.setDamageDealedToNightLords(0);
         if (player.getReady() == null) player.setReady(false);
+
         playerRepository.save(player);
     }
 
@@ -67,9 +68,8 @@ public class PlayerService {
         return playerRepository.existsById(id);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = RoleAlreadyChosenException.class)
     public void addDeckFromRoles(Player player, Role role) {
-
         for (Integer abilityId : role.getAbilities()) {
             Ability ability = abilityRepository.getAbilityById(abilityId);
             for (int i = 0; i < ability.getQuantity(); i++) {

@@ -32,7 +32,6 @@ public class AbilityInGame extends BaseEntity {
     @ManyToOne
     private Ability ability;
 
-    @NotNull
     @ManyToOne
     private Player player;
 

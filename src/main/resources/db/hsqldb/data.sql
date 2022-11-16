@@ -3,7 +3,7 @@ INSERT INTO users(username, password, avatar, tier, description, authority, birt
 VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'I want a nap', 0, '2002-02-01', 1),
        ('antonio', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 1, '2002-02-01', 1),
+        'I am a description', 1, '1999-02-01', 1),
        ('laurolmer', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'awanabumbambam', 1, '2002-08-21', 1),
        ('alvhidrod', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,

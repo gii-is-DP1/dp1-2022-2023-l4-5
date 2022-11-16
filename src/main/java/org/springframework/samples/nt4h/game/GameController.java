@@ -132,6 +132,7 @@ public class GameController {
         // Creamos el jugador si el usuario no se había unido a la partida.
         player.setName(user.getUsername());
         player.setHost(false);
+        player.setBirthDate(user.getBirthDate());
         game.addPlayer(player);
         player.setGame(game);
         playerService.savePlayer(player);
@@ -240,10 +241,12 @@ public class GameController {
     }
 
     @GetMapping("/selectOrder/{gameId}")
-    public String orderRule(@PathVariable Integer gameId) {
+    public String orderRule(@PathVariable Integer gameId, ModelMap model) {
         System.out.println("Order rule");
         Game game = gameService.getGameById(gameId);
+        model.put("game", game);
         List<Player> players = game.getPlayers();
+        model.put("players", players);
         System.out.println("Players: " + players);
         List<Triplet<Integer, Player, Integer>> datos = new ArrayList<>();
         for (var i = 0; i < players.size(); i++) {
@@ -252,6 +255,7 @@ public class GameController {
             datos.add(new Triplet<>(i, player,abilities.get(0).getAttack() + abilities.get(1).getAttack()));
         }
         datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
+        System.out.println("Datos: " + datos);
         if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
             datos.get(0).getValue1().getBirthDate().after(datos.get(1).getValue1().getBirthDate())) {
             var first = datos.get(0);
@@ -259,6 +263,7 @@ public class GameController {
             datos.set(0, second);
             datos.set(1, first);
         }
+        // Hace falta un post para almacenar.
         datos.forEach(triplet -> triplet.getValue1().setSequence(triplet.getValue0() + 1));
         return VIEW_GAME_ORDER;
     }
