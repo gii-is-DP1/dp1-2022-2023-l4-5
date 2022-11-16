@@ -1,7 +1,6 @@
-package org.springframework.samples.nt4h.action.actions;
+package org.springframework.samples.nt4h.action;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.product.MarketEffectEnum;
@@ -9,7 +8,7 @@ import org.springframework.samples.nt4h.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 @AllArgsConstructor
 public class Attack implements Action {
 
@@ -66,3 +65,4 @@ public class Attack implements Action {
         }
     }
 }
+*/
