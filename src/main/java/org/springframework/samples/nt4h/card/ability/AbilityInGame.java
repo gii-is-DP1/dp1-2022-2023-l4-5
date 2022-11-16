@@ -6,10 +6,7 @@ import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -37,4 +34,7 @@ public class AbilityInGame extends BaseEntity {
 
     @ManyToOne
     private ProductInGame productInGame;
+
+    @Enumerated(EnumType.STRING)
+    private AbilityCardType abilityCardType;
 }

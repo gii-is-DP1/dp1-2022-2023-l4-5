@@ -11,6 +11,7 @@
     <table id="games" class="table table-striped">
         <thead>
         <tr>
+            <th style="width: 200px;">Name</th>
             <th style="width: 200px;">Start Date</th>
             <th style="width: 200px;">Players</th>
             <th style="width: 200px">Mode</th>
@@ -21,6 +22,9 @@
         <tbody>
         <c:forEach items="${selections}" var="game">
             <tr>
+                <td>
+                    <c:out value="${game.name}"/>
+                </td>
                 <td>
                     <c:out value="${game.startDate}"/>
                 </td>
