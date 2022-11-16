@@ -8,25 +8,22 @@ import java.util.List;
 
 public class DiscardCards implements Action {
 
-    private Integer numDiscards;
-
-    private Player playerFrom;
+    private Integer numberDiscards;
+    private Player player;
 
     @Override
     public void executeAction() {
-        for (int i = 0; i < numDiscards; i++) {
-            List<AbilityInGame> listAbilityPile = playerFrom.getAbilityPile();
-            if (!listAbilityPile.isEmpty()) {
-                AbilityInGame discardedCard = listAbilityPile.get(0);
-                listAbilityPile.remove(discardedCard);
-                if (listAbilityPile.isEmpty())
-                    new GiveWoundCommand(playerFrom).execute();
-
-                playerFrom.getDiscardPile().add(discardedCard);
-            } else {
-                break;
+        for (int i = 0; i < numberDiscards; i++) {
+            List<AbilityInGame> abilities = player.getInDeck();
+            if (!abilities.isEmpty()) {
+                AbilityInGame removedCard = abilities.get(0);
+                abilities.remove(removedCard);
+                if (abilities.isEmpty())
+                    new ReceiveWound(player).executeAction();
+                player.getInDiscard().add(removedCard);
             }
         }
     }
-
 }
+
+
