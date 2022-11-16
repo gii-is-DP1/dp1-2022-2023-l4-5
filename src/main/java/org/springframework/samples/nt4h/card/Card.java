@@ -11,8 +11,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @MappedSuperclass
-@Getter
-@Setter
 public class Card extends NamedEntity {
 
     //@NotNull

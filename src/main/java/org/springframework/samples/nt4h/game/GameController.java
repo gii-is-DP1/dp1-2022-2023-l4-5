@@ -268,7 +268,7 @@ public class GameController {
         datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
         System.out.println("Datos: " + datos);
         if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
-            datos.get(0).getValue1().getBirthDate().after(datos.get(1).getValue1().getBirthDate())) {
+            datos.get(0).getValue1().getBirthDate().isAfter(datos.get(1).getValue1().getBirthDate())) {
             var first = datos.get(0);
             var second = datos.get(1);
             datos.set(0, second);
