@@ -28,12 +28,9 @@ import java.util.Set;
 public class Player extends NamedEntity {
 
     @Min(0)
-
     private Integer gold;
 
-
     @Min(0)
-
     private Integer glory;
 
     private Boolean hasEvasion;
@@ -65,6 +62,10 @@ public class Player extends NamedEntity {
     private Boolean ready;
 
     private Boolean host;
+
+    private Integer wounds;
+
+    private Integer damageProtect;
 
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private Date birthDate;

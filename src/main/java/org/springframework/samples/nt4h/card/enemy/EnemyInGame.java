@@ -17,4 +17,6 @@ public class EnemyInGame extends BaseEntity {
     @NotNull
     @Max(value = 10)
     private Integer actualHealth;
+
+    private Boolean NoAttackThisTurn;
 }
