@@ -1,14 +1,13 @@
 package org.springframework.samples.nt4h.orc;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.enemy.orc.Orc;
 import org.springframework.samples.nt4h.card.enemy.orc.OrcService;
-import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +16,33 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrcServiceTest {
     @Autowired
     OrcService ors;
+
+    @BeforeAll
+    void setUp() throws Exception {
+        Orc orc= new Orc();
+        orc.setHealth(2);
+        orc.setMaxUses(1);
+        orc.setName("Honda");
+        orc.setGlory(2);
+        orc.setGold(1);
+        orc.setHasCure(false);
+        orc.setLessDamageWizard(false);
+        ors.saveOrc(orc);
+        Orc orc1= new Orc();
+        orc1.setHealth(2);
+        orc1.setMaxUses(1);
+        orc1.setName("Honda");
+        orc1.setGlory(2);
+        orc1.setGold(1);
+        orc1.setHasCure(false);
+        orc1.setLessDamageWizard(false);
+        ors.saveOrc(orc1);
+    }
+
 
     @Test
     public void findByNameTrue() {
@@ -55,14 +78,14 @@ public class OrcServiceTest {
         List<Orc> ls = ors.getAllOrcs();
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
-        assertEquals(27, ls.size());
+        assertEquals(2, ls.size());
     }
     @Test
     public void findAllTestFalse() {
         List<Orc> ls = ors.getAllOrcs();
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
-        assertNotEquals(30, ls.size());
+        assertNotEquals(5, ls.size());
     }
 
     @Test
