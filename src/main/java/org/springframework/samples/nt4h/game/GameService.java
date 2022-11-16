@@ -2,9 +2,9 @@ package org.springframework.samples.nt4h.game;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
-import org.springframework.samples.nt4h.effect.Phase;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.game.exceptions.PlayerInOtherGameException;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

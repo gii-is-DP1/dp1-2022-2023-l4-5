@@ -2,8 +2,8 @@ package org.springframework.samples.nt4h.game;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.effect.Phase;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.stage.Stage;
