@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.player;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +14,9 @@ import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -28,12 +26,9 @@ import java.util.Set;
 public class Player extends NamedEntity {
 
     @Min(0)
-
     private Integer gold;
 
-
     @Min(0)
-
     private Integer glory;
 
     private Boolean hasEvasion;
@@ -66,31 +61,28 @@ public class Player extends NamedEntity {
 
     private Boolean host;
 
-    @NotNull
+    private Integer wounds;
+
+    private Integer damageProtect;
+
     @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private Date birthDate;
+    private LocalDate birthDate;
+
+    private Integer wounds;
 
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     @Getter(AccessLevel.NONE)
-    private Set<HeroInGame> heroes;
+    private List<HeroInGame> heroes;
     // Se crean al crear al jugador.
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<Turn> turn;
-    @OneToMany
-    @Getter(AccessLevel.NONE)
-    private List<AbilityInGame> inHand;
-    @OneToMany
-    @Getter(AccessLevel.NONE)
-    private List<AbilityInGame> inDeck;
-    @OneToMany
-    @Getter(AccessLevel.NONE)
-    private List<AbilityInGame> inDiscard;
 
-    public Set<HeroInGame> getHeroes() {
+
+    public List<HeroInGame> getHeroes() {
         if (heroes == null) {
-            heroes = Sets.newHashSet();
+            heroes = Lists.newArrayList();
         }
         return heroes;
     }
@@ -100,6 +92,29 @@ public class Player extends NamedEntity {
             turn = Lists.newArrayList();
         }
         return turn;
+    }
+
+    private Integer wounds;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Game game;
+    // Cartas
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @Getter(AccessLevel.NONE)
+    private List<AbilityInGame> inHand;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @Getter(AccessLevel.NONE)
+    private List<AbilityInGame> inDeck;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @Getter(AccessLevel.NONE)
+    private List<AbilityInGame> inDiscard;
+
+    public void addHero(HeroInGame hero) {
+        if (heroes == null) {
+            heroes = Lists.newArrayList();
+        } else {
+            heroes.add(hero);
+        }
     }
 
     public List<AbilityInGame> getInHand() {
@@ -123,15 +138,56 @@ public class Player extends NamedEntity {
         return inDiscard;
     }
 
-    @ManyToOne
-    private Game game;
+    public List<AbilityInGame> shuffleDeck() {
+        Collections.shuffle(inDeck);
+        return inDeck;
+    }
 
-    public void addHero(HeroInGame hero) {
-        if (heroes == null) {
-            heroes = Sets.newHashSet(hero);
+    public void addAbilityInHand(AbilityInGame ability) {
+        if (inHand == null) {
+            inHand = Lists.newArrayList(ability);
         } else {
-            heroes.add(hero);
+            inHand.add(ability);
         }
     }
 
+    public void addAbilityInDeck(AbilityInGame ability) {
+        if (inDeck == null) {
+            inDeck = Lists.newArrayList(ability);
+        } else {
+            inDeck.add(ability);
+        }
+    }
+
+    public void addAbilityInDiscard(AbilityInGame ability) {
+        if (inDiscard == null) {
+            inDiscard = Lists.newArrayList(ability);
+        } else {
+            inDiscard.add(ability);
+        }
+    }
+
+    public void removeAbilityInHand(AbilityInGame ability) {
+        if (inHand == null) {
+            inHand = Lists.newArrayList();
+        } else {
+            inHand.remove(ability);
+        }
+    }
+
+    public void removeAbilityInDeck(AbilityInGame ability) {
+        if (inDeck == null) {
+            inDeck = Lists.newArrayList();
+        } else {
+            inDeck.remove(ability);
+        }
+    }
+
+    public void removeAbilityInDiscard(AbilityInGame ability) {
+        if (inDiscard == null) {
+            inDiscard = Lists.newArrayList();
+        } else {
+            inDiscard.remove(ability);
+        }
+    }
 }

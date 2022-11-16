@@ -54,8 +54,4 @@ public class Statistic extends BaseEntity {
     @Min(0)
     @Column(columnDefinition = "int default 0")
     private Integer allDamageDealedToNightLords;
-
-
-
-
 }

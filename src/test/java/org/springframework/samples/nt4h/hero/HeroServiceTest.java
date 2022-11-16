@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,13 @@ import static org.junit.jupiter.api.Assertions.*;
     protected HeroService heroService;
     @Autowired
     protected PlayerService playerService;
+
+    @BeforeAll
+    void setUp() throws Exception {
+        HeroInGame hero = new HeroInGame();
+        hero.setActualHealth(1);
+        heroService.saveHeroInGame(hero);
+    }
 
     @Test
     public void findByIDTrue(){
@@ -71,7 +79,6 @@ import static org.junit.jupiter.api.Assertions.*;
     public void shouldInsertHero() {
 
         Hero hero = new Hero();
-        hero.setMaxUses(1);
         hero.setName("Lis");
         hero.setHealth(3);
         hero.setRole(Role.EXPLORER);
@@ -81,11 +88,13 @@ import static org.junit.jupiter.api.Assertions.*;
         List<Capacity>capacities= List.of(capacity);
         hero.setCapacities(capacities);
         Ability ability= new Ability();
-        ability.setAttack(0);
-        ability.setQuantity(0);
+        ability.setAttack(1);
+        ability.setQuantity(1);
+        ability.setMaxUses(1);
         ability.setRole(Role.EXPLORER);
         List<Ability>abilities= List.of(ability);
         hero.setAbilities(abilities);
+        hero.setMaxUses(1);
         this.heroService.saveHero(hero);
         assertEquals(heroService.getHeroByName("Lis"), hero);
 
@@ -107,20 +116,6 @@ import static org.junit.jupiter.api.Assertions.*;
         heroService.heroExists(1);
     }
 
-    @BeforeAll
-    void createProductInGame() throws RoleAlreadyChosenException {
-        HeroInGame hero = new HeroInGame();
-        hero.setEffectUsed(2);
-        hero.setActualHealth(3);
-        Hero h= heroService.getHeroById(1);
-        hero.setHero(h);
-        Player p = new Player();
-        p.setBirthDate(Date.from(Instant.now()));
-        hero.setPlayer(p);
-        playerService.savePlayer(p);
-        this.heroService.saveHeroInGame(hero);
-        heroService.saveHeroInGame(hero);
-    }
     //HeroInGame
     @Test
     @Transactional
@@ -132,7 +127,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Hero h= heroService.getHeroById(1);
         hero.setHero(h);
         Player p = new Player();
-        p.setBirthDate(Date.from(Instant.now()));
+        p.setBirthDate(LocalDate.now());
         hero.setPlayer(p);
         this.heroService.saveHeroInGame(hero);
         assertEquals(this.heroService.getHeroInGameById(2),hero);

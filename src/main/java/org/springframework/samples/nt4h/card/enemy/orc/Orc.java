@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
-@Table(name = "orcs")
+@DiscriminatorValue("orc")
 public class Orc extends Enemy {
 
     @NotNull

@@ -1,13 +1,11 @@
 package org.springframework.samples.nt4h.game;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
-import org.springframework.samples.nt4h.game.exceptions.PlayerInOtherGameException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +37,7 @@ public class GameService {
 
     //TODO: actualizar la Date_finish cuadno acabe la partida
     @Transactional(rollbackFor = {HeroAlreadyChosenException.class, FullGameException.class})
-    public void saveGame(Game game) throws HeroAlreadyChosenException, FullGameException, PlayerInOtherGameException {
+    public void saveGame(Game game) throws HeroAlreadyChosenException, FullGameException {
         System.out.println("----");
         /*
         if ()))
@@ -66,11 +64,8 @@ public class GameService {
     public void deleteGameById(int id) {
         gameRepository.deleteById(id);
     }
-
     @Transactional(readOnly = true)
     public boolean gameExists(int id) {
         return gameRepository.existsById(id);
     }
-
-
 }

@@ -10,17 +10,20 @@ import org.springframework.samples.nt4h.model.BaseEntity;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+
 
 @Getter
 @Setter
 @Entity
-@Table(name = "enemies_in_game")
 public class EnemyInGame extends BaseEntity {
     @NotNull
     @Max(value = 10)
     private Integer actualHealth;
+
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = AbilityEffectEnum.class)
@@ -30,10 +33,7 @@ public class EnemyInGame extends BaseEntity {
 
     @NotNull
     private boolean isNightLord;
+    private boolean isDead;
+    private Boolean NoAttackThisTurn;
 
-    @ManyToOne
-    private Orc orc;
-
-    @ManyToOne
-    private NightLord nightLord;
 }

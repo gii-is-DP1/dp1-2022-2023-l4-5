@@ -8,8 +8,10 @@ import org.springframework.samples.nt4h.model.NamedEntity;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 @MappedSuperclass
 @Getter
+
 @Setter
 public class Card extends NamedEntity {
 
@@ -23,6 +25,6 @@ public class Card extends NamedEntity {
 
     @NotNull
     @Min(-1)
-    private Integer maxUses;
+    public Integer maxUses;
 
 }
