@@ -23,7 +23,7 @@ public class AbilityInGame extends BaseEntity {
     private Integer timesUsed;
 
     @Min(0)
-    @NotNull
+    // @NotNull
     private Integer attack;
 
     @NotNull
@@ -32,7 +32,6 @@ public class AbilityInGame extends BaseEntity {
     @ManyToOne
     private Ability ability;
 
-    @NotNull
     @ManyToOne
     private Player player;
 

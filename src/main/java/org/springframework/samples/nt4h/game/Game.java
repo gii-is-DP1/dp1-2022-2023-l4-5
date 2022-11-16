@@ -57,10 +57,10 @@ public class Game extends NamedEntity {
     private boolean hasStages;
 
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Turn> turn;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @Size(max = 3)
     private List<EnemyInGame> actualOrcs;
 
@@ -68,13 +68,13 @@ public class Game extends NamedEntity {
     private List<EnemyInGame> allOrcsInGame;
 
     //@NotNull
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
 
     public void addPlayer(Player player){
