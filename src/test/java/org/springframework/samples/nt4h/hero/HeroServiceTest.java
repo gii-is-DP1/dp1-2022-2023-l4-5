@@ -35,6 +35,13 @@ import static org.junit.jupiter.api.Assertions.*;
     @Autowired
     protected PlayerService playerService;
 
+    @BeforeAll
+    void setUp() throws Exception {
+        HeroInGame hero = new HeroInGame();
+        hero.setActualHealth(1);
+        heroService.saveHeroInGame(hero);
+    }
+
     @Test
     public void findByIDTrue(){
         Hero hero = heroService.getHeroById(2);
@@ -75,14 +82,16 @@ import static org.junit.jupiter.api.Assertions.*;
         hero.setName("Lis");
         hero.setHealth(3);
         hero.setRole(Role.EXPLORER);
+        hero.setMaxUses(1);
         Capacity capacity= new Capacity();
         capacity.setStateCapacity(StateCapacity.EXPERTISE);
         capacity.setLessDamage(true);
         List<Capacity>capacities= List.of(capacity);
         hero.setCapacities(capacities);
         Ability ability= new Ability();
-        ability.setAttack(0);
-        ability.setQuantity(0);
+        ability.setAttack(1);
+        ability.setQuantity(1);
+        ability.setMaxUses(1);
         ability.setRole(Role.EXPLORER);
         List<Ability>abilities= List.of(ability);
         hero.setAbilities(abilities);
@@ -107,20 +116,6 @@ import static org.junit.jupiter.api.Assertions.*;
         heroService.heroExists(1);
     }
 
-    @BeforeAll
-    void createProductInGame() throws RoleAlreadyChosenException {
-        HeroInGame hero = new HeroInGame();
-        hero.setEffectUsed(2);
-        hero.setActualHealth(3);
-        Hero h= heroService.getHeroById(1);
-        hero.setHero(h);
-        Player p = new Player();
-        p.setBirthDate(Date.from(Instant.now()));
-        hero.setPlayer(p);
-        playerService.savePlayer(p);
-        this.heroService.saveHeroInGame(hero);
-        heroService.saveHeroInGame(hero);
-    }
     //HeroInGame
     @Test
     @Transactional

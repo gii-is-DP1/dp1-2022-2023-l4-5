@@ -8,8 +8,7 @@ import org.springframework.samples.nt4h.model.NamedEntity;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-@Getter
-@Setter
+
 @MappedSuperclass
 @Getter
 @Setter
