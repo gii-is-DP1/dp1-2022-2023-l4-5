@@ -93,7 +93,7 @@ VALUES ('Compañero Lobo', 'src/main/resources/static/resources/images/juego/wol
        ('Golpe de bastón', 'src/main/resources/static/resources/images/abilities/golpebaston_ability_front.png',
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'WIZARD', 1, 3),
        ('Orbe curativo', 'src/main/resources/static/resources/images/abilities/orbecurativo_ability_front.png',
-        'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'WIZARD', 0, 1),
+        'src/main/resources/static/resources/images/abilities/ability_back.png', 1, 'WIZARD', 0, 1),
        ('Proyectil ígneo', 'src/main/resources/static/resources/images/abilities/proyectiligneo_ability_front.png',
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'WIZARD', 2, 1),
        ('Reconstitución', 'src/main/resources/static/resources/images/abilities/reconstitucion_ability_front.png',
