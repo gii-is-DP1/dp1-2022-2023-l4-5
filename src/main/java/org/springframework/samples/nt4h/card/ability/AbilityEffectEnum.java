@@ -1,6 +1,6 @@
 package org.springframework.samples.nt4h.card.ability;
 
-public enum abilityEffectEnum {
+public enum AbilityEffectEnum {
     // Warrior
     ATAQUE_BRUTAL, CARGA_CON_ESCUDO, DOBLE_ESPADAZO, ESCUDO, ESPADAZO, PASO_ATRAS, TODO_O_NADA, VOZ_DE_ALIENTO,
 

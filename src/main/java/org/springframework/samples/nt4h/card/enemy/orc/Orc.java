@@ -5,8 +5,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.card.enemy.Enemy;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Getter
