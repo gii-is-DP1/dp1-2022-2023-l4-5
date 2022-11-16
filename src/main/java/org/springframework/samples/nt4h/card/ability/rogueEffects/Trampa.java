@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.rogue;
+package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;

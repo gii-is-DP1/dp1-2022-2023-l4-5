@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.wizard;
+package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -12,7 +12,7 @@ import java.util.List;
 public class BolaDeFuego {
     public void execute(Player player) {
         Game game = player.getGame();
-        List<EnemyInGame> activeEnemies = game.getOrcs();
+        List<EnemyInGame> activeEnemies = game.getActualOrcs();
         List<EnemyInGame> enemies = new ArrayList<>();
         for (EnemyInGame enemy : activeEnemies) {
             enemies.add(enemy);

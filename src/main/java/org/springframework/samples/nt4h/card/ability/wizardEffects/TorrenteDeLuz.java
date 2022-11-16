@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.wizard;
+package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;

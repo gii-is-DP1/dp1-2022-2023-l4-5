@@ -1,13 +1,14 @@
-package org.springframework.samples.nt4h.card.ability.warrior;
+package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DobleEspadazo {
+public class DisparoGelido {
     public void execute(Player player, EnemyInGame enemy) {
-        new Attack(2, player, enemy).execute();
-        new DiscardCards(1, player).execute();
+        new Attack(1, player, enemy).execute();
+        new DrawCards(1, player).execute();
+        new DenyDamageEnemy(enemy).execute();
     }
 }

@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.wizard;
+package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -11,9 +11,9 @@ import java.util.List;
 public class AuraProtectora {
     public void execute(Player player) {
         Game game = player.getGame();
-        Integer numDiscards = game.getOrcs().size();
+        Integer numDiscards = game.getActualOrcs().size();
         new DiscardCards(numDiscards, player).execute();
-        List<EnemyInGame> enemies = game.getOrcs();
+        List<EnemyInGame> enemies = game.getActualOrcs();
         for (EnemyInGame enemy : enemies) {
             new DenyDamageEnemy(enemy).execute();
         }

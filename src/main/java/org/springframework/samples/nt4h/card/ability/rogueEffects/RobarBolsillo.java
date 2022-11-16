@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.rogue;
+package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.game.GameService;
