@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.warrior;
+package org.springframework.samples.nt4h.card.ability.warriorEffects;
 
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;

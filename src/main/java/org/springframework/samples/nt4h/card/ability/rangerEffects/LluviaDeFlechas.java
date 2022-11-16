@@ -15,7 +15,7 @@ public class LluviaDeFlechas {
     // 2 de daño, dañas a 2 enemigos y al heroe con menos Heridas(en caso de empate se elige)
     public void execute(Player activePlayer) {
         Game game = activePlayer.getGame();
-        List<EnemyInGame> enemiesFighting = game.getOrcs();
+        List<EnemyInGame> enemiesFighting = game.getActualOrcs();
         List<EnemyInGame> targetList = new ArrayList<>();
         for(EnemyInGame enemy : enemiesFighting){
             targetList.add(enemy);

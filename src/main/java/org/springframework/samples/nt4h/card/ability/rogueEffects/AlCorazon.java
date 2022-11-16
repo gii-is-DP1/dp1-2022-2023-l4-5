@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.rogue;
+package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -14,7 +14,7 @@ public class AlCorazon {
             new GoldOnKill(1, enemy, player).execute();
         }
 
-        player.getGame().getOrcs()
+        player.getGame().getActualOrcs()
             .forEach(x -> x.getPermanentEffectCardsUsed().add(AbilityEffectEnum.AL_CORAZON));
 
         new DiscardCards(1, player).execute();

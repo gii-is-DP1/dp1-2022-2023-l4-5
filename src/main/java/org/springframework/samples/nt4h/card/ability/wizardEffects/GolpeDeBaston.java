@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.card.ability.wizard;
+package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -16,7 +16,7 @@ public class GolpeDeBaston {
 
         new Attack(damage, player, enemy).execute();
 
-        player.getGame().getOrcs()
+        player.getGame().getActualOrcs()
             .forEach(x -> x.getPermanentEffectCardsUsed().add(AbilityEffectEnum.GOLPE_DE_BASTON));
     }
 }

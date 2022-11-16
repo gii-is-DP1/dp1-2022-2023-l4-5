@@ -1,13 +1,13 @@
-package org.springframework.samples.nt4h.card.ability.rogue;
+package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EnLasSombras {
+public class ProyectilIgneo {
     public void execute(Player player, EnemyInGame enemy) {
-        new Attack(1, player, enemy).execute();
-        new ProtectAlly(2, player).execute();
+        new Attack(2, player, enemy).execute();
+        new GainGlory(1, player).execute();
     }
 }
