@@ -9,9 +9,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 @Getter
-@Setter
 @MappedSuperclass
-@Getter
 @Setter
 public class Card extends NamedEntity {
 
