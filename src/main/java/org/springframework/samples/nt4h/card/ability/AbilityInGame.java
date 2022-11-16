@@ -26,6 +26,8 @@ public class AbilityInGame extends BaseEntity {
     // @NotNull
     private Integer attack;
 
+    private AbilityEffectEnum abilityEffectEnum;
+
     @NotNull
     private boolean isProduct;
 
