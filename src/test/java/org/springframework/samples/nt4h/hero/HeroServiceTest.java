@@ -1,10 +1,13 @@
 package org.springframework.samples.nt4h.hero;
 
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.capacity.StateCapacity;
 import org.springframework.samples.nt4h.card.ability.Ability;
@@ -13,6 +16,8 @@ import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +26,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
  class HeroServiceTest {
     @Autowired
     protected HeroService heroService;
+    @Autowired
+    protected PlayerService playerService;
 
     @Test
     public void findByIDTrue(){
@@ -61,6 +69,7 @@ import static org.junit.jupiter.api.Assertions.*;
     public void shouldInsertHero() {
 
         Hero hero = new Hero();
+        hero.setMaxUses(1);
         hero.setName("Lis");
         hero.setHealth(3);
         hero.setRole(Role.EXPLORER);
@@ -70,6 +79,9 @@ import static org.junit.jupiter.api.Assertions.*;
         List<Capacity>capacities= List.of(capacity);
         hero.setCapacities(capacities);
         Ability ability= new Ability();
+        ability.setAttack(0);
+        ability.setQuantity(0);
+        ability.setRole(Role.EXPLORER);
         List<Ability>abilities= List.of(ability);
         hero.setAbilities(abilities);
         this.heroService.saveHero(hero);
@@ -92,6 +104,20 @@ import static org.junit.jupiter.api.Assertions.*;
     void existHero() {
         heroService.heroExists(1);
     }
+
+    @BeforeAll
+    void createProductInGame() throws RoleAlreadyChosenException {
+        HeroInGame hero = new HeroInGame();
+        hero.setEffectUsed(2);
+        hero.setActualHealth(3);
+        Hero h= heroService.getHeroById(1);
+        hero.setHero(h);
+        Player p = new Player();
+        hero.setPlayer(p);
+        playerService.savePlayer(p);
+        this.heroService.saveHeroInGame(hero);
+        heroService.saveHeroInGame(hero);
+    }
     //HeroInGame
     @Test
     @Transactional
@@ -105,15 +131,12 @@ import static org.junit.jupiter.api.Assertions.*;
         Player p = new Player();
         hero.setPlayer(p);
         this.heroService.saveHeroInGame(hero);
-        assertEquals(this.heroService.getHeroInGameById(1),hero);
+        assertEquals(this.heroService.getHeroInGameById(2),hero);
 
     }
     @Test
     @Transactional
     void shouldUpdateHeroInGame() {
-        HeroInGame h = new HeroInGame();
-        h.setActualHealth(3);
-        this.heroService.saveHeroInGame(h);
         HeroInGame hero = this.heroService.getHeroInGameById(1);
         Integer oldValue = hero.getActualHealth();
         Integer newValue = oldValue + 1;
@@ -122,10 +145,17 @@ import static org.junit.jupiter.api.Assertions.*;
         hero = this.heroService.getHeroInGameById(1);
         assertEquals(hero.getActualHealth(),newValue);
     }
+
     @Test
-    @Transactional
-    void existHeroInGame() {
-        heroService.heroInGameExists(1);
+    public void deleteHeroTest(){
+        heroService.deleteHeroById(1);
+        assertThrows(DataIntegrityViolationException.class,()->heroService.heroExists(1));
     }
+    @Test
+    public void deleteProductInGameTest(){
+        heroService.deleteHeroInGameById(1);
+        assertFalse(heroService.heroInGameExists(1));
+    }
+
 
 }

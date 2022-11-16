@@ -84,4 +84,9 @@ public class UserServiceTest {
         userService.saveUser(user);
         assertEquals(newUsername,userService.getUserById(1).getUsername());
     }
+    @Test
+    public void deleteStatisticTest(){
+        userService.deleteUserById(1);
+        assertFalse(userService.userExists(1));
+    }
 }
