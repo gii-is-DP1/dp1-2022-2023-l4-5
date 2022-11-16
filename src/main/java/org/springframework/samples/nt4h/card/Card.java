@@ -10,6 +10,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
+@Getter
+@Setter
 public class Card extends NamedEntity {
 
     //@NotNull
@@ -22,6 +24,6 @@ public class Card extends NamedEntity {
 
     @NotNull
     @Min(-1)
-    private Integer maxUses;
+    public Integer maxUses;
 
 }

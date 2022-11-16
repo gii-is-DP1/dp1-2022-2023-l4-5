@@ -26,8 +26,8 @@ public class NightLordServiceTest {
     void setUp() throws Exception {
         NightLord night= new NightLord();
         night.setHealth(8);
-        night.setMaxUses(1);
         night.setName("Gurdrug");
+        night.setMaxUses(1);
         nls.saveNightLord(night);
         NightLord night2= new NightLord();
         night2.setHealth(9);
@@ -93,8 +93,8 @@ public class NightLordServiceTest {
     public void shouldInsertOrc(){
         NightLord nuevo = new NightLord();
         nuevo.setName("GOAT");
-        nuevo.setMaxUses(-1);
         nuevo.setHealth(9);
+        nuevo.setMaxUses(1);
         nls.saveNightLord(nuevo);
         assertEquals(nuevo, nls.getNightLordByName("GOAT"));
     }
