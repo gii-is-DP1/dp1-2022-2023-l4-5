@@ -6,27 +6,15 @@ import org.springframework.samples.nt4h.card.enemy.night_lord.NightLord;
 import org.springframework.samples.nt4h.card.enemy.orc.Orc;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "enemies_in_game")
 public class EnemyInGame extends BaseEntity {
     @NotNull
     @Max(value = 10)
     private Integer actualHealth;
-
-    @NotNull
-    private boolean isNightLord;
-
-    @ManyToOne
-    private Orc orc;
-
-    @ManyToOne
-    private NightLord nightLord;
 }

@@ -123,10 +123,9 @@ public class UserController {
         if (principal instanceof UserDetails) {
             ud = ((UserDetails) principal);
         }
+        SecurityContextHolder.clearContext();
         User oldUser = this.userService.getUserByUsername(ud.getUsername());
-        userService.deleteUser(oldUser);
-        // TODO: deslogearse
+        this.userService.deleteUser(oldUser);
         return PAGE_WELCOME;
     }
-
 }
