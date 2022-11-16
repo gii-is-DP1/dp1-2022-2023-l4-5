@@ -1,5 +1,15 @@
 package org.springframework.samples.nt4h.game;
 
 public enum Mode {
-    UNI_CLASS, MULTI_CLASS
+    UNI_CLASS(1), MULTI_CLASS(2);
+
+    int numHeroes;
+
+    Mode(int numHeroes) {
+        this.numHeroes = numHeroes;
+    }
+
+    public int getNumHeroes() {
+        return numHeroes;
+    }
 }

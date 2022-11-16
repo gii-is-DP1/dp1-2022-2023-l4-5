@@ -2,10 +2,8 @@ package org.springframework.samples.nt4h.game;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.effect.Phase;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.stage.Stage;
@@ -14,7 +12,6 @@ import org.springframework.samples.nt4h.turn.Turn;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +32,10 @@ public class Game extends NamedEntity {
     // @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime finishDate;
 
-    @NotNull
+    //@NotNull
     // @Range(min = 1, max = 4)
     private Integer maxPlayers;
+
 
 
     @NotNull
@@ -51,7 +49,7 @@ public class Game extends NamedEntity {
     // @NotNull
     private String password;
 
-    //@NotNull
+    // @NotNull
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
@@ -59,21 +57,21 @@ public class Game extends NamedEntity {
     private boolean hasStages;
 
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Turn> turn;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @Size(max = 3)
     private List<EnemyInGame> orcs;
 
     //@NotNull
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
 
     public void addPlayer(Player player){

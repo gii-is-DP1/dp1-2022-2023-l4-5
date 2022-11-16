@@ -4,18 +4,24 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class OrcService {
     private final OrcRepository orcRepository;
 
+    @Transactional
+    public Orc getOrcById(int id){return orcRepository.findById(id);}
+
     @Transactional(readOnly = true)
-    public Orc getOrcByName(String name) {
-        return orcRepository.findByName(name).orElse(null);
+    public List<Orc> getOrcByName(String name) {
+        return orcRepository.findByName(name);
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Orc> getAllOrcs() {
+    public List<Orc> getAllOrcs() {
         return orcRepository.findAll();
     }
 

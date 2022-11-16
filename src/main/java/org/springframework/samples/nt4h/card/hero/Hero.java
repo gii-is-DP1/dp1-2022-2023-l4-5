@@ -2,13 +2,11 @@ package org.springframework.samples.nt4h.card.hero;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.card.Card;
 import org.springframework.samples.nt4h.card.ability.Ability;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -26,11 +24,11 @@ public class  Hero extends Card {
     private Role role;
 
     //@NotNull
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Ability> abilities;
 
     //@NotNull
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacities;
 
 }

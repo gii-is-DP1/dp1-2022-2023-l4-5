@@ -19,8 +19,8 @@ public class CapacityService {
     }
 
     @Transactional(readOnly = true)
-    public Capacity getCapacityByStateCapacity(StateCapacity stateCapacity) {
-        return capacityRepository.findByStateCapacity(stateCapacity).orElseThrow(() -> new NotFoundException("Capacity not found"));
+    public List<Capacity> getCapacityByStateCapacity(StateCapacity stateCapacity) {
+        return capacityRepository.findByStateCapacity(stateCapacity);
     }
 
     @Transactional(readOnly = true)

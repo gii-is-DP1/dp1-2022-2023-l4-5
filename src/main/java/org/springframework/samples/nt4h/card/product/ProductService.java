@@ -5,6 +5,8 @@ import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class ProductService {
@@ -24,7 +26,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Product> getAllProducts() {
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
@@ -55,7 +57,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<ProductInGame> getAllProductInGameCards() {
+    public List<ProductInGame> getAllProductInGameCards() {
         return productInGameRepository.findAll();
     }
 

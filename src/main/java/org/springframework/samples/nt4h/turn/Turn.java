@@ -2,9 +2,9 @@ package org.springframework.samples.nt4h.turn;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.effect.Phase;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
 import javax.persistence.*;
@@ -35,9 +35,9 @@ public class Turn extends BaseEntity {
     private Phase phase;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<AbilityInGame> usedAbilities;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> usedEnemies;
 }

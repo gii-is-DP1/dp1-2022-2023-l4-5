@@ -25,15 +25,15 @@ public class ProductInGame extends NamedEntity {
     private StateProduct stateProduct;
 
     // El producto.
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
 
     // A que jugador pertenece.
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
 
     // A que partida pertenece el producto.
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
 }

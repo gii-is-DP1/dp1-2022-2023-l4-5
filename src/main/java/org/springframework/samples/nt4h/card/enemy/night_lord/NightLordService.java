@@ -2,6 +2,7 @@ package org.springframework.samples.nt4h.card.enemy.night_lord;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -10,6 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class NightLordService {
     private final NightLordRepository nightLordRepository;
+
+    @Transactional
+    public NightLord getNightLordById(int id){ return nightLordRepository.findById(id);}
 
     @Transactional(readOnly = true)
     public NightLord getNightLordByName(String name) {

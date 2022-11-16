@@ -28,7 +28,6 @@ public class Achievement extends NamedEntity {
 
 
     //TODO probar si la tabla se crea con un null, un string vacio y algo que no sea una URL
-    @NotEmpty
     @URL
     private String image;
 }
