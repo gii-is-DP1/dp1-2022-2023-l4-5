@@ -10,9 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
-public class RecoverCard2 implements Action{
-
-
+public class RecoverCard2 implements Action {
 
 
     private Player playerFrom;

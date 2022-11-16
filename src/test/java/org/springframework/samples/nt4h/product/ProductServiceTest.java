@@ -1,32 +1,21 @@
 package org.springframework.samples.nt4h.product;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.capacity.StateCapacity;
-import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.StateProduct;
-import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
-import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -90,7 +79,7 @@ public class ProductServiceTest {
         product.setPrice(5);
         product.setAttack(0);
         product.setQuantity(7);
-        product.setMaxUses(10);
+        product.setMaxUses(1);
         Capacity capacity= new Capacity();
         capacity.setStateCapacity(StateCapacity.EXPERTISE);
         capacity.setLessDamage(true);

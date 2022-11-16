@@ -7,20 +7,15 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
-import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +44,7 @@ public class PlayerServiceTest {
         player.setSequence(1);
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
-        player.setBirthDate(Date.from(Instant.now()));
+        player.setBirthDate(LocalDate.now());
         playerService.savePlayer(player);
 
     }
@@ -95,7 +90,7 @@ public class PlayerServiceTest {
         player.setSequence(1);
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
-        player.setBirthDate(Date.from(Instant.now()));
+        player.setBirthDate(LocalDate.now());
         playerService.savePlayer(player);
         assertEquals(player,playerService.getPlayerByName("The Goat"));
     }
@@ -125,7 +120,7 @@ public class PlayerServiceTest {
         HeroInGame hero = new HeroInGame();
         hero.setHero(heroService.getHeroById(1));
         Role esperado= heroService.getHeroById(1).getRole();
-        player.setHeroes(Set.of(hero));
+        player.setHeroes(List.of(hero));
         Game game= gameService.getGameById(1);
         game.setPlayers(List.of(player));
         playerService.addDeckFromRole(player,game.getMode());

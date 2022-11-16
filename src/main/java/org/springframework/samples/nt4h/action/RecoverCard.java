@@ -7,7 +7,7 @@ import org.springframework.samples.nt4h.player.Player;
 import java.util.List;
 
 @AllArgsConstructor
-public class RecoverCard implements Action{
+public class RecoverCard implements Action {
 
     private Player playerFrom;
 

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.stream.IntStream;
 
 @AllArgsConstructor
-public class InflictWounds implements Action{
+public class inflictWounds implements Action {
 
     private Player playerTo;
 

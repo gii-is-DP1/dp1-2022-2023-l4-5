@@ -1,10 +1,5 @@
 package org.springframework.samples.nt4h.action;
 
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.player.Player;
-
-import java.util.ArrayList;
 /*
 public class ReceiveDamage implements Action {
 

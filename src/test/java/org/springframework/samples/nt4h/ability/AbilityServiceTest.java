@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolationException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class AbilityServiceTest {
         player.setSequence(1);
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
-        player.setBirthDate(Date.from(Instant.now()));
+        player.setBirthDate(LocalDate.now());
         playerService.savePlayer(player);
 
         AbilityInGame habilidad = new AbilityInGame();
@@ -107,10 +108,10 @@ public class AbilityServiceTest {
     public void shouldInsertAchivement(){
         Ability nuevo = new Ability();
         nuevo.setName("Goat");
-        nuevo.setMaxUses(-1);
         nuevo.setRole(Role.EXPLORER);
         nuevo.setAttack(4);
         nuevo.setQuantity(1);
+        nuevo.setMaxUses(1);
         abs.saveAbility(nuevo);
         assertEquals(nuevo,abs.getAbilityByName("Goat"));
     }
