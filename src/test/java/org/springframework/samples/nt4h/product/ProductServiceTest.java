@@ -79,7 +79,7 @@ public class ProductServiceTest {
         product.setPrice(5);
         product.setAttack(0);
         product.setQuantity(7);
-        product.setMaxUses(10);
+        product.setMaxUses(1);
         Capacity capacity= new Capacity();
         capacity.setStateCapacity(StateCapacity.EXPERTISE);
         capacity.setLessDamage(true);

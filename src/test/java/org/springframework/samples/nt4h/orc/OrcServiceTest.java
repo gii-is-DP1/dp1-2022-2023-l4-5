@@ -25,18 +25,18 @@ public class OrcServiceTest {
     void setUp() throws Exception {
         Orc orc= new Orc();
         orc.setHealth(2);
-        orc.setMaxUses(1);
         orc.setName("Honda");
         orc.setGlory(2);
         orc.setGold(1);
         orc.setHasCure(false);
         orc.setLessDamageWizard(false);
+        orc.setMaxUses(1);
         ors.saveOrc(orc);
         Orc orc1= new Orc();
         orc1.setHealth(2);
-        orc1.setMaxUses(1);
         orc1.setName("Honda");
         orc1.setGlory(2);
+        orc1.setMaxUses(1);
         orc1.setGold(1);
         orc1.setHasCure(false);
         orc1.setLessDamageWizard(false);
@@ -103,10 +103,10 @@ public class OrcServiceTest {
     public void shouldInsertOrc(){
         Orc nuevo = new Orc();
         nuevo.setName("GOAT");
-        nuevo.setMaxUses(-1);
         nuevo.setGold(0);
         nuevo.setGlory(1);
         nuevo.setHealth(4);
+        nuevo.setMaxUses(1);
         nuevo.setLessDamageWizard(false);
         nuevo.setHasCure(false);
         ors.saveOrc(nuevo);

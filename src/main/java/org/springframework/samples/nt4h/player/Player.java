@@ -68,6 +68,8 @@ public class Player extends NamedEntity {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
 
+    private Integer wounds;
+
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     @Getter(AccessLevel.NONE)

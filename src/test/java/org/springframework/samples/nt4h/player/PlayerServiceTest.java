@@ -44,7 +44,7 @@ public class PlayerServiceTest {
         player.setSequence(1);
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
-        player.setBirthDate(Date.from(Instant.now()));
+        player.setBirthDate(LocalDate.now());
         playerService.savePlayer(player);
 
     }
@@ -90,7 +90,7 @@ public class PlayerServiceTest {
         player.setSequence(1);
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
-        player.setBirthDate(Date.from(Instant.now()));
+        player.setBirthDate(LocalDate.now());
         playerService.savePlayer(player);
         assertEquals(player,playerService.getPlayerByName("The Goat"));
     }
@@ -120,7 +120,7 @@ public class PlayerServiceTest {
         HeroInGame hero = new HeroInGame();
         hero.setHero(heroService.getHeroById(1));
         Role esperado= heroService.getHeroById(1).getRole();
-        player.setHeroes(Set.of(hero));
+        player.setHeroes(List.of(hero));
         Game game= gameService.getGameById(1);
         game.setPlayers(List.of(player));
         playerService.addDeckFromRole(player,game.getMode());
