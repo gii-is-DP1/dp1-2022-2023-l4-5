@@ -322,5 +322,6 @@ VALUES (1, 1),
        (6, 6),
        (7, 3),
        (8, 3);
+
 INSERT INTO games(name, start_date, finish_date, max_players, mode, phase, password, accessibility, has_stages)
-VALUES ('pipo', '2020-02-01', '2020-02-01', 4, 'UNI_CLASS', 'HERO_ATTACK', 'patata', 'PRIVATE', TRUE);
+VALUES ('truckFekas', '2020-02-01', '2020-02-01', 4, 'UNI_CLASS', 'HERO_ATTACK', 'patata', 'PRIVATE', TRUE);

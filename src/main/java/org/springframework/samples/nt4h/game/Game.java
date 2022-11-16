@@ -62,7 +62,10 @@ public class Game extends NamedEntity {
 
     @OneToMany
     @Size(max = 3)
-    private List<EnemyInGame> orcs;
+    private List<EnemyInGame> actualOrcs;
+
+    @OneToMany
+    private List<EnemyInGame> allOrcsInGame;
 
     //@NotNull
     @OneToMany

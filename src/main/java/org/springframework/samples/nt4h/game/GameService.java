@@ -8,6 +8,7 @@ import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.game.exceptions.PlayerInOtherGameException;
+import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,5 +73,9 @@ public class GameService {
         return gameRepository.existsById(id);
     }
 
+    @Transactional
+    public Turn findTurnById(int turnId) {
+        return gameRepository.findByTurn(turnId);
+    }
 
 }
