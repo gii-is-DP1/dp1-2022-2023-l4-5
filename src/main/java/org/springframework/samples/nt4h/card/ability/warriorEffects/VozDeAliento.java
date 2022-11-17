@@ -3,7 +3,6 @@ package org.springframework.samples.nt4h.card.ability.warriorEffects;
 import org.springframework.samples.nt4h.action.DrawCards;
 import org.springframework.samples.nt4h.action.GainGlory;
 import org.springframework.samples.nt4h.action.RecoverCard;
-import org.springframework.samples.nt4h.action.actions.GainGlory;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;

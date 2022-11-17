@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.card.ability.rangerEffects;
 
 
+import org.springframework.samples.nt4h.action.Attack;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
@@ -22,7 +23,7 @@ public class LluviaDeFlechas {
             targetList.add(enemy);
         }
         for (EnemyInGame target : targetList) {
-            //new Attack(2, activePlayer, target).executeAction();
+            new Attack(2, activePlayer, target).executeAction();
         }
         List<Player> playersAlive = game.getAlivePlayersInTurnOrder();
         Integer minNumWounds = 2;

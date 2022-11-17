@@ -1,5 +1,6 @@
 package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
+import org.springframework.samples.nt4h.action.Attack;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
@@ -14,7 +15,7 @@ public class BallestaPrecisa {
             damage = 3;
         }
 
-        //new Attack(damage, player, enemy).execute();
+        new Attack(damage, player, enemy).executeAction();
 
         player.getGame().getActualOrcs()
             .forEach(x -> x.getPermanentEffectCardsUsed().add(AbilityEffectEnum.BALLESTA_PRECISA));

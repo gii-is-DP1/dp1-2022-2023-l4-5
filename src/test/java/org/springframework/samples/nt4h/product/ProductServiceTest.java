@@ -12,6 +12,7 @@ import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.stereotype.Service;
 
@@ -105,24 +106,22 @@ public class ProductServiceTest {
     }
 
     //ProductInGame
-
     @Test
     public void shouldInsertProductInGame() {
-        createProductInGame();
         ProductInGame product= new ProductInGame();
         Product p = productService.getProductById(1);
         product.setProduct(p);
         product.setStateProduct(StateProduct.INSALE);
         Game game = gameService.getGameById(1);
         product.setGame(game);
-        product.setName("Prueba");
+        product.setName("Prueba1");
         product.setTimesUsed(5);
-        product.setId(1);
         productService.saveProductInGame(product);
-        ProductInGame encontrado= productService.getProductInGameById(1);
+        ProductInGame encontrado= productService.getAllProductInGameCards().get(0);
         assertEquals(encontrado,product);
 
     }
+
     @Test
     void shouldUpdateProductInGame()  {
         createProductInGame();

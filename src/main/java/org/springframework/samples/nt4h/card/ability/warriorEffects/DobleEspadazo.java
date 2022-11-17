@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.card.ability.warriorEffects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.nt4h.action.Attack;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.TurnService;
@@ -11,7 +12,7 @@ import org.springframework.samples.nt4h.action.actions.DiscardCards;
 public class DobleEspadazo {
 
     public void execute(Player player, EnemyInGame enemy) {
-        //new Attack(2, player, enemy).execute();
+        new Attack(2, player, enemy).executeAction();
         new DiscardCards(1, player).executeAction();
     }
 }
