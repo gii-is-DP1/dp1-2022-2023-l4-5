@@ -1,6 +1,6 @@
 package org.springframework.samples.nt4h.action;
 
-/*
+
 public class ReceiveDamage implements Action {
 
     private EnemyInGame enemy;
@@ -55,4 +55,3 @@ public class ReceiveDamage implements Action {
     }
 
 }
-    */

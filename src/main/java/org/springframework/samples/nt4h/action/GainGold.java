@@ -1,8 +1,9 @@
 package org.springframework.samples.nt4h.action;
 
-import org.springframework.samples.nt4h.action.Action;
+import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.player.Player;
 
+@AllArgsConstructor
 public class GainGold implements Action {
 
     private Integer gold;
