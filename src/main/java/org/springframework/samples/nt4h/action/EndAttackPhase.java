@@ -14,18 +14,13 @@ import org.springframework.samples.nt4h.turn.TurnService;
 @AllArgsConstructor
 public class EndAttackPhase implements Action {
 
-    @Autowired
-    GameService gameService;
+
     @Autowired
     TurnService turnService;
-    Phase phase;
     Integer turnId;
-    private Player player;
 
     @Override
     public void executeAction() {
-        Integer gameId = player.getGame().getId();
-        Game game = gameService.getGameById(gameId);
         Turn turn = turnService.getTurnByID(turnId);
         turn.setPhase(Phase.ENEMY_ATTACK);
     }

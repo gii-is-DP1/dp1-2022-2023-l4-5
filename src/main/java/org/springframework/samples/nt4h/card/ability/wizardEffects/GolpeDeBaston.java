@@ -14,7 +14,7 @@ public class GolpeDeBaston {
         if (enemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.GOLPE_DE_BASTON))
             damage = 2;
 
-        new Attack(damage, player, enemy).execute();
+        //new Attack(damage, player, enemy).execute();
 
         player.getGame().getActualOrcs()
             .forEach(x -> x.getPermanentEffectCardsUsed().add(AbilityEffectEnum.GOLPE_DE_BASTON));

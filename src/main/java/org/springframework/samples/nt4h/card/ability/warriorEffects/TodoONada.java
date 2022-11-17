@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class TodoONada {
     public void execute(Player player, EnemyInGame enemy){
         Integer extraDamage = player.getInDeck().get(0).getAttack();
-        new Attack(1+extraDamage, player, enemy).execute();
+        //new Attack(1+extraDamage, player, enemy).execute();
     }
 }

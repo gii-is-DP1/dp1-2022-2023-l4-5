@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FlechaCorrosiva {
     public void execute(Player player, EnemyInGame enemy) {
-        new Attack(1, player, enemy).execute();
-        new DiscardCards(1, player).execute();
+        //new Attack(1, player, enemy).execute();
+        new org.springframework.samples.nt4h.action.actions.DiscardCards(1, player).execute();
         enemy.getPermanentEffectCardsUsed().add(AbilityEffectEnum.FLECHA_CORROSIVA);
     }
 }

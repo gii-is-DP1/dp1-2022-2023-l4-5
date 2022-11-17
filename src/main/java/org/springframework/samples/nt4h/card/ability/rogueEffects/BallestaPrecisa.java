@@ -14,7 +14,7 @@ public class BallestaPrecisa {
             damage = 3;
         }
 
-        new Attack(damage, player, enemy).execute();
+        //new Attack(damage, player, enemy).execute();
 
         player.getGame().getActualOrcs()
             .forEach(x -> x.getPermanentEffectCardsUsed().add(AbilityEffectEnum.BALLESTA_PRECISA));

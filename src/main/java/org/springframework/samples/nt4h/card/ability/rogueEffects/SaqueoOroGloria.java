@@ -1,5 +1,8 @@
 package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
+import org.springframework.samples.nt4h.action.GainGlory;
+import org.springframework.samples.nt4h.action.GainGold;
+import org.springframework.samples.nt4h.action.StealCoin;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
@@ -13,7 +16,7 @@ public class SaqueoOroGloria {
         Game game = player.getGame();
         List<EnemyInGame> activeOrcs = game.getActualOrcs();
         Integer enemies = activeOrcs.size();
-        new StealCoin(enemies, player).execute();
-        new GainGlory(player).execute();
+        new GainGold(enemies, player).executeAction();
+        new GainGlory(1,player).executeAction();
     }
 }

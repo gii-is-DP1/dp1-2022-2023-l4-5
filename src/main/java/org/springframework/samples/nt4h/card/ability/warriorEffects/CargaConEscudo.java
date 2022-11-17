@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CargaConEscudo {
     public void execute(Player player, EnemyInGame enemy) {
-        new Attack(2, player, enemy).execute();
-        new PreventDamage(2, player).execute();
+        //new Attack(2, player, enemy).execute();
+        //new PreventDamage(2, player).execute();
     }
 }
