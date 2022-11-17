@@ -10,11 +10,12 @@ import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
-public class RecoverCard2 implements Action {
+public class RecoverCardDiscardToAbilty implements Action {
 
 
     private Player playerFrom;
-    private AbilityCardType searchedCardEnum;
+    private AbilityCardType searchedCardType;
+
 
     @Override
     public void executeAction() {
@@ -22,7 +23,7 @@ public class RecoverCard2 implements Action {
         List<AbilityInGame> abilityPile = playerFrom.getInHand();
 
         AbilityInGame sameTypeCard = discardPile.stream()
-            .filter(card -> card.getAbilityCardType().equals(searchedCardEnum))
+            .filter(card -> card.getAbilityCardType().equals(searchedCardType))
             .findAny()
             .orElse(null);
         discardPile.remove(sameTypeCard);

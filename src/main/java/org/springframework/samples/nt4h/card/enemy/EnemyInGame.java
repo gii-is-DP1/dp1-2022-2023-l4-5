@@ -3,17 +3,13 @@ package org.springframework.samples.nt4h.card.enemy;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
-import org.springframework.samples.nt4h.card.enemy.night_lord.NightLord;
-import org.springframework.samples.nt4h.card.enemy.orc.Orc;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
-
 import java.util.HashSet;
 import java.util.Set;
-import java.util.List;
 
 
 @Getter
@@ -35,5 +31,8 @@ public class EnemyInGame extends BaseEntity {
     private boolean isNightLord;
     private boolean isDead;
     private Boolean NoAttackThisTurn;
+
+    @ManyToOne
+    private Enemy enemy;
 
 }

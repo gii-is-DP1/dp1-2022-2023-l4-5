@@ -1,6 +1,21 @@
 package org.springframework.samples.nt4h.enemy;
 
-/*
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.enemy.EnemyService;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EnemyServiceTest {
@@ -66,4 +81,4 @@ public class EnemyServiceTest {
         assertFalse(ens.enemyInGameExists(1));
     }
 }
-*/
+

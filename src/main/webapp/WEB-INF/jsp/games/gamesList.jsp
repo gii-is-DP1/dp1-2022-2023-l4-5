@@ -38,7 +38,7 @@
                     <c:out value="${game.accessibility}"/>
                 </td>
                 <td>
-                    <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game kbron</a>
+                    <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game</a>
                 </td>
             </tr>
         </c:forEach>

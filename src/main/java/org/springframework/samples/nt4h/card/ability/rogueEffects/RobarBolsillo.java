@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.nt4h.action.StealCoin;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,6 @@ public class RobarBolsillo {
     private GameService gameService;
     public void execute(Player player) {
         Integer gameId = player.getGame().getId();
-        gameService.getGameById(gameId).getPlayers().forEach(x -> new StealCoin(player, x).execute());
+        gameService.getGameById(gameId).getPlayers().forEach(x -> new StealCoin(player, x).executeAction());
     }
 }

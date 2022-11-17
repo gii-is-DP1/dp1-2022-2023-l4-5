@@ -1,6 +1,8 @@
 package org.springframework.samples.nt4h.card.ability.rangerEffects;
 
 import org.springframework.samples.nt4h.action.Attack;
+import org.springframework.samples.nt4h.action.DrawCards;
+import org.springframework.samples.nt4h.action.DropCardOnPileAbility;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -17,7 +19,7 @@ public class DisparoRapido {
         if (cartaRobada.getAbilityEffectEnum().equals(AbilityEffectEnum.DISPARO_RAPIDO)) {
 
         } else {
-            new HandToAbilityDeck(activePlayer, cartaRobada.getAbilityEffectEnum()).executeAction();
+            new DropCardOnPileAbility(activePlayer, cartaRobada.getAbilityCardType()).executeAction();
         }
     }
 }

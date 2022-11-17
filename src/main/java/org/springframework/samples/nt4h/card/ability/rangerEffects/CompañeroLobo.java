@@ -12,6 +12,6 @@ public class CompañeroLobo{
     // Previenes 2 puntos de daño
     public void execute(Player activePlayer, EnemyInGame targetedEnemy) {
         new Attack(2, activePlayer, targetedEnemy).executeAction();
-        new PreventDamage(2, activePlayer).executeAction();
+        //new PreventDamage(2, activePlayer).executeAction();
     }
 }
