@@ -1,10 +1,11 @@
 package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
+import org.springframework.samples.nt4h.action.Attack;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;
-
+import org.springframework.samples.nt4h.action.actions.DiscardCards;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class BolaDeFuego {
             enemies.add(enemy);
         }
         for (EnemyInGame enemy : enemies) {
-            new Attack(2, player, enemy).execute();
+            new Attack(2, player, enemy).executeAction();
         }
         List<Player> players = game.getPlayers();
         List<Player> otherPlayers = new ArrayList<>();
@@ -28,7 +29,7 @@ public class BolaDeFuego {
             }
         }
         for (Player player1 : otherPlayers) {
-            new DiscardCards(1, player1).execute();
+            new DiscardCards(1, player1).executeAction();
         }
     }
 }
