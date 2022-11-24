@@ -1,6 +1,6 @@
 package org.springframework.samples.nt4h.card.product.marketEffect;
 
-import org.springframework.samples.nt4h.action.actions.Attack;
+import org.springframework.samples.nt4h.action.Attack;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.capacity.StateCapacity;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;

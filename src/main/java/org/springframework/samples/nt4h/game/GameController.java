@@ -174,6 +174,10 @@ public class GameController {
         Game game = gameService.getGameById(gameId);
         Player player = playerService.getPlayerById(playerId);
 
+        // Esta línea va dedicada a Pedro, por su gran colaboración a la búsqueda de errores.
+        if (player.getReady())
+            return PAGE_GAME_LOBBY.replace("{gameId}", gameId.toString());
+
         // Vinculamos el héroe al jugador.
         heroInGame.setActualHealth(hero.getHealth());
         heroInGame.setPlayer(player);
@@ -240,7 +244,7 @@ public class GameController {
                     player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
                         .orElse("No hero selected") + " }" + " " + (player.getReady() ? "Ready" : "Not ready"))
                 .collect(Collectors.toList()));
-        jsonObject.put("timer", 20 - (time.getMinute() * 60 + time.getSecond() - game.getStartDate().getMinute() * 60 + game.getStartDate().getSecond()));
+        jsonObject.put("timer", 80 - (time.getMinute() * 60 + time.getSecond() - game.getStartDate().getMinute() * 60 + game.getStartDate().getSecond()));
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
 
