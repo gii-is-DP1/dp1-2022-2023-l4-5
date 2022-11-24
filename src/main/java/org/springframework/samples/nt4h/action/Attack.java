@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.enemy.orc.Orc;
-import org.springframework.samples.nt4h.card.product.MarketEffectEnum;
+
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.action.actions.DiscardCards;
 
@@ -24,7 +24,7 @@ public class Attack implements Action {
     public void executeAction() {
         Integer currentHealth = targetedEnemy.getActualHealth();
         Integer playerKillCount = activePlayer.getNumOrcsKilled();
-        Boolean whetstoneCondition = targetedEnemy.getPermanentEffectCardsUsed().contains(MarketEffectEnum.PIEDRA_DE_AMOLAR);
+        Boolean whetstoneCondition = targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.PIEDRA_DE_AMOLAR);
         Boolean corrosiveArrow = targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.FLECHA_CORROSIVA);
         if (whetstoneCondition || corrosiveArrow) {
             damage++;
