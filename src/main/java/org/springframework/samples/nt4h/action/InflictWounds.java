@@ -14,7 +14,7 @@ public class InflictWounds implements Action {
     @Override
     public void executeAction() {
         // Recover all the cards
-        Integer discardPileSize = playerTo.getInDiscard().size();
+        int discardPileSize = playerTo.getInDiscard().size();
         IntStream.range(0, discardPileSize).forEach(i -> new RecoverCard(playerTo).executeAction());
 
         // Shuffle the new abilityPile

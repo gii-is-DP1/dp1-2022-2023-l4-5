@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
 import org.springframework.samples.nt4h.action.GainGlory;
 import org.springframework.samples.nt4h.action.GainGold;
-import org.springframework.samples.nt4h.action.StealCoin;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;

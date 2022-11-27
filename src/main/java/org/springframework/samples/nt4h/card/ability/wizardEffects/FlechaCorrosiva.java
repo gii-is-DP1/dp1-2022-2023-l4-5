@@ -1,11 +1,11 @@
 package org.springframework.samples.nt4h.card.ability.wizardEffects;
 
 import org.springframework.samples.nt4h.action.Attack;
+import org.springframework.samples.nt4h.action.DiscardCards;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;
-import org.springframework.samples.nt4h.action.actions.DiscardCards;
 
 @Component
 public class FlechaCorrosiva {

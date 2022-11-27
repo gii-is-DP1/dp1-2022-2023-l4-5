@@ -27,7 +27,11 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
 
     List<Game> findDistinctById(int id);
 
-    @Query("SELECT p FROM Player p LEFT JOIN FETCH Game g WHERE g.id = : gameId")
+    @Query("SELECT p FROM Player p LEFT JOIN FETCH p.game g WHERE g.id = :gameId")
     List<Player> findPlayersByGame(int gameId);
+
+    @Query("SELECT p FROM Game g LEFT JOIN FETCH Player p LEFT JOIN FETCH User u WHERE p.name = u.username AND g.id = : gameId")
+    Player findGameById(int gameId);
+
 
 }

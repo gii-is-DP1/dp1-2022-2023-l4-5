@@ -1,3 +1,5 @@
+<%@ page import="org.springframework.samples.nt4h.user.User" %>
+<%@ page import="org.springframework.samples.nt4h.game.Game" %>
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -19,7 +21,7 @@
             <th style="width: 200px;">Description</th>
             <th style="width: 200px;">Authority</th>
             <th style="width: 200px;">BirthDate</th>
-            <th style="width: 200px">Friends</th>
+            <th style="width: 200px">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -38,13 +40,13 @@
                     <c:out value="${user.enable}"/>
                 </td>
                 <td>
-                    <c:out value="${user.avatar}"/>
+                    <img src="${user.avatar}" alt="No image found" height="50rem" width="50rem"/>
                 </td>
                 <td>
                     <c:out value="${user.tier}"/>
                 </td>
                 <td>
-                <c:out value="${user.description}"/>
+                    <c:out value="${user.description}"/>
                 </td>
                 <td>
                     <c:out value="${user.authority}"/>
@@ -53,11 +55,24 @@
                     <c:out value="${user.birthDate}"/>
                 </td>
                 <td>
-                    <c:forEach var="user" items="${user.friends}">
-                        <c:out value="${user.username} "/>
-                    </c:forEach>
-                </td>
+                    <spring:url value="/friends/remove/{userId}" var="removeFriend">
+                        <spring:param name="userId" value="${user.id}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(removeFriend)}" class="btn">Remove</a>
+                    <spring:url value="/messages/{username}" var="chatWith">
+                        <spring:param name="username" value="${user.username}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(chatWith)}" class="btn">Chat</a>
+                    <!--
+                    <c:if test="${game != null}">
+                        <spring:url value="/games/{gameId}" var="game">
+                            <spring:param name="gameId" value="${game.id}"/>
+                        </spring:url>
+                        <a href="${fn:escapeXml(game)}" class="btn">Join</a>
+                    </c:if>
+                    -->
 
+                </td>
             </tr>
         </c:forEach>
         </tbody>

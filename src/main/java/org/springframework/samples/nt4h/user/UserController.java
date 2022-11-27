@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -35,11 +38,11 @@ public class UserController {
     // Constantes.
     private static final String VIEW_USER_CREATE_OR_UPDATE_FORM = "users/createUserForm";
     private static final String VIEW_USER_LIST = "users/usersList";
+    private static final String VIEW_USER_DETAILS = "users/userDetails";
     private static final String PAGE_WELCOME = "redirect:/welcome";
     private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
     // Servicios.
     private final UserService userService;
-
 
 
     @Autowired
@@ -52,30 +55,37 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
+    @ModelAttribute("selections")
+    public List<User> getFriends() {
+        return userService.getAllUsers();
+    }
+
+    @ModelAttribute("user")
+    public User getUser() {
+        User loggedUser = userService.getLoggedUser();
+        return loggedUser != null ? loggedUser : new User();
+    }
+
     // Obtener todos los usuarios.
-    @GetMapping()
-    public String getUsers(ModelMap model) {
-        model.put("selections", userService.getAllUsers());
+    @GetMapping
+    public String getUsers() {
         return VIEW_USER_LIST;
     }
 
-    @GetMapping("/{userId}")
-    public ModelAndView showOwner(@PathVariable("userId") int userId) {
-        ModelAndView mav = new ModelAndView("users/userDetails");
-        mav.addObject(this.userService.getUserById(userId));
-        return mav;
+    @GetMapping("/details")
+    public String showOwner() {
+        return VIEW_USER_DETAILS;
     }
 
     // Crear usuario
     @GetMapping(value = "/new")
-    public String initCreationForm(ModelMap model) {
-        model.put("user", new User());
+    public String initCreationForm() {
         return VIEW_USER_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "/new")
-    public String processCreationForm(@Valid User user, BindingResult br) {
-        if(br.hasErrors()) {
+    public String processCreationForm(@Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
             return VIEW_USER_CREATE_OR_UPDATE_FORM;
         } else {
             userService.saveUser(user);
@@ -85,47 +95,27 @@ public class UserController {
 
     //Editar usuario
     @GetMapping(value = "/edit")
-    public String initUpdateUserForm(ModelMap model) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails ud = null;
-        if (principal instanceof UserDetails) {
-            ud = ((UserDetails) principal);
-        }
-        User user = this.userService.getUserByUsername(ud.getUsername());
-        model.addAttribute(user);
+    public String initUpdateUserForm() {
         return VIEW_USER_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "/edit")
     public String processUpdateUserForm(@Valid User user, BindingResult result) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails ud = null;
-        if (principal instanceof UserDetails) {
-            ud = ((UserDetails) principal);
-        }
-        User oldUser = this.userService.getUserByUsername(ud.getUsername());
-        if (result.hasErrors()) {
-            return VIEW_USER_CREATE_OR_UPDATE_FORM;
-        } else {
-            System.out.println("User: " + user);
-            user.setId(oldUser.getId());
-            user.setEnable(oldUser.getEnable());
-            user.setTier(oldUser.getTier());
-            this.userService.saveUser(user);
+        User oldUser = this.userService.getLoggedUser();
+        if (result.hasErrors()) return VIEW_USER_CREATE_OR_UPDATE_FORM;
+        else {
+            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).build();
+            newUser.setId(oldUser.getId());
+            userService.saveUser(newUser);
             return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
         }
     }
 
     @GetMapping(value = "/delete")
     public String processDeleteUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails ud = null;
-        if (principal instanceof UserDetails) {
-            ud = ((UserDetails) principal);
-        }
+        User loggedUser = userService.getLoggedUser();
         SecurityContextHolder.clearContext();
-        User oldUser = this.userService.getUserByUsername(ud.getUsername());
-        this.userService.deleteUser(oldUser);
+        this.userService.deleteUser(loggedUser);
         return PAGE_WELCOME;
     }
 }
