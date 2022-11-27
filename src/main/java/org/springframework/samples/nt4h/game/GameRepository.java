@@ -2,6 +2,7 @@ package org.springframework.samples.nt4h.game;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.Turn;
 
 import java.util.List;
@@ -23,4 +24,10 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
 
     @Query("SELECT g FROM Game g LEFT JOIN FETCH Turn t WHERE t.id = ?1")
     Turn findByTurn(int turnId);
+
+    List<Game> findDistinctById(int id);
+
+    @Query("SELECT p FROM Player p LEFT JOIN FETCH Game g WHERE g.id = : gameId")
+    List<Player> findPlayersByGame(int gameId);
+
 }
