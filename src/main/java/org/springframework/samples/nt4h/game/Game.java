@@ -42,6 +42,10 @@ public class Game extends NamedEntity {
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
+    public int isUniClass() {
+        return mode == Mode.UNI_CLASS ? 1 : 2;
+    }
+
     // @NotNull
     @Enumerated(EnumType.STRING)
     private Phase phase;

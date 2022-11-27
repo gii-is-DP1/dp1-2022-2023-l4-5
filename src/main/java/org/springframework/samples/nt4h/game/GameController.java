@@ -103,11 +103,11 @@ public class GameController {
     public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
         Game game = gameService.getGameById(gameId);
         User user = userService.currentUser();
-        if (userInOtherGame(model, gameId, user)) return getGames(model);
-        Optional<Player> player = game.getPlayers().stream().filter(p -> p.getName().equals(user.getUsername())).findFirst();
-        model.put("player", player.orElseGet(Player::new));
+        if(userInOtherGame(model, gameId, user))
+            return getGames(model);
+        model.put("player", gameService.getPlayerByCurrentUserInGame(user, game).orElseGet(Player::new));
         model.put("selections", game.getPlayers());
-        model.put("numHeroes", game.getMode() == Mode.UNI_CLASS ? 1 : 2);
+        model.put("numHeroes", game.isUniClass());
         return VIEW_GAME_LOBBY;
     }
 
@@ -146,10 +146,9 @@ public class GameController {
     }
 
     private boolean userInOtherGame(ModelMap model, Integer gameId, User user) {
-        if (gameService.getAllGames().stream().filter(g -> !Objects.equals(g.getId(), gameId))
-            .anyMatch(g -> g.getPlayers().stream().map(Player::getName).anyMatch(n -> n.equals(user.getUsername())))) {
-            Game currentGame = gameService.getAllGames().stream().filter(g -> g.getPlayers().stream().anyMatch(p -> p.getName().equals(user.getUsername()))).findFirst().get();
-            model.put("message", "Ya estás en una partida y esa es  " + currentGame.getName() + ".");
+        if(gameService.isUserInOtherGame(gameId, user) == true) {
+            gameService.findUserInOtherGame(gameId, user);
+            model.put("message", "Ya estás en una partida y esa es  " + gameService.findUserInOtherGame(gameId, user).getName() + ".");
             model.put("messageType", "danger");
             return true;
         }

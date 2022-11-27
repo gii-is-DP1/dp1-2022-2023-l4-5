@@ -11,6 +11,7 @@ import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -188,4 +189,9 @@ public class Player extends NamedEntity {
             inDiscard.remove(ability);
         }
     }
+
+    public Boolean userHasSameNameAsPlayer(User user) {
+        return getName().equals(user.getUsername());
+    }
+
 }
