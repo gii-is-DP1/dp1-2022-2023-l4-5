@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.user;
 
 
+import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
@@ -67,4 +68,14 @@ public class User extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player player;
+
+    void addFriend(User user) {
+        if (friends == null)
+            friends = Sets.newHashSet();
+        friends.add(user);
+    }
+
+    public void removeFriend(User user) {
+        friends.remove(user);
+    }
 }

@@ -97,4 +97,21 @@ public class UserService {
         }
         return getUserByUsername(ud.getUsername());
     }
+
+    @Transactional
+    public void addFriend(int friendId) {
+        User user = currentUser();
+        user.addFriend(getUserById(friendId));
+        saveUser(user);
+    }
+
+    @Transactional
+    public void removeFriend(int friendId) {
+        User user = currentUser();
+        User friend = getUserById(friendId);
+        if (user.getFriends().contains(friend)) {
+            user.removeFriend(friend);
+            saveUser(user);
+        }
+    }
 }

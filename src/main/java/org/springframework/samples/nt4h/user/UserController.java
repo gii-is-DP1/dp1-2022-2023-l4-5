@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -41,7 +42,6 @@ public class UserController {
     private final UserService userService;
 
 
-
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -52,10 +52,16 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
+    @ModelAttribute("selections")
+    public Set<User> getFriends() {
+        //return userService.currentUser().getFriends()
+        //    .stream().map(f -> new Pair<>(f, f.getPlayer() != null ? f.getPlayer().getGame() : null)).collect(Collectors.toList());
+        return userService.currentUser().getFriends();
+    }
+
     // Obtener todos los usuarios.
     @GetMapping
     public String getUsers(ModelMap model) {
-        model.put("selections", userService.getAllUsers());
         return VIEW_USER_LIST;
     }
 
