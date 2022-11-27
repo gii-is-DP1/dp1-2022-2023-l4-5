@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 @Component
 public class ArcoCompuesto {
     public void execute(Player player, EnemyInGame enemy) {
-        Integer damageModifier = 0;
+        int damageModifier = 0;
         List<StateCapacity> capacitiesAux = new ArrayList<>();
         List<StateCapacity> capacities = List.of(StateCapacity.RANGE);
         List<Capacity> ls = player.getHeroes().stream()
             .flatMap(h -> h.getHero().getCapacities().stream()).collect(Collectors.toList())
             .stream()
-            .filter(p -> capacities.contains(p.getStateCapacity())).filter(p -> p.getLessDamage())
+            .filter(p -> capacities.contains(p.getStateCapacity())).filter(Capacity::getLessDamage)
             .collect(Collectors.toList());
         if (!(ls.isEmpty())) {
             damageModifier = -1;

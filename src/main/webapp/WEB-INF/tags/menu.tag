@@ -42,10 +42,10 @@
 					<span>Create Game</span>
 				</nt4h:menuItem>
 
-				<nt4h:menuItem active="${name eq 'capacities'}" url="/capacities"
+				<nt4h:menuItem active="${name eq 'capacities'}" url="/users"
 					title="capacities">
 					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-					<span>Capacities</span>
+					<span>Users</span>
 				</nt4h:menuItem>
 
 			</ul>
@@ -81,8 +81,8 @@
 												   class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
 											<p class="text-left">
-												<a href="<c:url value="/users/edit" />"
-												   class="btn btn-primary btn-block btn-sm">Edit</a>
+												<a href="<c:url value="/users/details" />"
+												   class="btn btn-primary btn-block btn-sm">My Profile</a>
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/users/delete" />"

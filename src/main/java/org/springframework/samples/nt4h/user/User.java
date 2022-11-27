@@ -2,10 +2,10 @@ package org.springframework.samples.nt4h.user;
 
 
 import com.google.common.collect.Sets;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
@@ -24,6 +24,9 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users")
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
 
     @NotNull
@@ -49,6 +52,9 @@ public class User extends BaseEntity {
 
     @Enumerated
     private Authority authority;
+
+    @ManyToOne
+    private Game game;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")

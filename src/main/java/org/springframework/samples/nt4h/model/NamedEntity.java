@@ -31,7 +31,7 @@ public class NamedEntity extends BaseEntity {
 
     @Size(min = 3, max = 50)
     @Column(name = "name")
-	private String name;
+    public String name;
 
 	public String getName() {
 		return this.name;

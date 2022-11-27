@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Message extends BaseEntity {
 
     @NotNull
-    @Size(min = 0, max = 500)
+    @Size(max = 500)
     private String content;
 
     @Column(columnDefinition = "varchar(36) default NOW()")

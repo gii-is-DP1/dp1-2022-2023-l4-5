@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.springframework.samples.nt4h.card.Card;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 @Getter
 @Setter

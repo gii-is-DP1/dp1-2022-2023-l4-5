@@ -1,12 +1,10 @@
 package org.springframework.samples.nt4h.card.ability.warriorEffects;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Attack;
+import org.springframework.samples.nt4h.action.DiscardCards;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.stereotype.Component;
-import org.springframework.samples.nt4h.action.actions.DiscardCards;
 
 @Component
 public class DobleEspadazo {

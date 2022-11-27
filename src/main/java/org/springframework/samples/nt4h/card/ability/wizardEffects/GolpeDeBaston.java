@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class GolpeDeBaston {
     public void execute(Player player, EnemyInGame enemy) {
 
-        Integer damage = 1;
+        int damage = 1;
 
         if (enemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.GOLPE_DE_BASTON))
             damage = 2;

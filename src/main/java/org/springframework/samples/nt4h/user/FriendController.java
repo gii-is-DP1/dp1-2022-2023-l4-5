@@ -24,17 +24,8 @@ public class FriendController {
 
     @ModelAttribute("selections")
     public Set<User> getFriends() {
-        // return userService.currentUser().getFriends()
-        //    .stream().map(f -> new Pair<>(f, f.getPlayer() != null ? f.getPlayer().getGame() : null)).collect(Collectors.toList());
-        return userService.currentUser().getFriends();
+        return userService.getLoggedUser().getFriends();
     }
-
-    /*
-    @ModelAttribute("games")
-    public List<Game> getGames() {
-        return getFriends().stream().map(User::getPlayer).map(p -> p != null ? p.getGame() : null).collect(Collectors.toList());
-    }
-     */
 
     @RequestMapping
     public ModelAndView listFriends() {
