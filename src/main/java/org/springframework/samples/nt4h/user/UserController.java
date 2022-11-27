@@ -53,10 +53,13 @@ public class UserController {
     }
 
     // Obtener todos los usuarios.
-    @GetMapping
-    public String getUsers(ModelMap model) {
+    @GetMapping("/{userId}/usersList")
+    public String getUsers(ModelMap model, @PathVariable("userId") int userId) {
+      if(userService.getUserById(userId).getAuthority().equals(Authority.DOKTOL)){
         model.put("selections", userService.getAllUsers());
         return VIEW_USER_LIST;
+       }
+         return PAGE_WELCOME;
     }
 
     @GetMapping("/{userId}")
