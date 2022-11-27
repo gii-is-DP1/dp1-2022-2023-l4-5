@@ -19,7 +19,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/achievement")
+@RequestMapping("/achievements")
 public class AchievementController {
 
     private final String ACHIEVEMENTS_LIST_VIEW ="achievements/achievementsList";
