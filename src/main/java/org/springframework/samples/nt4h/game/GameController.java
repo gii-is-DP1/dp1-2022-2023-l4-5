@@ -155,7 +155,7 @@ public class GameController {
         return false;
     }
 
-    //Elegir heroe
+    //Elegir héroe
     @GetMapping(value = "/{gameId}/{playerId}")
     public String initHeroSelectForm(@PathVariable Integer gameId, @PathVariable Integer playerId, ModelMap model) {
         // Los datos para el formulario.
@@ -180,9 +180,9 @@ public class GameController {
         // Vinculamos el héroe al jugador.
         heroInGame.setActualHealth(hero.getHealth());
         heroInGame.setPlayer(player);
-
         player.addHero(heroInGame);
-        if (player.getHeroes().size() == game.getMode().getNumHeroes()) player.setReady(true);
+        if (player.getHeroes().size() == game.getMode().getNumHeroes())
+            player.setReady(true);
         // Si el héroe ya ha sido elegido o ya tenía uno de ese rol, se le impedirá elegirlo.
         try {
             gameService.saveGame(game);
@@ -232,7 +232,7 @@ public class GameController {
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 
-    // Acrualizar los jugadores en el lobby.
+    // Actualizar los jugadores en el lobby.
     @GetMapping("/update/{gameId}")
     public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
         JsonObject jsonObject = new JsonObject();

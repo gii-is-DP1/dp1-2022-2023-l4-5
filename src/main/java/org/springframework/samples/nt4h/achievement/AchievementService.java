@@ -1,6 +1,8 @@
 package org.springframework.samples.nt4h.achievement;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,4 +48,7 @@ public class AchievementService {
     public boolean achievementExists(int id) {
         return achievementRepository.existsById(id);
     }
+
+    @Transactional
+    public void save(Achievement achievement) { achievementRepository.save(achievement); }
 }

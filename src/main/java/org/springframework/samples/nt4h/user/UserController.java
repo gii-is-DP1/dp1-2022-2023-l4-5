@@ -53,7 +53,7 @@ public class UserController {
     }
 
     // Obtener todos los usuarios.
-    @GetMapping
+    @GetMapping()
     public String getUsers(ModelMap model) {
         model.put("selections", userService.getAllUsers());
         return VIEW_USER_LIST;
@@ -74,8 +74,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/new")
-    public String processCreationForm(@Valid User user, BindingResult result) {
-        if (result.hasErrors()) {
+    public String processCreationForm(@Valid User user, BindingResult br) {
+        if(br.hasErrors()) {
             return VIEW_USER_CREATE_OR_UPDATE_FORM;
         } else {
             userService.saveUser(user);
