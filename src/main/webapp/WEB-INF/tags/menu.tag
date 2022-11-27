@@ -42,10 +42,10 @@
 					<span>Create Game</span>
 				</nt4h:menuItem>
 
-				<nt4h:menuItem active="${name eq 'capacities'}" url="/capacities"
+				<nt4h:menuItem active="${name eq 'capacities'}" url="/users"
 					title="capacities">
 					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-					<span>Capacities</span>
+					<span>Users</span>
 				</nt4h:menuItem>
 
 			</ul>
@@ -78,36 +78,39 @@
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Logout</a>
+												   class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
 											<p class="text-left">
-                                            	<a href="<c:url value="/users/edit" />"
-                                            		class="btn btn-primary btn-block btn-sm">Edit</a>
-                                            </p>
-                                            <p class="text-left">
-                                                <a href="<c:url value="/users/delete" />"
-                                                    class="btn btn-primary btn-block btn-sm">Delete</a>
-                                            </p>
+												<a href="<c:url value="/users/details" />"
+												   class="btn btn-primary btn-block btn-sm">My Profile</a>
+											</p>
+											<p class="text-left">
+												<a href="<c:url value="/users/delete" />"
+												   class="btn btn-primary btn-block btn-sm">Delete</a>
+											</p>
+											<p class="text-left">
+												<a href="<c:url value="/friends" />"
+												   class="btn btn-primary btn-block btn-sm">Friends</a>
 										</div>
 									</div>
 								</div>
 							</li>
 							<li class="divider"></li>
-<!--
-                            <li>
-								<div class="navbar-login navbar-login-session">
-									<div class="row">
-										<div class="col-lg-12">
-											<p>
-												<a href="#" class="btn btn-primary btn-block">My Profile</a>
-												<a href="#" class="btn btn-danger btn-block">Change
-													Password</a>
-											</p>
-										</div>
-									</div>
-								</div>
-							</li>
--->
+							<!--
+                                                        <li>
+                                                            <div class="navbar-login navbar-login-session">
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        <p>
+                                                                            <a href="#" class="btn btn-primary btn-block">My Profile</a>
+                                                                            <a href="#" class="btn btn-danger btn-block">Change
+                                                                                Password</a>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                            -->
 						</ul></li>
 				</sec:authorize>
 			</ul>

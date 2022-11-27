@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${selections}" var="game">
+        <c:forEach items="${games}" var="game">
             <tr>
                 <td>
                     <c:out value="${game.name}"/>

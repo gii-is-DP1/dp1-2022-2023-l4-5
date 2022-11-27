@@ -7,7 +7,7 @@ import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CompañeroLobo{
+public class CompagneroLobo {
 
     // Previenes 2 puntos de daño
     public void execute(Player activePlayer, EnemyInGame targetedEnemy) {

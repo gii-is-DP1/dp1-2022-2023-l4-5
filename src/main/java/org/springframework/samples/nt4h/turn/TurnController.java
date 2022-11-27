@@ -29,7 +29,7 @@ public class TurnController {
 
     private static final String VIEW_TURN_RESUPLY= "turn/resuply";
 
-    public TurnController(GameService gameService, UserService userService, HeroService heroService, PlayerService playerService, TurnService turnService) {
+    public TurnController(GameService gameService, HeroService heroService, PlayerService playerService, TurnService turnService) {
         this.gameService = gameService;
         this.heroService = heroService;
         this.playerService= playerService;
@@ -44,7 +44,7 @@ public class TurnController {
         return VIEW_TURN_START;
     }
     @PostMapping(value = "/{turnId}/{playerId}/start")
-    public String processChoiceEvade(@Valid Turn turn, BindingResult result) {
+    public String processChoiceEvade(@Valid Turn turn) {
         turnservice.saveTurn(turn);
         if(turn.getPhase()== Phase.HERO_ATTACK){
             return VIEW_TURN_HERO_ATTACK;

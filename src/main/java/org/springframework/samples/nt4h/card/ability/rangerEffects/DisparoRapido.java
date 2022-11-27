@@ -14,7 +14,7 @@ public class DisparoRapido {
     public void execute(Player activePlayer, EnemyInGame targetedEnemy) {
         new Attack(1, activePlayer, targetedEnemy).executeAction();
         new DrawCards(1, activePlayer).executeAction();
-        Integer posicion = activePlayer.getInHand().size() - 1;
+        int posicion = activePlayer.getInHand().size() - 1;
         AbilityInGame cartaRobada = activePlayer.getInHand().get(posicion);
         if (cartaRobada.getAbilityEffectEnum().equals(AbilityEffectEnum.DISPARO_RAPIDO)) {
 

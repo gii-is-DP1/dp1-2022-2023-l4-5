@@ -15,7 +15,7 @@ public class WelcomeController {
 
 	  @GetMapping({"/","/welcome"})
 	  public String welcome(Map<String, Object> model) {
-          List<Person> people = new ArrayList<Person>();
+          List<Person> people = new ArrayList<>();
           Person p1 = new Person();
           p1.setFirstName("Pedro ");
           p1.setLastName("Ruiz Aguilar");

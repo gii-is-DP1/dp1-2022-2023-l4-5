@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/messages")
@@ -50,7 +51,7 @@ public class MessageController {
         }
         model.addAttribute("receiver", username);
         model.addAttribute("chat", new Message());
-        model.addAttribute("messages", messageService.getMessageBySenderWithReceiver(ud.getUsername(), username));
+        model.addAttribute("messages", messageService.getMessageBySenderWithReceiver(Objects.requireNonNull(ud).getUsername(), username));
         return VIEW_MESSAGE_LIST;
     }
 
@@ -63,7 +64,7 @@ public class MessageController {
             ud = ((UserDetails) principal);
         }
         User receiver = userService.getUserByUsername(username);
-        User sender = userService.getUserByUsername(ud.getUsername());
+        User sender = userService.getUserByUsername(Objects.requireNonNull(ud).getUsername());
         message.setReceiver(receiver);
         message.setSender(sender);
         message.setTime(LocalDateTime.now());
@@ -80,7 +81,7 @@ public class MessageController {
             ud = ((UserDetails) principal);
         }
         JsonObject jsonObject = new JsonObject();
-        jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(ud.getUsername(), username).stream()
+        jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(Objects.requireNonNull(ud).getUsername(), username).stream()
             .map(Message::toString).toArray());
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }

@@ -13,7 +13,7 @@ public class SaqueoOro {
     public void execute(Player player) {
         Game game = player.getGame();
         List<EnemyInGame> activeOrcs = game.getActualOrcs();
-        Integer enemies = activeOrcs.size();
+        int enemies = activeOrcs.size();
         new GainGold(enemies * 2, player).executeAction();
     }
 }

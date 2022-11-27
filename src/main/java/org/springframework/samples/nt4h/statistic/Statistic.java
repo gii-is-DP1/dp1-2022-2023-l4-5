@@ -38,7 +38,7 @@ public class Statistic extends BaseEntity {
     @NotNull
     @Min(0)
     @Column(columnDefinition = "int default 0")
-    private Integer numWinnedGames;
+    private Integer numWonGames;
 
     @NotNull
     @Min(0)
@@ -48,10 +48,10 @@ public class Statistic extends BaseEntity {
     @NotNull
     @Min(0)
     @Column(columnDefinition = "int default 0")
-    private Integer allDamgeDealed;
+    private Integer allDamageDealt;
 
     @NotNull
     @Min(0)
     @Column(columnDefinition = "int default 0")
-    private Integer allDamageDealedToNightLords;
+    private Integer allDamageDealtToNightLords;
 }

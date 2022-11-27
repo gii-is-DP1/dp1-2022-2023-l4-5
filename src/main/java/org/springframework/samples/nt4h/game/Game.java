@@ -1,11 +1,16 @@
 package org.springframework.samples.nt4h.game;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.google.common.collect.Lists;
+import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.hero.HeroInGame;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
+import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.stage.Stage;
 import org.springframework.samples.nt4h.turn.Turn;
 
@@ -13,27 +18,21 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "games")
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Game extends NamedEntity {
 
-    //DESCOMENAR CUANDO FUFE EL JSP COMPLETO
-
-    // @NotNull
-    // @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime startDate;
 
-    // @NotNull
-    // @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime finishDate;
 
-    //@NotNull
-    // @Range(min = 1, max = 4)
     private Integer maxPlayers;
 
 
@@ -42,21 +41,22 @@ public class Game extends NamedEntity {
     @Enumerated(EnumType.STRING)
     private Mode mode;
 
-    // @NotNull
+    public int isUniClass() {
+        return mode == Mode.UNI_CLASS ? 1 : 2;
+    }
+
+
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
-    // @NotNull
     private String password;
 
-    // @NotNull
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
-    //@NotNull
     private boolean hasStages;
 
-    // Falta relacion
+    // Relaciones
     @OneToMany(cascade = CascadeType.ALL)
     private List<Player> alivePlayersInTurnOrder;
 
@@ -70,7 +70,6 @@ public class Game extends NamedEntity {
     @OneToMany
     private List<EnemyInGame> allOrcsInGame;
 
-    //@NotNull
     @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
@@ -80,12 +79,31 @@ public class Game extends NamedEntity {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
 
-    public void addPlayer(Player player){
-        if(this.players== null){
-            List<Player> ls = new ArrayList<>();
-            ls.add(player);
-            this.setPlayers(ls);
-        }else{this.players.add(player);}
+    public void addPlayer(Player player) throws FullGameException {
+        if (this.players == null)
+            players = Lists.newArrayList(player);
+        else if (this.players.size() > this.maxPlayers)
+            throw new FullGameException();
+        else
+            this.players.add(player);
+
+    }
+
+    public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
+        if (isHeroAlreadyChosen(hero.getHero()))
+            throw new HeroAlreadyChosenException();
+        else {
+            player.addHero(hero);
+            addPlayer(player);
+        }
+
+    }
+
+
+    public boolean isHeroAlreadyChosen(Hero hero) {
+        System.out.println(players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero))));
+        return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
+
     }
 
 }

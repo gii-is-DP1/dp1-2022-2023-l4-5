@@ -3,10 +3,8 @@ package org.springframework.samples.nt4h.action;
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.card.enemy.orc.Orc;
 
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.action.actions.DiscardCards;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +53,13 @@ public class Attack implements Action {
             activePlayer.setNumOrcsKilled(playerKillCount + 1);
 
             if (targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.TRAMPA)) {
-                Integer enemyDefeatedGlory = ((Orc) targetedEnemy.getEnemy()).getGlory();
+                Integer enemyDefeatedGlory = targetedEnemy.getEnemy().getGlory();
                 new GainGlory(enemyDefeatedGlory, activePlayer).executeAction();
 
             } else {
 
-                Integer enemyDefeatedGlory = ((Orc) targetedEnemy.getEnemy()).getGlory() /*+ targetedEnemy.getEnemy().getExtraGlory()*/;
-                Integer enemyDefeatedGold = ((Orc) targetedEnemy.getEnemy()).getGold();
+                Integer enemyDefeatedGlory = targetedEnemy.getEnemy().getGlory() /*+ targetedEnemy.getEnemy().getExtraGlory()*/;
+                Integer enemyDefeatedGold = targetedEnemy.getEnemy().getGold();
                 new GainGlory(enemyDefeatedGlory, activePlayer).executeAction();
                 new GainGold(enemyDefeatedGold, activePlayer).executeAction();
             }

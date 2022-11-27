@@ -2,11 +2,11 @@ package org.springframework.samples.nt4h.card.ability.rangerEffects;
 
 
 import org.springframework.samples.nt4h.action.Attack;
+import org.springframework.samples.nt4h.action.DiscardCards;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;
-import org.springframework.samples.nt4h.action.actions.DiscardCards;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,7 @@ public class LluviaDeFlechas {
         Game game = activePlayer.getGame();
         List<EnemyInGame> enemiesFighting = game.getActualOrcs();
         List<EnemyInGame> targetList = new ArrayList<>();
-        for(EnemyInGame enemy : enemiesFighting){
-            targetList.add(enemy);
-        }
+        targetList.addAll(enemiesFighting);
         for (EnemyInGame target : targetList) {
             new Attack(2, activePlayer, target).executeAction();
         }
