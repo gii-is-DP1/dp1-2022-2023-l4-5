@@ -16,6 +16,7 @@
 package org.springframework.samples.nt4h.user;
 
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -100,14 +101,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/edit")
-    public String processUpdateUserForm(@Valid User user, BindingResult result) {
+    public String processUpdateUserForm(@Valid User newUser, BindingResult result) {
         User oldUser = this.userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_USER_CREATE_OR_UPDATE_FORM;
         else {
-            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).build();
-            newUser.setId(oldUser.getId());
+            BeanUtils.copyProperties(newUser, oldUser, "id", "password", "enable", "tier");
             userService.saveUser(newUser);
-            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
+            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(newUser.getId()));
         }
     }
 

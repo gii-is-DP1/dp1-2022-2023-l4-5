@@ -86,7 +86,6 @@ public class Game extends NamedEntity {
             throw new FullGameException();
         else
             this.players.add(player);
-
     }
 
     public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
