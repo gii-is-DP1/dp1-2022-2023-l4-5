@@ -1,19 +1,19 @@
 -- Creación de usuarios.
 INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable)
 VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I want a nap', 0, '2002-02-01', 1),
+        'I want a nap', 'DOKTOL', '2002-02-01', 1),
        ('antonio', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 1, '1999-02-01', 1),
+        'I am a description', 'USER', '1999-02-01', 1),
        ('laurolmer', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'awanabumbambam', 1, '2002-08-21', 1),
+        'awanabumbambam', 'DOKTOL', '2002-08-21', 1),
        ('alvhidrod', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'drakorion', 1, '2002-02-23', 1),
+        'drakorion', 'DOKTOL', '2002-02-23', 1),
        ('ismruijur', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'er jefe brrr', 1, '2002-10-27', 1),
+        'er jefe brrr', 'DOKTOL', '2002-10-27', 1),
        ('ivasansan1', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'bético encubierto', 1, '2002-11-12', 1),
+        'bético encubierto', 'DOKTOL', '2002-11-12', 1),
        ('pedruiagu', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'sácame del bolsillo', 1, '2002-10-01', 1);
+        'sácame del bolsillo', 'USER', '2002-10-01', 1);
 
 -- Creación de mensajes.
 INSERT INTO messages(content, time, receiver_id, sender_id)
@@ -325,3 +325,6 @@ VALUES (1, 1),
 
 INSERT INTO games(name, start_date, finish_date, max_players, mode, phase, password, accessibility, has_stages)
 VALUES ('truckFekas', '2020-02-01', '2020-02-01', 4, 'UNI_CLASS', 'HERO_ATTACK', 'patata', 'PRIVATE', TRUE);
+
+INSERT INTO users_friends(user_id, friends_id)
+VALUES (1, 2);

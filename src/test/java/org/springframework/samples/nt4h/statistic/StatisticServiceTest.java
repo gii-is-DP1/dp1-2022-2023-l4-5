@@ -22,13 +22,13 @@ public class StatisticServiceTest {
     @BeforeAll
     void ini() {
         Statistic statistic= new Statistic();
-        statistic.setAllDamgeDealed(0);
+        statistic.setAllDamageDealt(0);
         statistic.setAllGlory(0);
         statistic.setNumOrcsKilled(0);
         statistic.setNumWarLordKilled(0);
         statistic.setAllGold(0);
-        statistic.setAllDamageDealedToNightLords(0);
-        statistic.setNumWinnedGames(0);
+        statistic.setAllDamageDealtToNightLords(0);
+        statistic.setNumWonGames(0);
         statistic.setNumPlayedGames(0);
         statisticService.saveStatistic(statistic);
     }
@@ -36,13 +36,13 @@ public class StatisticServiceTest {
     public void findByIdTrue(){
         Statistic stat = statisticService.getStatisticById(1);
         assertNotNull(stat);
-        assertEquals(0, stat.getAllDamageDealedToNightLords());
+        assertEquals(0, stat.getAllDamageDealtToNightLords());
     }
     @Test
     public void findByIdFalse(){
         Statistic stat = statisticService.getStatisticById(1);
         assertNotNull(stat);
-        assertNotEquals(1, stat.getAllDamageDealedToNightLords());
+        assertNotEquals(1, stat.getAllDamageDealtToNightLords());
     }
     @Test
     public void findAll(){
@@ -54,13 +54,13 @@ public class StatisticServiceTest {
     @Test
     public void  shouldInsertStatistic(){
         Statistic statistic= new Statistic();
-        statistic.setAllDamgeDealed(0);
+        statistic.setAllDamageDealt(0);
         statistic.setAllGlory(0);
         statistic.setNumOrcsKilled(0);
         statistic.setNumWarLordKilled(0);
         statistic.setAllGold(0);
-        statistic.setAllDamageDealedToNightLords(0);
-        statistic.setNumWinnedGames(0);
+        statistic.setAllDamageDealtToNightLords(0);
+        statistic.setNumWonGames(0);
         statistic.setNumPlayedGames(0);
         statisticService.saveStatistic(statistic);
         assertEquals(statistic,statisticService.getStatisticById(2));

@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.statistic;
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.achievement.Achievement;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,4 +43,5 @@ public class StatisticService {
     public boolean statisticExists(int id) {
         return statisticRepository.existsById(id);
     }
+
 }

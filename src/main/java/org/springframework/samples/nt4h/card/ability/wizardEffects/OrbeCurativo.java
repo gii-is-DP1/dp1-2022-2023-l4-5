@@ -4,7 +4,6 @@ import org.springframework.samples.nt4h.action.DropCardFromHand;
 import org.springframework.samples.nt4h.action.HealWound;
 import org.springframework.samples.nt4h.action.RecoverCard;
 import org.springframework.samples.nt4h.card.ability.AbilityCardType;
-import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Component;

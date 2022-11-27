@@ -36,13 +36,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
             .antMatchers("/users/new").permitAll()
             .antMatchers("/session/**").permitAll()
-            .antMatchers("/capacities/**").permitAll()
-            .antMatchers("/message/send").authenticated()
+            .antMatchers("/messages/**").authenticated()
             .antMatchers("/admin/**").hasAnyAuthority("DOKTOL")
+            .antMatchers("/achievements/new", "/achievements/edit", "/achievements/delete").hasAnyAuthority("DOKTOL")
+            .antMatchers("/achievements/**").authenticated()
             .antMatchers("/games/**").authenticated()
             .antMatchers("/users/**").authenticated()
+            .antMatchers("/friends/**").authenticated()
 
-            // .anyRequest().denyAll()
+            .anyRequest().denyAll()
             .and()
             .formLogin()
             /*.loginPage("/login")*/

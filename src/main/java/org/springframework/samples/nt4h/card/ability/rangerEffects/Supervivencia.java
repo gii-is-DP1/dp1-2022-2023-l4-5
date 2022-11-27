@@ -1,10 +1,8 @@
 package org.springframework.samples.nt4h.card.ability.rangerEffects;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.ChangeEnemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.stereotype.Component;
 
 @Component

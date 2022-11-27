@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.card.ability.rogueEffects;
 
 import org.springframework.samples.nt4h.action.Attack;
-import org.springframework.samples.nt4h.action.actions.DiscardCards;
+import org.springframework.samples.nt4h.action.DiscardCards;
 import org.springframework.samples.nt4h.action.GoldOnKill;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;

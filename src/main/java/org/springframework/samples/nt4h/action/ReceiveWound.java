@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.action;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.player.Player;
 
 import java.util.Collections;
@@ -15,7 +14,7 @@ public class ReceiveWound implements Action {
     @Override
     public void executeAction() {
         // Recover all the cards
-        Integer discardPileSize = player.getInDiscard().size();
+        int discardPileSize = player.getInDiscard().size();
         IntStream.range(0, discardPileSize).forEach(i -> new RecoverCard(player).executeAction());
 
         // Shuffle the new abilityPile

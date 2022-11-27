@@ -1,10 +1,7 @@
 package org.springframework.samples.nt4h.card.hero;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
-import org.springframework.samples.nt4h.card.hero.Hero;
-import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;

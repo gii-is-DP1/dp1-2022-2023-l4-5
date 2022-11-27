@@ -1,16 +1,17 @@
 package org.springframework.samples.nt4h.player;
 
 import com.google.common.collect.Lists;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
+import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.NamedEntity;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -22,7 +23,9 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "players")
-// @ToString(of = {"name"})
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Player extends NamedEntity {
 
     @Min(0)
@@ -33,28 +36,21 @@ public class Player extends NamedEntity {
 
     private Boolean hasEvasion;
 
-    // @NotNull
     @Min(0)
-    // @Column(columnDefinition = "int default 0")
     private Integer numOrcsKilled;
 
-    // @NotNull
     @Min(0)
-    // @Column(columnDefinition = "int default 0")
-    private Integer numWarLordKilled; // TODO: Cambiar por night lord.
+    private Integer numWarLordKilled;
 
-    // @NotNull
+
     @Min(0)
-    // @Column(columnDefinition = "int default 0")
     private Integer damageDealed;
 
-    // @NotNull
     @Min(0)
     private Integer damageDealedToNightLords;
 
-    // @NotNull
     @Range(min = 1, max = 4)
-    private Integer sequence;  // Para elegir a quien le toca.
+    private Integer sequence;
 
 
     private Boolean ready;
@@ -80,16 +76,14 @@ public class Player extends NamedEntity {
 
 
     public List<HeroInGame> getHeroes() {
-        if (heroes == null) {
+        if (heroes == null)
             heroes = Lists.newArrayList();
-        }
         return heroes;
     }
 
     public List<Turn> getTurn() {
-        if (turn == null) {
+        if (turn == null)
             turn = Lists.newArrayList();
-        }
         return turn;
     }
 
@@ -107,12 +101,15 @@ public class Player extends NamedEntity {
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDiscard;
 
-    public void addHero(HeroInGame hero) {
-        if (heroes == null) {
-            heroes = Lists.newArrayList();
-        } else {
-            heroes.add(hero);
-        }
+    public void addHero(HeroInGame hero) throws RoleAlreadyChosenException {
+        if (heroes == null) heroes = Lists.newArrayList();
+        else if (hasRoleAlreadyBeenChosen(hero.getHero().getRole()))
+            throw new RoleAlreadyChosenException();
+        else heroes.add(hero);
+    }
+
+    public boolean hasRoleAlreadyBeenChosen(Role role) {
+        return heroes.stream().anyMatch(hero -> hero.getHero().getRole().equals(role));
     }
 
     public List<AbilityInGame> getInHand() {
@@ -188,4 +185,9 @@ public class Player extends NamedEntity {
             inDiscard.remove(ability);
         }
     }
+
+    public Boolean userHasSameNameAsPlayer(User user) {
+        return getName().equals(user.getUsername());
+    }
+
 }

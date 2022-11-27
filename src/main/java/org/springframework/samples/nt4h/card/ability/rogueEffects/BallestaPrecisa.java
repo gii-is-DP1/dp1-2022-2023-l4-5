@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BallestaPrecisa {
     public void execute(Player player, EnemyInGame enemy) {
-        Integer damage = 2;
+        int damage = 2;
 
         if (enemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.BALLESTA_PRECISA)){
             damage = 3;

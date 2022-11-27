@@ -1,10 +1,11 @@
 package org.springframework.samples.nt4h.user;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import com.google.common.collect.Sets;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
@@ -23,6 +24,9 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users")
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
 
     @NotNull
@@ -46,8 +50,11 @@ public class User extends BaseEntity {
     @NotBlank
     private String description;
 
-    @Enumerated
-    private Authority authority;
+
+    private String authority;
+
+    @ManyToOne
+    private Game game;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy/MM/dd")
@@ -67,4 +74,14 @@ public class User extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player player;
+
+    void addFriend(User user) {
+        if (friends == null)
+            friends = Sets.newHashSet();
+        friends.add(user);
+    }
+
+    public void removeFriend(User user) {
+        friends.remove(user);
+    }
 }

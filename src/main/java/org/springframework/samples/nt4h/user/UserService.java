@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -43,7 +44,7 @@ public class UserService {
     public void saveUser(User user) throws DataAccessException {
         if (user.getEnable() == null) user.setEnable("1");
         if (user.getTier()== null) user.setTier(Tier.IRON);
-        if (user.getAuthority()== null) user.setAuthority(Authority.USER);
+        if (user.getAuthority()== null) user.setAuthority("USER");
         userRepository.save(user);
     }
 
@@ -89,12 +90,34 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User currentUser() {
+    public User getLoggedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails ud = null;
         if (principal instanceof UserDetails) {
             ud = ((UserDetails) principal);
         }
-        return getUserByUsername(ud.getUsername());
+        return getUserByUsername(Objects.requireNonNull(ud).getUsername());
+    }
+
+    @Transactional(readOnly = true)
+    public int getIdFromLoggedUser() {
+        return getLoggedUser().getId();
+    }
+
+    @Transactional
+    public void addFriend(int friendId) {
+        User user = getLoggedUser();
+        user.addFriend(getUserById(friendId));
+        saveUser(user);
+    }
+
+    @Transactional
+    public void removeFriend(int friendId) {
+        User user = getLoggedUser();
+        User friend = getUserById(friendId);
+        if (user.getFriends().contains(friend)) {
+            user.removeFriend(friend);
+            saveUser(user);
+        }
     }
 }
