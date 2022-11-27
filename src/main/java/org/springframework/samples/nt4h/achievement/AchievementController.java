@@ -1,7 +1,9 @@
 package org.springframework.samples.nt4h.achievement;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,12 +22,16 @@ import javax.validation.Valid;
 @RequestMapping("/achievement")
 public class AchievementController {
 
-    private final String ACHIEVEMENTS_LIST_VIEW ="/achievements/achievementsList";
-    private final String ACHIEVEMENTS_FORM_VIEW ="/achievements/createOrUpdateAchievementsForm";
+    private final String ACHIEVEMENTS_LIST_VIEW ="achievements/achievementsList";
+    private final String ACHIEVEMENTS_FORM_VIEW ="achievements/createOrUpdateAchievementsForm";
     private static final String PAGE_WELCOME = "redirect:/welcome";
 
-
     private AchievementService achievementService;
+
+    @Autowired
+    public AchievementController(AchievementService achievementService) {
+        this.achievementService = achievementService;
+    }
 
     @GetMapping()
     public ModelAndView showAllAchievements() {
