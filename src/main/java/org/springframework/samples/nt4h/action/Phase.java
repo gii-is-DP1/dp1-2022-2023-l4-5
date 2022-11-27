@@ -2,6 +2,7 @@ package org.springframework.samples.nt4h.action;
 
 public enum Phase {
     START,
+    EVADE,
     HERO_ATTACK,
     HERO_ATTACK_ALLY,
     ENEMY_ATTACK,

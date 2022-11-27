@@ -35,6 +35,8 @@ public class Game extends NamedEntity {
 
     private Integer maxPlayers;
 
+    private Integer actual;
+
 
 
     @NotNull
@@ -79,6 +81,10 @@ public class Game extends NamedEntity {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
 
+    public Player getPlayer() {
+        return players.get(actual);
+    }
+
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)
             players = Lists.newArrayList(player);
@@ -100,9 +106,6 @@ public class Game extends NamedEntity {
 
 
     public boolean isHeroAlreadyChosen(Hero hero) {
-        System.out.println(players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero))));
         return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
-
     }
-
 }
