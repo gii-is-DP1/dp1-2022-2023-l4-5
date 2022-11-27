@@ -49,17 +49,6 @@
 					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
 					<span>Users</span>
 				</nt4h:menuItem>
-
-
-                <spring:url value="/users/{userId}/usersList" var="userUrl">
-                    <spring:param name="userId" value="${user.id}"/>
-                    <nt4h:menuItem active="${name eq 'User List'}" url="/users/{userId}/usersList"
-                                   title="User List">
-
-                    <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-                    <span>User List</span>
-                </nt4h:menuItem>
-                </spring:url>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
