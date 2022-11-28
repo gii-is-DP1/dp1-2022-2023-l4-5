@@ -34,7 +34,6 @@ public class Turn extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
-
     @ManyToMany(cascade = CascadeType.ALL)
     private List<AbilityInGame> usedAbilities;
 
