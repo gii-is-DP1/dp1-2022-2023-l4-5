@@ -60,7 +60,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> getUserByAuthority(Authority authority) {
+    public List<User> getUserByAuthority(String authority) {
         return userRepository.findByAuthority(authority);
     }
 

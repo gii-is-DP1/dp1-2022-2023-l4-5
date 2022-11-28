@@ -36,7 +36,7 @@ public class UserServiceTest {
     public void findNameTrue(){
         User user = userService.getUserByUsername("alesanfe");
         assertNotNull(user);
-        assertEquals(Authority.DOKTOL,user.getAuthority());
+        assertEquals("DOKTOL",user.getAuthority());
     }
     @Test
     public void findNameFalse(){
@@ -46,10 +46,10 @@ public class UserServiceTest {
     }
     @Test
     public void findByAuthority(){
-        List<User> user = userService.getUserByAuthority(Authority.USER);
+        List<User> user = userService.getUserByAuthority("USER");
         assertNotNull(user);
         assertFalse(user.isEmpty());
-        assertEquals(6,user.size());
+        assertEquals(2,user.size());
     }
     @Test
     public void findByTier(){

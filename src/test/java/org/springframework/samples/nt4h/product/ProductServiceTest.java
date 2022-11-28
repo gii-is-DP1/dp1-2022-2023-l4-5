@@ -27,9 +27,6 @@ public class ProductServiceTest {
     protected ProductService productService;
     @Autowired
     protected GameService gameService;
-    @Autowired
-    protected PlayerService playerService;
-
     void createProductInGame() {
         ProductInGame product= new ProductInGame();
         Product p = productService.getProductById(1);
