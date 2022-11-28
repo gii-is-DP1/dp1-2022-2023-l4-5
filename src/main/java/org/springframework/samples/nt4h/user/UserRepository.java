@@ -1,5 +1,6 @@
 package org.springframework.samples.nt4h.user;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.samples.nt4h.player.Tier;
 
@@ -13,7 +14,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     Optional<User> findByUsername(String username);
 
-    List<User> findByAuthority(Authority authority);
+    List<User> findByAuthority(String authority);
 
     List<User> findByTier(Tier tier);
 

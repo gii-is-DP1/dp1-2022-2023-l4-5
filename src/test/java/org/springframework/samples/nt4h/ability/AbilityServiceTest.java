@@ -3,6 +3,7 @@ package org.springframework.samples.nt4h.ability;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,18 +28,21 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AbilityServiceTest {
-    @Autowired
+    @Mock
     PlayerService playerService;
     @Autowired
     AbilityService abs;
+    Player player;
 
     @BeforeAll
-    void setUp() throws RoleAlreadyChosenException {
-        Player player = new Player();
+    void setUp() {
+        player = new Player();
         player.setGold(0);
         player.setGlory(0);
         player.setName("Goat");
@@ -47,12 +51,11 @@ public class AbilityServiceTest {
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
         player.setBirthDate(LocalDate.now());
-        playerService.savePlayer(player);
 
         AbilityInGame habilidad = new AbilityInGame();
         habilidad.setAbility(abs.getAbilityById(1));
         habilidad.setAttack(2);
-        habilidad.setPlayer(playerService.getPlayerById(1));
+        habilidad.setPlayer(playerService.getPlayerByName("Goat"));
         habilidad.setProduct(false);
         habilidad.setTimesUsed(0);
         abs.saveAbilityInGame(habilidad);
@@ -168,7 +171,7 @@ public class AbilityServiceTest {
         AbilityInGame nuevo = new AbilityInGame();
         nuevo.setAbility(abs.getAbilityById(1));
         nuevo.setAttack(5);
-        nuevo.setPlayer(playerService.getPlayerById(1));
+        nuevo.setPlayer(player);
         nuevo.setProduct(false);
         nuevo.setTimesUsed(0);
         abs.saveAbilityInGame(nuevo);

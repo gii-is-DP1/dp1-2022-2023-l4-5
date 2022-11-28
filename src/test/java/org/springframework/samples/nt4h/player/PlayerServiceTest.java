@@ -4,9 +4,11 @@ package org.springframework.samples.nt4h.player;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
@@ -37,11 +39,11 @@ public class PlayerServiceTest {
     protected HeroService heroService;
     @BeforeAll
      void setUp() throws RoleAlreadyChosenException {
-        //OMG quiero poner esto en model de Player
+        //OMG quiero poner esto en model de Player ✍(◔◡◔)
         Player player = new Player();
         player.setGold(0);
         player.setGlory(0);
-        player.setName("Goat");
+        player.setName("Test");
         player.setReady(false);
         player.setSequence(1);
         player.setDamageDealed(0);
@@ -55,7 +57,7 @@ public class PlayerServiceTest {
     public void findByIDTrue(){
         Player player = this.playerService.getPlayerById(1);
         assertNotNull(player);
-        assertEquals("Goat", player.getName());
+        assertEquals("Test", player.getName());
     }
     @Test
     public void findByIDFalse(){
@@ -65,13 +67,13 @@ public class PlayerServiceTest {
     }
     @Test
     public void findByNameTrue(){
-        Player player = playerService.getPlayerByName("Goat");
+        Player player = playerService.getPlayerByName("Test");
         assertNotNull(player);
-        assertEquals("Goat", player.getName());
+        assertEquals("Test", player.getName());
     }
     @Test
     public void findByNameFalse(){
-        Player player = playerService.getPlayerByName("Goat");
+        Player player = playerService.getPlayerByName("Test");
         assertNotNull(player);
         assertNotEquals("", player.getName());
     }
@@ -80,21 +82,21 @@ public class PlayerServiceTest {
         List<Player> ls= playerService.getAllPlayers();
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
-        assertEquals(1,ls.size());
+        assertEquals(2,ls.size());
     }
     @Test
     public void shouldInsertPlayer() throws RoleAlreadyChosenException {
         Player player = new Player();
         player.setGold(0);
         player.setGlory(0);
-        player.setName("The Goat");
+        player.setName("TheGoat");
         player.setReady(false);
         player.setSequence(1);
         player.setDamageDealed(0);
         player.setDamageDealedToNightLords(0);
         player.setBirthDate(LocalDate.now());
         playerService.savePlayer(player);
-        assertEquals(player,playerService.getPlayerByName("The Goat"));
+        assertEquals(player,playerService.getPlayerByName("TheGoat"));
     }
     @Test
     public void shouldUpdatePlayer() throws RoleAlreadyChosenException {
@@ -113,8 +115,7 @@ public class PlayerServiceTest {
         HeroInGame hero1 = new HeroInGame();
         hero1.setHero(heroService.getHeroByName("Idril"));
         player.addHero(hero);
-        player.addHero(hero1);
-        assertThrows(RoleAlreadyChosenException.class,()->playerService.savePlayer(player, Mode.MULTI_CLASS));
+        assertThrows(RoleAlreadyChosenException.class,()->player.addHero(hero1));
     }
     @Test
     public void shouldAddDeckFromRole(){

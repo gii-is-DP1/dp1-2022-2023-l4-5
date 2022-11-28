@@ -259,7 +259,7 @@ public class GameController {
     }
 
     @GetMapping("/selectOrder/")
-    public String orderRule() {
+    public String orderPlayers() {
         resetMessage();
         List<Player> players = getPlayers();
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
