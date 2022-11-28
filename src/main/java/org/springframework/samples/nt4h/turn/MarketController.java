@@ -34,7 +34,7 @@ public class MarketController {
 
     private final ProductService productService;
 
-    @ModelAttribute("productsInSell")
+    @ModelAttribute("productsOnSale")
     public List<ProductInGame> getProductsInSell() {
         return productService.getMarket();
     }
@@ -48,6 +48,10 @@ public class MarketController {
     public Player getPlayer() {
         return getGame().getPlayer();
     }
+
+    // TODO: El jugador no puede comprar sin tener dinero.
+    // TODO: Si el usuario no tiene el jugador, no podrá interactuar con la pantalla.
+    // TODO: El nextPlayer deberá llevar a la acción que está.
 
     @GetMapping
     public String market() {

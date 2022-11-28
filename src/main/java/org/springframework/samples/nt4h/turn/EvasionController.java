@@ -33,6 +33,9 @@ public class EvasionController {
         this.turnService = turnService;
     }
 
+    // TODO: Si el usuario no tiene el jugador, no podrá interactuar con la pantalla.
+    // TODO: El nextPlayer deberá llevar a la acción que está.
+
     @ModelAttribute("game")
     public Game getGame() {
         return userService.getLoggedUser().getGame();
