@@ -30,4 +30,6 @@ public class Ability extends Card {
 
     @Min(1)
     private Integer quantity;
+
+    private AbilityEffectEnum abilityEffectEnum;
 }

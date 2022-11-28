@@ -5,7 +5,9 @@ import lombok.Setter;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.BaseEntity;
+import org.springframework.samples.nt4h.player.Player;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -39,4 +41,12 @@ public class Turn extends BaseEntity {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> usedEnemies;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Game game;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Player player;
+
+
 }

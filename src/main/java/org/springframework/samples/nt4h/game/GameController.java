@@ -222,12 +222,13 @@ public class GameController {
 
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
-    public String initCreationForm() {
+    public String initCreationForm(ModelMap model) {
         // Comprobamos si está en otras partidas.
-        Optional<Game> otherGame = gameService.getUserInOtherGame(null, userService.getLoggedUser());
-        if (otherGame.isPresent())
-            return sendError("Ya estás en una partida y esa es  " + otherGame.get() + ".", PAGE_GAMES);
+        Game oldGame = getGame();
+        if (oldGame != null)
+            return sendError("Ya estás en una partida y esa es  " + oldGame + ".", PAGE_GAMES);
         resetMessage();
+        // model.addAttribute("game", new Game());
         return VIEW_GAME_CREATE;
     }
 

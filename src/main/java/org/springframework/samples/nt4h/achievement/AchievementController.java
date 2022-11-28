@@ -3,7 +3,6 @@ package org.springframework.samples.nt4h.achievement;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.user.User;
-import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,12 +18,12 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/achievements")
+@RequestMapping("/achievement")
 public class AchievementController {
 
     private final String ACHIEVEMENTS_LIST_VIEW ="achievements/achievementsList";
     private final String ACHIEVEMENTS_FORM_VIEW ="achievements/createOrUpdateAchievementsForm";
-    private static final String PAGE_WELCOME = "redirect:/welcome";
+
 
     private AchievementService achievementService;
 

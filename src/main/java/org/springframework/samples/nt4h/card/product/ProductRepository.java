@@ -18,4 +18,6 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p WHERE p.quantity > 0")
     List<Product> findWhatIsAvailable();
+
+
 }

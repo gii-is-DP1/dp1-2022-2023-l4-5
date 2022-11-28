@@ -1,6 +1,9 @@
 package org.springframework.samples.nt4h.card.product;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.player.Player;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,5 +82,21 @@ public class ProductService {
     @Transactional(readOnly = true)
     public boolean productInGameExists(int id) {
         return productInGameRepository.existsById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductInGame> getMarket() {
+        return productInGameRepository.findAllByStateProduct(StateProduct.INSALE, PageRequest.of(0, 5));
+    }
+
+    @Transactional
+    public void buyProduct(Player player, ProductInGame productInGame) {
+        if (productInGame.getStateProduct() == StateProduct.INSALE) {
+            AbilityInGame abilityInGame = AbilityInGame.builder().timesUsed(0).attack(productInGame.getProduct().getAttack()).isProduct(true).build();
+            player.addAbilityInDeck(abilityInGame);
+            productInGame.setStateProduct(StateProduct.PLAYER);
+            productInGame.setPlayer(player);
+            saveProductInGame(productInGame);
+        }
     }
 }

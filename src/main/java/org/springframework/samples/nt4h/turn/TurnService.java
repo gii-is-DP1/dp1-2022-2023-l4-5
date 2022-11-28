@@ -49,4 +49,9 @@ public class TurnService {
         return turnRepository.existsById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Turn getTurnsByPhaseAndPlayerId(Phase phase, int playerId) {
+        return turnRepository.findByPhaseAndPlayerId(phase, playerId);
+    }
+
 }
