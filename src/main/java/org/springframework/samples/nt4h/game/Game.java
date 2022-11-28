@@ -82,7 +82,7 @@ public class Game extends NamedEntity {
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)
             players = Lists.newArrayList(player);
-        else if (this.players.size() > this.maxPlayers)
+        else if (this.players.size() >= this.maxPlayers)
             throw new FullGameException();
         else
             this.players.add(player);
@@ -92,7 +92,7 @@ public class Game extends NamedEntity {
     public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
         if (isHeroAlreadyChosen(hero.getHero()))
             throw new HeroAlreadyChosenException();
-        else {
+         else {
             player.addHero(hero);
             addPlayer(player);
         }
@@ -101,7 +101,7 @@ public class Game extends NamedEntity {
 
 
     public boolean isHeroAlreadyChosen(Hero hero) {
-        System.out.println(players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero))));
+        if(this.players==null)return false;
         return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
 
     }

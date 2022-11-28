@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
@@ -102,7 +103,7 @@ public class Player extends NamedEntity {
     private List<AbilityInGame> inDiscard;
 
     public void addHero(HeroInGame hero) throws RoleAlreadyChosenException {
-        if (heroes == null) heroes = Lists.newArrayList();
+        if (heroes == null) heroes = Lists.newArrayList(hero);
         else if (hasRoleAlreadyBeenChosen(hero.getHero().getRole()))
             throw new RoleAlreadyChosenException();
         else heroes.add(hero);
