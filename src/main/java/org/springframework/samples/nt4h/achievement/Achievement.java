@@ -5,10 +5,11 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.samples.nt4h.model.NamedEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Getter
@@ -22,13 +23,10 @@ public class Achievement extends NamedEntity {
 
     @NotNull
     @Min(value = 0)
-    private double threshold;
+    private Integer threshold;
 
+
+    //TODO probar si la tabla se crea con un null, un string vacio y algo que no sea una URL
     @URL
     private String image;
-
-    public String getActualDescription(){
-        return description.replace("<THRESHOLD>",String.valueOf(threshold));
-
-    }
 }

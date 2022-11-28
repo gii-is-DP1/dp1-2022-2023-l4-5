@@ -50,8 +50,8 @@ public class User extends BaseEntity {
     @NotBlank
     private String description;
 
-    @Enumerated
-    private Authority authority;
+
+    private String authority;
 
     @ManyToOne
     private Game game;
