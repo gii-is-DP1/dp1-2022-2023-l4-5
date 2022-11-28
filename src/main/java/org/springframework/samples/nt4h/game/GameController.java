@@ -222,7 +222,7 @@ public class GameController {
 
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
-    public String initCreationForm(ModelMap model) {
+    public String initCreationForm() {
         // Comprobamos si está en otras partidas.
         Game oldGame = getGame();
         if (oldGame != null)

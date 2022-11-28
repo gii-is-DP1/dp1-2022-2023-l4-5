@@ -60,8 +60,8 @@ public class Game extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Player> alivePlayersInTurnOrder;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Turn> turn;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Turn currentTurn;
 
     @OneToMany(cascade = CascadeType.ALL)
     @Size(max = 3)

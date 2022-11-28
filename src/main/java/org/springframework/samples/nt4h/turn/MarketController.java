@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("/market")
 public class MarketController {
     public final String VIEW_MARKET = "market/market";
+    public final String NEXT_TURN = "redirect:/turns/nextTurn";
 
     private final UserService userService;
     private final PlayerService playerService;
@@ -46,7 +47,8 @@ public class MarketController {
 
     @ModelAttribute("player")
     public Player getPlayer() {
-        return getGame().getPlayer();
+        // return getGame().getPlayer();
+        return userService.getLoggedUser().getPlayer();
     }
 
     // TODO: El jugador no puede comprar sin tener dinero.
@@ -55,20 +57,13 @@ public class MarketController {
 
     @GetMapping
     public String market() {
-        return VIEW_MARKET;
+        return VIEW_MARKET; // TODO: en la vista market debe de haber una url que indique a "redirect:/turns/nextTurn";
     }
 
     @PostMapping
     public String buyProduct(ProductInGame productInGame) {
         Player player = getPlayer();
         productService.buyProduct(player, productInGame);
-
         return market();
-    }
-
-    @GetMapping("/end")
-    public String endTurn() {
-        Player player = getPlayer();
-        return "redirect:/turn/nextPlayer";
     }
 }
