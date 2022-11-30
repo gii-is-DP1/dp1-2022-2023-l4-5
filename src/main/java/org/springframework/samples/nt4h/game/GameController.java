@@ -7,6 +7,7 @@ import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
@@ -28,9 +29,9 @@ import javax.validation.Valid;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+// TODO: Cambiar nombre y enlaces.
 @Controller
 @RequestMapping("/games")
 public class GameController {
@@ -228,7 +229,7 @@ public class GameController {
         if (oldGame != null)
             return sendError("Ya estás en una partida y esa es  " + oldGame + ".", PAGE_GAMES);
         resetMessage();
-        // model.addAttribute("game", new Game());
+        model.addAttribute("game", new Game());
         return VIEW_GAME_CREATE;
     }
 
@@ -278,6 +279,8 @@ public class GameController {
         }
         // Hace falta un post para almacenar.
         datos.forEach(triplet -> triplet.getValue1().setSequence(triplet.getValue0() + 1));
+        players = datos.stream().map(Triplet::getValue1).collect(Collectors.toList());
+        gameService.saveGame(getGame().toBuilder().players(players).currentTurn(players.get(0).getTurn(Phase.EVADE)).build());
         resetMessage();
         return VIEW_GAME_ORDER;
     }

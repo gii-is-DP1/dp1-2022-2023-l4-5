@@ -18,6 +18,6 @@ public class Escudo {
 
     public void execute(Player player, EnemyInGame enemy) {
         new DenyDamageEnemy(enemy).executeAction();
-        new EndAttackPhase(turnService, player.getTurn().get(0).getId()).executeAction();
+        new EndAttackPhase(turnService, player.getTurns().get(0).getId()).executeAction();
     }
 }

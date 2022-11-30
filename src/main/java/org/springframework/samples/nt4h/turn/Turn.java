@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -17,21 +16,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Turn extends BaseEntity {
-
-    @NotNull
-    @Min(0)
-    @Column(columnDefinition = "int default 0")
-    private Integer gold;
-
-    @NotNull
-    @Min(0)
-    @Column(columnDefinition = "int default 0")
-    private Integer glory;
-
-    @NotNull
-    private Boolean evasion;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private Phase phase;

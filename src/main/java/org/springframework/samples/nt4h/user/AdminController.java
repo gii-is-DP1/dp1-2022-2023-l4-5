@@ -1,22 +1,25 @@
 package org.springframework.samples.nt4h.user;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admins")
 public class AdminController {
+
     // Constantes.
-    private static final String VIEW_USER_CREATE_OR_UPDATE_FORM = "users/createUserForm";
+    private static final String VIEW_USER_UPDATE_FORM = "admins/updateUserForm";
+    private static final String VIEW_USER_LIST = "admins/usersAdminList";
+    private static final String VIEW_USER_DETAILS = "users/userDetails";
+    private static final String PAGE_WELCOME = "redirect:/welcome";
     private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
-    private static final String VIEW_USER_LIST = "users/usersList";
     // Servicios.
     private final UserService userService;
 
@@ -25,34 +28,57 @@ public class AdminController {
         this.userService = userService;
     }
 
+
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
     }
 
-    //Editar usuario siendo admin.
-    @GetMapping(value = "/{userId}/edit")
-    public String initUpdateUserForm(@PathVariable("userId") int userId, ModelMap model) {
-        User user = this.userService.getUserById(userId);
-        model.addAttribute(user);
-        return VIEW_USER_CREATE_OR_UPDATE_FORM;
+    @ModelAttribute("selections")
+    public List<User> getFriends() {
+        return userService.getAllUsers();
     }
 
-    @PostMapping(value = "/{userId}/edit")
-    public String processUpdateUserForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId) {
-        if (result.hasErrors()) {
-            return VIEW_USER_CREATE_OR_UPDATE_FORM;
-        } else {
-            user.setId(userId);
-            this.userService.saveUser(user);
-            return PAGE_USER_DETAILS;
-        }
+    @ModelAttribute("user")
+    public User getUser() {
+        User loggedUser = userService.getLoggedUser();
+        return loggedUser != null ? loggedUser : new User();
     }
 
-    @DeleteMapping(value = "/{userId}/delete")
-    public String processDeleteUser(@PathVariable int userId) {
-        userService.deleteUserById(userId);
+    // Obtener todos los usuarios.
+    @GetMapping("/usersAdminList")
+    public String getUsers() {
         return VIEW_USER_LIST;
     }
 
+    @GetMapping("/details")
+    public String showOwner() {
+        return VIEW_USER_DETAILS;
+    }
+
+
+    //Editar usuario
+    @GetMapping(value = "/edit")
+    public String initUpdateUserForm() {return VIEW_USER_UPDATE_FORM;
+    }
+
+    @PostMapping(value = "/edit")
+    public String processUpdateUserForm(@Valid User user, BindingResult result) {
+        User oldUser = this.userService.getLoggedUser();
+        if (result.hasErrors()) return VIEW_USER_UPDATE_FORM;
+        else {
+            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).build();
+            newUser.setId(oldUser.getId());
+            userService.saveUser(newUser);
+            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
+        }
+    }
+
+    @GetMapping(value = "/delete")
+    public String processDeleteUser() {
+        User loggedUser = userService.getLoggedUser();
+        SecurityContextHolder.clearContext();
+        this.userService.deleteUser(loggedUser);
+        return PAGE_WELCOME;
+    }
 }
