@@ -1,6 +1,8 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.BuyProduct;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.game.Game;
@@ -65,10 +67,11 @@ public class MarketController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             return sendError("No puedes comprar productos en el turno de otro jugador", market());
+        Action buyProduct = new BuyProduct(player, productInGame);
         try {
-            productService.buyProduct(player, productInGame);
+            buyProduct.executeAction();
         } catch (NoMoneyException e) {
-            return sendError("No tienes dinero suficiente para comprar este producto", "/market");
+            return sendError("No tienes dinero suficiente para comprar este producto", market());
         }
         resetMessage();
         return market();

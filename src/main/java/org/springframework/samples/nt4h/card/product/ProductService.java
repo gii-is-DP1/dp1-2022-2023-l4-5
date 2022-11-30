@@ -89,17 +89,4 @@ public class ProductService {
     public List<ProductInGame> getMarket() {
         return productInGameRepository.findAllByStateProduct(StateProduct.INSALE, PageRequest.of(0, 5));
     }
-
-    @Transactional
-    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException {
-        if (player.getGold() < productInGame.getProduct().getPrice())
-            throw new NoMoneyException();
-        else if (productInGame.getStateProduct() == StateProduct.INSALE) {
-            AbilityInGame abilityInGame = AbilityInGame.builder().timesUsed(0).attack(productInGame.getProduct().getAttack()).isProduct(true).build();
-            player.addAbilityInDeck(abilityInGame);
-            productInGame.setStateProduct(StateProduct.PLAYER);
-            productInGame.setPlayer(player);
-            saveProductInGame(productInGame);
-        }
-    }
 }

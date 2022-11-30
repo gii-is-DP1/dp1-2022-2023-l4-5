@@ -76,13 +76,20 @@ public class Game extends NamedEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    private int currentPlayerIndex;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
 
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
+    @OneToOne(cascade = CascadeType.ALL)
+    public Player currentPlayer;
+
+    public Player getNextPlayer() {
+        Integer index = alivePlayersInTurnOrder.indexOf(currentPlayer);
+        if (index == alivePlayersInTurnOrder.size() - 1) {
+            return alivePlayersInTurnOrder.get(0);
+        } else {
+            return alivePlayersInTurnOrder.get(index + 1);
+        }
     }
 
 

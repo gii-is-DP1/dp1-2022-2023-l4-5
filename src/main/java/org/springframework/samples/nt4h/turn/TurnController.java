@@ -1,5 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.Game;
@@ -20,6 +21,7 @@ public class TurnController {
 
 
     private final UserService userService;
+    private final GameService gameService;
 
     private final String PAGE_EVADE = "redirect:/evade";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
@@ -28,8 +30,10 @@ public class TurnController {
     private final String PAGE_RESUPPLY = "redirect:/resupply";
     private final String PAGE_LOBBY = "redirect:/games/";
 
-    public TurnController(UserService userService) {
+    @Autowired
+    public TurnController(UserService userService, GameService gameService) {
         this.userService = userService;
+        this.gameService = gameService;
     }
 
     @ModelAttribute("user")
@@ -73,12 +77,13 @@ public class TurnController {
     public String nextTurn() {
         Player player = getPlayer();
         Turn nextTurn = player.getNextTurn(getTurn());
+        Game game = getGame();
         Phase phase = nextTurn.getPhase();
         if (phase.equals(Phase.EVADE)) {
-
-        } else {
-
-        }
+            Player nextPlayer = getGame().getNextPlayer();
+            gameService.saveGame(game.toBuilder().currentTurn(nextTurn).currentPlayer(nextPlayer).build());
+        } else
+            gameService.saveGame(game.toBuilder().currentTurn(nextTurn).build());
         return enterInGame();
     }
 }
