@@ -76,8 +76,17 @@ public class Game extends NamedEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
+    private int currentPlayerIndex;
+
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+
+
 
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)

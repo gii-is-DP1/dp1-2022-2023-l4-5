@@ -96,7 +96,11 @@ public class UserService {
         if (principal instanceof UserDetails) {
             ud = ((UserDetails) principal);
         }
-        return getUserByUsername(Objects.requireNonNull(ud).getUsername());
+        if (ud != null) {
+            return getUserByUsername(ud.getUsername());
+        } else {
+            return new User();
+        }
     }
 
     @Transactional(readOnly = true)

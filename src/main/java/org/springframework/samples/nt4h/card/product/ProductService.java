@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,8 +91,10 @@ public class ProductService {
     }
 
     @Transactional
-    public void buyProduct(Player player, ProductInGame productInGame) {
-        if (productInGame.getStateProduct() == StateProduct.INSALE) {
+    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException {
+        if (player.getGold() < productInGame.getProduct().getPrice())
+            throw new NoMoneyException();
+        else if (productInGame.getStateProduct() == StateProduct.INSALE) {
             AbilityInGame abilityInGame = AbilityInGame.builder().timesUsed(0).attack(productInGame.getProduct().getAttack()).isProduct(true).build();
             player.addAbilityInDeck(abilityInGame);
             productInGame.setStateProduct(StateProduct.PLAYER);

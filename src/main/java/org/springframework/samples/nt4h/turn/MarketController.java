@@ -6,6 +6,7 @@ import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,17 +20,15 @@ import java.util.List;
 @RequestMapping("/market")
 public class MarketController {
     public final String VIEW_MARKET = "market/market";
-    public final String NEXT_TURN = "redirect:/turns/nextTurn";
 
     private final UserService userService;
-    private final PlayerService playerService;
-    private final TurnService turnService;
+
+    private String message = "";
+    private String messageType = "";
 
     @Autowired
-    public MarketController(UserService userService, PlayerService playerService, TurnService turnService, ProductService productService) {
-        this.playerService = playerService;
+    public MarketController(UserService userService, ProductService productService) {
         this.userService = userService;
-        this.turnService = turnService;
         this.productService = productService;
     }
 
@@ -47,23 +46,42 @@ public class MarketController {
 
     @ModelAttribute("player")
     public Player getPlayer() {
-        // return getGame().getPlayer();
+        return getGame().getCurrentPlayer();
+    }
+
+    @ModelAttribute("loggedPLayer")
+    public Player getLoggedPlayer() {
         return userService.getLoggedUser().getPlayer();
     }
 
-    // TODO: El jugador no puede comprar sin tener dinero.
-    // TODO: Si el usuario no tiene el jugador, no podrá interactuar con la pantalla.
-    // TODO: El nextPlayer deberá llevar a la acción que está.
-
     @GetMapping
     public String market() {
-        return VIEW_MARKET; // TODO: en la vista market debe de haber una url que indique a "redirect:/turns/nextTurn";
+        return VIEW_MARKET;
     }
 
     @PostMapping
     public String buyProduct(ProductInGame productInGame) {
         Player player = getPlayer();
-        productService.buyProduct(player, productInGame);
+        Player loggedPlayer = getLoggedPlayer();
+        if (loggedPlayer != player)
+            return sendError("No puedes comprar productos en el turno de otro jugador", market());
+        try {
+            productService.buyProduct(player, productInGame);
+        } catch (NoMoneyException e) {
+            return sendError("No tienes dinero suficiente para comprar este producto", "/market");
+        }
+        resetMessage();
         return market();
+    }
+
+    public String sendError(String message, String redirect) {
+        this.message = message;
+        messageType = "danger";
+        return redirect;
+    }
+
+    private void resetMessage() {
+        this.message = "";
+        this.messageType = "";
     }
 }

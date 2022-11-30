@@ -36,9 +36,6 @@ public class EvasionController {
         this.gameService = gameService;
     }
 
-    // TODO: Si el usuario no tiene el jugador, no podrá interactuar con la pantalla.
-    // TODO: El nextPlayer deberá llevar a la acción que está.
-
     @ModelAttribute("game")
     public Game getGame() {
         return userService.getLoggedUser().getGame();
@@ -46,9 +43,9 @@ public class EvasionController {
 
     @ModelAttribute("player")
     public Player getPlayer() {
-        // return getGame().getPlayer();
-        return userService.getLoggedUser().getPlayer();
+        return getGame().getCurrentPlayer();
     }
+
     @ModelAttribute("phases")
     public List<Phase> getPhases() {
         Player player = getPlayer();
@@ -72,6 +69,4 @@ public class EvasionController {
         }
         return NEXT_TURN;
     }
-
-
 }

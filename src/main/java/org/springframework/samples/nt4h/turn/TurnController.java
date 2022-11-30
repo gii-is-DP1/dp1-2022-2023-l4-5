@@ -10,53 +10,75 @@ import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/games/{gameId}/turns")
+@RequestMapping("/turns")
 public class TurnController {
 
-    private final TurnService turnService;
-    private final GameService gameService;
-    private final HeroService heroService;
-    private final PlayerService playerService;
+
     private final UserService userService;
 
-    private static final String VIEW_TURN_START = "turns/turnStart";
-    private static final String VIEW_TURN_HERO_ATTACK = "turns/hero_attack";
+    private final String PAGE_EVADE = "redirect:/evade";
+    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
+    private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
+    private final String PAGE_MARKET = "redirect:/market";
+    private final String PAGE_RESUPPLY = "redirect:/resupply";
+    private final String PAGE_LOBBY = "redirect:/games/";
 
-    private static final String VIEW_TURN_RESUPLY= "turns/resuply";
-
-    public TurnController(GameService gameService, HeroService heroService, PlayerService playerService, TurnService turnService, UserService userService) {
-        this.gameService = gameService;
-        this.heroService = heroService;
-        this.playerService= playerService;
-        this.turnService= turnService;
+    public TurnController(UserService userService) {
         this.userService = userService;
     }
-    @GetMapping("/{turnId}/{playerId}/start")
-    public String startTurn(@PathVariable("turnId") int turnId, @PathVariable("playerId") int playerId, ModelMap model) {
-        Turn turn = turnService.getTurnByID(turnId);
-        Player player= playerService.getPlayerById(playerId);
-        model.put("turn", turn);
-        model.put("player",player);
-        return VIEW_TURN_START;
+
+    @ModelAttribute("user")
+    public User getUser() {
+        return userService.getLoggedUser();
     }
 
-    @PostMapping(value = "/{turnId}/{playerId}/start")
-    public String processChoiceEvade(@Valid Turn turn) {
-        turnService.saveTurn(turn);
-        if(turn.getPhase()== Phase.HERO_ATTACK){
-            return VIEW_TURN_HERO_ATTACK;
+    @ModelAttribute("player")
+    public Player getPlayer() {
+        return getGame().getCurrentPlayer();
+    }
+
+    @ModelAttribute("loggedPlayer")
+    public Player getLoggedPlayer() {
+        return userService.getLoggedUser().getPlayer();
+    }
+
+    @ModelAttribute("game")
+    public Game getGame() {
+        return getUser().getGame();
+    }
+
+    @ModelAttribute("turn")
+    public Turn getTurn() {
+        return getGame().getCurrentTurn();
+    }
+
+
+    @GetMapping
+    public String enterInGame() {
+        Phase phase = getTurn().getPhase();
+        if (phase.equals(Phase.START)) return PAGE_EVADE;
+        else if (phase.equals(Phase.HERO_ATTACK)) return PAGE_HERO_ATTACK;
+        else if (phase.equals(Phase.ENEMY_ATTACK)) return PAGE_ENEMY_ATTACK;
+        else if (phase.equals(Phase.MARKET)) return PAGE_MARKET;
+        else if (phase.equals(Phase.RESUPPLY)) return PAGE_RESUPPLY;
+        else return PAGE_LOBBY;
+    }
+
+    @GetMapping("/nextTurn")
+    public String nextTurn() {
+        Player player = getPlayer();
+        Turn nextTurn = player.getNextTurn(getTurn());
+        Phase phase = nextTurn.getPhase();
+        if (phase.equals(Phase.EVADE)) {
+
+        } else {
+
         }
-        return VIEW_TURN_RESUPLY;
+        return enterInGame();
     }
-
-
 }

@@ -2,11 +2,14 @@ package org.springframework.samples.nt4h.player;
 
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ import java.util.List;
 public class PlayerService {
     private final PlayerRepository playerRepository;
     private final AbilityService abilityService;
+    private final TurnService turnService;
 
     @Transactional(readOnly = true)
     public Player getPlayerById(int id) {
@@ -28,6 +32,7 @@ public class PlayerService {
     @Transactional
     public void savePlayer(Player player) {
         playerRepository.save(player);
+        turnService.createAllTurnForAPlayer(player);
     }
 
     @Transactional
