@@ -42,6 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/achievements/**").authenticated()
             .antMatchers("/games/**").authenticated()
             .antMatchers("/users/**").authenticated()
+            .antMatchers("/admins/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/friends/**").authenticated()
 
             .anyRequest().denyAll()
