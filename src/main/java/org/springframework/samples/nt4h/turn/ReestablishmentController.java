@@ -12,6 +12,7 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameController;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +56,7 @@ public class ReestablishmentController {
 
     @ModelAttribute("player")
     public Player getPlayer() {
-        return getGame().getPlayer();
+        return getGame().getCurrentPlayer();
     }
 
     @ModelAttribute("enemiesInBattle")
@@ -92,7 +93,7 @@ public class ReestablishmentController {
     public String putAbilitiesIntoHandDeck() {
         try {
             takeNewCard();
-        } catch(EnoughCardsException exc) {
+        } catch(EnoughCardsException | NoMoneyException exc) {
             return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         }
         resetMessage();
@@ -103,7 +104,7 @@ public class ReestablishmentController {
     public String removeHandAbilitiesIntoDiscard(Integer cardId) {
         try {
             removeAbilityCards(cardId);
-        } catch(EnoughCardsException exc) {
+        } catch(EnoughCardsException | NoMoneyException exc) {
             return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         }
         resetMessage();
@@ -134,7 +135,7 @@ public class ReestablishmentController {
         this.messageType = "";
     }
 
-    public void takeNewCard() throws EnoughCardsException {
+    public void takeNewCard() throws EnoughCardsException, NoMoneyException {
         Player player = getPlayer();
         for(int i = 0; i < 3; i++) {
             if(getHandDeckByPlayer().size() < 3) {
@@ -145,7 +146,7 @@ public class ReestablishmentController {
         }
     }
 
-    private void removeAbilityCards(Integer cardId) throws EnoughCardsException {
+    private void removeAbilityCards(Integer cardId) throws EnoughCardsException, NoMoneyException {
         Player player = getPlayer();
         while (getHandDeckByPlayer().size() > 3) {
             if (getHandDeckByPlayer().size() > 3) {

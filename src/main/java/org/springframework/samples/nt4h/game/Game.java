@@ -35,8 +35,6 @@ public class Game extends NamedEntity {
 
     private Integer maxPlayers;
 
-
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
@@ -44,7 +42,6 @@ public class Game extends NamedEntity {
     public int isUniClass() {
         return mode == Mode.UNI_CLASS ? 1 : 2;
     }
-
 
     @Enumerated(EnumType.STRING)
     private Phase phase;
@@ -76,7 +73,6 @@ public class Game extends NamedEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
 
@@ -92,9 +88,6 @@ public class Game extends NamedEntity {
         }
     }
 
-
-
-
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)
             players = Lists.newArrayList(player);
@@ -102,7 +95,6 @@ public class Game extends NamedEntity {
             throw new FullGameException();
         else
             this.players.add(player);
-
     }
 
     public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
@@ -112,14 +104,12 @@ public class Game extends NamedEntity {
             player.addHero(hero);
             addPlayer(player);
         }
-
     }
-
 
     public boolean isHeroAlreadyChosen(Hero hero) {
         if(this.players==null)return false;
         return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
-
     }
+
 
 }
