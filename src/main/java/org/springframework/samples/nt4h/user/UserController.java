@@ -16,20 +16,18 @@
 package org.springframework.samples.nt4h.user;
 
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -62,14 +60,20 @@ public class UserController {
 
     @ModelAttribute("user")
     public User getUser() {
-        User loggedUser = userService.getLoggedUser();
-        return loggedUser != null ? loggedUser : new User();
+        return userService.getLoggedUser();
     }
 
     // Obtener todos los usuarios.
     @GetMapping
-    public String getUsers() {
-        return VIEW_USER_LIST;
+    public String getUsers(@RequestParam(defaultValue = "all") String username, ModelMap model) {
+        if (username.equals("all")) {
+            model.addAttribute("users", userService.getAllUsers());
+            return VIEW_USER_LIST;
+        } else {
+            User user = userService.getUserByUsername(username);
+            model.addAttribute("user", user);
+            return VIEW_USER_DETAILS;
+        }
     }
 
     @GetMapping("/details")
@@ -93,6 +97,7 @@ public class UserController {
         }
     }
 
+
     //Editar usuario
     @GetMapping(value = "/edit")
     public String initUpdateUserForm() {
@@ -100,14 +105,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/edit")
-    public String processUpdateUserForm(@Valid User user, BindingResult result) {
+    public String processUpdateUserForm(@Valid User newUser, BindingResult result) {
         User oldUser = this.userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_USER_CREATE_OR_UPDATE_FORM;
         else {
-            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).build();
-            newUser.setId(oldUser.getId());
+            BeanUtils.copyProperties(newUser, oldUser, "id", "password", "enable", "tier");
             userService.saveUser(newUser);
-            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
+            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(newUser.getId()));
         }
     }
 

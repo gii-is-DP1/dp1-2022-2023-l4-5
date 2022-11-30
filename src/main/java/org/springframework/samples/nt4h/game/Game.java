@@ -60,8 +60,8 @@ public class Game extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Player> alivePlayersInTurnOrder;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Turn> turn;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Turn currentTurn;
 
     @OneToMany(cascade = CascadeType.ALL)
     @Size(max = 3)
@@ -76,8 +76,24 @@ public class Game extends NamedEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
+
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Stage> stage;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    public Player currentPlayer;
+
+    public Player getNextPlayer() {
+        Integer index = alivePlayersInTurnOrder.indexOf(currentPlayer);
+        if (index == alivePlayersInTurnOrder.size() - 1) {
+            return alivePlayersInTurnOrder.get(0);
+        } else {
+            return alivePlayersInTurnOrder.get(index + 1);
+        }
+    }
+
+
+
 
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)

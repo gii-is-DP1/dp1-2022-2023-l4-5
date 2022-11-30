@@ -1,9 +1,11 @@
 package org.springframework.samples.nt4h.turn;
 
 
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,15 @@ public class TurnService {
     @Transactional
     public void saveTurn(Turn turn) throws DataAccessException {
         turnRepository.save(turn);
+    }
+
+    @Transactional
+    public void createAllTurnForAPlayer(Player player) {
+        for (Phase phase : Phase.values()) {
+            Turn turn = Turn.builder().player(player).game(player.getGame()).phase(phase)
+                .usedEnemies(Lists.newArrayList()).usedAbilities(Lists.newArrayList()).build();
+            saveTurn(turn);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -47,6 +58,11 @@ public class TurnService {
     @Transactional(readOnly = true)
     public boolean turnExists(int id) {
         return turnRepository.existsById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Turn getTurnsByPhaseAndPlayerId(Phase phase, int playerId) {
+        return turnRepository.findByPhaseAndPlayerId(phase, playerId);
     }
 
 }
