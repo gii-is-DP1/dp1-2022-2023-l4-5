@@ -42,12 +42,17 @@
 					<span>Create Game</span>
 				</nt4h:menuItem>
 
-				<nt4h:menuItem active="${name eq 'capacities'}" url="/users"
-					title="capacities">
+				<nt4h:menuItem active="${name eq 'users'}" url="/users"
+					title="Users">
 					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
 					<span>Users</span>
 				</nt4h:menuItem>
 
+                <nt4h:menuItem active="${name eq 'friends'}" url="/friends"
+                               title="friends">
+                    <span class="glyphicon glyphicon-apple" aria-hidden="true"></span>
+                    <span>Friends</span>
+                </nt4h:menuItem>
 			</ul>
 
 
