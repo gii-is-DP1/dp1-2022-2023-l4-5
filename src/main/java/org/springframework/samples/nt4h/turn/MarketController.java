@@ -24,6 +24,7 @@ public class MarketController {
     public final String VIEW_MARKET = "market/market";
 
     private final UserService userService;
+    private final ProductService productService;
 
     private String message = "";
     private String messageType = "";
@@ -33,8 +34,6 @@ public class MarketController {
         this.userService = userService;
         this.productService = productService;
     }
-
-    private final ProductService productService;
 
     @ModelAttribute("productsOnSale")
     public List<ProductInGame> getProductsInSell() {
@@ -67,9 +66,8 @@ public class MarketController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             return sendError("No puedes comprar productos en el turno de otro jugador", market());
-        Action buyProduct = new BuyProduct(player, productInGame);
         try {
-            buyProduct.executeAction();
+            productService.buyProduct(player, productInGame);
         } catch (NoMoneyException e) {
             return sendError("No tienes dinero suficiente para comprar este producto", market());
         }

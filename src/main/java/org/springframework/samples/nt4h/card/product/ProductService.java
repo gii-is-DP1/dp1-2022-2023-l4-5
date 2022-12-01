@@ -2,6 +2,8 @@ package org.springframework.samples.nt4h.card.product;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.BuyProduct;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
@@ -22,6 +24,16 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product getProductById(int id) {
         return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
+    }
+
+    @Transactional
+    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException {
+        if (player.getGold() < productInGame.getProduct().getPrice())
+            throw new NoMoneyException();
+        else if (productInGame.getStateProduct() == StateProduct.INSALE) {
+            Action bp = new BuyProduct(player, productInGame);
+            bp.executeAction();
+        }
     }
 
     @Transactional(readOnly = true)
