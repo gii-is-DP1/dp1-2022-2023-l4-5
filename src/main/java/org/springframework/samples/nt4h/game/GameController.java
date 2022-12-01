@@ -26,6 +26,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -111,8 +113,10 @@ public class GameController {
 
     @ModelAttribute("game")
     public Game getGame() {
-        User loggedUser = getUser();
-        return loggedUser != null ? loggedUser.getGame() : new Game();
+        Game loggedGame = getUser().getGame();
+        //System.out.println(loggedGame != null);
+        //System.out.println("Game: " + (loggedGame != null ? loggedGame : new Game()));
+        return loggedGame != null ? loggedGame : new Game();
     }
 
     @ModelAttribute("games")
@@ -223,13 +227,12 @@ public class GameController {
 
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
-    public String initCreationForm(ModelMap model) {
+    public String initCreationForm() {
         // Comprobamos si está en otras partidas.
         Game oldGame = getGame();
-        if (oldGame != null)
+        if (!oldGame.isNew())
             return sendError("Ya estás en una partida y esa es  " + oldGame + ".", PAGE_GAMES);
         resetMessage();
-        model.addAttribute("game", new Game());
         return VIEW_GAME_CREATE;
     }
 
@@ -238,7 +241,10 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_GAME_CREATE;
-        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false).build();
+        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false)
+            .build();
+        game.setStartDate(LocalDateTime.now());
+        System.out.println("Game: " + game);
         newPlayer.setName(user.getUsername());
         game.addPlayer(newPlayer);
         gameService.saveGame(game);
@@ -255,6 +261,7 @@ public class GameController {
         LocalTime time = LocalTime.now();
         jsonObject.put("messages", createMessages(game));
         // TODO: Arreglar
+        System.out.println("game:" + game);
         jsonObject.put("timer", 80 - ((time.getMinute() * 60 + time.getSecond()) - (game.getStartDate().getMinute() * 60 + game.getStartDate().getSecond())));
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
