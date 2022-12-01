@@ -94,7 +94,7 @@ public class PlayerService {
     }
 
     @Transactional
-    private void removeAbilityCards(Integer cardId, Player player) throws EnoughCardsException, NoMoneyException {
+    public void removeAbilityCards(Integer cardId, Player player) throws EnoughCardsException {
         while(player.getInHand().size() > 3) {
             if(player.getInHand().size() > 3) {
                 Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
@@ -105,7 +105,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public void takeNewCard(Player player) throws EnoughCardsException, NoMoneyException {
+    public void takeNewCard(Player player) throws EnoughCardsException {
         for(int i = 0; i < 3; i++) {
             if(player.getInHand().size() < 3) {
                 Action takeNewCard = new TakeCardFromAbilityPile(player);
@@ -128,7 +128,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public void restoreEnemyLife(List<EnemyInGame> enemies) throws NoMoneyException {
+    public void restoreEnemyLife(List<EnemyInGame> enemies) {
         for(int i = 0; enemies.size()<i; i++) {
             Action recoverEnemyLife = new HealEnemy(enemies.get(i));
             recoverEnemyLife.executeAction();

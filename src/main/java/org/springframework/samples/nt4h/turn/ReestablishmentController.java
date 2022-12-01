@@ -86,7 +86,7 @@ public class ReestablishmentController {
     }
 
     @GetMapping("/addCards")
-    public String reestablishment() {
+    public String reestablishmentAddCards() {
         return VIEW_REESTABLISHMENT;
     }
 
@@ -96,24 +96,29 @@ public class ReestablishmentController {
             playerService.takeNewCard(getPlayer());
             playerService.restoreEnemyLife(getEnemiesInBattle());
             playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
-        } catch(EnoughCardsException | NoMoneyException exc) {
+        } catch(EnoughCardsException exc) {
             return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         } catch (EnoughEnemiesException e) {
             return sendError("No te faltan orcos.", VIEW_REESTABLISHMENT);
         }
         resetMessage();
-        return reestablishment();
+        return reestablishmentAddCards();
     }
 
-    @PostMapping("/removeCard")
+    @GetMapping("/removeCards")
+    public String reestablishmentRemoveCards() {
+        return VIEW_REESTABLISHMENT;
+    }
+
+    @PostMapping("/removeCards")
     public String removeHandAbilitiesIntoDiscard(Integer cardId) {
         try {
-            playerService.removeAbilityCards(cardId);
-        } catch(EnoughCardsException | NoMoneyException exc) {
+            playerService.removeAbilityCards(cardId, getPlayer());
+        } catch(EnoughCardsException exc) {
             return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         }
         resetMessage();
-        return reestablishment();
+        return reestablishmentRemoveCards();
     }
 
     //Métodos auxiliares
@@ -127,9 +132,5 @@ public class ReestablishmentController {
         this.message = "";
         this.messageType = "";
     }
-
-//todo: enemigos recuperan vida
-
-
 
 }
