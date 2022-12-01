@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/reestablishment")
@@ -84,44 +85,36 @@ public class ReestablishmentController {
         return getPlayer().getInDeck();
     }
 
-    @GetMapping()
+    @GetMapping("/addCards")
     public String reestablishment() {
         return VIEW_REESTABLISHMENT;
     }
 
-    @PostMapping
-    public String putAbilitiesIntoHandDeck() {
+    @PostMapping("/addCards")
+    public String takeNewAbilitiesAndEnemies() {
         try {
-            takeNewCard();
+            playerService.takeNewCard(getPlayer());
+            playerService.restoreEnemyLife(getEnemiesInBattle());
+            playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
         } catch(EnoughCardsException | NoMoneyException exc) {
             return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
+        } catch (EnoughEnemiesException e) {
+            return sendError("No te faltan orcos.", VIEW_REESTABLISHMENT);
         }
         resetMessage();
         return reestablishment();
     }
 
-    @PostMapping
+    @PostMapping("/removeCard")
     public String removeHandAbilitiesIntoDiscard(Integer cardId) {
         try {
-            removeAbilityCards(cardId);
+            playerService.removeAbilityCards(cardId);
         } catch(EnoughCardsException | NoMoneyException exc) {
             return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         }
         resetMessage();
         return reestablishment();
     }
-
-    @PostMapping
-    public String addNewEnemies() {
-        try {
-            addNewEnemiesToBattle();
-        } catch(EnoughEnemiesException exc) {
-            return sendError("No faltan orcos.", VIEW_REESTABLISHMENT);
-        }
-        resetMessage();
-        return reestablishment();
-    }
-
 
     //Métodos auxiliares
     public String sendError(String message, String redirect) {
@@ -135,40 +128,8 @@ public class ReestablishmentController {
         this.messageType = "";
     }
 
-    public void takeNewCard() throws EnoughCardsException, NoMoneyException {
-        Player player = getPlayer();
-        for(int i = 0; i < 3; i++) {
-            if(getHandDeckByPlayer().size() < 3) {
-                Action takeNewCard = new TakeCardFromAbilityPile(player);
-                takeNewCard.executeAction();
-            } else
-                throw new EnoughCardsException();
-        }
-    }
+//todo: enemigos recuperan vida
 
-    private void removeAbilityCards(Integer cardId) throws EnoughCardsException, NoMoneyException {
-        Player player = getPlayer();
-        while (getHandDeckByPlayer().size() > 3) {
-            if (getHandDeckByPlayer().size() > 3) {
-                Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
-                removeToDiscard.executeAction();
-            } else
-                throw new EnoughCardsException();
-        }
-    }
-
-    private void addNewEnemiesToBattle() throws EnoughEnemiesException {
-        List<EnemyInGame> enemies = getEnemiesInBattle();
-        List<EnemyInGame> allOrcs = getAllEnemies();
-        if(enemies.size() == 1 || enemies.size() == 2) {
-            enemies.add(allOrcs.get(1));
-            allOrcs.remove(1);
-        } else if(enemies.size() == 0) {
-            enemies = getAllEnemies().stream().limit(3).collect(Collectors.toList());
-            allOrcs.removeAll(enemies);
-        } else
-            throw new EnoughEnemiesException();
-    }
 
 
 }
