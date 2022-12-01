@@ -35,7 +35,7 @@ public class UserController {
 
     // Constantes.
     private static final String VIEW_USER_CREATE_OR_UPDATE_FORM = "users/createUserForm";
-    private static final String VIEW_USER_LIST = "users/usersList";
+    private static final String VIEW_USER_LIST = "users/usersGameList";
     private static final String VIEW_USER_DETAILS = "users/userDetails";
     private static final String PAGE_WELCOME = "redirect:/welcome";
     private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
