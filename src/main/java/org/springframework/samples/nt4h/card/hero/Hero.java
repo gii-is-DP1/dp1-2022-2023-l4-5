@@ -15,19 +15,14 @@ import java.util.List;
 @Table(name = "heroes")
 public class  Hero extends Card {
 
-    //@NotNull
-    //@Range(min = 2, max = 3)
     private Integer health;
 
-    //@NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    //@NotNull
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Ability> abilities;
 
-    //@NotNull
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacities;
 

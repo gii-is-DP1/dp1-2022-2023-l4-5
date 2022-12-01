@@ -26,8 +26,7 @@ public class MarketController {
     private final UserService userService;
     private final ProductService productService;
 
-    private String message = "";
-    private String messageType = "";
+    public Advise advise = new Advise();
 
     @Autowired
     public MarketController(UserService userService, ProductService productService) {
@@ -65,24 +64,12 @@ public class MarketController {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
-            return sendError("No puedes comprar productos en el turno de otro jugador", market());
+            return advise.sendError("No puedes comprar productos en el turno de otro .", market());
         try {
             productService.buyProduct(player, productInGame);
         } catch (NoMoneyException e) {
-            return sendError("No tienes dinero suficiente para comprar este producto", market());
+            return advise.sendError("No tienes dinero suficiente para comprar este producto", market());
         }
-        resetMessage();
         return market();
-    }
-
-    public String sendError(String message, String redirect) {
-        this.message = message;
-        messageType = "danger";
-        return redirect;
-    }
-
-    private void resetMessage() {
-        this.message = "";
-        this.messageType = "";
     }
 }

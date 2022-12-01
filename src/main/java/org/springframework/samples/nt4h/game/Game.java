@@ -64,7 +64,6 @@ public class Game extends NamedEntity {
     private Turn currentTurn;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @Size(max = 3)
     private List<EnemyInGame> actualOrcs;
 
     @OneToMany
@@ -84,7 +83,7 @@ public class Game extends NamedEntity {
     public Player currentPlayer;
 
     public Player getNextPlayer() {
-        Integer index = alivePlayersInTurnOrder.indexOf(currentPlayer);
+        int index = alivePlayersInTurnOrder.indexOf(currentPlayer);
         if (index == alivePlayersInTurnOrder.size() - 1) {
             return alivePlayersInTurnOrder.get(0);
         } else {

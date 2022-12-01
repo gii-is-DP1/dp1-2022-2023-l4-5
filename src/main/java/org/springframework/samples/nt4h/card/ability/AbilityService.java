@@ -31,21 +31,6 @@ public class AbilityService {
         return abilityRepository.findByName(name).orElseThrow(() -> new NotFoundException("Ability not found"));
     }
 
-    @Transactional
-    public void saveAbility(Ability ability) {
-        abilityRepository.save(ability);
-    }
-
-    @Transactional
-    public void deleteAbility(Ability ability) {
-        abilityRepository.delete(ability);
-    }
-
-    @Transactional
-    public void deleteAbilityById(Integer id) {
-        abilityRepository.deleteById(id);
-    }
-
     @Transactional(readOnly = true)
     public boolean abilityExists(int id) {
         return abilityRepository.existsById(id);
@@ -72,10 +57,6 @@ public class AbilityService {
         abilityInGameRepository.save(abilityInGame);
     }
 
-    @Transactional
-    public void saveAllAbilityInGame(List<AbilityInGame> abilityInGame) {
-        abilityInGameRepository.saveAll(abilityInGame);
-    }
 
     @Transactional
     public void deleteAbilityInGame(AbilityInGame abilityInGame) {

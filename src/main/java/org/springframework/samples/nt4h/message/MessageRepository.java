@@ -10,9 +10,6 @@ import java.util.Optional;
 @Repository
 public interface MessageRepository extends CrudRepository<Message, Integer> {
 
-    @Query("SELECT m FROM Message m WHERE m.sender.id = :id OR m.receiver.id = :id")
-    List<Message> findBySenderOrReceiver(Integer id);
-
     @Query("SELECT m FROM Message m WHERE (m.sender.username = :sender AND m.receiver.username = :receiver) OR (m.sender.username = :receiver AND m.receiver.username = :sender)")
     List<Message> findBySenderWithReceiver(String sender, String receiver);
 

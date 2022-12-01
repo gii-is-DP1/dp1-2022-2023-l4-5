@@ -18,7 +18,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${achievement}" var="achievement">
+        <c:forEach items="${achievements}" var="achievement">
             <tr>
                 <td>
                     <spring:url value="/achievements/{achievementId}" var="achievementUrl">

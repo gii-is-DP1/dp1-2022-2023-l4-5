@@ -1,6 +1,6 @@
 package org.springframework.samples.nt4h.card.product;
 
 public enum StateProduct {
-    INSALE,
+    IN_SALE,
     PLAYER
 }
