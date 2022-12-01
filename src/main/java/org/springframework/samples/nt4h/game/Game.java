@@ -11,7 +11,6 @@ import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenExcepti
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
-import org.springframework.samples.nt4h.stage.Stage;
 import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
@@ -76,8 +75,6 @@ public class Game extends NamedEntity {
     private List<Player> players;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Stage> stage;
 
     @OneToOne(cascade = CascadeType.ALL)
     public Player currentPlayer;

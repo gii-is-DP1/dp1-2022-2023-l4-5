@@ -21,8 +21,11 @@ public class EnemyInGame extends BaseEntity {
     private Integer actualHealth;
 
     // TODO: Decidir como pasarle las habilidades.
-    // @Enumerated(EnumType.STRING)
-    // private Set<AbilityEffectEnum> permanentEffectCardsUsed = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = AbilityEffectEnum.class)
+    @CollectionTable(name = "permanent_effect_cards_used", joinColumns = @JoinColumn(name = "enemy_in_game_id"))
+    @Column(name = "ability_effect_enum")
+    private Set<AbilityEffectEnum> permanentEffectCardsUsed = new HashSet<>();
 
     @NotNull
     private boolean isNightLord;
