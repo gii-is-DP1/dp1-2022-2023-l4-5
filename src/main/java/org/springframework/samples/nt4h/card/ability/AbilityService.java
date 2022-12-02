@@ -1,8 +1,12 @@
 package org.springframework.samples.nt4h.card.ability;
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.RemoveCardFromHandToDiscard;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.turn.EnoughCardsException;
+import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +21,8 @@ public class AbilityService {
     private AbilityInGameRepository abilityInGameRepository;
 
     @Transactional(readOnly = true)
-    public Ability getAbilityById(Integer id) {
-        return abilityRepository.findById(id).orElseThrow(() -> new NotFoundException("Ability not found"));
+    public Ability getAbilityById(Integer abilityId) {
+        return abilityRepository.findById(abilityId).orElseThrow(() -> new NotFoundException("Ability not found"));
     }
 
     @Transactional(readOnly = true)
@@ -42,19 +46,19 @@ public class AbilityService {
     }
 
     @Transactional
-    public void deleteAbilityById(Integer id) {
-        abilityRepository.deleteById(id);
+    public void deleteAbilityById(Integer abilityId) {
+        abilityRepository.deleteById(abilityId);
     }
 
     @Transactional(readOnly = true)
-    public boolean abilityExists(int id) {
-        return abilityRepository.existsById(id);
+    public boolean abilityExists(int abilityId) {
+        return abilityRepository.existsById(abilityId);
     }
 
     // AbilityInGame
     @Transactional(readOnly = true)
-    public AbilityInGame getAbilityInGameById(Integer id) {
-        return abilityInGameRepository.findById(id).orElseThrow(() -> new NotFoundException("AbilityInGame not found"));
+    public AbilityInGame getAbilityInGameById(Integer gameId) {
+        return abilityInGameRepository.findById(gameId).orElseThrow(() -> new NotFoundException("AbilityInGame not found"));
     }
 
     @Transactional(readOnly = true)
@@ -83,8 +87,8 @@ public class AbilityService {
     }
 
     @Transactional
-    public void deleteAbilityInGameById(Integer id) {
-        abilityInGameRepository.deleteById(id);
+    public void deleteAbilityInGameById(Integer gameId) {
+        abilityInGameRepository.deleteById(gameId);
     }
 
     @Transactional
@@ -98,8 +102,13 @@ public class AbilityService {
     }
 
     @Transactional(readOnly = true)
-    public boolean abilityInGameExists(int id) {
-        return abilityInGameRepository.existsById(id);
+    public boolean abilityInGameExists(int gameId) {
+        return abilityInGameRepository.existsById(gameId);
+    }
+
+    @Transactional
+    public List<AbilityInGame> getAbilityCardsByPlayer(int playerId) {
+        return abilityInGameRepository.findAbilitiesByPlayer(playerId);
     }
 
 }
