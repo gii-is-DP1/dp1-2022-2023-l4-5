@@ -11,7 +11,6 @@ import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenExcepti
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
-import org.springframework.samples.nt4h.stage.Stage;
 import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
@@ -35,6 +34,8 @@ public class Game extends NamedEntity {
 
     private Integer maxPlayers;
 
+
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
@@ -42,6 +43,7 @@ public class Game extends NamedEntity {
     public int isUniClass() {
         return mode == Mode.UNI_CLASS ? 1 : 2;
     }
+
 
     @Enumerated(EnumType.STRING)
     private Phase phase;
@@ -61,7 +63,6 @@ public class Game extends NamedEntity {
     private Turn currentTurn;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @Size(max = 3)
     private List<EnemyInGame> actualOrcs;
 
     @OneToMany
@@ -73,20 +74,22 @@ public class Game extends NamedEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Stage> stage;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     public Player currentPlayer;
 
     public Player getNextPlayer() {
-        Integer index = alivePlayersInTurnOrder.indexOf(currentPlayer);
+        int index = alivePlayersInTurnOrder.indexOf(currentPlayer);
         if (index == alivePlayersInTurnOrder.size() - 1) {
             return alivePlayersInTurnOrder.get(0);
         } else {
             return alivePlayersInTurnOrder.get(index + 1);
         }
     }
+
+
+
 
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)
@@ -95,6 +98,7 @@ public class Game extends NamedEntity {
             throw new FullGameException();
         else
             this.players.add(player);
+
     }
 
     public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
@@ -104,12 +108,14 @@ public class Game extends NamedEntity {
             player.addHero(hero);
             addPlayer(player);
         }
+
     }
+
 
     public boolean isHeroAlreadyChosen(Hero hero) {
         if(this.players==null)return false;
         return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
-    }
 
+    }
 
 }

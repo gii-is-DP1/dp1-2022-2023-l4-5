@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class TurnService {
             Turn turn = Turn.builder().player(player).game(player.getGame()).phase(phase)
                 .usedEnemies(Lists.newArrayList()).usedAbilities(Lists.newArrayList()).build();
             saveTurn(turn);
+            player.addTurn(turn);
         }
     }
 
@@ -62,7 +64,8 @@ public class TurnService {
 
     @Transactional(readOnly = true)
     public Turn getTurnsByPhaseAndPlayerId(Phase phase, int playerId) {
-        return turnRepository.findByPhaseAndPlayerId(phase, playerId);
+        return getAllTurns().stream().filter(turn -> turn.getPhase().equals(phase) && turn.getPlayer().getId() == playerId)
+            .findFirst().orElseThrow(() -> new NotFoundException("Turn not found"));
     }
 
 }

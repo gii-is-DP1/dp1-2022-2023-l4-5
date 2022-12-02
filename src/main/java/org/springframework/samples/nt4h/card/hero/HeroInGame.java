@@ -27,4 +27,8 @@ public class HeroInGame extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
+
+    public HeroInGame createHero(Hero hero, Player player) {
+        return toBuilder().hero(hero).player(player).actualHealth(hero.getHealth()).build();
+    }
 }

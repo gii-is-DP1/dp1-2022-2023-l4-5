@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.action.BuyProduct;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
@@ -30,7 +29,7 @@ public class ProductService {
     public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException {
         if (player.getGold() < productInGame.getProduct().getPrice())
             throw new NoMoneyException();
-        else if (productInGame.getStateProduct() == StateProduct.INSALE) {
+        else if (productInGame.getStateProduct() == StateProduct.IN_SALE) {
             Action bp = new BuyProduct(player, productInGame);
             bp.executeAction();
         }
@@ -44,21 +43,6 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
-    }
-
-    @Transactional
-    public void saveProduct(Product product) {
-        productRepository.save(product);
-    }
-
-    @Transactional
-    public void deleteProduct(Product product) {
-        productRepository.delete(product);
-    }
-
-    @Transactional
-    public void deleteProductById(int id) {
-        productRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
@@ -99,6 +83,6 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductInGame> getMarket() {
-        return productInGameRepository.findAllByStateProduct(StateProduct.INSALE, PageRequest.of(0, 5));
+        return productInGameRepository.findAllByStateProduct(StateProduct.IN_SALE, PageRequest.of(0, 5));
     }
 }

@@ -14,11 +14,5 @@ public interface AbilityInGameRepository extends CrudRepository<AbilityInGame, I
 
     List<AbilityInGame> findAll();
 
-    // TODO: Decidir si situarlo en este repo o en PlayerRepository.
-    @Query("SELECT a FROM AbilityInGame a WHERE a.player.id = ?1")
-    List<AbilityInGame> findAbilitiesByPlayer(Integer id);
-
     void deleteAllByPlayer(Player player);
-
-
 }

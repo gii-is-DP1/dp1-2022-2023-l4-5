@@ -30,21 +30,6 @@ public class HeroService {
         return heroRepository.findByName(name).orElseThrow(() -> new NotFoundException("Hero not found"));
     }
 
-    @Transactional
-    public void saveHero(Hero hero) {
-        heroRepository.save(hero);
-    }
-
-    @Transactional
-    public void deleteHero(Hero hero) {
-        heroRepository.delete(hero);
-    }
-
-    @Transactional
-    public void deleteHeroById(Integer id) {
-        heroRepository.deleteById(id);
-    }
-
     @Transactional(readOnly = true)
     public boolean heroExists(int id) {
         return heroRepository.existsById(id);

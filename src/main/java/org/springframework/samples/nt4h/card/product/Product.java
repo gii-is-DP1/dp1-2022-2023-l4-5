@@ -32,7 +32,6 @@ public class Product extends Card {
     @Range(min = 0, max = 4)
     private Integer attack;
 
-    //TODO probar si se puede mandar una lista vacía
     @NotNull
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacity;

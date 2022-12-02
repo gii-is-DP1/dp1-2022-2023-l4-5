@@ -15,8 +15,4 @@ public interface HeroRepository extends CrudRepository<Hero, Integer> {
 
     Optional<Hero> findByName(String name);
 
-    List<Hero> findByRole(Role role);
-
-    List<Hero> findByHealth(Integer health);
-
 }

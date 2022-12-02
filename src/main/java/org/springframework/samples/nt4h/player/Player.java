@@ -198,8 +198,11 @@ public class Player extends NamedEntity {
         return getTurn(turn.getPhase().nextPhase());
     }
 
-    public Boolean userHasSameNameAsPlayer(User user) {
-        return getName().equals(user.getUsername());
+    public void addTurn(Turn turn) {
+        if (turns == null) {
+            turns = Lists.newArrayList(turn);
+        } else {
+            turns.add(turn);
+        }
     }
-
 }
