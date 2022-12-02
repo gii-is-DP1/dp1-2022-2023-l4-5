@@ -65,7 +65,7 @@ public class TurnController {
     @GetMapping
     public String enterInGame() {
         Phase phase = getTurn().getPhase();
-        if (phase.equals(Phase.START)) return PAGE_EVADE;
+        if (phase.equals(Phase.EVADE)) return PAGE_EVADE;
         else if (phase.equals(Phase.HERO_ATTACK)) return PAGE_HERO_ATTACK;
         else if (phase.equals(Phase.ENEMY_ATTACK)) return PAGE_ENEMY_ATTACK;
         else if (phase.equals(Phase.MARKET)) return PAGE_MARKET;

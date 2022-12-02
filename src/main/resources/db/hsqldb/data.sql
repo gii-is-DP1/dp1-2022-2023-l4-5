@@ -324,7 +324,7 @@ VALUES (1, 1),
        (8, 3);
 
 INSERT INTO games(name, start_date, finish_date, max_players, mode, phase, password, accessibility, has_stages, current_player_index)
-VALUES ('truckFekas', '2020-02-01', '2020-02-01', 4, 'UNI_CLASS', 'HERO_ATTACK', 'patata', 'PRIVATE', TRUE, 1);
+
 
 INSERT INTO users_friends(user_id, friends_id)
 VALUES (1, 2);

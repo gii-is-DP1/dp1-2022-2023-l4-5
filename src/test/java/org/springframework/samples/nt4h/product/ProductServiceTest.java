@@ -123,7 +123,7 @@ public class ProductServiceTest {
     void shouldUpdateProductInGame()  {
         createProductInGame();
         ProductInGame p= productService.getProductInGameById(1);
-        StateProduct newSta= StateProduct.PLAYER1;
+        StateProduct newSta= StateProduct.PLAYER;
         p.setStateProduct(newSta);
         productService.saveProductInGame(p);
         p= productService.getProductInGameById(1);

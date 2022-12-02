@@ -23,17 +23,14 @@ public class TurnServiceTest {
     @BeforeAll
     void ini() {
         Turn turn = new Turn();
-        turn.setEvasion(true);
-        turn.setGlory(0);
-        turn.setPhase(Phase.START);
-        turn.setGold(0);
+        turn.setPhase(Phase.EVADE);
         turnService.saveTurn(turn);
     }
     @Test
     public void findByIDTrue(){
         Turn turn = turnService.getTurnByID(1);
         assertNotNull(turn);
-        assertEquals(Phase.START, turn.getPhase());
+        assertEquals(Phase.EVADE, turn.getPhase());
     }
     @Test
     public void findByIDFalse(){
@@ -43,7 +40,7 @@ public class TurnServiceTest {
     }
     @Test
     public void shouldFindByPhase(){
-        List<Turn> ls = turnService.getTurnsByPhase(Phase.START);
+        List<Turn> ls = turnService.getTurnsByPhase(Phase.EVADE);
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
         assertEquals(1,ls.size());
@@ -58,10 +55,8 @@ public class TurnServiceTest {
     @Test
     public void shouldInsertTurn(){
         Turn turn = new Turn();
-        turn.setEvasion(true);
-        turn.setGlory(0);
-        turn.setPhase(Phase.START);
-        turn.setGold(0);
+
+        turn.setPhase(Phase.EVADE);
         turnService.saveTurn(turn);
         assertEquals(turn,turnService.getTurnByID(2));
     }

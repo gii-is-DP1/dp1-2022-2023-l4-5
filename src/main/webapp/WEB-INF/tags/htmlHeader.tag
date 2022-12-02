@@ -14,7 +14,7 @@ PetClinic :: a Spring Framework demonstration
     <spring:url value="/resources/images/LogoNT4H.png" var="favicon"/>
     <link rel="shortcut icon" type="image/x-icon" href="${favicon}">
 
-    <title>PetClinic :: a Spring Framework demonstration</title>
+    <title>No time for heroes</title>
 
     <%-- CSS generated from LESS --%>
     <spring:url value="/resources/css/petclinic.css" var="petclinicCss"/>
