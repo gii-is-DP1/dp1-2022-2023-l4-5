@@ -73,6 +73,7 @@ public class TurnController {
         else return PAGE_LOBBY;
     }
 
+    // TODO: Realizar todas las comprobaciones necesarias para pasar de turno.
     @GetMapping("/nextTurn")
     public String nextTurn() {
         Player player = getPlayer();

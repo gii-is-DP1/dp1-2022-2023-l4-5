@@ -65,15 +65,9 @@ public class UserController {
 
     // Obtener todos los usuarios.
     @GetMapping
-    public String getUsers(@RequestParam(defaultValue = "all") String username, ModelMap model) {
-        if (username.equals("all")) {
-            model.addAttribute("users", userService.getAllUsers());
-            return VIEW_USER_LIST;
-        } else {
-            User user = userService.getUserByUsername(username);
-            model.addAttribute("user", user);
-            return VIEW_USER_DETAILS;
-        }
+    public String getUsers(ModelMap model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return VIEW_USER_LIST;
     }
 
     @GetMapping("/details")
@@ -122,4 +116,7 @@ public class UserController {
         this.userService.deleteUser(loggedUser);
         return PAGE_WELCOME;
     }
+
+    // TODO: Utilizar un jsp que impida que se pueda modificar los datos del USUArio
+    // @GetMapping(value="/{userId})
 }

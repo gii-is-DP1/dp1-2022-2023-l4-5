@@ -5,6 +5,6 @@ public enum StateCapacity {
     PRUEBA,
     EXPERTISE,
     RANGE,
-    MAGIC
+    MAGIC;
 
 }

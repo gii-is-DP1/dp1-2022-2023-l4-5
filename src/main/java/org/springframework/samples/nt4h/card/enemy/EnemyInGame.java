@@ -20,7 +20,7 @@ public class EnemyInGame extends BaseEntity {
     @Max(value = 10)
     private Integer actualHealth;
 
-
+    // TODO: Decidir como pasarle las habilidades.
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = AbilityEffectEnum.class)
     @CollectionTable(name = "permanent_effect_cards_used", joinColumns = @JoinColumn(name = "enemy_in_game_id"))
@@ -30,7 +30,7 @@ public class EnemyInGame extends BaseEntity {
     @NotNull
     private boolean isNightLord;
     private boolean isDead;
-    private Boolean NoAttackThisTurn;
+    private Boolean noAttackThisTurn;
 
     @ManyToOne
     private Enemy enemy;

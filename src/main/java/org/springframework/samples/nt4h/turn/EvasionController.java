@@ -27,6 +27,8 @@ public class EvasionController {
     private final TurnService turnService;
     private final GameService gameService;
 
+    private final Advise advise = new Advise();
+
 
     @Autowired
     public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService) {
@@ -46,11 +48,32 @@ public class EvasionController {
         return getGame().getCurrentPlayer();
     }
 
+    @ModelAttribute("loggedPLayer")
+    public Player getLoggedPlayer() {
+        return userService.getLoggedUser().getPlayer();
+    }
+
+    @ModelAttribute("message")
+    public String getMessage() {
+        String message = advise.getMessage();
+        advise.resetMessage();
+        return message;
+    }
+
+    @ModelAttribute("messageType")
+    public String getMessageType() {
+        String messageType = advise.getMessageType();
+        advise.setMessageType("");
+        return messageType;
+    }
+
     @ModelAttribute("phases")
-    public List<Phase> getPhases() {
+    public List<Turn> getPhases() {
         Player player = getPlayer();
-        turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
-        return Lists.newArrayList(Phase.EVADE, Phase.HERO_ATTACK);
+        return Lists.newArrayList(
+            turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId()),
+            turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId())
+        );
     }
 
     @GetMapping
@@ -59,13 +82,15 @@ public class EvasionController {
     }
 
     @PostMapping
-    public String selectEvasion(Phase phase) {
+    public String selectEvasion(Turn turn) {
         Player player = getPlayer();
-        Turn turn = turnService.getTurnsByPhaseAndPlayerId(phase, player.getId());
-        gameService.saveGame(getGame().toBuilder().currentTurn(turn).build()); // TODO: almacenar los cuatro turnos que toquen.
-        if (phase == Phase.EVADE) {
+        Player loggedPlayer = getLoggedPlayer();
+        gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
+        if (loggedPlayer != player)
+            return advise.sendError("No puedes seleccionar si atacar o evadir.",chooseEvasion());
+        if (turn.getPhase() == Phase.EVADE) {
             player.setHasEvasion(false);
-            playerService.savePlayer(player);
+            playerService.savePlayerAndCreateTurns(player);
         }
         return NEXT_TURN;
     }

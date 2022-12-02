@@ -16,8 +16,4 @@ public interface TurnRepository extends CrudRepository<Turn, Integer> {
     Optional<Turn> findById(Integer id);
 
     List<Turn> findByPhase(Phase phase);
-
-    Turn findByPhaseAndPlayerId(Phase phase, Integer playerId);
-
-
 }
