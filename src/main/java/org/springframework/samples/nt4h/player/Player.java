@@ -50,7 +50,7 @@ public class Player extends NamedEntity {
     @Min(0)
     private Integer damageDealtToNightLords;
 
-    @Range(min = 1, max = 4)
+    // @Range(min = 1, max = 4)
     private Integer sequence;
 
 
