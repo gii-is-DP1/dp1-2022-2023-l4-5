@@ -26,7 +26,6 @@
         -->
         <div>
             <sec:authorize access="hasAnyAuthority('DOKTOL')">
-                <h2 style="color: white; text-shadow: 3px 3px 6px #000000;">"${user.username}"<font face="verdana" SIZE="5"></font></h2>
             </sec:authorize>
         </div>
         <!--

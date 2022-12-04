@@ -39,6 +39,12 @@
                             <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
                             <span>Users</span>
                         </nt4h:menuItem>
+
+                        <nt4h:menuItem active="${name eq 'Card'}" url="/cards/Allcard"
+                                       title="Card">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                            <span>Cards</span>
+                        </nt4h:menuItem>
                     </ul>
                 </sec:authorize>
 
@@ -59,6 +65,13 @@
                             <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
                             <span>Friends</span>
                         </nt4h:menuItem>
+
+                        <nt4h:menuItem active="${name eq 'Card'}" url="/Allcard"
+                                       title="Card">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                            <span>Cards</span>
+                        </nt4h:menuItem>
+
                     </ul>
                 </sec:authorize>
 
