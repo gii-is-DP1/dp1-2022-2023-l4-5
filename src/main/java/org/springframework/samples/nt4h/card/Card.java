@@ -15,12 +15,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Card extends NamedEntity {
 
-    //@NotNull
     @URL
     private String backImage;
 
     @URL
-    //@NotNull
     private String frontImage;
 
     @NotNull

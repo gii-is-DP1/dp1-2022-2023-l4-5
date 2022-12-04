@@ -21,23 +21,8 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public Message getMessageById(int id) {
-        return messageRepository.findById(id).orElseThrow(() -> new NotFoundException("Message not found"));
-    }
-
-    @Transactional(readOnly = true)
     public List<Message> getMessageBySenderWithReceiver(String usernameSender, String usernameReceiver) {
         return messageRepository.findBySenderWithReceiver(usernameSender, usernameReceiver);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Message> getAllMessages() {
-        return messageRepository.findAll();
-    }
-
-    @Transactional
-    public void deleteMessage(Message message) {
-        messageRepository.delete(message);
     }
 
     @Transactional

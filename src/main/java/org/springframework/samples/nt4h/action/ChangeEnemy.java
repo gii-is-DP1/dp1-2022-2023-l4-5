@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.action;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
@@ -19,7 +18,7 @@ public class ChangeEnemy implements Action {
     @Override
     public void executeAction() {
         Game game = actualPlayer.getGame();
-        Turn turn = actualPlayer.getTurn().get(turnId);
+        Turn turn = actualPlayer.getTurns().get(turnId);
         List<EnemyInGame> allOrcs = game.getAllOrcsInGame();
         if (allOrcs.size() >= 2) {
             List<EnemyInGame> actualOrcs = game.getActualOrcs();

@@ -16,7 +16,10 @@ public class DisparoRapido {
         new DrawCards(1, activePlayer).executeAction();
         int posicion = activePlayer.getInHand().size() - 1;
         AbilityInGame cartaRobada = activePlayer.getInHand().get(posicion);
-        if (cartaRobada.getAbilityEffectEnum().equals(AbilityEffectEnum.DISPARO_RAPIDO)) {
+        // Replantear
+        var ability = cartaRobada.isProduct() ? cartaRobada.getProductInGame().getProduct().getAbilityEffectEnum():
+            cartaRobada.getAbility().getAbilityEffectEnum();
+        if (ability.equals(AbilityEffectEnum.DISPARO_RAPIDO)) {
 
         } else {
             new DropCardOnPileAbility(activePlayer, cartaRobada.getAbilityCardType()).executeAction();

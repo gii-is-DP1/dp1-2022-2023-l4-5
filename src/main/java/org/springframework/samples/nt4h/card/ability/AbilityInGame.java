@@ -18,14 +18,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class AbilityInGame extends BaseEntity {
     @Min(0)
-    @Column(columnDefinition = "int default 0")
     private Integer timesUsed;
 
     @Min(0)
-    // @NotNull
     private Integer attack;
-
-    private AbilityEffectEnum abilityEffectEnum;
 
     @NotNull
     private boolean isProduct;

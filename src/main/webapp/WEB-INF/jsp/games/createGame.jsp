@@ -13,7 +13,6 @@
                 $("#birthDate").datepicker({dateFormat: 'yy/mm/dd'});
             });
         </script>
-
     </jsp:attribute>
     <jsp:body>
         <h2>

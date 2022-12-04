@@ -55,7 +55,7 @@
         player.innerHTML = lis.join("");
         var timer = resultado.timer;
         if (timer > 0) next.innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
-        else next.innerHTML = "<a href='/games/selectOrder/" + gameId + "'>Continue</a>";
+        else next.innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
     })
 
     console.log("hola" + timer);

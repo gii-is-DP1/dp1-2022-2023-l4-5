@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class Enemy extends Card {
     @NotNull
     @Range(min = 2, max = 10)

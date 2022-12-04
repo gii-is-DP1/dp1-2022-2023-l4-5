@@ -17,6 +17,7 @@ package org.springframework.samples.nt4h.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -60,16 +61,6 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> getUserByAuthority(Authority authority) {
-        return userRepository.findByAuthority(authority);
-    }
-
-    @Transactional(readOnly = true)
-    public List<User> getUserByTier(Tier tier) {
-        return userRepository.findByTier(tier);
-    }
-
-    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -96,12 +87,11 @@ public class UserService {
         if (principal instanceof UserDetails) {
             ud = ((UserDetails) principal);
         }
-        return getUserByUsername(Objects.requireNonNull(ud).getUsername());
-    }
-
-    @Transactional(readOnly = true)
-    public int getIdFromLoggedUser() {
-        return getLoggedUser().getId();
+        if (ud != null) {
+            return getUserByUsername(ud.getUsername());
+        } else {
+            return new User();
+        }
     }
 
     @Transactional
@@ -119,5 +109,11 @@ public class UserService {
             user.removeFriend(friend);
             saveUser(user);
         }
+    }
+
+    @Transactional
+    public void addUserToGame(User user, Game game) {
+        user.setGame(game);
+        saveUser(user);
     }
 }

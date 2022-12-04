@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
-public class RecoverCardDiscardToAbilty implements Action {
+public class RecoverCardDiscardToAbility implements Action {
 
 
     private Player playerFrom;

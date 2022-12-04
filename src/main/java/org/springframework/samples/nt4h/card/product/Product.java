@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.card.Card;
+import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -31,8 +32,9 @@ public class Product extends Card {
     @Range(min = 0, max = 4)
     private Integer attack;
 
-    //TODO probar si se puede mandar una lista vacía
     @NotNull
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacity;
+
+    private AbilityEffectEnum abilityEffectEnum;
 }
