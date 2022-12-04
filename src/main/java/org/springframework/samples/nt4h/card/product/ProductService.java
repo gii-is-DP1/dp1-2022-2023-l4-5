@@ -2,8 +2,6 @@ package org.springframework.samples.nt4h.card.product;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.BuyProduct;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
