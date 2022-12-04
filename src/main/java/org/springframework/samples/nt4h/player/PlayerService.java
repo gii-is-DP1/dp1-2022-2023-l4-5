@@ -2,13 +2,19 @@ package org.springframework.samples.nt4h.player;
 
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.action.*;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.turn.EnoughCardsException;
+import org.springframework.samples.nt4h.turn.EnoughEnemiesException;
 import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.turn.EnoughCardsException;
+import org.springframework.samples.nt4h.turn.EnoughEnemiesException;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -84,7 +91,7 @@ public class PlayerService {
             for (int i = 0; i < ability.getQuantity(); i++)
                 totalAbilities.add(ability);
         Collections.shuffle(totalAbilities);
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i < limit && i < totalAbilities.size(); i++) {
             Ability ability = totalAbilities.get(i);
             AbilityInGame abilityInGame = AbilityInGame.builder()
                 .player(player).ability(ability).timesUsed(0).attack(ability.getAttack()).isProduct(false).build();

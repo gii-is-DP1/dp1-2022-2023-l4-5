@@ -47,6 +47,7 @@ public class GameController {
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/heroSelect";
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
+    private static final String VIEW_GAME_PREORDER = "games/preSelectOrder";
     // Servicios
     private final GameService gameService;
 
@@ -178,6 +179,7 @@ public class GameController {
     @GetMapping(value = "/heroSelect")
     public String initHeroSelectForm() {
         // Los datos para el formulario.
+        System.out.println("initHeroSelectForm");
         return VIEW_GAME_HERO_SELECT;
     }
 
@@ -229,26 +231,41 @@ public class GameController {
     @GetMapping("/update/{gameId}")
     public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
         JsonObject jsonObject = new JsonObject();
-        Game game = gameService.getGameById(gameId);
         LocalDateTime now = LocalDateTime.now();
-        jsonObject.put("messages", createMessages(game));
-        long difference = ChronoUnit.SECONDS.between(game.getStartDate(), now);
-        jsonObject.put("timer", 20 - difference);
+        if (gameService.existsGameById(gameId)) {
+            Game game = gameService.getGameById(gameId);
+            jsonObject.put("messages", createMessages(game));
+            long difference = ChronoUnit.SECONDS.between(game.getStartDate(), now);
+            jsonObject.put("timer", 20 - difference);
+        }
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
 
     @GetMapping("/selectOrder/")
     public String orderPlayers() {
-        // TODO: Mostrar un formulario, ¿quizás para elegir las dos cartas?
-        return "I DON'T KNOW";
+        return VIEW_GAME_PREORDER;
     }
+
 
     // Tiene que recibir las cartas de habilidad que desea utilizar el jugador, por tanto, se va a modificar entero.
     @PostMapping("/selectOrder")
     public String processOrderPlayers() {
         List<Player> players = getPlayers();
         Game game = getGame();
-        gameService.orderPlayer(players, game);
+        if (players.stream().anyMatch(player -> player.getSequence() == null))
+            gameService.orderPlayer(players, game);
         return VIEW_GAME_ORDER;
     }
+
+    @GetMapping("/ready")
+    public ResponseEntity<String> updateMessages() {
+        JsonObject jsonObject = new JsonObject();
+        Game game = getGame(); // NO estoy seguro de que funcione.
+        if (game == null)
+            jsonObject.put("ready", false);
+        else
+            jsonObject.put("isReady", game.getPlayers().stream().allMatch(Player::getReady));
+        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+    }
+
 }

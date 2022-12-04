@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,7 @@ public class GameService {
         return newPlayer;
     }
 
+    @Transactional
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException {
         game.addPlayerWithNewHero(player, heroInGame);
         player.setReady(player.getHeroes().size() == game.getMode().getNumHeroes());
@@ -77,6 +79,7 @@ public class GameService {
         saveGame(game);
     }
 
+    @Transactional
     public void createGame(User user, Game game) throws FullGameException {
         Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false)
             .build();
@@ -86,7 +89,9 @@ public class GameService {
         saveGame(game);
     }
 
+    @Transactional
     public void orderPlayer(List<Player> players, Game game) {
+        System.out.println("Ordering players");
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
         Player player;
         for (var i = 0; i < players.size(); i++) {
@@ -94,6 +99,7 @@ public class GameService {
             List<AbilityInGame> abilities = player.getInDeck();
             datos.add(new Triplet<>(i, player, abilities.get(0).getAttack() + abilities.get(1).getAttack()));
         }
+
         datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
         if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
             datos.get(0).getValue1().getBirthDate().isAfter(datos.get(1).getValue1().getBirthDate())) {
@@ -102,11 +108,17 @@ public class GameService {
             datos.set(0, second);
             datos.set(1, first);
         }
-        // Hace falta un post para almacenar, de esta manera no va a fufar.
-        datos.forEach(triplet -> triplet.getValue1().setSequence(triplet.getValue0()));
         players = datos.stream().map(Triplet::getValue1).collect(Collectors.toList());
         Player firstPlayer = players.get(0);
         players.forEach(playerService::savePlayer);
-        saveGame(game.toBuilder().players(players).currentTurn(firstPlayer.getTurn(Phase.EVADE)).currentPlayer(firstPlayer).build());
+        game.setPlayers(players);
+        game.setCurrentPlayer(firstPlayer);
+        game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));
+        saveGame(game);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsGameById(int id) {
+        return gameRepository.existsById(id);
     }
 }
