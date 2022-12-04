@@ -7,15 +7,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
-<nt4h:layout pageName="users">
-    <h2>Users</h2>
+<nt4h:layout pageName="friends">
+    <h2>Friends</h2>
 
-    <table id="users" class="table table-striped">
+    <table id="friends" class="table table-striped">
         <thead>
         <tr>
             <th style="width: 200px;">Username</th>
-            <th style="width: 200px;">Password</th>
-            <th style="width: 200px;">Enable</th>
             <th style="width: 200px">Avatar</th>
             <th style="width: 200px;">Tier</th>
             <th style="width: 200px;">Description</th>
@@ -29,16 +27,10 @@
         <c:forEach items="${selections}" var="localUser">
             <tr>
                 <td>
-                    <spring:url value="/users/{userId}" var="userUrl">
+                    <spring:url value="/user/{userId}" var="userUrl">
                         <spring:param name="userId" value="${localUser.id}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username}"/></a>
-                </td>
-                <td>
-                    <c:out value="${localUser.password}"/>
-                </td>
-                <td>
-                    <c:out value="${localUser.enable}"/>
                 </td>
                 <td>
                     <img src="${localUser.avatar}" alt="No image found" height="50rem" width="50rem"/>
@@ -59,15 +51,7 @@
                     <spring:url value="/friends/remove/{userId}" var="removeFriend">
                         <spring:param name="userId" value="${localUser.id}"/>
                     </spring:url>
-                    <spring:url value="/friends/add/{userId}" var="addFriend">
-                        <spring:param name="userId" value="${localUser.id}"/>
-                    </spring:url>
-                    <c:if test="${user.getFriends().contains(localUser)}">
-                        <a href="${fn:escapeXml(removeFriend)}" class="btn">Remove</a>
-                    </c:if>
-                    <c:if test="${!(user.getFriends().contains(localUser))}">
-                        <a href="${fn:escapeXml(addFriend)}" class="btn">Add Friend</a>
-                    </c:if>
+                    <a href="${fn:escapeXml(removeFriend)}" class="btn">Remove</a>
                     <spring:url value="/messages/{username}" var="chatWith">
                         <spring:param name="username" value="${localUser.username}"/>
                     </spring:url>

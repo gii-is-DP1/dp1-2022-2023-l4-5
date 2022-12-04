@@ -14,7 +14,7 @@ import java.util.Set;
 @RequestMapping("/friends")
 public class FriendController {
 
-    private static final String VIEW_USER_LIST = "users/usersList";
+    private static final String VIEW_USER_LIST = "users/friendList";
     private final UserService userService;
 
     @Autowired
