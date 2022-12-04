@@ -88,7 +88,7 @@ public class EvasionController {
         gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
         if (loggedPlayer != player)
             return advise.sendError("No puedes seleccionar si atacar o evadir.",chooseEvasion());
-        if (turn.getPhase() == Phase.EVADE) {
+        if (turn.getPhase() == Phase.EVADE && player.getHasEvasion() == true) {
             player.setHasEvasion(false);
             playerService.savePlayerAndCreateTurns(player);
         }

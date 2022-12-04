@@ -106,8 +106,8 @@ public class ReestablishmentController {
     }
 
     @GetMapping("/removeCards")
-    public String reestablishmentRemoveCards() {
-        return VIEW_REESTABLISHMENT;
+    public String reestablishmentNextTurn() {
+        return "redirect:/nextTurn";
     }
 
     @PostMapping("/removeCards")
@@ -118,7 +118,7 @@ public class ReestablishmentController {
             return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         }
         resetMessage();
-        return reestablishmentRemoveCards();
+        return reestablishmentNextTurn();
     }
 
     //Métodos auxiliares

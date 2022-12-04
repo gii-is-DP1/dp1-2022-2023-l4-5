@@ -249,6 +249,7 @@ public class GameController {
         List<Player> players = getPlayers();
         Game game = getGame();
         gameService.orderPlayer(players, game);
+
         return VIEW_GAME_ORDER;
     }
 }

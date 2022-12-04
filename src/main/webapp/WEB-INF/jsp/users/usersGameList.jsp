@@ -34,9 +34,6 @@
                     <a href="${fn:escapeXml(userUrl)}"><c:out value="${user.username}"/></a>
                 </td>
                 <td>
-                    <c:out value="${user.password}"/>
-                </td>
-                <td>
                     <c:out value="${user.enable}"/>
                 </td>
                 <td>

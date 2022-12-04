@@ -23,11 +23,11 @@ public class TurnController {
     private final UserService userService;
     private final GameService gameService;
 
-    private final String PAGE_EVADE = "redirect:/evade";
+    private final String PAGE_EVADE = "redirect:/evasion";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
     private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
     private final String PAGE_MARKET = "redirect:/market";
-    private final String PAGE_RESUPPLY = "redirect:/resupply";
+    private final String PAGE_RESUPPLY = "redirect:/reestablishment";
     private final String PAGE_LOBBY = "redirect:/games/";
 
     @Autowired
@@ -62,7 +62,7 @@ public class TurnController {
     }
 
 
-    @GetMapping
+    @GetMapping()
     public String enterInGame() {
         Phase phase = getTurn().getPhase();
         if (phase.equals(Phase.EVADE)) return PAGE_EVADE;
@@ -80,7 +80,7 @@ public class TurnController {
         Turn nextTurn = player.getNextTurn(getTurn());
         Game game = getGame();
         Phase phase = nextTurn.getPhase();
-        if (phase.equals(Phase.EVADE)) {
+        if(phase.equals(Phase.EVADE)) {
             Player nextPlayer = getGame().getNextPlayer();
             gameService.saveGame(game.toBuilder().currentTurn(nextTurn).currentPlayer(nextPlayer).build());
         } else
