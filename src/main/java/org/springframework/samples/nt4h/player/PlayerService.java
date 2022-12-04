@@ -2,6 +2,7 @@ package org.springframework.samples.nt4h.player;
 
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.action.*;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
@@ -11,6 +12,9 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.turn.EnoughCardsException;
 import org.springframework.samples.nt4h.turn.EnoughEnemiesException;
+import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.turn.EnoughCardsException;
+import org.springframework.samples.nt4h.turn.EnoughEnemiesException;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -39,12 +44,8 @@ public class PlayerService {
 
     @Transactional
     public void savePlayer(Player player) {
-        System.out.println("Saving player " + player.getId());
         playerRepository.save(player);
-    }
-
-    public void savePlayerAll(List<Player> players) {
-        playerRepository.saveAll(players);
+        turnService.createAllTurnForAPlayer(player);
     }
 
     @Transactional
@@ -114,8 +115,8 @@ public class PlayerService {
     public void takeNewCard(Player player) throws EnoughCardsException {
         for(int i = 0; i < 3; i++) {
             if(player.getInHand().size() < 3) {
-                //Action takeNewCard = new TakeCardFromAbilityPile(player);
-                //takeNewCard.executeAction();
+                Action takeNewCard = new TakeCardFromAbilityPile(player);
+                takeNewCard.executeAction();
             } else
                 throw new EnoughCardsException();
         }

@@ -111,7 +111,10 @@ public class GameService {
         players = datos.stream().map(Triplet::getValue1).collect(Collectors.toList());
         Player firstPlayer = players.get(0);
         players.forEach(playerService::savePlayer);
-        saveGame(game.toBuilder().players(players).currentTurn(firstPlayer.getTurn(Phase.EVADE)).currentPlayer(firstPlayer).build());
+        game.setPlayers(players);
+        game.setCurrentPlayer(firstPlayer);
+        game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));
+        saveGame(game);
     }
 
     @Transactional(readOnly = true)
