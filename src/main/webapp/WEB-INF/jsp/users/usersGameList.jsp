@@ -29,10 +29,7 @@
         <c:forEach items="${selections}" var="localUser">
             <tr>
                 <td>
-                    <spring:url value="/users/{userId}" var="userUrl">
-                        <spring:param name="userId" value="${localUser.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username}"/></a>
+                    <c:out value="${localUser.username}"/>
                 </td>
                 <td>
                     <c:out value="${localUser.password}"/>
