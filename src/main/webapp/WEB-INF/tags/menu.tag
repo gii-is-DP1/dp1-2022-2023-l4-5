@@ -40,7 +40,7 @@
                             <span>Users</span>
                         </nt4h:menuItem>
 
-                        <nt4h:menuItem active="${name eq 'Card'}" url="/cards/Allcard"
+                        <nt4h:menuItem active="${name eq 'Card'}" url="/cards/buttonsCards"
                                        title="Card">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                             <span>Cards</span>
@@ -66,7 +66,7 @@
                             <span>Friends</span>
                         </nt4h:menuItem>
 
-                        <nt4h:menuItem active="${name eq 'Card'}" url="/Allcard"
+                        <nt4h:menuItem active="${name eq 'Card'}" url="cards/buttonsCards"
                                        title="Card">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                             <span>Cards</span>
