@@ -18,6 +18,8 @@ package org.springframework.samples.nt4h.user;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -65,8 +67,10 @@ public class UserController {
 
     // Obtener todos los usuarios.
     @GetMapping
-    public String getUsers(ModelMap model) {
-        model.addAttribute("users", userService.getAllUsers());
+    public String getUsers(@RequestParam(defaultValue = "0") int page, ModelMap model) {
+        Pageable pageable = PageRequest.of(page, 1);
+        System.out.println("Page: " + page);
+        model.addAttribute("users", userService.getAllUsers(pageable));
         return VIEW_USER_LIST;
     }
 
