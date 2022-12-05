@@ -17,6 +17,7 @@ package org.springframework.samples.nt4h.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.security.acls.model.NotFoundException;
@@ -63,6 +64,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    // Obtener los usuarios de cinco en cinco.
+    public List<User> getAllUsers(Pageable page) {
+        return userRepository.findAll().subList(page.getPageNumber(), page.getPageNumber() + page.getPageSize());
     }
 
     @Transactional
