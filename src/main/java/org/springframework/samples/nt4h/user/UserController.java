@@ -18,6 +18,7 @@ package org.springframework.samples.nt4h.user;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +42,7 @@ public class UserController {
     private static final String VIEW_USER_DETAILS = "users/userDetails";
     private static final String PAGE_WELCOME = "redirect:/welcome";
     private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
+
     // Servicios.
     private final UserService userService;
 
@@ -55,22 +57,24 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
-    // @ModelAttribute("selections")
-    // public List<User> getFriends() {
-    //    return userService.getAllUsers();
-    // }
-
-    @ModelAttribute("user")
-    public User getUser() {
-        return userService.getLoggedUser();
+    @ModelAttribute("loggedUser")
+    public User loggedUser() {
+        return this.userService.getLoggedUser();
     }
-
     // Obtener todos los usuarios.
     @GetMapping
     public String getUsers(@RequestParam(defaultValue = "0") int page, ModelMap model) {
+        page = page < 0 ? 0 : page;
         Pageable pageable = PageRequest.of(page, 5);
-        System.out.println("Page: " + page);
-        model.addAttribute("users", userService.getAllUsers(pageable));
+        List<User> users = userService.getAllUsers();
+        Page<User> usersPage = userService.getAllUsers(pageable);
+        if (!users.isEmpty() && usersPage.isEmpty()) {
+            page = users.size() / 5;
+            pageable = PageRequest.of(page, 5);
+            usersPage = userService.getAllUsers(pageable);
+        }
+        model.put("isNext", usersPage.hasNext());
+        model.addAttribute("users", usersPage.getContent());
         model.put("page", page);
         return VIEW_USER_LIST;
     }
@@ -96,23 +100,23 @@ public class UserController {
         }
     }
 
-
     //Editar usuario
     @GetMapping(value = "/edit")
-    public String initUpdateUserForm() {
-        return VIEW_USER_CREATE_OR_UPDATE_FORM;
+    public String initUpdateUserForm() {return VIEW_USER_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "/edit")
-    public String processUpdateUserForm(@Valid User newUser, BindingResult result) {
+    public String processUpdateUserForm(@Valid User user, BindingResult result) {
         User oldUser = this.userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_USER_CREATE_OR_UPDATE_FORM;
         else {
-            BeanUtils.copyProperties(newUser, oldUser, "id", "password", "enable", "tier");
+            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).build();
+            newUser.setId(oldUser.getId());
             userService.saveUser(newUser);
-            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(newUser.getId()));
+            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
         }
     }
+
 
     @GetMapping(value = "/delete")
     public String processDeleteUser() {
@@ -122,6 +126,4 @@ public class UserController {
         return PAGE_WELCOME;
     }
 
-    // TODO: Utilizar un jsp que impida que se pueda modificar los datos del USUArio
-    // @GetMapping(value="/{userId})
 }

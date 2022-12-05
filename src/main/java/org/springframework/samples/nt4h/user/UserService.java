@@ -17,6 +17,7 @@ package org.springframework.samples.nt4h.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Tier;
@@ -68,8 +69,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     // Obtener los usuarios de cinco en cinco.
-    public List<User> getAllUsers(Pageable page) {
-        return userRepository.findAll(page).getContent();
+    public Page<User> getAllUsers(Pageable page) {
+        return userRepository.findAll(page);
     }
 
     @Transactional
@@ -123,4 +124,6 @@ public class UserService {
         user.setGame(game);
         saveUser(user);
     }
+
+
 }

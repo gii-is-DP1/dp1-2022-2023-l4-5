@@ -29,13 +29,13 @@
                     <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                     <span>Home</span>
                 </nt4h:menuItem>
-                <nt4h:menuItem active="${name eq 'Users'}" url="/admins/usersAdminList"
-                               title="User">
-                    <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-                    <span>Users</span>
-                </nt4h:menuItem>
                 </sec:authorize>
                 <sec:authorize access="isAuthenticated()">
+                    <nt4h:menuItem active="${name eq 'Users'}" url="/users"
+                                   title="User">
+                        <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                        <span>Users</span>
+                    </nt4h:menuItem>
                     <nt4h:menuItem active="${name eq 'friends'}" url="/friends"
                                    title="friends">
                         <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
