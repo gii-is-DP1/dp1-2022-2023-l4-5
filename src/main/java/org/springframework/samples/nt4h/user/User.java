@@ -60,7 +60,7 @@ public class User extends BaseEntity {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> friends;
 
     @OneToOne(cascade = CascadeType.ALL)
