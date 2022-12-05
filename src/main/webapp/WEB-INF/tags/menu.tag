@@ -28,11 +28,19 @@
 					<span>Home</span>
 				</nt4h:menuItem>
 
+                        <nt4h:menuItem active="${name eq 'Users'}" url="/admins/usersAdminList"
+                                       title="User">
+                            <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                            <span>Users</span>
+                        </nt4h:menuItem>
 
-				<nt4h:menuItem active="${name eq 'games'}" url="/games"
-					title="find games">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find Games</span>
+                        <nt4h:menuItem active="${name eq 'Card'}" url="/cards/buttonsCards"
+                                       title="Card">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                            <span>Cards</span>
+                        </nt4h:menuItem>
+                    </ul>
+                </sec:authorize>
 
 				</nt4h:menuItem>
 
@@ -42,11 +50,22 @@
 					<span>Create Game</span>
 				</nt4h:menuItem>
 
-				<nt4h:menuItem active="${name eq 'users'}" url="/users"
-					title="Users">
-					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-					<span>Users</span>
-				</nt4h:menuItem>
+
+                        <nt4h:menuItem active="${name eq 'friends'}" url="/friends"
+                                       title="friends">
+                            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                            <span>Friends</span>
+                        </nt4h:menuItem>
+
+                        <nt4h:menuItem active="${name eq 'Card'}" url="cards/buttonsCards"
+                                       title="Card">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                            <span>Cards</span>
+                        </nt4h:menuItem>
+
+                    </ul>
+                </sec:authorize>
+
 
                 <nt4h:menuItem active="${name eq 'friends'}" url="/friends"
                                title="friends">

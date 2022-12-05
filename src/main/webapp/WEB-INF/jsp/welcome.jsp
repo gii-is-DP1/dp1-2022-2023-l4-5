@@ -26,7 +26,6 @@
         -->
         <div>
             <sec:authorize access="hasAnyAuthority('DOKTOL')">
-                <h2 style="color: white; text-shadow: 3px 3px 6px #000000;">"${user.username}"<font face="verdana" SIZE="5"></font></h2>
             </sec:authorize>
         </div>
         <!--
@@ -88,6 +87,7 @@
     <center>
         <div>-----------------------------------------------------------------------------------------------------------------
             <h1 style = "color: white; text-shadow: 3px 3px 6px #000000;">¿Jugamos?<FONT FACE="verdana" SIZE=15></FONT></h1>
+
             <form method="get" action="/games/new">
                 <button type="submit"><img src="/resources/images/Boton_create.PNG" width="280" height="75" /></button></form>
             <form method="get" action="/games">
