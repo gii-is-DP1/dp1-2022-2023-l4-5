@@ -14,7 +14,7 @@ public class HeroFormatter implements Formatter<Hero> {
 
     @Override
     public Hero parse(String text, Locale locale) {
-        return heroService.getHeroByName(text.split(" - ")[0].trim());
+        return heroService.getHeroByName(text.split(" - ")[0].trim().replace("�", "è"));
     }
 
     @Override
