@@ -108,7 +108,7 @@ VALUES ('Compañero Lobo', 'src/main/resources/static/resources/images/juego/wol
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 2, 2),
        ('En las sombras', 'src/main/resources/static/resources/images/abilities/enlassombras_ability_front.png',
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 1, 1),
-       ('Engañar', 'src/main/resources/static/resources/images/abilities/engañar_ability_front.png',
+       ('Engañar', 'src/main/resources/static/resources/images/abilities/enganar_ability_front.png',
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 0, 1),
        ('Robar bolsillo', 'src/main/resources/static/resources/images/abilities/robarbolsillos_ability_front.png',
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 0, 1),
