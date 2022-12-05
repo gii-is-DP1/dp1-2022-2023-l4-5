@@ -5,6 +5,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
+
+
 <nt4h:layout pageName="games">
     <h2>Games</h2>
     <c:out value="${message}"/>
@@ -38,7 +40,44 @@
                     <c:out value="${game.accessibility}"/>
                 </td>
                 <td>
-                    <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game</a>
+                <c:choose>
+                    <c:when test="game.Accessibility.isPublic">
+                        <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game</a>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                            Join Game
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Introduce Password</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="text-align: center;">
+                                            <input type="password" id="password">
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Join</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </c:otherwise>
+                </c:choose>
                 </td>
             </tr>
         </c:forEach>
