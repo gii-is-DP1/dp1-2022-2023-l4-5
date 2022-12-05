@@ -62,14 +62,13 @@
                                     </div>
                                     <div class="modal-body">
                                         <div style="text-align: center;">
-                                            <input type="password" id="password">
-
-
-
+                                            <input type="password" id="input">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <a id="redirection" href="/games/${game.id}?password=">Redirect ></a>
                                         <button type="button" class="btn btn-primary">Join</button>
                                     </div>
                                 </div>
@@ -84,3 +83,14 @@
         </tbody>
     </table>
 </nt4h:layout>
+
+<script type="text/javascript">
+    const input = document.getElementById("input");
+    console.log("hola " + input.value);
+    input.addEventListener("keyup", function (event) {
+        const bottom = document.getElementById("redirection");
+        const url = bottom.getAttribute("href");
+        bottom.setAttribute("href", url.replace(/=.*/, "=" + input.value));
+        console.log(bottom.getAttribute("href"));
+    });
+</script>

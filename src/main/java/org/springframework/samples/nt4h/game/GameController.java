@@ -5,6 +5,7 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.google.common.collect.Lists;
 import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.action.Phase;
@@ -145,13 +146,17 @@ public class GameController {
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model) {
         User loggedUser = getUser();
         Game newGame = gameService.getGameById(gameId);
         Game oldGame = loggedUser.getGame();
         if (oldGame != null && oldGame != newGame)
             return advise.sendError("Ya estás en una partida y esa es  " + loggedUser.getGame() + ".", PAGE_GAMES);
-        if (oldGame == null) userService.addUserToGame(loggedUser, newGame);
+        if (oldGame == null)  {
+            if (Objects.equals(newGame.getPassword(), password) || newGame.getAccessibility() == Accessibility.PUBLIC)
+                userService.addUserToGame(loggedUser, newGame);
+            else return advise.sendError("La contraseña es incorrecta.", PAGE_GAMES);
+        }
         model.put("numHeroes", gameService.getGameById(gameId).isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
         return VIEW_GAME_LOBBY;
     }
@@ -223,6 +228,7 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_GAME_CREATE;
+
         gameService.createGame(user, game); // TODO: Comprobar si la id se guarda.
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }

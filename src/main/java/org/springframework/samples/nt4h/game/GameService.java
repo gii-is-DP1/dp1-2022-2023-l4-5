@@ -83,11 +83,15 @@ public class GameService {
     public void createGame(User user, Game game) throws FullGameException {
         Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false)
             .build();
+        user.setGame(game);
         game.setStartDate(LocalDateTime.now());
         newPlayer.setName(user.getUsername());
         game.addPlayer(newPlayer);
+        userService.saveUser(user);
         saveGame(game);
     }
+
+    // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
