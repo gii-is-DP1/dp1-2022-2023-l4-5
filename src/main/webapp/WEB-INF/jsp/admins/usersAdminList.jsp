@@ -25,7 +25,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${selections}" var="user">
+        <c:forEach items="${users}" var="user">
             <tr>
                 <td>
                     <spring:url value="/users/{userId}" var="userUrl">

@@ -69,7 +69,7 @@ public class UserService {
     @Transactional(readOnly = true)
     // Obtener los usuarios de cinco en cinco.
     public List<User> getAllUsers(Pageable page) {
-        return userRepository.findAll().subList(page.getPageNumber(), page.getPageNumber() + page.getPageSize());
+        return userRepository.findAll(page).getContent();
     }
 
     @Transactional

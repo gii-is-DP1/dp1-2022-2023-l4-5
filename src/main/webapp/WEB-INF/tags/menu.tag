@@ -41,7 +41,7 @@
                         <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
                         <span>Friends</span>
                     </nt4h:menuItem>
-                    <nt4h:menuItem active="${name eq 'Card'}" url="cards/buttonsCards"
+                    <nt4h:menuItem active="${name eq 'Card'}" url="/cards/buttonsCards"
                                    title="Card">
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                         <span>Cards</span>

@@ -55,10 +55,10 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
-    @ModelAttribute("selections")
-    public List<User> getFriends() {
-        return userService.getAllUsers();
-    }
+    // @ModelAttribute("selections")
+    // public List<User> getFriends() {
+    //    return userService.getAllUsers();
+    // }
 
     @ModelAttribute("user")
     public User getUser() {
@@ -68,9 +68,10 @@ public class UserController {
     // Obtener todos los usuarios.
     @GetMapping
     public String getUsers(@RequestParam(defaultValue = "0") int page, ModelMap model) {
-        Pageable pageable = PageRequest.of(page, 1);
+        Pageable pageable = PageRequest.of(page, 5);
         System.out.println("Page: " + page);
         model.addAttribute("users", userService.getAllUsers(pageable));
+        model.put("page", page);
         return VIEW_USER_LIST;
     }
 
