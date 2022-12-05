@@ -15,6 +15,7 @@
             <th style="width: 200px;">Description</th>
             <th style="width: 200px;">Image</th>
             <th style="width: 200px">Threshold</th>
+            <th style="width: 200px">Action</th>
         </tr>
         </thead>
         <tbody>
