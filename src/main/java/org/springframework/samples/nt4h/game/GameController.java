@@ -5,6 +5,9 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.google.common.collect.Lists;
 import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.action.Phase;
@@ -139,7 +142,20 @@ public class GameController {
 
     // Obtener todas las partidas.
     @GetMapping
-    public String showGames() {
+    public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model) {
+        page = page < 0 ? 0 : page;
+        Pageable pageable = PageRequest.of(page, 5);
+        List<Game> games = gameService.getAllGames();
+        Page<Game> gamePage = gameService.getAllGames(pageable);
+        if (!games.isEmpty() && gamePage.isEmpty()) {
+            page = games.size() / 5;
+            pageable = PageRequest.of(page, 5);
+            gamePage = gameService.getAllGames(pageable);
+        }
+        model.put("isNext", gamePage.hasNext());
+        model.addAttribute("games", gamePage.getContent());
+        model.put("page", page);
+
         return VIEW_GAME_LIST;
     }
 

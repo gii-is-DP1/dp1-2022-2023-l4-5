@@ -44,4 +44,17 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <c:if test="${page > 0}">
+        <spring:url value="/games?page={previous}" var="previous">
+            <spring:param name="previous" value="${page-1}"/>
+        </spring:url>
+        <a href="${fn:escapeXml(previous)}" class="btn">Previous</a>
+    </c:if>
+    <c:if test="${isNext}">
+        <spring:url value="/games?page={next}" var="next">
+            <spring:param name="next" value="${page+1}"/>
+        </spring:url>
+        <a href="${fn:escapeXml(next)}" class="btn">Next</a>
+    </c:if>
 </nt4h:layout>
