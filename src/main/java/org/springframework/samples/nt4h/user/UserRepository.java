@@ -21,4 +21,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     List<User> findByTier(Tier tier);
 
     Optional<User> findById(int id);
+
+    Page<User> findAll(Pageable page);
 }
