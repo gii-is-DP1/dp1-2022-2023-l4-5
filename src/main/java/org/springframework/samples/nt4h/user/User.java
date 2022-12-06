@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.user;
 
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
@@ -61,7 +62,7 @@ public class User extends BaseEntity {
     private LocalDate birthDate;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private Set<User> friends;
+    private List<User> friends;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Statistic statistic;
@@ -77,7 +78,7 @@ public class User extends BaseEntity {
 
     void addFriend(User user) {
         if (friends == null)
-            friends = Sets.newHashSet();
+            friends = Lists.newArrayList();
         friends.add(user);
     }
 
