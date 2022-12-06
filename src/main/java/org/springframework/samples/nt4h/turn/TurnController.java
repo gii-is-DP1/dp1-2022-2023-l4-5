@@ -23,7 +23,7 @@ public class TurnController {
     private final UserService userService;
     private final GameService gameService;
 
-    private final String PAGE_EVADE = "redirect:/evade";
+    private final String PAGE_EVADE = "redirect:/evasion";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
     private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
     private final String PAGE_MARKET = "redirect:/market";

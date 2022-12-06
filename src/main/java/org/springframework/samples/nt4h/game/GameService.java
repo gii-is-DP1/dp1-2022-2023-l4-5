@@ -81,7 +81,7 @@ public class GameService {
 
     @Transactional
     public void createGame(User user, Game game) throws FullGameException {
-        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false)
+        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false).nextPhase(Phase.EVADE)
             .build();
         user.setGame(game);
         game.setStartDate(LocalDateTime.now());
@@ -97,14 +97,13 @@ public class GameService {
     public void orderPlayer(List<Player> players, Game game) {
         System.out.println("Ordering players");
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
-        Player player;
         for (var i = 0; i < players.size(); i++) {
-            player = players.get(i);
+            Player player = players.get(i);
             List<AbilityInGame> abilities = player.getInDeck();
             datos.add(new Triplet<>(i, player, abilities.get(0).getAttack() + abilities.get(1).getAttack()));
         }
-
         datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
+        System.out.println("datos = " + datos);
         if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
             datos.get(0).getValue1().getBirthDate().isAfter(datos.get(1).getValue1().getBirthDate())) {
             var first = datos.get(0);
@@ -112,9 +111,15 @@ public class GameService {
             datos.set(0, second);
             datos.set(1, first);
         }
-        players = datos.stream().map(Triplet::getValue1).collect(Collectors.toList());
+        players = datos.stream()
+            .map(triplet -> {
+                Player p = triplet.getValue1();
+                p.setSequence(triplet.getValue0());
+                return p;
+            }).collect(Collectors.toList());
         Player firstPlayer = players.get(0);
         players.forEach(playerService::savePlayer);
+        System.out.println("First player: " + firstPlayer.getSequence());
         game.setPlayers(players);
         game.setCurrentPlayer(firstPlayer);
         game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));

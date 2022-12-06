@@ -49,7 +49,6 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                             Join Game
                         </button>
-
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -68,13 +67,13 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                         </button>
-                                        <a id="redirection" href="/games/${game.id}?password=">Redirect ></a>
-                                        <button type="button" class="btn btn-primary">Join</button>
+                                        <a id="redirection" href="/games/${game.id}?password=">
+                                            <button type="button" class="btn btn-primary">Join</button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </c:otherwise>
                 </c:choose>
                 </td>

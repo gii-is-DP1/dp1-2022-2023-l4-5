@@ -228,7 +228,6 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_GAME_CREATE;
-
         gameService.createGame(user, game); // TODO: Comprobar si la id se guarda.
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }

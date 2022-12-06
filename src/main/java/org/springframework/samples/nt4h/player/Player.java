@@ -53,6 +53,8 @@ public class Player extends NamedEntity {
     // @Range(min = 1, max = 4)
     private Integer sequence;
 
+    private Phase nextPhase;
+
 
     private Boolean ready;
 

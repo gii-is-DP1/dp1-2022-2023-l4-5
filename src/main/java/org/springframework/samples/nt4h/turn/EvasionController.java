@@ -2,6 +2,8 @@ package org.springframework.samples.nt4h.turn;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.DropCardFromHand;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.concurrent.Phaser;
 
 @Controller
 @RequestMapping("/evasion")
@@ -67,13 +70,16 @@ public class EvasionController {
         return messageType;
     }
 
-    @ModelAttribute("phases")
+    @ModelAttribute("turn")
+    public Turn getTurn() {
+        return getGame().getCurrentTurn();
+    }
+
+    @ModelAttribute("turns")
     public List<Turn> getPhases() {
-        Player player = getPlayer();
         return Lists.newArrayList(
-            turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId()),
-            turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId())
-        );
+            turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, getPlayer().getId()),
+            turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, getPlayer().getId()));
     }
 
     @GetMapping
@@ -85,12 +91,18 @@ public class EvasionController {
     public String selectEvasion(Turn turn) {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
-        gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
         if (loggedPlayer != player)
             return advise.sendError("No puedes seleccionar si atacar o evadir.",chooseEvasion());
-        if (turn.getPhase() == Phase.EVADE) {
+        gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
+        if (turn.getPhase() == Phase.MARKET) {
             player.setHasEvasion(false);
-            playerService.savePlayerAndCreateTurns(player);
+            player.setNextPhase(Phase.MARKET);
+            Action action = new DropCardFromHand(loggedPlayer, null); // TODO: Eliminar dos cartas
+            action.executeAction();
+            playerService.savePlayer(player);
+        } else {
+            player.setNextPhase(Phase.HERO_ATTACK);
+            playerService.savePlayer(player);
         }
         return NEXT_TURN;
     }
