@@ -112,6 +112,7 @@ public class UserService {
     public Page<User> getFriendsPaged(Pageable page) {
         return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), (int) page.getOffset()+page.getPageSize()));
     }
+    //ewo
 
     @Transactional
     public void addFriend(int friendId) {
