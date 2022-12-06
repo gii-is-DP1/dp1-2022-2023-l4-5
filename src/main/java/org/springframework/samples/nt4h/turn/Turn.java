@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Turn extends BaseEntity {
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
@@ -35,6 +35,4 @@ public class Turn extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
-
-
 }

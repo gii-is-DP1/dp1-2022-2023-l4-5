@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.concurrent.Phaser;
 
 @Controller
 @RequestMapping("/evasion")
@@ -70,13 +69,13 @@ public class EvasionController {
         return messageType;
     }
 
-    @ModelAttribute("turn")
-    public Turn getTurn() {
-        return getGame().getCurrentTurn();
+    @ModelAttribute("newTurn")
+    public Turn getNewTurn() {
+        return new Turn();
     }
 
     @ModelAttribute("turns")
-    public List<Turn> getPhases() {
+    public List<Turn> getTurns() {
         return Lists.newArrayList(
             turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, getPlayer().getId()),
             turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, getPlayer().getId()));

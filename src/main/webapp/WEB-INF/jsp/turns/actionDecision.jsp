@@ -9,7 +9,7 @@
 <nt4h:layout pageName="Action decision">
     <h2>Action decision</h2>
 
-    <form:form modelAttribute="turn" class="form-horizontal" id="choose-phases-form">
+    <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
         <nt4h:selectField name="turns" label="Phases in turn?" names="${turns}" size="2"/>
         <button class="btn btn-default" type="submit">Action chosen</button>
     </form:form>
