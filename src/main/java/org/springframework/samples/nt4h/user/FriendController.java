@@ -1,20 +1,20 @@
 package org.springframework.samples.nt4h.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Controller
 @RequestMapping("/friends")
 public class FriendController {
 
-    private static final String VIEW_USER_LIST = "users/friendList";
+    private static final String VIEW_FRIEND_LIST = "users/friendList";
     private final UserService userService;
 
     @Autowired
@@ -22,25 +22,32 @@ public class FriendController {
         this.userService = userService;
     }
 
-    @ModelAttribute("selections")
-    public Set<User> getFriends() {
-        return userService.getLoggedUser().getFriends();
-    }
-
     @RequestMapping
-    public ModelAndView listFriends() {
-        return new ModelAndView(VIEW_USER_LIST);
+    public String listFriends(@RequestParam(defaultValue = "0") int page, ModelMap model) {
+        page = page < 0 ? 0 : page;
+        Pageable pageable = PageRequest.of(page, 3);
+        List<User> friends = userService.getFriends();
+        Page<User> friendsPage = userService.getFriendsPaged(pageable);
+        if (!friends.isEmpty() && friendsPage.isEmpty()) {
+            page = friends.size() / 5;
+            pageable = PageRequest.of(page, 3);
+            friendsPage = userService.getFriendsPaged(pageable);
+        }
+        model.put("isNext", friendsPage.hasNext());
+        model.addAttribute("friendsList", friendsPage.getContent());
+        model.put("page", page);
+        return VIEW_FRIEND_LIST;
     }
 
     @GetMapping("/add/{friendId}")
-    public ModelAndView addFriend(@PathVariable("friendId") int friendId) {
+    public String addFriend(@PathVariable("friendId") int friendId) {
         userService.addFriend(friendId);
-        return listFriends();
+        return VIEW_FRIEND_LIST;
     }
 
     @GetMapping("/remove/{friendId}")
-    public ModelAndView removeFriend(@PathVariable("friendId") int friendId) {
+    public String removeFriend(@PathVariable("friendId") int friendId) {
         userService.removeFriend(friendId);
-        return listFriends();
+        return VIEW_FRIEND_LIST;
     }
 }
