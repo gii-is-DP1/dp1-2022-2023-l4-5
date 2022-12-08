@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.action.DropCardFromHand;
 import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.hero.HeroInGame;
+import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
@@ -28,16 +31,18 @@ public class EvasionController {
     private final PlayerService playerService;
     private final TurnService turnService;
     private final GameService gameService;
+    private final HeroService heroService;
 
     private final Advise advise = new Advise();
 
 
     @Autowired
-    public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService) {
+    public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService, HeroService heroService) {
         this.playerService = playerService;
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
+        this.heroService = heroService;
     }
 
     @ModelAttribute("game")
@@ -75,10 +80,8 @@ public class EvasionController {
     }
 
     @ModelAttribute("turns")
-    public List<Turn> getTurns() {
-        return Lists.newArrayList(
-            turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, getPlayer().getId()),
-            turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, getPlayer().getId()));
+    public List<Phase> getTurns() {
+        return Lists.newArrayList(Phase.MARKET, Phase.HERO_ATTACK);
     }
 
     @GetMapping

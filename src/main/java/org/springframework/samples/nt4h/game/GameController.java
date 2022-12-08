@@ -266,7 +266,7 @@ public class GameController {
     public ResponseEntity<String> updateMessages() {
         JsonObject jsonObject = new JsonObject();
         Game game = getGame(); // NO estoy seguro de que funcione.
-        if (game == null)
+        if (game == null || game.getPlayers() == null)
             jsonObject.put("ready", false);
         else
             jsonObject.put("isReady", game.getPlayers().stream().allMatch(Player::getReady));

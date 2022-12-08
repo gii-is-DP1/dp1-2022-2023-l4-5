@@ -6,24 +6,21 @@ import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.Locale;
 
 @Component
 @AllArgsConstructor
-public class TurnFormatter implements Formatter<Turn> {
-
-    private final TurnService turnService;
-    private final UserService userService;
+public class TurnFormatter implements Formatter<TurnDTO> {
 
     @Override
-    public Turn parse(String text, Locale locale) {
-        System.out.println("TurnFormatter.parse");
-        return turnService.getTurnsByPhaseAndPlayerId(Phase.valueOf(text), userService.getLoggedUser().getPlayer().getId());
+    public TurnDTO parse(String s, Locale locale) {
+        System.out.println("PhaseFormatter.parse");
+        return new TurnDTO(s);
     }
 
     @Override
-    public String print(Turn turn, Locale locale) {
-        System.out.println("TurnFormatter.print");
-        return turn.getPhase().toString();
+    public String print(TurnDTO turnDTO, Locale locale) {
+        return turnDTO.getPhase();
     }
 }
