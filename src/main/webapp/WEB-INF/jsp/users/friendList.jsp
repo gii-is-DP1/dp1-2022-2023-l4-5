@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${selections}" var="localUser">
+        <c:forEach items="${friendsList}" var="localUser">
             <tr>
                 <td>
                     <spring:url value="/user/{userId}" var="userUrl">
@@ -71,4 +71,16 @@
         </c:forEach>
         </tbody>
     </table>
+    <c:if test="${page > 0}">
+            <spring:url value="/friends?page={previous}" var="previous">
+                <spring:param name="previous" value="${page-1}"/>
+            </spring:url>
+            <a href="${fn:escapeXml(previous)}" class="btn">Previous</a>
+        </c:if>
+        <c:if test="${isNext}">
+            <spring:url value="/friends?page={next}" var="next">
+                <spring:param name="next" value="${page+1}"/>
+            </spring:url>
+            <a href="${fn:escapeXml(next)}" class="btn">Next</a>
+        </c:if>
 </nt4h:layout>

@@ -40,8 +40,10 @@ public class WelcomeController {
           p6.setFirstName("Álvaro ");
           p6.setLastName("Hidalgo Rodríguez");
           people.add(p6);
+
           model.put("people", people);
           model.put("title", "No Time For Heroes");
+
           return "welcome";
       }
 }

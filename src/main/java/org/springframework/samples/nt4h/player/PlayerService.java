@@ -6,12 +6,12 @@ import org.springframework.samples.nt4h.action.*;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
-import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
-import org.springframework.samples.nt4h.turn.EnoughEnemiesException;
+import org.springframework.samples.nt4h.turn.exceptions.EnoughCardsException;
+import org.springframework.samples.nt4h.turn.exceptions.EnoughEnemiesException;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -98,18 +98,24 @@ public class PlayerService {
     }
 
     @Transactional
-    public void removeAbilityCards(Integer cardId, Player player) {
-        for(int i = 0; player.getInHand().size() > 4; i++) {
-            Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
-            removeToDiscard.executeAction();
+    public void removeAbilityCards(Integer cardId, Player player) throws EnoughCardsException {
+        while(player.getInHand().size() > 3) {
+            if(player.getInHand().size() > 3) {
+                Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
+                removeToDiscard.executeAction();
+            } else
+                throw new EnoughCardsException();
         }
     }
 
     @Transactional
-    public void takeNewCard(Player player) {
-        for(int i = 0; player.getInHand().size() < 4; i++) {
-            Action takeNewCard = new TakeCardFromAbilityPile(player);
-            takeNewCard.executeAction();
+    public void takeNewCard(Player player) throws EnoughCardsException {
+        for(int i = 0; i < 3; i++) {
+            if(player.getInHand().size() < 3) {
+                Action takeNewCard = new TakeCardFromAbilityPile(player);
+                takeNewCard.executeAction();
+            } else
+                throw new EnoughCardsException();
         }
     }
 
@@ -128,28 +134,9 @@ public class PlayerService {
     @Transactional
     public void restoreEnemyLife(List<EnemyInGame> enemies) {
         for(int i = 0; enemies.size()<i; i++) {
-            Enemy enemy = enemies.get(i).getEnemy();
-            if(enemy.getHasCure() == true) {
-                Action recoverEnemyLife = new HealEnemy(enemies.get(i));
-                recoverEnemyLife.executeAction();
-            }
+            Action recoverEnemyLife = new HealEnemy(enemies.get(i));
+            recoverEnemyLife.executeAction();
         }
     }
-
-    @Transactional
-    public void discard2CardsEvasion(Player player, Integer cardId) {
-        for(int i = 0; i > 2; i++) {
-            Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
-            removeToDiscard.executeAction();
-        }
-    }
-
-/*
-    @Transactional
-    public void changeStage() {
-
-    }
-
-*/
 
 }

@@ -18,6 +18,7 @@ package org.springframework.samples.nt4h.user;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Tier;
@@ -103,9 +104,25 @@ public class UserService {
     }
 
     @Transactional
+    public List<User> getFriends() {
+        return getLoggedUser().getFriends();
+    }
+
+    @Transactional
+    public Page<User> getFriendsPaged(Pageable page) {
+        Integer limit = (int) page.getOffset() + page.getPageSize();
+        limit = limit > getFriends().size() ? getFriends().size() : limit;
+        return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), limit), page, getLoggedUser().getFriends().size());
+    }
+    //ewo
+
+    @Transactional
     public void addFriend(int friendId) {
         User user = getLoggedUser();
         user.addFriend(getUserById(friendId));
+        if(!getLoggedUser().getFriends().contains(getUserById(friendId))){
+            user.addFriend(getUserById(friendId));
+        }
         saveUser(user);
     }
 

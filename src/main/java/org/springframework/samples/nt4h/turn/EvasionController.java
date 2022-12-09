@@ -2,7 +2,12 @@ package org.springframework.samples.nt4h.turn;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.DropCardFromHand;
 import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.hero.HeroInGame;
+import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
@@ -26,16 +31,18 @@ public class EvasionController {
     private final PlayerService playerService;
     private final TurnService turnService;
     private final GameService gameService;
+    private final HeroService heroService;
 
     private final Advise advise = new Advise();
 
 
     @Autowired
-    public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService) {
+    public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService, HeroService heroService) {
         this.playerService = playerService;
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
+        this.heroService = heroService;
     }
 
     @ModelAttribute("game")
@@ -67,13 +74,14 @@ public class EvasionController {
         return messageType;
     }
 
-    @ModelAttribute("phases")
-    public List<Turn> getPhases() {
-        Player player = getPlayer();
-        return Lists.newArrayList(
-            turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId()),
-            turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId())
-        );
+    @ModelAttribute("newTurn")
+    public Turn getNewTurn() {
+        return new Turn();
+    }
+
+    @ModelAttribute("turns")
+    public List<Phase> getTurns() {
+        return Lists.newArrayList(Phase.MARKET, Phase.HERO_ATTACK);
     }
 
     @GetMapping
@@ -82,16 +90,21 @@ public class EvasionController {
     }
 
     @PostMapping
-    public String selectEvasion(Turn turn, Integer cardId) {
+    public String selectEvasion(Turn turn) {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
-        gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
         if (loggedPlayer != player)
             return advise.sendError("No puedes seleccionar si atacar o evadir.",chooseEvasion());
-        if (turn.getPhase() == Phase.EVADE && player.getHasEvasion() == true) {
+        gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
+        if (turn.getPhase() == Phase.MARKET) {
             player.setHasEvasion(false);
-            playerService.discard2CardsEvasion(player, cardId);
-            playerService.savePlayerAndCreateTurns(player);
+            player.setNextPhase(Phase.MARKET);
+            Action action = new DropCardFromHand(loggedPlayer, null); // TODO: Eliminar dos cartas
+            action.executeAction();
+            playerService.savePlayer(player);
+        } else {
+            player.setNextPhase(Phase.HERO_ATTACK);
+            playerService.savePlayer(player);
         }
         return NEXT_TURN;
     }

@@ -32,21 +32,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
             .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
-            .antMatchers("/users/new").permitAll()
-            .antMatchers("/session/**").permitAll()
-            .antMatchers("/messages/**").authenticated()
-            .antMatchers("/admin/**").hasAnyAuthority("DOKTOL")
-            .antMatchers("/achievements/new", "/achievements/edit", "/achievements/delete").hasAnyAuthority("DOKTOL")
-            .antMatchers("/achievements/**").authenticated()
-            .antMatchers("/games/**").authenticated()
-            .antMatchers("/evasion/**").authenticated()
-            .antMatchers("/users/**").authenticated()
-            .antMatchers("/admins/**").hasAnyAuthority("DOKTOL")
-            .antMatchers("/cards/**").authenticated()
-            .antMatchers("/friends/**").authenticated()
-
+            .antMatchers("/users/new", "/session/**", "/resources/**", "/webjars/**", "/h2-console/**").permitAll()
+            .antMatchers("/admins/**", "/achievements/new", "/achievements/edit", "/achievements/delete").hasAnyAuthority("DOKTOL")
+            .antMatchers("/achievements/**", "/games/**", "/evasion/**", "/users/**", "/cards/**",
+                "/friends/**", "/turns/**", "/evade/**", "/messages/**").authenticated()
             .anyRequest().denyAll()
             .and()
             .formLogin()

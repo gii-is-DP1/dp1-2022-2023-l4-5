@@ -9,6 +9,8 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameController;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.exceptions.EnoughCardsException;
+import org.springframework.samples.nt4h.turn.exceptions.EnoughEnemiesException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,11 +81,6 @@ public class ReestablishmentController {
         return getPlayer().getInDeck();
     }
 
-    //@ModelAttribute("stageCards")
-    //public List<Stage> getStageByGame() {
-    //    return getGame().getStages();
-    //}
-
     @GetMapping("/addCards")
     public String reestablishmentAddCards() {
         return VIEW_REESTABLISHMENT;
@@ -95,7 +92,8 @@ public class ReestablishmentController {
             playerService.takeNewCard(getPlayer());
             playerService.restoreEnemyLife(getEnemiesInBattle());
             playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
-
+        } catch(EnoughCardsException exc) {
+            return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         } catch (EnoughEnemiesException e) {
             return sendError("No te faltan orcos.", VIEW_REESTABLISHMENT);
         }
@@ -104,14 +102,19 @@ public class ReestablishmentController {
     }
 
     @GetMapping("/removeCards")
-    public String reestablishmentNextTurn() {
-        return "redirect:/nextTurn";
+    public String reestablishmentRemoveCards() {
+        return VIEW_REESTABLISHMENT;
     }
 
     @PostMapping("/removeCards")
     public String removeHandAbilitiesIntoDiscard(Integer cardId) {
+        try {
             playerService.removeAbilityCards(cardId, getPlayer());
-        return reestablishmentNextTurn();
+        } catch(EnoughCardsException exc) {
+            return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
+        }
+        resetMessage();
+        return reestablishmentRemoveCards();
     }
 
     //Métodos auxiliares
