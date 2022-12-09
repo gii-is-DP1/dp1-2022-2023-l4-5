@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -82,7 +83,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductInGame> getMarket() {
-        return productInGameRepository.findAllByStateProduct(StateProduct.IN_SALE, PageRequest.of(0, 5));
+    public List<Product> getMarket() {
+        return productInGameRepository.findAllByStateProduct(StateProduct.IN_SALE, PageRequest.of(0, 5)).stream().map(ProductInGame::getProduct).collect(Collectors.toList());
     }
 }

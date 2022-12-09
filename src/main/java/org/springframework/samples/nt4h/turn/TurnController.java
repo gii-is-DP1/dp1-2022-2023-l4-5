@@ -74,6 +74,7 @@ public class TurnController {
     }
 
     // TODO: Realizar todas las comprobaciones necesarias para pasar de turno.
+    /*
     @GetMapping("/nextTurn")
     public String nextTurn() {
         Player player = getPlayer();
@@ -82,9 +83,11 @@ public class TurnController {
         Phase phase = nextTurn.getPhase();
         if (phase.equals(Phase.EVADE)) {
             Player nextPlayer = getGame().getNextPlayer();
+            game.setCurrentTurn(nextPlayer);
             gameService.saveGame(game.toBuilder().currentTurn(nextTurn).currentPlayer(nextPlayer).build());
         } else
             gameService.saveGame(game.toBuilder().currentTurn(nextTurn).build());
         return enterInGame();
     }
+     */
 }

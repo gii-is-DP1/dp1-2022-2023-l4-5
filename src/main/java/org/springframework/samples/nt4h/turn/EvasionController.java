@@ -26,23 +26,21 @@ import java.util.List;
 public class EvasionController {
 
     public final String VIEW_CHOOSE_EVASION = "turns/actionDecision";
-    public final String NEXT_TURN = "redirect:/turns/nextTurn";
+    public final String NEXT_TURN = "redirect:/turns";
     private final UserService userService;
     private final PlayerService playerService;
     private final TurnService turnService;
     private final GameService gameService;
-    private final HeroService heroService;
 
     private final Advise advise = new Advise();
 
 
     @Autowired
-    public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService, HeroService heroService) {
+    public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService) {
         this.playerService = playerService;
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
-        this.heroService = heroService;
     }
 
     @ModelAttribute("game")
@@ -93,14 +91,17 @@ public class EvasionController {
     public String selectEvasion(Turn turn) {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
+        turn = turnService.getTurnsByPhaseAndPlayerId(turn.getPhase(), player.getId());
         if (loggedPlayer != player)
             return advise.sendError("No puedes seleccionar si atacar o evadir.",chooseEvasion());
-        gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
+        Game game = getGame();
+        game.setCurrentTurn(turn);
+        gameService.saveGame(game);
         if (turn.getPhase() == Phase.MARKET) {
             player.setHasEvasion(false);
             player.setNextPhase(Phase.MARKET);
-            Action action = new DropCardFromHand(loggedPlayer, null); // TODO: Eliminar dos cartas
-            action.executeAction();
+            // Action action = new DropCardFromHand(loggedPlayer, null); // TODO: Eliminar dos cartas
+            // action.executeAction();
             playerService.savePlayer(player);
         } else {
             player.setNextPhase(Phase.HERO_ATTACK);

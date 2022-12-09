@@ -3,6 +3,7 @@ package org.springframework.samples.nt4h.turn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.action.BuyProduct;
+import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.game.Game;
@@ -21,7 +22,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/market")
 public class MarketController {
-    public final String VIEW_MARKET = "market/market";
+    public final String VIEW_MARKET = "turns/marketPhase";
 
     private final UserService userService;
     private final ProductService productService;
@@ -35,8 +36,13 @@ public class MarketController {
     }
 
     @ModelAttribute("productsOnSale")
-    public List<ProductInGame> getProductsInSell() {
+    public List<Product> getProductsInSell() {
         return productService.getMarket();
+    }
+
+    @ModelAttribute("productInGame")
+    public ProductInGame getProductInGame() {
+        return new ProductInGame();
     }
 
     @ModelAttribute("game")
