@@ -34,28 +34,14 @@ import static org.mockito.Mockito.when;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AbilityServiceTest {
-    @Mock
-    PlayerService playerService;
     @Autowired
     AbilityService abs;
-    Player player;
 
     @BeforeAll
     void setUp() {
-        player = new Player();
-        player.setGold(0);
-        player.setGlory(0);
-        player.setName("Goat");
-        player.setReady(false);
-        player.setSequence(1);
-        player.setDamageDealed(0);
-        player.setDamageDealedToNightLords(0);
-        player.setBirthDate(LocalDate.now());
-
         AbilityInGame habilidad = new AbilityInGame();
         habilidad.setAbility(abs.getAbilityById(1));
         habilidad.setAttack(2);
-        habilidad.setPlayer(playerService.getPlayerByName("Goat"));
         habilidad.setProduct(false);
         habilidad.setTimesUsed(0);
         abs.saveAbilityInGame(habilidad);
@@ -171,7 +157,6 @@ public class AbilityServiceTest {
         AbilityInGame nuevo = new AbilityInGame();
         nuevo.setAbility(abs.getAbilityById(1));
         nuevo.setAttack(5);
-        nuevo.setPlayer(player);
         nuevo.setProduct(false);
         nuevo.setTimesUsed(0);
         abs.saveAbilityInGame(nuevo);

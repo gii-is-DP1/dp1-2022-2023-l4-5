@@ -1,9 +1,7 @@
 package org.springframework.samples.nt4h.player;
 
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -39,7 +37,7 @@ public class PlayerServiceTest {
     protected HeroService heroService;
     @BeforeAll
      void setUp() throws RoleAlreadyChosenException {
-        //OMG quiero poner esto en model de Player ✍(◔◡◔)
+        // ✍(◔◡◔)
         Player player = new Player();
         player.setGold(0);
         player.setGlory(0);
@@ -81,8 +79,9 @@ public class PlayerServiceTest {
     public void findAll(){
         List<Player> ls= playerService.getAllPlayers();
         assertNotNull(ls);
+        System.out.println(ls);
         assertFalse(ls.isEmpty());
-        assertEquals(2,ls.size());
+        assertEquals(1,ls.size());
     }
     @Test
     public void shouldInsertPlayer() throws RoleAlreadyChosenException {
@@ -100,7 +99,7 @@ public class PlayerServiceTest {
     }
     @Test
     public void shouldUpdatePlayer() throws RoleAlreadyChosenException {
-        Player player = playerService.getPlayerById(1);
+        Player player = playerService.getPlayerByName("Test");
         String OldName = player.getName();
         String NewName = OldName +"X";
         player.setName(NewName);
@@ -109,7 +108,7 @@ public class PlayerServiceTest {
     }
     @Test
     public void shouldRoleExceptPlayer() throws RoleAlreadyChosenException {
-        Player player = playerService.getPlayerById(1);
+        Player player = playerService.getPlayerByName("Test");
         HeroInGame hero = new HeroInGame();
         hero.setHero(heroService.getHeroByName("Beleth-Il"));
         HeroInGame hero1 = new HeroInGame();
@@ -119,7 +118,7 @@ public class PlayerServiceTest {
     }
     @Test
     public void shouldAddDeckFromRole(){
-        Player player = playerService.getPlayerById(1);
+        Player player = playerService.getPlayerByName("Test");
         HeroInGame hero = new HeroInGame();
         hero.setHero(heroService.getHeroById(1));
         Role esperado= heroService.getHeroById(1).getRole();
@@ -133,6 +132,7 @@ public class PlayerServiceTest {
 
     }
     @Test
+    @AfterAll
     public void deletePlayerTest(){
         playerService.deletePlayerById(1);
         assertFalse(playerService.playerExists(1));
