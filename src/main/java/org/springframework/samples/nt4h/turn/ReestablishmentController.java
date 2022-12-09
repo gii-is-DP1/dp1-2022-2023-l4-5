@@ -1,9 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.RemoveCardFromHandToDiscard;
-import org.springframework.samples.nt4h.action.TakeCardFromAbilityPile;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -12,7 +9,8 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameController;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
+import org.springframework.samples.nt4h.turn.exceptions.EnoughCardsException;
+import org.springframework.samples.nt4h.turn.exceptions.EnoughEnemiesException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/reestablishment")

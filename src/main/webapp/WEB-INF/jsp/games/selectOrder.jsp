@@ -32,4 +32,7 @@
             </tbody>
         </c:forEach>
     </table>
+    <a href="/turns">
+        <button type="button" class="btn btn-primary">Next</button>
+    </a>
 </nt4h:layout>

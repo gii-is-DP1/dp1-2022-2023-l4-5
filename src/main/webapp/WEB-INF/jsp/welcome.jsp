@@ -12,7 +12,7 @@
         <div style="text-align: center;">
             <div class="container">
                 <h1 style="color: white; text-shadow: 3px 3px 6px #000000;"><span FACE="hola"><fmt:message key="welcome"/></span></h1>
-                <h2 style="color: white; text-shadow: 3px 3px 6px #000000;"><span style="font-family: verdana;">${title}</span>
+                <h2 style="color: white; text-shadow: 3px 3px 6px #000000;"><span style="font-family: verdana,serif;">${title}</span>
                 </h2>
                 <img src="/resources/images/AAA.jpg" id="miImagen" height="400rem" width="700rem">
                 <br/> <!-- salto de linea/ meter un espacio en blanco entre texto -->

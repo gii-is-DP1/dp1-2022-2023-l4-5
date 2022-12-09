@@ -5,9 +5,7 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.google.common.collect.Lists;
 import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.action.Phase;
@@ -142,32 +140,23 @@ public class GameController {
 
     // Obtener todas las partidas.
     @GetMapping
-    public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model) {
-        page = page < 0 ? 0 : page;
-        Pageable pageable = PageRequest.of(page, 5);
-        List<Game> games = gameService.getAllGames();
-        Page<Game> gamePage = gameService.getAllGames(pageable);
-        if (!games.isEmpty() && gamePage.isEmpty()) {
-            page = games.size() / 5;
-            pageable = PageRequest.of(page, 5);
-            gamePage = gameService.getAllGames(pageable);
-        }
-        model.put("isNext", gamePage.hasNext());
-        model.addAttribute("games", gamePage.getContent());
-        model.put("page", page);
-
+    public String showGames() {
         return VIEW_GAME_LIST;
     }
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model) {
         User loggedUser = getUser();
         Game newGame = gameService.getGameById(gameId);
         Game oldGame = loggedUser.getGame();
         if (oldGame != null && oldGame != newGame)
             return advise.sendError("Ya estás en una partida y esa es  " + loggedUser.getGame() + ".", PAGE_GAMES);
-        if (oldGame == null) userService.addUserToGame(loggedUser, newGame);
+        if (oldGame == null)  {
+            if (Objects.equals(newGame.getPassword(), password) || newGame.getAccessibility() == Accessibility.PUBLIC)
+                userService.addUserToGame(loggedUser, newGame);
+            else return advise.sendError("La contraseña es incorrecta.", PAGE_GAMES);
+        }
         model.put("numHeroes", gameService.getGameById(gameId).isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
         return VIEW_GAME_LOBBY;
     }
@@ -277,7 +266,7 @@ public class GameController {
     public ResponseEntity<String> updateMessages() {
         JsonObject jsonObject = new JsonObject();
         Game game = getGame(); // NO estoy seguro de que funcione.
-        if (game == null)
+        if (game == null || game.getPlayers() == null)
             jsonObject.put("ready", false);
         else
             jsonObject.put("isReady", game.getPlayers().stream().allMatch(Player::getReady));
