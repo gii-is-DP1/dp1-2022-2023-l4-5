@@ -9,7 +9,6 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameController;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.turn.exceptions.EnoughEnemiesException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

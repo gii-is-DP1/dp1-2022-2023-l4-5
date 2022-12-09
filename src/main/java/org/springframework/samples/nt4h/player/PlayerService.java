@@ -11,7 +11,6 @@ import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
-import org.springframework.samples.nt4h.turn.EnoughCardsException;
 import org.springframework.samples.nt4h.turn.EnoughEnemiesException;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.security.acls.model.NotFoundException;
