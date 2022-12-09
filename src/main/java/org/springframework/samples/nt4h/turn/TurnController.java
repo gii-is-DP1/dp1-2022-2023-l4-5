@@ -27,7 +27,7 @@ public class TurnController {
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
     private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
     private final String PAGE_MARKET = "redirect:/market";
-    private final String PAGE_RESUPPLY = "redirect:/reestablishment";
+    private final String PAGE_RESUPPLY = "redirect:/reestablishment/addCards";
     private final String PAGE_LOBBY = "redirect:/games/";
 
     @Autowired

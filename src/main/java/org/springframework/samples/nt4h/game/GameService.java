@@ -10,6 +10,7 @@ import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
+import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.Player;
@@ -34,6 +35,7 @@ public class GameService {
     private final UserService userService;
     private final PlayerService playerService;
     private final HeroService heroService;
+    private final ProductService productService;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -97,6 +99,7 @@ public class GameService {
         game.addPlayer(newPlayer);
         userService.saveUser(user);
         saveGame(game);
+        productService.addProduct(game);
     }
 
     // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())

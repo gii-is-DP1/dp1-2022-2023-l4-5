@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.card.product;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
@@ -14,6 +13,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Table(name = "products_in_game")
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductInGame extends NamedEntity {
 
     @Min(0)

@@ -93,6 +93,7 @@ public class GameController {
     }
 
     private static List<String> createMessages(Game game) {
+        // Añadir href
         return game.getPlayers().stream().map(player -> player.getName() + " { " +
                 player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
                     .orElse("No hero selected") + " }" + " " + (Boolean.TRUE.equals(player.getReady()) ? "Ready" : "Not ready"))
@@ -244,7 +245,8 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_GAME_CREATE;
-        gameService.createGame(user, game); // TODO: Comprobar si la id se guarda.
+            gameService.createGame(user, game); // TODO: Comprobar si la id se guarda.
+        System.out.println("Game created: " + game.getId());
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 
@@ -288,5 +290,4 @@ public class GameController {
             jsonObject.put("isReady", game.getPlayers().stream().allMatch(Player::getReady));
         return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
-
 }
