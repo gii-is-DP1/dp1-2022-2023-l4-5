@@ -27,4 +27,5 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
     List<Player> findPlayersByGame(int gameId);
 
 
+
 }

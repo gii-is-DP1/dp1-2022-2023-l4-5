@@ -23,7 +23,7 @@ public class CardController {
     @GetMapping(value = "/buttonsCards")
     public String getViewBotonesCards() {
         // Los datos para el formulario.
-        System.out.println("HOLA MAMAM SALGO EN YT");
+        System.out.println("HOLA MAMA SALGO EN YT");
         return VIEW_BOTONES_CARDS;
     }
 
