@@ -89,7 +89,6 @@ public class MarketController {
         try {
             productService.buyProduct(player, productInGame);
         } catch (NoMoneyException e) {
-            System.out.println("No tienes dinero");
             return advise.sendError("No tienes dinero suficiente para comprar este producto", market());
         }
         return market();

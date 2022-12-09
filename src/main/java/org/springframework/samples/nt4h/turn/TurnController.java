@@ -21,7 +21,6 @@ public class TurnController {
 
 
     private final UserService userService;
-    private final GameService gameService;
 
     private final String PAGE_EVADE = "redirect:/evasion";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
@@ -31,9 +30,8 @@ public class TurnController {
     private final String PAGE_LOBBY = "redirect:/games/";
 
     @Autowired
-    public TurnController(UserService userService, GameService gameService) {
+    public TurnController(UserService userService) {
         this.userService = userService;
-        this.gameService = gameService;
     }
 
     @ModelAttribute("user")
@@ -72,22 +70,4 @@ public class TurnController {
         else if (phase.equals(Phase.RESUPPLY)) return PAGE_RESUPPLY;
         else return PAGE_LOBBY;
     }
-
-    // TODO: Realizar todas las comprobaciones necesarias para pasar de turno.
-    /*
-    @GetMapping("/nextTurn")
-    public String nextTurn() {
-        Player player = getPlayer();
-        Turn nextTurn = player.getNextTurn(getTurn());
-        Game game = getGame();
-        Phase phase = nextTurn.getPhase();
-        if(phase.equals(Phase.EVADE)) {
-            Player nextPlayer = getGame().getNextPlayer();
-            game.setCurrentTurn(nextPlayer);
-            gameService.saveGame(game.toBuilder().currentTurn(nextTurn).currentPlayer(nextPlayer).build());
-        } else
-            gameService.saveGame(game.toBuilder().currentTurn(nextTurn).build());
-        return enterInGame();
-    }
-     */
 }

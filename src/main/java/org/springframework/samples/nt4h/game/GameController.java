@@ -92,14 +92,6 @@ public class GameController {
         return new HeroInGame(); // TODO: comprobar si necesita valores por defecto.
     }
 
-    private static List<String> createMessages(Game game) {
-        // Añadir href
-        return game.getPlayers().stream().map(player -> player.getName() + " { " +
-                player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
-                    .orElse("No hero selected") + " }" + " " + (Boolean.TRUE.equals(player.getReady()) ? "Ready" : "Not ready"))
-            .collect(Collectors.toList());
-    }
-
     @ModelAttribute("player")
     public Player getPlayer() {
         User loggedUser = getUser();
@@ -248,20 +240,6 @@ public class GameController {
             gameService.createGame(user, game); // TODO: Comprobar si la id se guarda.
         System.out.println("Game created: " + game.getId());
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
-    }
-
-    // Actualizar los jugadores en el lobby.
-    @GetMapping("/update/{gameId}")
-    public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
-        JsonObject jsonObject = new JsonObject();
-        LocalDateTime now = LocalDateTime.now();
-        if (gameService.existsGameById(gameId)) {
-            Game game = gameService.getGameById(gameId);
-            jsonObject.put("messages", createMessages(game));
-            long difference = ChronoUnit.SECONDS.between(game.getStartDate(), now);
-            jsonObject.put("timer", 20 - difference);
-        }
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
 
     @GetMapping("/selectOrder/")
