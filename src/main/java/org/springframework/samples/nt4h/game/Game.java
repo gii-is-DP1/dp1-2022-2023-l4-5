@@ -32,6 +32,7 @@ public class Game extends NamedEntity {
 
     private LocalDateTime finishDate;
 
+    @NotNull
     private Integer maxPlayers;
 
 

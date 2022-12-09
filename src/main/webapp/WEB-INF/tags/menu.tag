@@ -10,8 +10,7 @@
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand"
-				href="<spring:url value="/" htmlEscape="true" />"><span></span></a>
+			<a class="navbar-brand" href="<spring:url value="/" htmlEscape="true"/>"><span></span></a>
             <button type="button" class="navbar-toggle" data-toggle="collapse"
                     data-target="#main-navbar">
                 <span class="sr-only"><os-p>Toggle navigation</os-p></span> <span
@@ -21,16 +20,12 @@
         </div>
         <div class="navbar-collapse collapse" id="main-navbar">
             <ul class="nav navbar-nav">
-
-
-                <sec:authorize access="hasAnyAuthority('DOKTOL')">
-                <nt4h:menuItem active="${name eq 'home'}" url="/"
-                               title="home page">
-                    <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-                    <span>Home</span>
-                </nt4h:menuItem>
-                </sec:authorize>
                 <sec:authorize access="isAuthenticated()">
+                    <nt4h:menuItem active="${name eq 'home'}" url="/"
+                                   title="home page">
+                        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                        <span>Home</span>
+                    </nt4h:menuItem>
                     <nt4h:menuItem active="${name eq 'Users'}" url="/users"
                                    title="User">
                         <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>

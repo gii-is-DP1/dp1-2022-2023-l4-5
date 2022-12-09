@@ -32,6 +32,13 @@ public class TurnService {
         }
     }
 
+    @Transactional
+    public List<Turn> getWaysTurns(Player player) {
+        return Lists.newArrayList(
+            getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()),
+            getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId()));
+    }
+
     @Transactional(readOnly = true)
     public Turn getTurnByID(int id) {
         return turnRepository.findById(id).orElse(null);

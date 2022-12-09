@@ -9,8 +9,6 @@ import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -20,8 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Turn extends BaseEntity {
-    @NotNull
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated
     private Phase phase;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -35,6 +33,5 @@ public class Turn extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
-
-
 }
+
