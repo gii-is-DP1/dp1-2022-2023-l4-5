@@ -3,6 +3,8 @@ package org.springframework.samples.nt4h.game;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.javatuples.Triplet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -36,6 +38,12 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    // Obtener las partidas de cinco en cinco.
+    public Page<Game> getAllGames(Pageable page) {
+        return gameRepository.findAll(page);
     }
 
     @Transactional(readOnly = true)
