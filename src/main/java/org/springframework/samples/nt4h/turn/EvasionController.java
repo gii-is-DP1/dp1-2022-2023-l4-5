@@ -82,7 +82,7 @@ public class EvasionController {
     }
 
     @PostMapping
-    public String selectEvasion(Turn turn) {
+    public String selectEvasion(Turn turn, Integer cardId) {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
         gameService.saveGame(getGame().toBuilder().currentTurn(turn).build());
@@ -90,6 +90,7 @@ public class EvasionController {
             return advise.sendError("No puedes seleccionar si atacar o evadir.",chooseEvasion());
         if (turn.getPhase() == Phase.EVADE && player.getHasEvasion() == true) {
             player.setHasEvasion(false);
+            playerService.discard2CardsEvasion(player, cardId);
             playerService.savePlayerAndCreateTurns(player);
         }
         return NEXT_TURN;

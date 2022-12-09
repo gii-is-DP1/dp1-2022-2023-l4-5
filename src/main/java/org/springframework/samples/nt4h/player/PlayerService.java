@@ -136,6 +136,15 @@ public class PlayerService {
             }
         }
     }
+
+    @Transactional
+    public void discard2CardsEvasion(Player player, Integer cardId) {
+        for(int i = 0; i > 2; i++) {
+            Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
+            removeToDiscard.executeAction();
+        }
+    }
+
 /*
     @Transactional
     public void changeStage() {

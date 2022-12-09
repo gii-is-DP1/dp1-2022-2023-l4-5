@@ -28,6 +28,7 @@ public class Ability extends Card {
     @Min(1)
     private Integer quantity;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "abilityEffectEnum")
     private AbilityEffectEnum abilityEffectEnum;
 }

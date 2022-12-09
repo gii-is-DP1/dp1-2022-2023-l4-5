@@ -67,8 +67,8 @@ public class Game extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
-    @OneToMany
-    private List<Stage> stages;
+    //@OneToMany
+    //private List<Stage> stages;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;

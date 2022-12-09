@@ -13,9 +13,9 @@ VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c
        ('ivasansan1', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'bético encubierto', 'DOKTOL', '2002-11-12', 1),
        ('pedruiagu', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'sácame del bolsillo', 'USER', '2002-10-01', 1);
+        'sácame del bolsillo', 'USER', '2002-10-01', 1),
         ('lapaqui', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'vivo en una simulación', 'USER', '2003-05-11', 1);
+        'vivo en una simulación', 'USER', '2003-05-11', 1),
         ('pepe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'pepito de carne mechá', 'USER', '2004-07-14', 1);
 
@@ -55,7 +55,7 @@ VALUES ('Valèrys', 'src/main/resources/static/resources/images/heroes/valerys_h
         'src/main/resources/static/resources/images/heroes/aranel_hero_front.png', -1, 2, 'WIZARD');
 
 -- Creación de habilidades.
-INSERT INTO abilities(name, front_image, back_image, max_uses, role, attack, quantity, abilityEffectEnum)
+INSERT INTO abilities(name, front_image, back_image, max_uses, role, attack, quantity, ability_effect_enum)
 VALUES ('Compañero Lobo', 'src/main/resources/static/resources/images/juego/wolf_abilities_front.png',
         'src/main/resources/static/resources/images/juego/parte_atras_general.png', -1, 'EXPLORER', 2, 1, 'COMPANERO_LOBO'),
        ('Disparo Certero', 'src/main/resources/static/resources/images/juego/sharp_abilities_front.png',
@@ -122,97 +122,93 @@ VALUES ('Compañero Lobo', 'src/main/resources/static/resources/images/juego/wol
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 0, 1, 'SAQUEO_ORO_GLORIA'),
        ('Trampa', 'src/main/resources/static/resources/images/abilities/trampa_ability_front.png',
         'src/main/resources/static/resources/images/abilities/ability_back.png', -1, 'THIEF', 0, 1, 'TRAMPA');
-/*
+
 -- Creación de orcos.
-INSERT INTO enemies(name, back_image, front_image, max_uses, health, glory, gold, has_cure, less_damage_wizard, isNightLord)
+INSERT INTO enemies(name, back_image, front_image, max_uses, health, glory, gold, has_cure, less_damage_wizard, is_night_lord)
 VALUES ('Honda', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 0, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 0, FALSE, FALSE, FALSE),
        ('Honda', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 1, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 1, FALSE, FALSE, FALSE),
        ('Honda', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 1, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 1, FALSE, FALSE, FALSE),
        ('Honda', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 0, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 0, FALSE, FALSE, FALSE),
        ('Honda', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 1, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/honda_orc_front.png', -1, 2, 1, 1, FALSE, FALSE, FALSE),
        ('Lanza', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 0, TRUE, FALSE),
+        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 0, TRUE, FALSE, FALSE),
        ('Lanza', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 0, TRUE, FALSE),
+        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 0, TRUE, FALSE, FALSE),
        ('Lanza', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 0, TRUE, FALSE),
+        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 0, TRUE, FALSE, FALSE),
        ('Lanza', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 1, TRUE, FALSE),
+        'src/main/resources/static/resources/images/juego/lanza_orc_front.png', -1, 3, 2, 1, TRUE, FALSE, FALSE),
        ('Lanza', 'src/main/resources/static/resources/images/juego/1-1_orc_back.png',
-        'src/main/resources/static/resources/images/juego/chaman_orc_front.png', -1, 3, 3, 1, TRUE, FALSE),
+        'src/main/resources/static/resources/images/juego/chaman_orc_front.png', -1, 3, 3, 1, TRUE, FALSE, FALSE),
        ('Chaman', 'src/main/resources/static/resources/images/juego/2-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/chaman_orc_front.png', -1, 3, 1, 2, FALSE, TRUE),
+        'src/main/resources/static/resources/images/juego/chaman_orc_front.png', -1, 3, 1, 2, FALSE, TRUE, FALSE),
        ('Chaman', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/chaman_orc_front.png', -1, 3, 1, 0, FALSE, TRUE),
+        'src/main/resources/static/resources/images/juego/chaman_orc_front.png', -1, 3, 1, 0, FALSE, TRUE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/sword_orc_front.png', -1, 4, 2, 0, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/sword_orc_front.png', -1, 4, 2, 0, FALSE, FALSE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/sword_orc_front.png', -1, 4, 2, 0, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/sword_orc_front.png', -1, 4, 2, 0, FALSE, FALSE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/sword_orc_front.png', -1, 4, 2, 1, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/sword_orc_front.png', -1, 4, 2, 1, FALSE, FALSE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 2, 1, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 2, 1, FALSE, FALSE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 2, 1, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 2, 1, FALSE, FALSE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/2-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 2, 2, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 2, 2, FALSE, FALSE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/2-1_orc_back.png',
-        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 3, 2, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 3, 2, FALSE, FALSE, FALSE),
        ('Sword', 'src/main/resources/static/resources/images/juego/2-1_orc_back.png',
-        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 3, 2, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/bounty_orc_front.png', -1, 4, 3, 2, FALSE, FALSE, FALSE),
        ('Gran Chaman', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 3, 0, FALSE, TRUE),
+        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 3, 0, FALSE, TRUE, FALSE),
        ('Gran Chaman', 'src/main/resources/static/resources/images/juego/2-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 3, 2, FALSE, TRUE),
+        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 3, 2, FALSE, TRUE, FALSE),
        ('Gran Chaman', 'src/main/resources/static/resources/images/juego/2-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 3, 2, FALSE, TRUE),
+        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 3, 2, FALSE, TRUE, FALSE),
        ('Gran Chaman', 'src/main/resources/static/resources/images/juego/2-1_orc_back.png',
-        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 4, 2, FALSE, TRUE),
+        'src/main/resources/static/resources/images/juego/greatchaman_orc_front.png', -1, 5, 4, 2, FALSE, TRUE, FALSE),
        ('Terminator', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/axe_orc_front.png', -1, 6, 4, 0, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/axe_orc_front.png', -1, 6, 4, 0, FALSE, FALSE, FALSE),
        ('Terminator', 'src/main/resources/static/resources/images/juego/1-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/axe_orc_front.png', -1, 6, 4, 0, FALSE, FALSE),
+        'src/main/resources/static/resources/images/juego/axe_orc_front.png', -1, 6, 4, 0, FALSE, FALSE, FALSE),
        ('Terminator', 'src/main/resources/static/resources/images/juego/0-0_orc_back.png',
-        'src/main/resources/static/resources/images/juego/axe_orc_front.png', -1, 6, 4, 1, FALSE, FALSE);
--- Creación de señores de la noche.
-INSERT INTO night_lords(name, back_image, front_image, max_uses, health, glory, gold, has_cure, less_damage_wizard, isNightLord)
-VALUES ('Gurdrug', 'src/main/resources/static/resources/images/juego/nightlord_back.png',
-        'src/main/resources/static/resources/images/juego/gur_nightlord_front.png',-1, 8, null, null, ),
+        'src/main/resources/static/resources/images/juego/axe_orc_front.png', -1, 6, 4, 1, FALSE, FALSE, FALSE),
+       ('Gurdrug', 'src/main/resources/static/resources/images/juego/nightlord_back.png',
+        'src/main/resources/static/resources/images/juego/gur_nightlord_front.png',-1, 8, null, null, FALSE, FALSE, TRUE),
        ('Roghkiller', 'src/main/resources/static/resources/images/juego/nightlord_back.png',
-        'src/main/resources/static/resources/images/juego/rogh_nightlord_front.png', -1, 9),
+        'src/main/resources/static/resources/images/juego/rogh_nightlord_front.png', -1, 9, null, null, FALSE, FALSE, TRUE),
        ('Shriekknifer', 'src/main/resources/static/resources/images/juego/nightlord_back.png',
-        'src/main/resources/static/resources/images/juego/shriek_nightlord_front.png', -1, 10);
-*/
+        'src/main/resources/static/resources/images/juego/shriek_nightlord_front.png', -1, 10, null, null, FALSE, FALSE, TRUE);
 
 -- Productos
-INSERT INTO products(name, front_image, back_image, max_uses, price, attack, quantity)
+INSERT INTO products(name, front_image, back_image, max_uses, price, attack, quantity, ability_effect_enum)
 VALUES ('Daga élfica', 'src/main/resources/static/resources/images/products/dagaelfica_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 3, 2, 2),
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 3, 2, 2, 'DAGA_ELFICA'),
        ('Poción curativa', 'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', 1, 8, 0, 3),
+        'src/main/resources/static/resources/images/products/product_back.png', 1, 8, 0, 3, 'POCION_CURATIVA'),
        ('Piedra de amolar', 'src/main/resources/static/resources/images/products/piedraamolar_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 4, 0, 1),
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 4, 0, 1, 'PIEDRA_DE_AMOLAR'),
        ('Vial de conjuración',
         'src/main/resources/static/resources/images/products/vialconjuracion_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 5, 0, 2),
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 5, 0, 2, 'VIAL_DE_CONJURACION'),
        ('Elixir de concentración',
         'src/main/resources/static/resources/images/products/pocioncurativa_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 3, 0, 2),
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 3, 0, 2, 'ELIXIR_DE_CONCENTRACION'),
        ('Capa élfica', 'src/main/resources/static/resources/images/products/capaelfica_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 3, 0, 1),
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 3, 0, 1, 'CAPA_ELFICA'),
        ('Armadura de placas',
         'src/main/resources/static/resources/images/products/armaduraplacas_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 4, 0, 1),
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 4, 0, 1, 'ARMADURA_DE_PLACAS'),
        ('Alabarda orca', 'src/main/resources/static/resources/images/products/alabardaorca_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 5, 4, 1),
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 5, 4, 1, 'ALABARDA_ORCA'),
        ('Arco compuesto', 'src/main/resources/static/resources/images/products/arcocompuesto_product_front.png',
-        'src/main/resources/static/resources/images/products/product_back.png', -1, 5, 4, 1);
-
+        'src/main/resources/static/resources/images/products/product_back.png', -1, 5, 4, 1, 'ARCO_COMPUESTO');
 -- Nuevo
 
 -- Creación de la relación entre capacidades y productos.
@@ -329,3 +325,4 @@ VALUES (1, 1),
 
 INSERT INTO users_friends(user_id, friends_id)
 VALUES (1, 2);
+
