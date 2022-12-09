@@ -4,7 +4,6 @@ import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.player.Player;
 
 import java.util.List;
-import java.util.Random;
 
 public class LagrimasDeAradiel {
 
@@ -24,7 +23,6 @@ public class LagrimasDeAradiel {
             victimPlayerDiscard.add(actualPlayerDiscard.get(idChosenCard));
             actualPlayerDiscard.remove(idChosenCard);
         }
-
     }
 
 }
