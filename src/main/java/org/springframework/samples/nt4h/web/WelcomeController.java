@@ -17,7 +17,7 @@ public class WelcomeController {
 	  public String welcome(Map<String, Object> model) {
           List<Person> people = new ArrayList<>();
           Person p1 = new Person();
-          p1.setFirstName("Pedro ");
+          p1.setFirstName("Pedro Jesús ");
           p1.setLastName("Ruiz Aguilar");
           people.add(p1);
           Person p2 = new Person();
@@ -26,18 +26,24 @@ public class WelcomeController {
           people.add(p2);
           Person p3 = new Person();
           p3.setFirstName("Laura ");
-          p3.setLastName("Roldan Merat");
+          p3.setLastName("Roldán Merat");
           people.add(p3);
           Person p4 = new Person();
           p4.setFirstName("Alejandro ");
-          p4.setLastName("Santiago Felix");
+          p4.setLastName("Santiago Félix");
           people.add(p4);
           Person p5 = new Person();
-          p5.setFirstName("Ivan ");
-          p5.setLastName("Sanchez San jose");
+          p5.setFirstName("Iván ");
+          p5.setLastName("Sánchez San José");
           people.add(p5);
+          Person p6 = new Person();
+          p6.setFirstName("Álvaro ");
+          p6.setLastName("Hidalgo Rodríguez");
+          people.add(p6);
+
           model.put("people", people);
           model.put("title", "No Time For Heroes");
+
           return "welcome";
       }
 }

@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
@@ -45,13 +45,15 @@ public class Player extends NamedEntity {
 
 
     @Min(0)
-    private Integer damageDealed;
+    private Integer damageDealt;
 
     @Min(0)
-    private Integer damageDealedToNightLords;
+    private Integer damageDealtToNightLords;
 
-    @Range(min = 1, max = 4)
+    // @Range(min = 1, max = 4)
     private Integer sequence;
+
+    private Phase nextPhase;
 
 
     private Boolean ready;
@@ -65,6 +67,13 @@ public class Player extends NamedEntity {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
 
+    public Turn getTurn(Phase phase) {
+        return this.turns.stream()
+                .filter(turn -> turn.getPhase().equals(phase))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No turn found for phase " + phase));
+    }
+
 
     //Relaciones
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
@@ -73,7 +82,7 @@ public class Player extends NamedEntity {
     // Se crean al crear al jugador.
     @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
-    private List<Turn> turn;
+    private List<Turn> turns;
 
 
     public List<HeroInGame> getHeroes() {
@@ -82,10 +91,10 @@ public class Player extends NamedEntity {
         return heroes;
     }
 
-    public List<Turn> getTurn() {
-        if (turn == null)
-            turn = Lists.newArrayList();
-        return turn;
+    public List<Turn> getTurns() {
+        if (turns == null)
+            turns = Lists.newArrayList();
+        return turns;
     }
 
 
@@ -187,8 +196,15 @@ public class Player extends NamedEntity {
         }
     }
 
-    public Boolean userHasSameNameAsPlayer(User user) {
-        return getName().equals(user.getUsername());
+    public Turn getNextTurn(Turn turn) {
+        return getTurn(turn.getPhase().nextPhase());
     }
 
+    public void addTurn(Turn turn) {
+        if (turns == null) {
+            turns = Lists.newArrayList(turn);
+        } else {
+            turns.add(turn);
+        }
+    }
 }

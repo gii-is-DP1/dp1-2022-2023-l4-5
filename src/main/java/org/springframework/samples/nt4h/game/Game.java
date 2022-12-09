@@ -11,7 +11,6 @@ import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenExcepti
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
-import org.springframework.samples.nt4h.stage.Stage;
 import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
@@ -33,6 +32,7 @@ public class Game extends NamedEntity {
 
     private LocalDateTime finishDate;
 
+    @NotNull
     private Integer maxPlayers;
 
 
@@ -60,11 +60,10 @@ public class Game extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Player> alivePlayersInTurnOrder;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Turn> turn;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Turn currentTurn;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @Size(max = 3)
     private List<EnemyInGame> actualOrcs;
 
     @OneToMany
@@ -76,8 +75,22 @@ public class Game extends NamedEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Stage> stage;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    public Player currentPlayer;
+
+    public Player getNextPlayer() {
+        int index = alivePlayersInTurnOrder.indexOf(currentPlayer);
+        if (index == alivePlayersInTurnOrder.size() - 1) {
+            return alivePlayersInTurnOrder.get(0);
+        } else {
+            return alivePlayersInTurnOrder.get(index + 1);
+        }
+    }
+
+
+
 
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)

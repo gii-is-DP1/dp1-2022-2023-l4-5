@@ -21,7 +21,6 @@ public class Message extends BaseEntity {
     @Size(max = 500)
     private String content;
 
-    @Column(columnDefinition = "varchar(36) default NOW()")
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     private LocalDateTime time;
 

@@ -1,6 +1,11 @@
 package org.springframework.samples.nt4h.card.product;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.BuyProduct;
+import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +25,16 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
     }
 
+    @Transactional
+    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException {
+        if (player.getGold() < productInGame.getProduct().getPrice())
+            throw new NoMoneyException();
+        else if (productInGame.getStateProduct() == StateProduct.IN_SALE) {
+            Action bp = new BuyProduct(player, productInGame);
+            bp.executeAction();
+        }
+    }
+
     @Transactional(readOnly = true)
     public Product getProductByName(String name) {
         return productRepository.findByName(name).orElseThrow(() -> new NotFoundException("Product not found"));
@@ -28,21 +43,6 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
-    }
-
-    @Transactional
-    public void saveProduct(Product product) {
-        productRepository.save(product);
-    }
-
-    @Transactional
-    public void deleteProduct(Product product) {
-        productRepository.delete(product);
-    }
-
-    @Transactional
-    public void deleteProductById(int id) {
-        productRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
@@ -79,5 +79,10 @@ public class ProductService {
     @Transactional(readOnly = true)
     public boolean productInGameExists(int id) {
         return productInGameRepository.existsById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductInGame> getMarket() {
+        return productInGameRepository.findAllByStateProduct(StateProduct.IN_SALE, PageRequest.of(0, 5));
     }
 }

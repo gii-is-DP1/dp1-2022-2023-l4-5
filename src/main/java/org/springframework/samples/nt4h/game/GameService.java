@@ -1,19 +1,37 @@
 package org.springframework.samples.nt4h.game;
 
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
+import org.javatuples.Triplet;
+import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.hero.HeroInGame;
+import org.springframework.samples.nt4h.card.hero.HeroService;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
+import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.ListIterator;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class GameService {
     private final GameRepository gameRepository;
+    private final UserService userService;
+    private final PlayerService playerService;
+    private final HeroService heroService;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -25,12 +43,6 @@ public class GameService {
         return gameRepository.findById(id).orElseThrow(() -> new NotFoundException("Game not found"));
     }
 
-    @Transactional(readOnly = true)
-    public Game getGameByName(String name) {
-        return gameRepository.findByName(name).orElseThrow(() -> new NotFoundException("Game not found"));
-    }
-
-    //TODO: actualizar la Date_finish cuando acabe la partida
     @Transactional
     public void saveGame(Game game) {
         gameRepository.save(game);
@@ -46,33 +58,76 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
+    public Player addPlayerToGame(Player player, Game game, User user) throws FullGameException {
+        Player newPlayer = player.toBuilder().host(false).birthDate(user.getBirthDate()).game(game).build();
+        newPlayer.setName(user.getUsername());
+        game.addPlayer(newPlayer);
+        playerService.savePlayerAndCreateTurns(newPlayer);
+        user.setPlayer(newPlayer);
+        userService.saveUser(user);
+        saveGame(game);
+        return newPlayer;
+    }
+
+    @Transactional
+    public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException {
+        game.addPlayerWithNewHero(player, heroInGame);
+        player.setReady(player.getHeroes().size() == game.getMode().getNumHeroes());
+        heroService.saveHeroInGame(heroInGame);
+        playerService.savePlayerAndCreateTurns(player);
+        playerService.addDeckFromRole(player, game.getMode());
+        saveGame(game);
+    }
+
+    @Transactional
+    public void createGame(User user, Game game) throws FullGameException {
+        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false).nextPhase(Phase.EVADE)
+            .build();
+        user.setGame(game);
+        game.setStartDate(LocalDateTime.now());
+        newPlayer.setName(user.getUsername());
+        game.addPlayer(newPlayer);
+        userService.saveUser(user);
+        saveGame(game);
+    }
+
+    // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
+
+    @Transactional
+    public void orderPlayer(List<Player> players, Game game) {
+        System.out.println("Ordering players");
+        List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
+        for (var i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            List<AbilityInGame> abilities = player.getInDeck();
+            datos.add(new Triplet<>(i, player, abilities.get(0).getAttack() + abilities.get(1).getAttack()));
+        }
+        datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
+        System.out.println("datos = " + datos);
+        if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
+            datos.get(0).getValue1().getBirthDate().isAfter(datos.get(1).getValue1().getBirthDate())) {
+            var first = datos.get(0);
+            var second = datos.get(1);
+            datos.set(0, second);
+            datos.set(1, first);
+        }
+        players = datos.stream()
+            .map(triplet -> {
+                Player p = triplet.getValue1();
+                p.setSequence(triplet.getValue0());
+                return p;
+            }).collect(Collectors.toList());
+        Player firstPlayer = players.get(0);
+        players.forEach(playerService::savePlayer);
+        System.out.println("First player: " + firstPlayer.getSequence());
+        game.setPlayers(players);
+        game.setCurrentPlayer(firstPlayer);
+        game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));
+        saveGame(game);
+    }
+
     @Transactional(readOnly = true)
-    public boolean gameExists(int id) {
+    public boolean existsGameById(int id) {
         return gameRepository.existsById(id);
     }
-
-    @Transactional
-    public Optional<Player> getPlayerByUserInGame(User user, Game game) {
-        return game.getPlayers().stream()
-            .filter(p -> p.getName().equals(user.getUsername()))
-            .findFirst();
-    }
-
-    @Transactional
-    public Boolean isUserInOtherGame(int gameId, User user) {
-        Boolean response = null;
-        for (int i = 0; gameRepository.findDistinctById(gameId).size() > i; i++) {
-            List<Player> players = gameRepository.findPlayersByGame(i);
-            response = players.stream().anyMatch(p -> p.userHasSameNameAsPlayer(user));
-        }
-        return response;
-    }
-
-    @Transactional
-    public Optional<Game> getUserInOtherGame(Integer gameId, User user) {
-        return getAllGames().stream()
-            .filter(x -> isUserInOtherGame(gameId, user))
-            .findFirst();
-    }
-
 }

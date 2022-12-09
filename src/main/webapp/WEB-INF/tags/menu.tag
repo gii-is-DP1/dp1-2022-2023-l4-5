@@ -10,45 +10,42 @@
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand"
-				href="<spring:url value="/" htmlEscape="true" />"><span></span></a>
-			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target="#main-navbar">
-				<span class="sr-only"><os-p>Toggle navigation</os-p></span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-		</div>
-		<div class="navbar-collapse collapse" id="main-navbar">
-			<ul class="nav navbar-nav">
+			<a class="navbar-brand" href="<spring:url value="/" htmlEscape="true"/>"><span></span></a>
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#main-navbar">
+                <span class="sr-only"><os-p>Toggle navigation</os-p></span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse" id="main-navbar">
+            <ul class="nav navbar-nav">
+                <sec:authorize access="isAuthenticated()">
+                    <nt4h:menuItem active="${name eq 'home'}" url="/"
+                                   title="home page">
+                        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                        <span>Home</span>
+                    </nt4h:menuItem>
+                    <nt4h:menuItem active="${name eq 'Users'}" url="/users"
+                                   title="User">
+                        <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                        <span>Users</span>
+                    </nt4h:menuItem>
+                    <nt4h:menuItem active="${name eq 'friends'}" url="/friends"
+                                   title="friends">
+                        <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                        <span>Friends</span>
+                    </nt4h:menuItem>
+                    <nt4h:menuItem active="${name eq 'Card'}" url="/cards/buttonsCards"
+                                   title="Card">
+                        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                        <span>Cards</span>
+                    </nt4h:menuItem>
+                </sec:authorize>
+            </ul>
 
-				<nt4h:menuItem active="${name eq 'home'}" url="/"
-					title="home page">
-					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
-				</nt4h:menuItem>
 
 
-				<nt4h:menuItem active="${name eq 'games'}" url="/games"
-					title="find games">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find Games</span>
-
-				</nt4h:menuItem>
-
-				<nt4h:menuItem active="${name eq 'games'}" url="/games/new"
-					title="Create Game">
-					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Create Game</span>
-				</nt4h:menuItem>
-
-				<nt4h:menuItem active="${name eq 'capacities'}" url="/users"
-					title="capacities">
-					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-					<span>Users</span>
-				</nt4h:menuItem>
-
-			</ul>
 
 
 			<ul class="nav navbar-nav navbar-right">
@@ -94,24 +91,8 @@
 										</div>
 									</div>
 								</div>
-							</li>
-							<li class="divider"></li>
-							<!--
-                                                        <li>
-                                                            <div class="navbar-login navbar-login-session">
-                                                                <div class="row">
-                                                                    <div class="col-lg-12">
-                                                                        <p>
-                                                                            <a href="#" class="btn btn-primary btn-block">My Profile</a>
-                                                                            <a href="#" class="btn btn-danger btn-block">Change
-                                                                                Password</a>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                            -->
-						</ul></li>
+                            </li>
+                        </ul>
 				</sec:authorize>
 			</ul>
 		</div>

@@ -1,7 +1,9 @@
 package org.springframework.samples.nt4h.user;
 
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.samples.nt4h.player.Tier;
 
 import java.util.List;
@@ -20,4 +22,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     Optional<User> findById(int id);
 
+    Page<User> findAll(Pageable page);
 }

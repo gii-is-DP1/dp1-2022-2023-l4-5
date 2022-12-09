@@ -17,19 +17,18 @@ package org.springframework.samples.nt4h.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -37,10 +36,11 @@ public class UserController {
 
     // Constantes.
     private static final String VIEW_USER_CREATE_OR_UPDATE_FORM = "users/createUserForm";
-    private static final String VIEW_USER_LIST = "users/usersList";
+    private static final String VIEW_USER_LIST = "users/usersGameList";
     private static final String VIEW_USER_DETAILS = "users/userDetails";
     private static final String PAGE_WELCOME = "redirect:/welcome";
     private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
+
     // Servicios.
     private final UserService userService;
 
@@ -55,20 +55,25 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
-    @ModelAttribute("selections")
-    public List<User> getFriends() {
-        return userService.getAllUsers();
+    @ModelAttribute("loggedUser")
+    public User loggedUser() {
+        return this.userService.getLoggedUser();
     }
-
-    @ModelAttribute("user")
-    public User getUser() {
-        User loggedUser = userService.getLoggedUser();
-        return loggedUser != null ? loggedUser : new User();
-    }
-
     // Obtener todos los usuarios.
     @GetMapping
-    public String getUsers() {
+    public String getUsers(@RequestParam(defaultValue = "0") int page, ModelMap model) {
+        page = page < 0 ? 0 : page;
+        Pageable pageable = PageRequest.of(page, 5);
+        List<User> users = userService.getAllUsers();
+        Page<User> usersPage = userService.getAllUsers(pageable);
+        if (!users.isEmpty() && usersPage.isEmpty()) {
+            page = users.size() / 5;
+            pageable = PageRequest.of(page, 5);
+            usersPage = userService.getAllUsers(pageable);
+        }
+        model.put("isNext", usersPage.hasNext());
+        model.addAttribute("users", usersPage.getContent());
+        model.put("page", page);
         return VIEW_USER_LIST;
     }
 
@@ -95,8 +100,7 @@ public class UserController {
 
     //Editar usuario
     @GetMapping(value = "/edit")
-    public String initUpdateUserForm() {
-        return VIEW_USER_CREATE_OR_UPDATE_FORM;
+    public String initUpdateUserForm() {return VIEW_USER_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "/edit")
@@ -111,6 +115,7 @@ public class UserController {
         }
     }
 
+
     @GetMapping(value = "/delete")
     public String processDeleteUser() {
         User loggedUser = userService.getLoggedUser();
@@ -118,4 +123,5 @@ public class UserController {
         this.userService.deleteUser(loggedUser);
         return PAGE_WELCOME;
     }
+
 }
