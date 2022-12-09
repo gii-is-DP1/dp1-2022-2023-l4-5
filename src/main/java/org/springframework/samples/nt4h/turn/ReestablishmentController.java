@@ -86,14 +86,17 @@ public class ReestablishmentController {
         return VIEW_REESTABLISHMENT;
     }
 
+    //@ModelAttribute("stageCards")
+    //public List<Stage> getStageByGame() {
+    //    return getGame().getStages();
+    //}
+
     @PostMapping("/addCards")
     public String takeNewAbilitiesAndEnemies() {
         try {
             playerService.takeNewCard(getPlayer());
             playerService.restoreEnemyLife(getEnemiesInBattle());
             playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
-        } catch(EnoughCardsException exc) {
-            return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
         } catch (EnoughEnemiesException e) {
             return sendError("No te faltan orcos.", VIEW_REESTABLISHMENT);
         }
@@ -102,19 +105,14 @@ public class ReestablishmentController {
     }
 
     @GetMapping("/removeCards")
-    public String reestablishmentRemoveCards() {
-        return VIEW_REESTABLISHMENT;
+    public String reestablishmentNextTurn() {
+        return "redirect:/nextTurn";
     }
 
     @PostMapping("/removeCards")
     public String removeHandAbilitiesIntoDiscard(Integer cardId) {
-        try {
             playerService.removeAbilityCards(cardId, getPlayer());
-        } catch(EnoughCardsException exc) {
-            return sendError("No te faltan cartas.", VIEW_REESTABLISHMENT);
-        }
-        resetMessage();
-        return reestablishmentRemoveCards();
+        return reestablishmentNextTurn();
     }
 
     //Métodos auxiliares
