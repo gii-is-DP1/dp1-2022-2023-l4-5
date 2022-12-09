@@ -23,7 +23,8 @@
             <div class="form-group has-feedback">
 
                 <nt4h:inputField label="Username" name="username"/>
-                <nt4h:inputField label="Password" name="password"/>
+                <h5>Password</h5>
+                <input type="password" name="password"/>
                 <nt4h:inputField label="Avatar" name="avatar"/>
                 <nt4h:inputField label="Birth Date" name="birthDate"/>
                 <nt4h:inputField label="Description" name="description"/>

@@ -12,16 +12,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
+@Table(name = "enemies")
 public class Enemy extends Card {
     @NotNull
     @Range(min = 2, max = 10)
     private Integer health;
 
-    @NotNull
     @Range(min = 1, max = 4)
     private Integer glory;
 
-    @NotNull
     @Range(min = 0, max = 2)
     private Integer gold;
 
@@ -30,4 +29,7 @@ public class Enemy extends Card {
 
     @NotNull
     private Boolean lessDamageWizard;
+
+    @NotNull
+    private Boolean isNightLord;
 }

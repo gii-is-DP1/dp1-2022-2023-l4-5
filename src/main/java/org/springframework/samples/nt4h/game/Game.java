@@ -15,7 +15,6 @@ import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,8 +34,6 @@ public class Game extends NamedEntity {
     @NotNull
     private Integer maxPlayers;
 
-
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private Mode mode;
@@ -44,7 +41,6 @@ public class Game extends NamedEntity {
     public int isUniClass() {
         return mode == Mode.UNI_CLASS ? 1 : 2;
     }
-
 
     @Enumerated(EnumType.STRING)
     private Phase phase;
@@ -72,10 +68,11 @@ public class Game extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
+    //@OneToMany
+    //private List<Stage> stages;
+
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
-
-
 
     @OneToOne(cascade = CascadeType.ALL)
     public Player currentPlayer;
@@ -88,9 +85,6 @@ public class Game extends NamedEntity {
             return alivePlayersInTurnOrder.get(index + 1);
         }
     }
-
-
-
 
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)
@@ -111,7 +105,6 @@ public class Game extends NamedEntity {
         }
 
     }
-
 
     public boolean isHeroAlreadyChosen(Hero hero) {
         if(this.players==null)return false;

@@ -62,7 +62,7 @@ public class AchievementController {
     @PostMapping("/{achievementId}/edit")
     public String saveAchievement(@PathVariable int achievementId,@Valid Achievement actualAchievement, BindingResult br, ModelMap model) {
         if(br.hasErrors())
-            return createAchievement(model);
+            return editAchievement(achievementId, model);
         Achievement achievementToBeUpdated = achievementService.getAchievementById(achievementId);
         BeanUtils.copyProperties(actualAchievement, achievementToBeUpdated,"id");
         achievementService.saveAchievement(achievementToBeUpdated);
