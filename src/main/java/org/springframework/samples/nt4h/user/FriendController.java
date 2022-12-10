@@ -28,13 +28,6 @@ public class FriendController {
         page = page < 0 ? 0 : page;
         Pageable pageable = PageRequest.of(page, 3);
         List<User> friends = userService.getFriends();
-        /*
-        if (friends.size() < 3) {
-            model.put("friendsList", friends);
-            model.put("isNext", false);
-            return VIEW_FRIEND_LIST;
-        }
-         */
         Page<User> friendsPage = userService.getFriendsPaged(pageable);
         if (!friends.isEmpty() && friendsPage.isEmpty()) {
             page = friends.size() / 5;
