@@ -91,13 +91,15 @@ public class GameService {
 
     @Transactional
     public void createGame(User user, Game game) throws FullGameException {
-        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false).nextPhase(Phase.EVADE)
-            .build();
-        user.setGame(game);
-        game.setStartDate(LocalDateTime.now());
+        // TODO: Crear un método a parte para creación de player.
+        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false).nextPhase(Phase.EVADE).damageDealt(0).damageDealtToNightLords(0)
+            .birthDate(user.getBirthDate()).damageProtect(0).numOrcsKilled(0).numWarLordKilled(0).sequence(-1).wounds(0).game(game).build();
         newPlayer.setName(user.getUsername());
+        user.setGame(game);
+        user.setPlayer(newPlayer);
+        game.setStartDate(LocalDateTime.now());
         game.addPlayer(newPlayer);
-        userService.saveUser(user);
+        game.setAccessibility(game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE);
         saveGame(game);
         productService.addProduct(game);
     }

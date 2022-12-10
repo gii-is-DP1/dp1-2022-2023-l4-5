@@ -41,7 +41,7 @@
                 </td>
                 <td>
                 <c:choose>
-                    <c:when test="game.Accessibility.isPublic">
+                    <c:when test="${game.accessibility.isPublic()}">
                         <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game</a>
                     </c:when>
                     <c:otherwise>

@@ -40,7 +40,7 @@ public class HeroInGame extends BaseEntity implements Jsonable {
     public String toJson() {
         JsonObject json = new JsonObject();
         json.put("hero", hero);
-        return null;
+        return json.toJson();
     }
 
     @Override

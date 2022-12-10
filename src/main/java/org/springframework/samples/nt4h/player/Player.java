@@ -218,7 +218,9 @@ public class Player extends NamedEntity implements Jsonable {
         json.put("id", this.getId());
         json.put("heroesInGame", heroes);
         json.put("host", host);
-        return null;
+        json.put("name", this.getName());
+        json.put("ready", ready);
+        return json.toJson();
     }
 
     @Override

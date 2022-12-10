@@ -237,8 +237,7 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_GAME_CREATE;
-            gameService.createGame(user, game); // TODO: Comprobar si la id se guarda.
-        System.out.println("Game created: " + game.getId());
+        gameService.createGame(user, game);
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 
@@ -256,16 +255,5 @@ public class GameController {
         if (players.stream().anyMatch(player -> player.getSequence() == null))
             gameService.orderPlayer(players, game);
         return VIEW_GAME_ORDER;
-    }
-
-    @GetMapping("/ready")
-    public ResponseEntity<String> updateMessages() {
-        JsonObject jsonObject = new JsonObject();
-        Game game = getGame(); // NO estoy seguro de que funcione.
-        if (game == null || game.getPlayers() == null)
-            jsonObject.put("ready", false);
-        else
-            jsonObject.put("isReady", game.getPlayers().stream().allMatch(Player::getReady));
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
 }
