@@ -41,6 +41,7 @@
                 </td>
                 <td>
                 <c:choose>
+
                     <c:when test="${game.accessibility.isPublic()}">
                         <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game</a>
                     </c:when>
@@ -61,6 +62,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <div style="text-align: center;">
+
                                             <input type="password" id="input">
                                         </div>
                                     </div>

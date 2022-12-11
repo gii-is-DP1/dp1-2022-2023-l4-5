@@ -1,6 +1,10 @@
 package org.springframework.samples.nt4h.game;
 
 
+
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.github.cliftonlabs.json_simple.JsonObject;
+
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -86,6 +90,14 @@ public class GameController {
     @ModelAttribute("hero")
     public HeroInGame getHero() {
         return new HeroInGame(); // TODO: comprobar si necesita valores por defecto.
+    }
+
+
+    private static List<String> createMessages(Game game) {
+        return game.getPlayers().stream().map(player -> player.getName() + " { " +
+                player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
+                    .orElse("No hero selected") + " }" + " " + (Boolean.TRUE.equals(player.getReady()) ? "Ready" : "Not ready"))
+            .collect(Collectors.toList());
     }
 
     @ModelAttribute("player")
