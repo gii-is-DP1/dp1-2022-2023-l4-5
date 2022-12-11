@@ -1,24 +1,18 @@
 package org.springframework.samples.nt4h.game;
 
 
-import com.github.cliftonlabs.json_simple.JsonObject;
 import com.google.common.collect.Lists;
-import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.turn.Advise;
@@ -31,11 +25,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 // TODO: Cambiar nombre y enlaces.
 @Controller
@@ -57,14 +48,19 @@ public class GameController {
 
     private final HeroService heroService;
     private final UserService userService;
+    private final PlayerService playerService;
     private final Advise advise = new Advise();
+    private final PlayerRepository playerRepository;
 
 
     @Autowired
-    public GameController(GameService gameService, HeroService heroService, UserService userService) {
+    public GameController(GameService gameService, HeroService heroService, UserService userService, PlayerService playerService,
+                          PlayerRepository playerRepository) {
         this.gameService = gameService;
         this.heroService = heroService;
         this.userService = userService;
+        this.playerService = playerService;
+        this.playerRepository = playerRepository;
     }
 
     @InitBinder
@@ -255,5 +251,12 @@ public class GameController {
         if (players.stream().anyMatch(player -> player.getSequence() == null))
             gameService.orderPlayer(players, game);
         return VIEW_GAME_ORDER;
+    }
+
+    @GetMapping("deletePlayer/{playerId}")
+    public String deletePlayer(@PathVariable("playerId") int playerId) {
+        Game game = getGame();
+        playerService.getOutGame(playerService.getPlayerById(playerId));
+        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 }
