@@ -61,7 +61,7 @@ public class AdminController {
 
     //Editar usuario
     @GetMapping(value = "{userId}/edit")
-    public String initUpdateUserForm(Integer userId, ModelMap model) {
+    public String initUpdateUserForm(@PathVariable Integer userId, ModelMap model) {
         model.put("user", userService.getUserById(userId));
         return VIEW_USER_CREATE_OR_UPDATE_FORM;
     }
