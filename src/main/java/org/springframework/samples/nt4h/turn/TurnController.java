@@ -21,19 +21,17 @@ public class TurnController {
 
 
     private final UserService userService;
-    private final GameService gameService;
 
     private final String PAGE_EVADE = "redirect:/evasion";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
     private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
     private final String PAGE_MARKET = "redirect:/market";
-    private final String PAGE_RESUPPLY = "redirect:/resupply";
+    private final String PAGE_RESUPPLY = "redirect:/reestablishment/addCards";
     private final String PAGE_LOBBY = "redirect:/games/";
 
     @Autowired
-    public TurnController(UserService userService, GameService gameService) {
+    public TurnController(UserService userService) {
         this.userService = userService;
-        this.gameService = gameService;
     }
 
     @ModelAttribute("user")
@@ -62,7 +60,7 @@ public class TurnController {
     }
 
 
-    @GetMapping
+    @GetMapping()
     public String enterInGame() {
         Phase phase = getTurn().getPhase();
         if (phase.equals(Phase.EVADE)) return PAGE_EVADE;
@@ -72,22 +70,4 @@ public class TurnController {
         else if (phase.equals(Phase.RESUPPLY)) return PAGE_RESUPPLY;
         else return PAGE_LOBBY;
     }
-
-    // TODO: Realizar todas las comprobaciones necesarias para pasar de turno.
-    /*
-    @GetMapping("/nextTurn")
-    public String nextTurn() {
-        Player player = getPlayer();
-        Turn nextTurn = player.getNextTurn(getTurn());
-        Game game = getGame();
-        Phase phase = nextTurn.getPhase();
-        if (phase.equals(Phase.EVADE)) {
-            Player nextPlayer = getGame().getNextPlayer();
-            game.setCurrentTurn(nextPlayer);
-            gameService.saveGame(game.toBuilder().currentTurn(nextTurn).currentPlayer(nextPlayer).build());
-        } else
-            gameService.saveGame(game.toBuilder().currentTurn(nextTurn).build());
-        return enterInGame();
-    }
-     */
 }

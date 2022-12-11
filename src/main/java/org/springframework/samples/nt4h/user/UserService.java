@@ -143,4 +143,8 @@ public class UserService {
     }
 
 
+    public void removeUserFromGame(User user, Game game) {
+        user.setGame(null);
+        saveUser(user);
+    }
 }

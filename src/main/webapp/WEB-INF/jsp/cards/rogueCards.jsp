@@ -35,6 +35,7 @@
         <img class="card-img-top" src="\resources\images\abilities\enlassombras_ability_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\robarbolsillos_ability_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\saqueo_ability_front.png" alt="Card image cap">
+        <img class="card-img-top" src="\resources\images\abilities\saqueo2_ability_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\trampa_ability_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\ataquefurtivo_ability_front.png" alt="Card image cap">
 
