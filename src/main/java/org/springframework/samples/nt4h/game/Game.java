@@ -1,7 +1,10 @@
 package org.springframework.samples.nt4h.game;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
+import org.h2.util.json.JSONObject;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -15,6 +18,8 @@ import org.springframework.samples.nt4h.turn.Turn;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.io.Writer;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +30,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Game extends NamedEntity {
+public class Game extends NamedEntity implements Jsonable {
 
     private LocalDateTime startDate;
 
@@ -93,7 +98,6 @@ public class Game extends NamedEntity {
             throw new FullGameException();
         else
             this.players.add(player);
-
     }
 
     public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
@@ -110,6 +114,22 @@ public class Game extends NamedEntity {
         if(this.players==null)return false;
         return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
 
+    }
+
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("players", this.players);
+        return json.toJson();
+    }
+
+    @Override
+    public void toJson(Writer writer) {
+        try {
+            writer.write(toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

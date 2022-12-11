@@ -12,13 +12,11 @@ public class PhaseFormatter implements Formatter<Phase> {
 
     @Override
     public Phase parse(String text, Locale locale) {
-        System.out.println("PhaseFormatter.parse");
         return Phase.valueOf(text);
     }
 
     @Override
     public String print(Phase object, Locale locale) {
-        System.out.println("PhaseFormatter.print");
         return object.toString();
     }
 }

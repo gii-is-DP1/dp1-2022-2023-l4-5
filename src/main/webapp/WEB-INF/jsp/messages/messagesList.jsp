@@ -21,30 +21,17 @@
     </div>
 </nt4h:layout>
 
-<script type="text/javascript">
+<script type="module">
+    import sendPetitionInInterval from "../../../../resources/js/petition.js";
 
-    function reset(url, action) {
-        $(document).ready(function () {
-            setInterval(function () {
-                const http = new XMLHttpRequest();
-                http.open('GET', url, true);
-                http.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        action(this.responseText)
-                    }
-                }
-                http.send()
-            }, 1000);
-        });
-    }
-    username = window.location.pathname.split("/")[2];
-
-    reset('/messages/update/' + username, function (responseText) {
+    const username = window.location.pathname.split("/")[2];
+    console.log(username);
+    sendPetitionInInterval('/api/messages/' + username, function (responseText) {
         const resultado = JSON.parse(responseText)
-        chat = document.getElementById("chat");
-        lis = resultado.messages.map(function (m) {
-            return "<li>" + m + "</li>"
-        })
+        const chat = document.getElementById("chat");
+        const lis = resultado.messages.map(function (m) {
+            return "<li class='message'>" + m.sender + ": " + m.content + "</li>"
+        });
         chat.innerHTML = lis.join("")
-    })
+    }, 1000)
 </script>
