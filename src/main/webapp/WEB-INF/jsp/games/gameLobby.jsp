@@ -8,8 +8,8 @@
 
 <nt4h:layout pageName="lobby">
     <h2>Game Lobby</h2>
-    <div id="ready">
 
+    <div id="ready">
     </div>
 
     <div>
@@ -25,6 +25,7 @@
         </c:choose>
     </div>
     <div id="next"></div>
+
 </nt4h:layout>
 
 <script type="text/javascript">

@@ -68,7 +68,7 @@ public class User extends BaseEntity {
     private Statistic statistic;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
-    private List<Message> sendedMessages; // TODO: Solucionar de una mejor forma.
+    private List<Message> sentMessages; // TODO: Solucionar de una mejor forma.
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
     private List<Message> receivedMessages; // TODO: Solucionar de una mejor forma.

@@ -96,7 +96,7 @@ public class GameController {
         return game.getPlayers().stream().map(player -> player.getName() + " { " +
                 player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
                     .orElse("No hero selected") + " }" + " " + (Boolean.TRUE.equals(player.getReady()) ? "Ready" : "Not ready"))
-            .collect(Collectors.toList());
+                    .collect(Collectors.toList());
     }
 
     @ModelAttribute("player")
@@ -177,7 +177,6 @@ public class GameController {
         return VIEW_GAME_LOBBY;
     }
 
-    // TODO: SI es privada deberá de solicitar la contraseña.
     // Crear un jugador y vincularlo con la partida.
     @PostMapping(value = "/{gameId}")
     public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId) {
