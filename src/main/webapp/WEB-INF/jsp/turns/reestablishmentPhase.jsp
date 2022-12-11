@@ -7,8 +7,17 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="Reestablishment Phase">
+<body class="background">
 <h2>Action decision</h2>
-
+<img> </img>
 </nt4h:layout>
+
+<style>
+    .background {
+        background-image: url("/resources/images/campo.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
 
 
