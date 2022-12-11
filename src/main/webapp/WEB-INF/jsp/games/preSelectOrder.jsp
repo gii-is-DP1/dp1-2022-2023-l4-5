@@ -18,25 +18,10 @@
     </jsp:body>
 </nt4h:layout>
 
-<script type="text/javascript">
+<script type="module">
+    import sendPetitionInInterval from "../../../../resources/js/petition.js";
 
-    function reset(url, action) {
-        $(document).ready(function () {
-            setInterval(function () {
-                const http = new XMLHttpRequest();
-                http.open('GET', url, true);
-                http.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        action(this.responseText)
-                    }
-                }
-                http.send()
-            }, 1000);
-        });
-    }
-    username = window.location.pathname.split("/")[2];
-
-    reset('/games/ready/', function (responseText) {
+    sendPetitionInInterval('/api/games/ready/', function (responseText) {
         const resultado = JSON.parse(responseText)
         const form = document.getElementById("waiting");
         if (resultado.isReady&& form.hasAttribute("hidden"))

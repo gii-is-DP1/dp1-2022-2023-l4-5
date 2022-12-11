@@ -48,6 +48,7 @@ public class PlayerService {
 
     @Transactional
     public void deletePlayerById(int id) {
+        System.out.println("Dele");
         playerRepository.deleteById(id);
     }
 
@@ -137,11 +138,12 @@ public class PlayerService {
         }
     }
 
-    /*
-    @Transactional
-    public void changeStage() {
-
+    public void getOutGame(Player player) {
+        // TODO: mejorar.
+        player.setGame(null);
+        player.setInHand(null);
+        player.setInDiscard(null);
+        player.setInDeck(null);
+        savePlayer(player);
     }
-*/
-
 }

@@ -30,33 +30,24 @@
 <script type="module">
     import sendPetitionInInterval from "../../../../resources/js/petition.js";
 
-    const gameId = window.location.pathname.split("/")[2];
-    const timer = 0;
-    sendPetitionInInterval('/games/update/' + gameId, function (responseText) {
+    sendPetitionInInterval('/api/games', function (responseText) {
         const resultado = JSON.parse(responseText);
         const player = document.getElementById("ready");
         const next = document.getElementById("next");
-        const lis = resultado.game.players.map(function (m) {
-            const namePlayer = m.name;
-            const nameHeroes = m.heroesInGame.sort().map(function (h) {return h.name;}).join(", ")
-            const ready = m.ready ? "Ready" : "Not ready";
-            const actions = resultado.loggedUsser.host ? "<a href='/games/deletePlayer/" + m.id + "'>Get Out!!</a>" : "";
-
-            return "<li>" + "<p>" + namePlayer + "{" + (nameHeroes.isEmpty() ? "No hero selected": nameHeroes)  + "}" + " " + ready + "</p>" +actions + "</li>"
+        const lis = resultado.game.players.map(function (player) {
+            const namePlayer = player.name;
+            console.log(player.heroesInGame)
+            const nameHeroes = player.heroesInGame.sort().map(function (h) {return h.hero.name;}).join(", ")
+            console.log(player.ready)
+            const ready = player.ready ? "Ready" : "Not ready";
+            const actions = resultado.loggedUser.player.host ? " - " + "<a href='/games/deletePlayer/" + player.id + "'>Get Out!!</a>" : "";
+            console.log(namePlayer + " " + nameHeroes + " " + ready + " " + actions);
+            return "<li>" + namePlayer + " {" + (nameHeroes === "" ? "No hero selected": nameHeroes)  + "} " + " " + ready + actions + "</li>"
         })
-
-
-        });
         player.innerHTML = lis.join("");
         const timer = resultado.timer;
         if (timer > 0) next.innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
         else next.innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
-    }, 1000)
 
-    console.log("hola" + timer);
+        }, 1000);
 </script>
-
-return game.getPlayers().stream().map(player -> player.getName() + " { " +
-player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
-.orElse("No hero selected") + " }" + " " + (Boolean.TRUE.equals(player.getReady()) ? "Ready" : "Not ready"))
-.collect(Collectors.toList());
