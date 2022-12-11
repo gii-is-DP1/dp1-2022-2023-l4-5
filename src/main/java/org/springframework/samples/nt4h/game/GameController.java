@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.game;
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.google.common.collect.Lists;
 import org.javatuples.Triplet;
@@ -87,6 +88,7 @@ public class GameController {
     public HeroInGame getHero() {
         return new HeroInGame(); // TODO: comprobar si necesita valores por defecto.
     }
+
 
     private static List<String> createMessages(Game game) {
         return game.getPlayers().stream().map(player -> player.getName() + " { " +
