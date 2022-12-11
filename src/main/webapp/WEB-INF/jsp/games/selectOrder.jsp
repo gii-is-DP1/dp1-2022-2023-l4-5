@@ -23,7 +23,7 @@
                     <c:out value="${player.name}"/>
                 </td>
                 <td>
-                    <c:out value="${player.sequence}"/>
+                    <c:out value="${player.sequence + 1}"/>
                 </td>
                 <td>
                     <c:out value="${player.birthDate.year} - ${player.birthDate.month.value} - ${player.birthDate.dayOfMonth} | ${player.inDeck.get(0).ability.name} + ${player.inDeck.get(1).ability.name} = ${player.inDeck.get(0).ability.attack+player.inDeck.get(1).ability.attack}"/>

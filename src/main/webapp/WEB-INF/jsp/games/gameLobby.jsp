@@ -8,8 +8,8 @@
 
 <nt4h:layout pageName="lobby">
     <h2>Game Lobby</h2>
-    <div id="ready">
 
+    <div id="ready">
     </div>
 
     <div>
@@ -25,6 +25,7 @@
         </c:choose>
     </div>
     <div id="next"></div>
+
 </nt4h:layout>
 
 <script type="module">
@@ -36,9 +37,7 @@
         const next = document.getElementById("next");
         const lis = resultado.game.players.map(function (player) {
             const namePlayer = player.name;
-            console.log(player.heroesInGame)
             const nameHeroes = player.heroesInGame.sort().map(function (h) {return h.hero.name;}).join(", ")
-            console.log(player.ready)
             const ready = player.ready ? "Ready" : "Not ready";
             const actions = resultado.loggedUser.player.host ? " - " + "<a href='/games/deletePlayer/" + player.id + "'>Get Out!!</a>" : "";
             console.log(namePlayer + " " + nameHeroes + " " + ready + " " + actions);
