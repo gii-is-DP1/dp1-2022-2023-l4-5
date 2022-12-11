@@ -27,36 +27,27 @@
     <div id="next"></div>
 </nt4h:layout>
 
-<script type="text/javascript">
-    function reset(url, action) {
-        $(document).ready(function () {
-            setInterval(function () {
-                const http = new XMLHttpRequest();
-                http.open('GET', url, true);
-                http.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        action(this.responseText)
-                    }
-                }
-                http.send()
-            }, 1000);
-        });
-    }
+<script type="module">
+    import sendPetitionInInterval from "../../../../resources/js/petition.js";
 
-    gameId = window.location.pathname.split("/")[2];
-    timer = 0;
-    reset('/games/update/' + gameId, function (responseText) {
+    sendPetitionInInterval('/api/games', function (responseText) {
         const resultado = JSON.parse(responseText);
         const player = document.getElementById("ready");
         const next = document.getElementById("next");
-        const lis = resultado.messages.map(function (m) {
-            return "<li>" + m + "</li>"
-        });
+        const lis = resultado.game.players.map(function (player) {
+            const namePlayer = player.name;
+            console.log(player.heroesInGame)
+            const nameHeroes = player.heroesInGame.sort().map(function (h) {return h.hero.name;}).join(", ")
+            console.log(player.ready)
+            const ready = player.ready ? "Ready" : "Not ready";
+            const actions = resultado.loggedUser.player.host ? " - " + "<a href='/games/deletePlayer/" + player.id + "'>Get Out!!</a>" : "";
+            console.log(namePlayer + " " + nameHeroes + " " + ready + " " + actions);
+            return "<li>" + namePlayer + " {" + (nameHeroes === "" ? "No hero selected": nameHeroes)  + "} " + " " + ready + actions + "</li>"
+        })
         player.innerHTML = lis.join("");
-        var timer = resultado.timer;
+        const timer = resultado.timer;
         if (timer > 0) next.innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
         else next.innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
-    })
 
-    console.log("hola" + timer);
+        }, 1000);
 </script>

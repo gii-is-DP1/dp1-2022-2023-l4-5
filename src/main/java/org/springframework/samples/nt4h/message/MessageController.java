@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -70,19 +71,5 @@ public class MessageController {
         message.setTime(LocalDateTime.now());
         messageService.saveMessage(message);
         return PAGE_MESSAGE_WITH;
-    }
-
-    // Actualizar el chat.
-    @GetMapping("/update/{username}")
-    public ResponseEntity<String> updateMessages(@PathVariable String username) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails ud = null;
-        if (principal instanceof UserDetails) {
-            ud = ((UserDetails) principal);
-        }
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(Objects.requireNonNull(ud).getUsername(), username).stream()
-            .map(Message::toString).toArray());
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
 }

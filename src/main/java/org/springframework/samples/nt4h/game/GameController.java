@@ -1,21 +1,22 @@
 package org.springframework.samples.nt4h.game;
 
 
+
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.github.cliftonlabs.json_simple.JsonObject;
+
 import com.google.common.collect.Lists;
-import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.turn.Advise;
@@ -28,11 +29,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 // TODO: Cambiar nombre y enlaces.
 @Controller
@@ -54,14 +52,19 @@ public class GameController {
 
     private final HeroService heroService;
     private final UserService userService;
+    private final PlayerService playerService;
     private final Advise advise = new Advise();
+    private final PlayerRepository playerRepository;
 
 
     @Autowired
-    public GameController(GameService gameService, HeroService heroService, UserService userService) {
+    public GameController(GameService gameService, HeroService heroService, UserService userService, PlayerService playerService,
+                          PlayerRepository playerRepository) {
         this.gameService = gameService;
         this.heroService = heroService;
         this.userService = userService;
+        this.playerService = playerService;
+        this.playerRepository = playerRepository;
     }
 
     @InitBinder
@@ -141,19 +144,36 @@ public class GameController {
 
     // Obtener todas las partidas.
     @GetMapping
-    public String showGames() {
+    public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model) {
+        page = page < 0 ? 0 : page;
+        Pageable pageable = PageRequest.of(page, 5);
+        List<Game> games = gameService.getAllGames();
+        Page<Game> gamePage = gameService.getAllGames(pageable);
+        if (!games.isEmpty() && gamePage.isEmpty()) {
+            page = games.size() / 5;
+            pageable = PageRequest.of(page, 5);
+            gamePage = gameService.getAllGames(pageable);
+        }
+        model.put("isNext", gamePage.hasNext());
+        model.addAttribute("games", gamePage.getContent());
+        model.put("page", page);
+
         return VIEW_GAME_LIST;
     }
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, ModelMap model) {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model) {
         User loggedUser = getUser();
         Game newGame = gameService.getGameById(gameId);
         Game oldGame = loggedUser.getGame();
         if (oldGame != null && oldGame != newGame)
             return advise.sendError("Ya estás en una partida y esa es  " + loggedUser.getGame() + ".", PAGE_GAMES);
-        if (oldGame == null) userService.addUserToGame(loggedUser, newGame);
+        if (oldGame == null)  {
+            if (Objects.equals(newGame.getPassword(), password) || newGame.getAccessibility() == Accessibility.PUBLIC)
+                userService.addUserToGame(loggedUser, newGame);
+            else return advise.sendError("La contraseña es incorrecta.", PAGE_GAMES);
+        }
         model.put("numHeroes", gameService.getGameById(gameId).isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
         return VIEW_GAME_LOBBY;
     }
@@ -225,22 +245,8 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_GAME_CREATE;
-        gameService.createGame(user, game); // TODO: Comprobar si la id se guarda.
+        gameService.createGame(user, game);
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
-    }
-
-    // Actualizar los jugadores en el lobby.
-    @GetMapping("/update/{gameId}")
-    public ResponseEntity<String> updateMessages(@PathVariable Integer gameId) {
-        JsonObject jsonObject = new JsonObject();
-        LocalDateTime now = LocalDateTime.now();
-        if (gameService.existsGameById(gameId)) {
-            Game game = gameService.getGameById(gameId);
-            jsonObject.put("messages", createMessages(game));
-            long difference = ChronoUnit.SECONDS.between(game.getStartDate(), now);
-            jsonObject.put("timer", 20 - difference);
-        }
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
     }
 
     @GetMapping("/selectOrder/")
@@ -259,15 +265,10 @@ public class GameController {
         return VIEW_GAME_ORDER;
     }
 
-    @GetMapping("/ready")
-    public ResponseEntity<String> updateMessages() {
-        JsonObject jsonObject = new JsonObject();
-        Game game = getGame(); // NO estoy seguro de que funcione.
-        if (game == null)
-            jsonObject.put("ready", false);
-        else
-            jsonObject.put("isReady", game.getPlayers().stream().allMatch(Player::getReady));
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+    @GetMapping("deletePlayer/{playerId}")
+    public String deletePlayer(@PathVariable("playerId") int playerId) {
+        Game game = getGame();
+        playerService.getOutGame(playerService.getPlayerById(playerId));
+        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
-
 }

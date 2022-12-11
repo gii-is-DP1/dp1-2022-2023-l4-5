@@ -1,5 +1,7 @@
 package org.springframework.samples.nt4h.message;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,13 +11,16 @@ import org.springframework.samples.nt4h.user.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.Writer;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "messages")
-public class Message extends BaseEntity {
+public class Message extends BaseEntity implements Jsonable {
 
     @NotNull
     @Size(max = 500)
@@ -36,4 +41,22 @@ public class Message extends BaseEntity {
         return sender.getUsername() + ": " + content;
     }
 
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("content", this.getContent());
+        json.put("time", this.getTime().toString());
+        json.put("sender", this.getSender().getUsername());
+        json.put("receiver", this.getReceiver().getUsername());
+        return json.toJson();
+    }
+
+    @Override
+    public void toJson(Writer writer) {
+        try {
+            writer.write(toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -72,13 +72,13 @@
         </tbody>
     </table>
     <c:if test="${page > 0}">
-            <spring:url value="/friendsList?page={previous}" var="previous">
+            <spring:url value="/friends?page={previous}" var="previous">
                 <spring:param name="previous" value="${page-1}"/>
             </spring:url>
             <a href="${fn:escapeXml(previous)}" class="btn">Previous</a>
         </c:if>
         <c:if test="${isNext}">
-            <spring:url value="/friendsList?page={next}" var="next">
+            <spring:url value="/friends?page={next}" var="next">
                 <spring:param name="next" value="${page+1}"/>
             </spring:url>
             <a href="${fn:escapeXml(next)}" class="btn">Next</a>

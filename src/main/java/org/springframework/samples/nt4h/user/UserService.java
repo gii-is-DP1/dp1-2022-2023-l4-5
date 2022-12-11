@@ -110,7 +110,9 @@ public class UserService {
 
     @Transactional
     public Page<User> getFriendsPaged(Pageable page) {
-        return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), (int) page.getOffset()+page.getPageSize()));
+        Integer limit = (int) page.getOffset() + page.getPageSize();
+        limit = limit > getFriends().size() ? getFriends().size() : limit;
+        return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), limit), page, getLoggedUser().getFriends().size());
     }
     //ewo
 
@@ -141,4 +143,8 @@ public class UserService {
     }
 
 
+    public void removeUserFromGame(User user, Game game) {
+        user.setGame(null);
+        saveUser(user);
+    }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 public class FriendController {
 
     private static final String VIEW_FRIEND_LIST = "users/friendList";
+    private static final String PAGE_FRIEND_LIST = "redirect:/friends";
     private final UserService userService;
 
     @Autowired
@@ -42,12 +43,12 @@ public class FriendController {
     @GetMapping("/add/{friendId}")
     public String addFriend(@PathVariable("friendId") int friendId) {
         userService.addFriend(friendId);
-        return VIEW_FRIEND_LIST;
+        return PAGE_FRIEND_LIST;
     }
 
     @GetMapping("/remove/{friendId}")
     public String removeFriend(@PathVariable("friendId") int friendId) {
         userService.removeFriend(friendId);
-        return VIEW_FRIEND_LIST;
+        return PAGE_FRIEND_LIST;
     }
 }

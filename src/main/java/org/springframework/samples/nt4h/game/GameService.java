@@ -3,11 +3,14 @@ package org.springframework.samples.nt4h.game;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.javatuples.Triplet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
+import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.Player;
@@ -32,10 +35,17 @@ public class GameService {
     private final UserService userService;
     private final PlayerService playerService;
     private final HeroService heroService;
+    private final ProductService productService;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    // Obtener las partidas de cinco en cinco.
+    public Page<Game> getAllGames(Pageable page) {
+        return gameRepository.findAll(page);
     }
 
     @Transactional(readOnly = true)
@@ -81,26 +91,32 @@ public class GameService {
 
     @Transactional
     public void createGame(User user, Game game) throws FullGameException {
-        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false)
-            .build();
-        game.setStartDate(LocalDateTime.now());
+        // TODO: Crear un método a parte para creación de player.
+        Player newPlayer = Player.builder().host(true).glory(0).gold(0).ready(false).nextPhase(Phase.EVADE).damageDealt(0).damageDealtToNightLords(0)
+            .birthDate(user.getBirthDate()).damageProtect(0).numOrcsKilled(0).numWarLordKilled(0).sequence(-1).wounds(0).game(game).build();
         newPlayer.setName(user.getUsername());
+        user.setGame(game);
+        user.setPlayer(newPlayer);
+        game.setStartDate(LocalDateTime.now());
         game.addPlayer(newPlayer);
+        game.setAccessibility(game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE);
         saveGame(game);
+        productService.addProduct(game);
     }
+
+    // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
         System.out.println("Ordering players");
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
-        Player player;
         for (var i = 0; i < players.size(); i++) {
-            player = players.get(i);
+            Player player = players.get(i);
             List<AbilityInGame> abilities = player.getInDeck();
             datos.add(new Triplet<>(i, player, abilities.get(0).getAttack() + abilities.get(1).getAttack()));
         }
-
         datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
+        System.out.println("datos = " + datos);
         if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
             datos.get(0).getValue1().getBirthDate().isAfter(datos.get(1).getValue1().getBirthDate())) {
             var first = datos.get(0);
@@ -108,9 +124,15 @@ public class GameService {
             datos.set(0, second);
             datos.set(1, first);
         }
-        players = datos.stream().map(Triplet::getValue1).collect(Collectors.toList());
+        players = datos.stream()
+            .map(triplet -> {
+                Player p = triplet.getValue1();
+                p.setSequence(triplet.getValue0());
+                return p;
+            }).collect(Collectors.toList());
         Player firstPlayer = players.get(0);
         players.forEach(playerService::savePlayer);
+        System.out.println("First player: " + firstPlayer.getSequence());
         game.setPlayers(players);
         game.setCurrentPlayer(firstPlayer);
         game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));

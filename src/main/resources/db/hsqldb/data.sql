@@ -7,13 +7,17 @@ VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c
        ('laurolmer', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'awanabumbambam', 'DOKTOL', '2002-08-21', 1),
        ('alvhidrod', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'drakorion', 'DOKTOL', '2002-02-23', 1),
+        'drakorion', 'USER', '2002-02-23', 1),
        ('ismruijur', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'er jefe brrr', 'DOKTOL', '2002-10-27', 1),
+        'er jefe brrr', 'USER', '2002-10-27', 1),
        ('ivasansan1', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'bético encubierto', 'DOKTOL', '2002-11-12', 1),
        ('pedruiagu', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'sácame del bolsillo', 'USER', '2002-10-01', 1);
+        'sácame del bolsillo', 'USER', '2002-10-01', 1),
+        ('lapaqui', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'vivo en una simulación', 'USER', '2003-05-11', 1),
+        ('pepe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
+        'pepito de carne mechá', 'USER', '2004-07-14', 1);
 
 -- Creación de mensajes.
 INSERT INTO messages(content, time, receiver_id, sender_id)
@@ -51,6 +55,7 @@ VALUES ('Valèrys', '/resources/images/heroes/valerys_hero_front.png',
         '/resources/images/heroes/aranel_hero_back.png', -1, 2, 'WIZARD');
 
 -- Creación de habilidades.
+
 INSERT INTO abilities(name, front_image, back_image, max_uses, role, attack, quantity)
 VALUES ('Compañero Lobo', '/resources/images/juego/wolf_abilities_front.png',
         '/resources/images/juego/parte_atras_general.png', -1, 'EXPLORER', 2, 1),
@@ -209,6 +214,7 @@ VALUES ('Daga élfica', '/resources/images/products/dagaelfica_product_front.png
        ('Arco compuesto', '/resources/images/products/arcocompuesto_product_front.png',
         '/resources/images/products/product_back.png', -1, 5, 4, 1);
 
+
 -- Nuevo
 
 -- Creación de la relación entre capacidades y productos.
@@ -325,3 +331,4 @@ VALUES (1, 1),
 
 INSERT INTO users_friends(user_id, friends_id)
 VALUES (1, 2);
+

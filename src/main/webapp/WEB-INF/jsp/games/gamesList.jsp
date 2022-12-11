@@ -41,7 +41,8 @@
                 </td>
                 <td>
                 <c:choose>
-                    <c:when test="game.Accessibility.isPublic">
+
+                    <c:when test="${game.accessibility.isPublic()}">
                         <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game</a>
                     </c:when>
                     <c:otherwise>
@@ -49,7 +50,6 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                             Join Game
                         </button>
-
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -62,20 +62,20 @@
                                     </div>
                                     <div class="modal-body">
                                         <div style="text-align: center;">
-                                            <input type="password" id="password">
 
-
-
+                                            <input type="password" id="input">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Join</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <a id="redirection" href="/games/${game.id}?password=">
+                                            <button type="button" class="btn btn-primary">Join</button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </c:otherwise>
                 </c:choose>
                 </td>
@@ -83,4 +83,28 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <c:if test="${page > 0}">
+        <spring:url value="/games?page={previous}" var="previous">
+            <spring:param name="previous" value="${page-1}"/>
+        </spring:url>
+        <a href="${fn:escapeXml(previous)}" class="btn">Previous</a>
+    </c:if>
+    <c:if test="${isNext}">
+        <spring:url value="/games?page={next}" var="next">
+            <spring:param name="next" value="${page+1}"/>
+        </spring:url>
+        <a href="${fn:escapeXml(next)}" class="btn">Next</a>
+    </c:if>
 </nt4h:layout>
+
+<script type="text/javascript">
+    const input = document.getElementById("input");
+    console.log("hola " + input.value);
+    input.addEventListener("keyup", function (event) {
+        const bottom = document.getElementById("redirection");
+        const url = bottom.getAttribute("href");
+        bottom.setAttribute("href", url.replace(/=.*/, "=" + input.value));
+        console.log(bottom.getAttribute("href"));
+    });
+</script>

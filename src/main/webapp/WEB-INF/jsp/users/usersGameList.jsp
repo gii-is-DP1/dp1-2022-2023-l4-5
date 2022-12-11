@@ -37,10 +37,7 @@
         <c:forEach items="${users}" var="localUser">
             <tr>
                 <td>
-                    <spring:url value="/users/{userId}" var="userUrl">
-                        <spring:param name="userId" value="${localUser.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username}"/></a>
+                    <c:out value="${localUser.username}"/>
                 </td>
                 <sec:authorize access="hasAuthority('DOKTOL')">
                     <td>

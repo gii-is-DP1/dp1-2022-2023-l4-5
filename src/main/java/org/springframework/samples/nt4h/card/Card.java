@@ -16,10 +16,10 @@ import javax.validation.constraints.NotNull;
 public class Card extends NamedEntity {
 
     @URL
-    private String backImage;
+    private String frontImage;
 
     @URL
-    private String frontImage;
+    private String backImage;
 
     @NotNull
     @Min(-1)
