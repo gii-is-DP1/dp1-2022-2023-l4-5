@@ -30,7 +30,6 @@
                     <button class="btn btn-default" type="submit">Create game</button>
                 </div>
             </div>
-
         </form:form>
     </jsp:body>
 </nt4h:layout>
