@@ -170,7 +170,7 @@ public class GameController {
         Game oldGame = loggedUser.getGame();
         if (oldGame != null && oldGame != newGame)
             return advise.sendError("Ya estás en una partida y esa es  " + loggedUser.getGame() + ".", PAGE_GAMES);
-        if (oldGame == null) {
+        if (oldGame == null)  {
             if (Objects.equals(newGame.getPassword(), password) || newGame.getAccessibility() == Accessibility.PUBLIC)
                 userService.addUserToGame(loggedUser, newGame);
             else return advise.sendError("La contraseña es incorrecta.", PAGE_GAMES);
@@ -179,6 +179,7 @@ public class GameController {
         return VIEW_GAME_LOBBY;
     }
 
+    // TODO: SI es privada deberá de solicitar la contraseña.
     // Crear un jugador y vincularlo con la partida.
     @PostMapping(value = "/{gameId}")
     public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId) {
