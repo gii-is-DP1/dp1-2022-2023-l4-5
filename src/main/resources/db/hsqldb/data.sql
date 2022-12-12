@@ -330,5 +330,6 @@ VALUES (1, 1),
        (8, 3);
 
 INSERT INTO users_friends(user_id, friends_id)
-VALUES (1, 2);
+VALUES (1, 2),
+       (2, 1);
 

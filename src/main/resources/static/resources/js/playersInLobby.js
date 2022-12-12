@@ -11,14 +11,14 @@ sendPetitionInInterval('/api/games', function (responseText) {
         const actions = resultado.loggedUser.player.host ? " - " + "<a href='/games/deletePlayer/" + player.id + "'>Get Out!!</a>" : "";
         return createHtml(namePlayer, nameHeroes,ready,actions);
     })
-    for (let ready in readys) {
-        ready.innerHTML = lis.join("");
+    for (let i = 0; i < readys.length; i++) {
+        readys[i].innerHTML = lis.join("");
     }
     const timer = resultado.timer;
-    for (let next in nexts) {
-        if (timer > 0) next.innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
-        else if (game.players.size() < game.maxPlayers) next.innerHTML = "<h1>Waiting for players</h1>";
-        else next.innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
+    for (let j = 0; j < nexts.length; j++) {
+        if (timer > 0) nexts[j].innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
+        else if (game.players.size() < game.maxPlayers) nexts[j].innerHTML = "<h1>Waiting for players</h1>";
+        else nexts[j].innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
     }
 }, 1000);
 

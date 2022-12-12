@@ -25,5 +25,6 @@
         </c:choose>
     </div>
     <div class="next"></div>
-    <script src="/resources/js/playersInLobby.js" type="module"></script>
+    <script src="/resources/js/playersInLobby.js" type="module">
+    </script>
 </nt4h:layout>

@@ -9,11 +9,7 @@
 <nt4h:layout pageName="chat">
     <h2>"Chatea con ${receiver}"</h2>
     <div class="row">
-        <div id="chat">
-            <c:forEach items="${messages}" var="m">
-                <li>${m.sender.username}: ${m.content}</li>
-            </c:forEach>
-        </div>
+        <div class="chat"></div>
         <form:form modelAttribute="chat" class="form-horizontal">
             <nt4h:inputField label="Content" name="content"/>
         </form:form>
