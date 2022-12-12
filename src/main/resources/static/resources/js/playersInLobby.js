@@ -17,7 +17,7 @@ sendPetitionInInterval('/api/games', function (responseText) {
     const timer = resultado.timer;
     for (let j = 0; j < nexts.length; j++) {
         if (timer > 0) nexts[j].innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
-        else if (resultado.game.players.size() < resultado.game.maxPlayers) nexts[j].innerHTML = "<h1>Waiting for players</h1>";
+        else if (resultado.game.players.length < resultado.game.maxPlayers) nexts[j].innerHTML = "<h1>Waiting for players</h1>";
         else nexts[j].innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
     }
 }, 1000);
