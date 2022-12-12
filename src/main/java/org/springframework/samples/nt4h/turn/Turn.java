@@ -1,5 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
+import com.google.common.collect.Lists;
 import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
@@ -33,5 +34,22 @@ public class Turn extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
+
+    public void addEnemy(EnemyInGame attackedEnemy) {
+        if(usedEnemies == null) {
+            usedEnemies = Lists.newArrayList(attackedEnemy);
+        } else {
+            usedEnemies.add(attackedEnemy);
+        }
+    }
+
+    public void addAbility(AbilityInGame usedAbility) {
+        if(usedAbilities == null) {
+            usedAbilities = Lists.newArrayList(usedAbility);
+        } else {
+            usedAbilities.add(usedAbility);
+        }
+    }
+
 }
 
