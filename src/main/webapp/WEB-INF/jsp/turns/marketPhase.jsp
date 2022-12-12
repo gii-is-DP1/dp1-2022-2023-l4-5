@@ -10,6 +10,14 @@
     <h2>Action decision</h2>
     <form:form modelAttribute="productInGame" class="form-horizontal" id="product-selection-form">
         <nt4h:selectField name="product" label="Buy a product" names="${productsOnSale}" size="5"/>
+        <div class="container">
+            <c:forEach begin="0" step="1" end="${productsOnSale.size()-1}" var="i">
+                <div class="col-sm-5">
+                    <input id="i" type="radio" name="hero" value="${productsOnSale.get(i)}" />
+                    <img  class="card-img-top" src="${productsOnSale.get(i).getFrontImage()}">
+                </div>
+            </c:forEach>
+        </div>
         <button class="btn btn-default" type="submit">Buy Product</button>
     </form:form>
     <a href="${pageContext.request.contextPath}/market/next" class="btn btn-default">End phase</a>

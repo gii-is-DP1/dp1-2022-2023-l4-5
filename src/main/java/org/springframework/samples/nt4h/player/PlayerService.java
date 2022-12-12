@@ -29,6 +29,7 @@ public class PlayerService {
     private final AbilityService abilityService;
     private final TurnService turnService;
 
+
     @Transactional(readOnly = true)
     public Player getPlayerById(int id) {
         return playerRepository.findById(id).orElseThrow(() -> new NotFoundException("Player not found"));
@@ -138,12 +139,13 @@ public class PlayerService {
         }
     }
 
-    public void getOutGame(Player player) {
+    public void getOutGame(Player player, Game game) {
         // TODO: mejorar.
         player.setGame(null);
         player.setInHand(null);
         player.setInDiscard(null);
         player.setInDeck(null);
         savePlayer(player);
+        game.getPlayers().remove(player);
     }
 }
