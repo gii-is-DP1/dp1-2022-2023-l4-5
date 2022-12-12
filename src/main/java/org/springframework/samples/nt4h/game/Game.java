@@ -120,6 +120,7 @@ public class Game extends NamedEntity implements Jsonable {
     public String toJson() {
         JsonObject json = new JsonObject();
         json.put("players", this.players);
+        json.put("maxPlayers", this.maxPlayers);
         return json.toJson();
     }
 
