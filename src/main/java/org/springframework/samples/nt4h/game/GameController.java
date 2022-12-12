@@ -269,7 +269,7 @@ public class GameController {
     @GetMapping("deletePlayer/{playerId}")
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
-        playerService.getOutGame(playerService.getPlayerById(playerId));
+        playerService.getOutGame(playerService.getPlayerById(playerId), game);
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 }
