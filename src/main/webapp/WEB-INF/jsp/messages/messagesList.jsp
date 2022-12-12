@@ -17,21 +17,8 @@
         <form:form modelAttribute="chat" class="form-horizontal">
             <nt4h:inputField label="Content" name="content"/>
         </form:form>
-
     </div>
+    <script src="/resources/js/chat.js" type="module"></script>
 </nt4h:layout>
 
-<script type="module">
-    import sendPetitionInInterval from "../../../../resources/js/petition.js";
 
-    const username = window.location.pathname.split("/")[2];
-    console.log(username);
-    sendPetitionInInterval('/api/messages/' + username, function (responseText) {
-        const resultado = JSON.parse(responseText)
-        const chat = document.getElementById("chat");
-        const lis = resultado.messages.map(function (m) {
-            return "<li class='message'>" + m.sender + ": " + m.content + "</li>"
-        });
-        chat.innerHTML = lis.join("")
-    }, 1000)
-</script>

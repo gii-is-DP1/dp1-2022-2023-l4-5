@@ -9,7 +9,7 @@
 <nt4h:layout pageName="lobby">
     <h2>Game Lobby</h2>
 
-    <div id="ready">
+    <div class="ready">
     </div>
 
     <div>
@@ -24,29 +24,6 @@
             </c:otherwise>
         </c:choose>
     </div>
-    <div id="next"></div>
-
+    <div class="next"></div>
+    <script src="/resources/js/playersInLobby.js" type="module"></script>
 </nt4h:layout>
-
-<script type="module">
-    import sendPetitionInInterval from "../../../../resources/js/petition.js";
-
-    sendPetitionInInterval('/api/games', function (responseText) {
-        const resultado = JSON.parse(responseText);
-        const player = document.getElementById("ready");
-        const next = document.getElementById("next");
-        const lis = resultado.game.players.map(function (player) {
-            const namePlayer = player.name;
-            const nameHeroes = player.heroesInGame.sort().map(function (h) {return h.hero.name;}).join(", ")
-            const ready = player.ready ? "Ready" : "Not ready";
-            const actions = resultado.loggedUser.player.host ? " - " + "<a href='/games/deletePlayer/" + player.id + "'>Get Out!!</a>" : "";
-            console.log(namePlayer + " " + nameHeroes + " " + ready + " " + actions);
-            return "<li>" + namePlayer + " {" + (nameHeroes === "" ? "No hero selected": nameHeroes)  + "} " + " " + ready + actions + "</li>"
-        })
-        player.innerHTML = lis.join("");
-        const timer = resultado.timer;
-        if (timer > 0) next.innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
-        else next.innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
-
-        }, 1000);
-</script>
