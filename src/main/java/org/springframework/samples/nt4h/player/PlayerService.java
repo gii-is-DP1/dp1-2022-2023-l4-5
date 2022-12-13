@@ -46,16 +46,9 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
-    @Transactional
-    public void saveAllPlayer(List<Player> players) {
-        playerRepository.saveAll(players);
-    }
-
-
 
     @Transactional
     public void deletePlayerById(int id) {
-        System.out.println("Dele");
         playerRepository.deleteById(id);
     }
 
@@ -102,6 +95,8 @@ public class PlayerService {
             AbilityInGame abilityInGame = AbilityInGame.builder()
                 .player(player).ability(ability).timesUsed(0).attack(ability.getAttack()).isProduct(false).build();
             abilityService.saveAbilityInGame(abilityInGame);
+            if (i < 5 )
+                player.addAbilityInHand(abilityInGame);
             player.addAbilityInDeck(abilityInGame);
         }
     }

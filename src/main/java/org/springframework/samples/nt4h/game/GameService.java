@@ -91,8 +91,8 @@ public class GameService {
         game.addPlayerWithNewHero(player, heroInGame);
         player.setReady(player.getHeroes().size() == game.getMode().getNumHeroes());
         heroService.saveHeroInGame(heroInGame);
-        playerService.savePlayerAndCreateTurns(player);
         playerService.addDeckFromRole(player, game.getMode());
+        playerService.savePlayerAndCreateTurns(player);
         saveGame(game);
     }
 
@@ -123,14 +123,6 @@ public class GameService {
     public void orderPlayer(List<Player> players, Game game) {
         System.out.println("Ordering players");
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
-        for (Player player : players) {
-            player.shuffleDeck();
-            System.out.println("Deck shuffled");
-            player.setInHand(player.getInDeck().subList(0, 5));
-            System.out.println(player.getInHand());
-
-        }
-        playerService.saveAllPlayer(players);
         for (var i = 0; i < players.size(); i++) {
             Player player = players.get(i);
             List<AbilityInGame> abilities = player.getInDeck();
