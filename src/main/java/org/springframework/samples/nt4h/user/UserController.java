@@ -110,7 +110,7 @@ public class UserController {
         User oldUser = this.userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_USER_CREATE_OR_UPDATE_FORM;
         else {
-            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).build();
+            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).authority(oldUser.getAuthority()).build();
             newUser.setId(oldUser.getId());
             userService.saveUser(newUser);
             return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
