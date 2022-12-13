@@ -57,6 +57,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
             return VIEW_ATTACK_ACTION;
         }
 
+        @ModelAttribute("newTurn")
+        public Turn getNewTurn() {
+            return new Turn();
+        }
+
         @PostMapping()
         public String modifyCardAttributes(Turn turn) {
             Player player = getPlayer();
