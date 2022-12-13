@@ -44,8 +44,14 @@ public class PlayerService {
     @Transactional
     public void savePlayer(Player player) {
         playerRepository.save(player);
-        turnService.createAllTurnForAPlayer(player);
     }
+
+    @Transactional
+    public void saveAllPlayer(List<Player> players) {
+        playerRepository.saveAll(players);
+    }
+
+
 
     @Transactional
     public void deletePlayerById(int id) {
@@ -102,7 +108,7 @@ public class PlayerService {
 
     @Transactional
     public void removeAbilityCards(Integer cardId, Player player) {
-        for(int i = 0; player.getInHand().size() > 4; i++) {
+        while (player.getInHand().size() > 4) {
             Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
             removeToDiscard.executeAction();
         }
@@ -110,7 +116,7 @@ public class PlayerService {
 
     @Transactional
     public void takeNewCard(Player player) {
-        for(int i = 0; player.getInHand().size() < 4; i++) {
+        while (player.getInHand().size() < 4) {
             Action takeNewCard = new TakeCardFromAbilityPile(player);
             takeNewCard.executeAction();
         }

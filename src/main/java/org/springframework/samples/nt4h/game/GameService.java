@@ -10,12 +10,9 @@ import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
-import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
-import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.Player;
@@ -28,8 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -85,18 +82,9 @@ public class GameService {
         return newPlayer;
     }
 
-    public void addOrcsToGame(Game game) {
-        enemyService.getAllEnemyByIsNightLord(false).forEach(
-            enemy -> {
-                    EnemyInGame orcsInGame = EnemyInGame.createEnemy(false, enemy);
-                    enemyService.saveEnemyInGame(orcsInGame); });
-    }
 
-    public void addNightLordToGame(Game game) {
-        Enemy nightLord = enemyService.getNightLord();
-        EnemyInGame nightLordInGame = EnemyInGame.createEnemy(true, nightLord);
-        enemyService.saveEnemyInGame(nightLordInGame);
-    }
+
+
 
     @Transactional
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException {
@@ -120,9 +108,13 @@ public class GameService {
         game.addPlayer(newPlayer);
         game.setAccessibility(game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE);
         saveGame(game);
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame();
+        EnemyInGame nightLordInGame = enemyService.addNightLordToGame();
+        game.setAllOrcsInGame(orcsInGame);
+        game.addOrcsInGame(nightLordInGame);
+        game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
-        addOrcsToGame(game);
-        addNightLordToGame(game);
+
     }
 
     // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
@@ -131,6 +123,14 @@ public class GameService {
     public void orderPlayer(List<Player> players, Game game) {
         System.out.println("Ordering players");
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
+        for (Player player : players) {
+            player.shuffleDeck();
+            System.out.println("Deck shuffled");
+            player.setInHand(player.getInDeck().subList(0, 5));
+            System.out.println(player.getInHand());
+
+        }
+        playerService.saveAllPlayer(players);
         for (var i = 0; i < players.size(); i++) {
             Player player = players.get(i);
             List<AbilityInGame> abilities = player.getInDeck();
