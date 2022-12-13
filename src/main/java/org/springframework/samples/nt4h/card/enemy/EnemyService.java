@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class EnemyService {
     private final EnemyInGameRepository enemyInGameRepository;
+    private final EnemyRepository enemyRepository;
 
     // EnemyInGame
     @Transactional(readOnly = true)
@@ -43,5 +45,18 @@ public class EnemyService {
         return enemyInGameRepository.existsById(id);
     }
 
+
+    public List<Enemy> getAllEnemies() { return enemyRepository.findAll(); }
+
+    public Enemy getNightLord() {
+        Integer randomNumber = (int) (Math.random() * 3);
+        List<Enemy> allNightLords = getAllEnemyByIsNightLord(true);
+        return allNightLords.get(randomNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Enemy> getAllEnemyByIsNightLord(Boolean isNightLord) {
+        return enemyRepository.findAll().stream().filter(enemy -> enemy.getIsNightLord() == isNightLord).collect(Collectors.toList());
+    }
 
 }

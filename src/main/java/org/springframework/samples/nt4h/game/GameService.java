@@ -7,10 +7,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.enemy.Enemy;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
+import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
+import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.Player;
@@ -36,6 +41,7 @@ public class GameService {
     private final PlayerService playerService;
     private final HeroService heroService;
     private final ProductService productService;
+    private final EnemyService enemyService;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -79,6 +85,19 @@ public class GameService {
         return newPlayer;
     }
 
+    public void addOrcsToGame(Game game) {
+        enemyService.getAllEnemyByIsNightLord(false).forEach(
+            enemy -> {
+                    EnemyInGame orcsInGame = EnemyInGame.createEnemy(false, enemy);
+                    enemyService.saveEnemyInGame(orcsInGame); });
+    }
+
+    public void addNightLordToGame(Game game) {
+        Enemy nightLord = enemyService.getNightLord();
+        EnemyInGame nightLordInGame = EnemyInGame.createEnemy(true, nightLord);
+        enemyService.saveEnemyInGame(nightLordInGame);
+    }
+
     @Transactional
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException {
         game.addPlayerWithNewHero(player, heroInGame);
@@ -102,6 +121,8 @@ public class GameService {
         game.setAccessibility(game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE);
         saveGame(game);
         productService.addProduct(game);
+        addOrcsToGame(game);
+        addNightLordToGame(game);
     }
 
     // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())

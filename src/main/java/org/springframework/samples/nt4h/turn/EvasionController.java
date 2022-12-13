@@ -79,7 +79,7 @@ public class EvasionController {
 
     @ModelAttribute("turns")
     public List<Phase> getTurns() {
-        return Lists.newArrayList(Phase.MARKET, Phase.HERO_ATTACK);
+        return Lists.newArrayList(Phase.EVADE, Phase.HERO_ATTACK);
     }
 
     @GetMapping
@@ -97,7 +97,7 @@ public class EvasionController {
         Game game = getGame();
         game.setCurrentTurn(turn);
         gameService.saveGame(game);
-        if (turn.getPhase() == Phase.MARKET) {
+        if (turn.getPhase() == Phase.EVADE) {
             player.setHasEvasion(false);
             player.setNextPhase(Phase.MARKET);
             // Action action = new DropCardFromHand(loggedPlayer, null); // TODO: Eliminar dos cartas
