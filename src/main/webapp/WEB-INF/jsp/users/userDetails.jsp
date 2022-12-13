@@ -12,27 +12,27 @@
     <table class="table table-striped">
         <tr>
             <th>UserName</th>
-            <td><b><c:out value="${user.username}" /></b></td>
+            <td><b><c:out value="${loggedUser.username}" /></b></td>
         </tr>
         <tr>
             <th>Avatar</th>
-            <td><c:out value="${user.avatar}"/></td>
+            <td><img src="${loggedUser.avatar}" alt="No image found"/></td>
         </tr>
         <tr>
             <th>Tier</th>
-            <td><c:out value="${user.tier}"/></td>
+            <td><c:out value="${loggedUser.tier}"/></td>
         </tr>
         <tr>
             <th>BirthDate</th>
-            <td><c:out value="${user.birthDate}"/></td>
+            <td><c:out value="${loggedUser.birthDate}"/></td>
         </tr>
         <tr>
             <th>Authority</th>
-            <td><c:out value="${user.authority}"/></td>
+            <td><c:out value="${loggedUser.authority}"/></td>
         </tr>
         <tr>
             <th>Description</th>
-            <td><c:out value="${user.description}"/></td>
+            <td><c:out value="${loggedUser.description}"/></td>
         </tr>
     </table>
 
@@ -40,7 +40,7 @@
 
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit User</a>
-    <spring:url value="/welcome" var="goToLobby">
+    <spring:url value="/" var="goToLobby">
     </spring:url>
     <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Menu</a>
 

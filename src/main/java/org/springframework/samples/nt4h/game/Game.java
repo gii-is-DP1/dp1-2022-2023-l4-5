@@ -94,7 +94,7 @@ public class Game extends NamedEntity implements Jsonable {
     public void addPlayer(Player player) throws FullGameException {
         if (this.players == null)
             players = Lists.newArrayList(player);
-        else if (this.players.size() >= this.maxPlayers)
+        else if (this.players.size() > this.maxPlayers)
             throw new FullGameException();
         else
             this.players.add(player);
@@ -120,6 +120,7 @@ public class Game extends NamedEntity implements Jsonable {
     public String toJson() {
         JsonObject json = new JsonObject();
         json.put("players", this.players);
+        json.put("maxPlayers", this.maxPlayers);
         return json.toJson();
     }
 

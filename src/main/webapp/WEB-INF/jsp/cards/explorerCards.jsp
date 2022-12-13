@@ -21,9 +21,6 @@
             padding-right: 10px;
             padding-top: 15px;
         }
-        .text{
-            padding-top: 10px;
-        }
     </style>
 
     <div class="card-column">

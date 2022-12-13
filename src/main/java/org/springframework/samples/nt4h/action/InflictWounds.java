@@ -22,5 +22,7 @@ public class InflictWounds implements Action {
 
         // Give the player a wound
         playerTo.setWounds(playerTo.getWounds() + 1);
+
+
     }
 }

@@ -85,9 +85,6 @@
 												<a href="<c:url value="/users/delete" />"
 												   class="btn btn-primary btn-block btn-sm">Delete</a>
 											</p>
-											<p class="text-left">
-												<a href="<c:url value="/friends" />"
-												   class="btn btn-primary btn-block btn-sm">Friends</a>
 										</div>
 									</div>
 								</div>

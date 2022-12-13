@@ -1,6 +1,10 @@
 package org.springframework.samples.nt4h.game;
 
 
+
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.github.cliftonlabs.json_simple.JsonObject;
+
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 // TODO: Cambiar nombre y enlaces.
 @Controller
@@ -86,6 +91,14 @@ public class GameController {
     @ModelAttribute("hero")
     public HeroInGame getHero() {
         return new HeroInGame(); // TODO: comprobar si necesita valores por defecto.
+    }
+
+
+    private static List<String> createMessages(Game game) {
+        return game.getPlayers().stream().map(player -> player.getName() + " { " +
+                player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
+                    .orElse("No hero selected") + " }" + " " + (Boolean.TRUE.equals(player.getReady()) ? "Ready" : "Not ready"))
+            .collect(Collectors.toList());
     }
 
     @ModelAttribute("player")
@@ -256,7 +269,7 @@ public class GameController {
     @GetMapping("deletePlayer/{playerId}")
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
-        playerService.getOutGame(playerService.getPlayerById(playerId));
+        playerService.getOutGame(playerService.getPlayerById(playerId), game);
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 }
