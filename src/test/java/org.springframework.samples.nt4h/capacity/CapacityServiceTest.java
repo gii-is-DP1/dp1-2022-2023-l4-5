@@ -1,79 +1,99 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
+package org.springframework.samples.nt4h.capacity;
 
-package org.springframework.samples.nt4h.game;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.card.hero.HeroInGame;
-import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.game.exceptions.FullGameException;
-import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
-import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.samples.nt4h.achievement.Achievement;
+import org.springframework.samples.nt4h.achievement.AchievementService;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 
-@DataJpaTest(
-    includeFilters = {@Filter({Service.class})}
-)
-@TestInstance(Lifecycle.PER_CLASS)
-public class GameTest {
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+public class CapacityServiceTest {
+
     @Autowired
-    public HeroService heroService;
-    public Game game;
-
-    public GameTest() {
-    }
-
-    @BeforeEach
-    void ini() throws HeroAlreadyChosenException, FullGameException {
-        this.game = new Game();
-        this.game.setAccessibility(Accessibility.PUBLIC);
-        this.game.setMaxPlayers(4);
-        this.game.setMode(Mode.UNI_CLASS);
-        this.game.setHasStages(false);
-        List<EnemyInGame> passive = new ArrayList();
-        this.game.setPassiveOrcs(passive);
-        this.game.setPassword("");
-        this.game.setName("Prueba");
+    CapacityService cas;
+    @Test
+    public void findByStateTrue() {
+        List<Capacity> nuevo = cas.getCapacityByStateCapacity(StateCapacity.MELEE);
+        assertNotNull(nuevo);
+        assertFalse(nuevo.isEmpty());
     }
 
     @Test
-    public void shouldHeroAlreadyChosenException() throws FullGameException, RoleAlreadyChosenException, HeroAlreadyChosenException {
-        Player player1 = new Player();
-        Player player2 = new Player();
-        HeroInGame h = new HeroInGame();
-        h.setHero(this.heroService.getHeroByName("Aranel"));
-        this.game.addPlayerWithNewHero(player1, h);
-        Assertions.assertThrows(HeroAlreadyChosenException.class, () -> {
-            this.game.addPlayerWithNewHero(player2, h);
-        });
+    public void findByStateFalse() {
+        List<Capacity> nuevo = cas.getCapacityByStateCapacity(StateCapacity.PRUEBA);
+        assertNotNull(nuevo);
+        assertTrue(nuevo.isEmpty());
     }
 
     @Test
-    public void shouldFullGameException() throws FullGameException {
-        Player player1 = new Player();
-        Player player2 = new Player();
-        Player player3 = new Player();
-        Player player4 = new Player();
-        Player player5 = new Player();
-        this.game.addPlayer(player1);
-        this.game.addPlayer(player2);
-        this.game.addPlayer(player3);
-        this.game.addPlayer(player4);
-        Assertions.assertThrows(FullGameException.class, () -> {
-            this.game.addPlayer(player5);
-        });
+    public void findByIdTrue() {
+        Capacity nuevo = cas.getCapacityById(1);
+        assertNotNull(nuevo);
+        assertFalse(nuevo.getLessDamage());
+    }
+
+    @Test
+    public void findByIdFalse() {
+        Capacity nuevo = cas.getCapacityById(5);
+        assertNotNull(nuevo);
+        assertFalse(nuevo.getLessDamage() == false);
+    }
+
+    @Test
+    public void findAllTestTrue() {
+        List<Capacity> ls = cas.getAllCapacities();
+        assertNotNull(ls);
+        assertFalse(ls.isEmpty());
+        assertEquals(8, ls.size());
+    }
+
+    @Test
+    public void existsByIdTestTrue(){
+        assertTrue(cas.capacityExists(1));
+    }
+
+    @Test
+    public void existByIdTestFalse(){
+        assertFalse(cas.capacityExists(30));
+    }
+
+
+
+    @Test
+    public void shouldInsertCapacity(){
+        Capacity nuevo = new Capacity();
+        nuevo.setStateCapacity(StateCapacity.EXPERTISE);
+        nuevo.setLessDamage(false);
+        cas.saveCapacity(nuevo);
+        List<Capacity> probar = cas.getCapacityByStateCapacity(StateCapacity.EXPERTISE);
+        Capacity comparador = probar.get(2);
+        assertEquals(nuevo, comparador);
+    }
+    @Test
+    public void shouldUpdateCapacity(){
+        Capacity nuevo = cas.getCapacityById(1);
+        Boolean OldLD = nuevo.getLessDamage();
+        Boolean NewLD = true;
+        nuevo.setLessDamage(NewLD);
+        cas.saveCapacity(nuevo);
+        assertTrue(cas.getCapacityById(1).getLessDamage());
+    }
+
+
+    @Test
+    public void deleteAchievementTest(){
+        cas.deleteCapacityById(1);
+        assertThrows(DataIntegrityViolationException.class,() -> cas.capacityExists(1));
+
+
     }
 }
