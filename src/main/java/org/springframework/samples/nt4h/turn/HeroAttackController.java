@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-    @Controller
+import java.util.List;
+
+@Controller
     @RequestMapping("/heroAttack")
     public class HeroAttackController {
 
@@ -27,6 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
         private final TurnService turnService;
         private final PlayerService playerService;
         private final GameService gameService;
+
+        // @ModelAttribute("enemiesInBattle")
+        // public List<EnemyInGame> getEnemiesInBattle() {
+        //     return game.getEnemiesInBattle();
+        // }
 
 
         @Autowired

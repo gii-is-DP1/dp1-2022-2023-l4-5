@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.card.enemy;
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,4 +60,17 @@ public class EnemyService {
         return enemyRepository.findAll().stream().filter(enemy -> enemy.getIsNightLord() == isNightLord).collect(Collectors.toList());
     }
 
+    public List<EnemyInGame> addOrcsToGame() {
+        List<EnemyInGame> orcs = getAllEnemyByIsNightLord(false).stream()
+            .map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
+        orcs.forEach(this::saveEnemyInGame);
+        return orcs;
+    }
+
+    public EnemyInGame addNightLordToGame() {
+        Enemy nightLord = getNightLord();
+        EnemyInGame nightLordInGame = EnemyInGame.createEnemy(true, nightLord);
+        saveEnemyInGame(nightLordInGame);
+        return nightLordInGame;
+    }
 }

@@ -113,7 +113,13 @@ public class Game extends NamedEntity implements Jsonable {
     public boolean isHeroAlreadyChosen(Hero hero) {
         if(this.players==null)return false;
         return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
+    }
 
+    public void addOrcsInGame(EnemyInGame enemy) {
+        if (this.allOrcsInGame == null)
+            allOrcsInGame = Lists.newArrayList(enemy);
+        else
+            this.allOrcsInGame.add(enemy);
     }
 
     @Override

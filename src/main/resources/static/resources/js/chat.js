@@ -14,5 +14,5 @@ sendPetitionInInterval('/api/messages/' + username, function (responseText) {
 }, 1000)
 
 function createHtml(sender, content)  {
-    return '<li>' + sender + ': ' + content + '</li>'
+    return '<li>' + sender + ': ' + '<pre>' + '<code>' + content.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + '</code>' + '</pre>' + '</li>'
 }

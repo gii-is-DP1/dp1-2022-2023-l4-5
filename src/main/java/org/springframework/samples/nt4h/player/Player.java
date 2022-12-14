@@ -105,13 +105,13 @@ public class Player extends NamedEntity implements Jsonable {
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
     // Cartas
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inHand;
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDeck;
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDiscard;
 
