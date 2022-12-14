@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.hero.Hero;
+import org.springframework.samples.nt4h.card.enemy.Enemy;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.product.ProductService;
@@ -23,8 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,7 @@ public class GameService {
     private final PlayerService playerService;
     private final HeroService heroService;
     private final ProductService productService;
+    private final EnemyService enemyService;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -79,13 +82,17 @@ public class GameService {
         return newPlayer;
     }
 
+
+
+
+
     @Transactional
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException {
         game.addPlayerWithNewHero(player, heroInGame);
         player.setReady(player.getHeroes().size() == game.getMode().getNumHeroes());
         heroService.saveHeroInGame(heroInGame);
-        playerService.savePlayerAndCreateTurns(player);
         playerService.addDeckFromRole(player, game.getMode());
+        playerService.savePlayerAndCreateTurns(player);
         saveGame(game);
     }
 
@@ -101,7 +108,13 @@ public class GameService {
         game.addPlayer(newPlayer);
         game.setAccessibility(game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE);
         saveGame(game);
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame();
+        EnemyInGame nightLordInGame = enemyService.addNightLordToGame();
+        game.setAllOrcsInGame(orcsInGame);
+        game.addOrcsInGame(nightLordInGame);
+        game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
+
     }
 
     // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
