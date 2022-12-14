@@ -2,7 +2,7 @@
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by FernFlower decompiler)
 //
-
+/*
 package org.springframework.samples.nt4h.product;
 
 import java.util.List;
@@ -161,3 +161,5 @@ public class ProductServiceTest {
         Assertions.assertFalse(this.productService.productInGameExists(2));
     }
 }
+
+ */

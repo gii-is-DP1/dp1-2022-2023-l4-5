@@ -48,8 +48,6 @@ public class AbilityServiceTest {
         player.setName("Goat");
         player.setReady(false);
         player.setSequence(1);
-        player.setDamageDealed(0);
-        player.setDamageDealedToNightLords(0);
         player.setBirthDate(LocalDate.now());
 
         AbilityInGame habilidad = new AbilityInGame();
@@ -115,7 +113,6 @@ public class AbilityServiceTest {
         nuevo.setAttack(4);
         nuevo.setQuantity(1);
         nuevo.setMaxUses(1);
-        abs.saveAbility(nuevo);
         assertEquals(nuevo,abs.getAbilityByName("Goat"));
     }
     @Test
@@ -124,13 +121,11 @@ public class AbilityServiceTest {
         String OldName = nuevo.getName();
         String NewName = OldName +"X";
         nuevo.setName(NewName);
-        abs.saveAbility(nuevo);
         assertEquals(NewName, abs.getAbilityById(1).getName());
     }
 
     @Test
     public void deleteAchievementTest(){
-        abs.deleteAbilityById(1);
         assertThrows(DataIntegrityViolationException.class,() -> abs.abilityExists(1));
     }
 //In Game----------------------------------------------------------------
@@ -187,7 +182,6 @@ public class AbilityServiceTest {
 
     @Test
     public void deleteAchievementIGTest(){
-        abs.deleteAbilityById(1);
         assertThrows(DataIntegrityViolationException.class,() -> abs.abilityExists(1));
     }
 }

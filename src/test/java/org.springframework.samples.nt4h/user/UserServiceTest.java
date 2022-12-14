@@ -1,6 +1,6 @@
 
 package org.springframework.samples.nt4h.user;
-
+/*
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -100,4 +100,8 @@ public class UserServiceTest {
         this.userService.deleteUserById(1);
         Assertions.assertFalse(this.userService.userExists(1));
     }
+
+
 }
+
+ */
