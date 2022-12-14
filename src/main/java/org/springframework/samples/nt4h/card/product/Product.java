@@ -7,10 +7,7 @@ import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.card.Card;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -20,9 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product extends Card {
-    @NotNull
-    @Min(1)
-    private Integer quantity;
 
     @NotNull
     @Range(min = 3, max = 8)
@@ -33,8 +27,13 @@ public class Product extends Card {
     private Integer attack;
 
     @NotNull
+    @Min(1)
+    private Integer quantity;
+
+    @NotNull
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacity;
 
+    @Enumerated(EnumType.STRING)
     private AbilityEffectEnum abilityEffectEnum;
 }

@@ -1,6 +1,8 @@
 package org.springframework.samples.nt4h.user;
 
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.*;
@@ -17,6 +19,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.IOException;
+import java.io.Writer;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +32,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Jsonable {
 
     @NotNull
     @Column(unique = true)
@@ -68,7 +72,7 @@ public class User extends BaseEntity {
     private Statistic statistic;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
-    private List<Message> sendedMessages; // TODO: Solucionar de una mejor forma.
+    private List<Message> sentMessages; // TODO: Solucionar de una mejor forma.
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
     private List<Message> receivedMessages; // TODO: Solucionar de una mejor forma.
@@ -84,5 +88,22 @@ public class User extends BaseEntity {
 
     public void removeFriend(User user) {
         friends.remove(user);
+    }
+
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("player", player);
+        return json.toJson();
+    }
+
+    @Override
+    public void toJson(Writer writer) {
+        try {
+            writer.write(toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

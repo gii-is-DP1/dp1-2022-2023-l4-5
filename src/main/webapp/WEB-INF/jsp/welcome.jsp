@@ -49,14 +49,10 @@
             <h1 style="color: white; text-shadow: 3px 3px 6px #000000;">¿Jugamos?<span FACE="verdana" SIZE=15></span>
             </h1>
             <a href="/games/new">
-                <img src="/resources/images/Boton_create.PNG" width="280rem" height="75rem" alt="Create"
-                     onmouseover="this.src='https://pbs.twimg.com/profile_images/1292184934489128961/DFawhH9s_400x400.jpg'"
-                     onmouseout="this.src='/resources/images/Boton_create.PNG'">
+                <img src="/resources/images/Boton_create.PNG" width="280rem" height="75rem" alt="Create">
             </a>
             <a href="/games">
-                <img src="/resources/images/Boton_find.PNG" width="280rem" height="75rem" alt="Find"
-                     onmouseover="this.src='https://pbs.twimg.com/profile_images/1292184934489128961/DFawhH9s_400x400.jpg'"
-                     onmouseout="this.src='/resources/images/Boton_find.PNG'"/>
+                <img src="/resources/images/Boton_find.PNG" width="280rem" height="75rem" alt="Find"/>
             </a>
         </div>
         <br/>
@@ -67,14 +63,10 @@
         <div style="text-align: center;">
             <h1 style="color: white; text-shadow: 3px 3px 6px #000000;">Manuales del juego<span FACE="verdana" SIZE=15></span></h1>
             <a href="https://drive.google.com/file/d/1ElArQTTfUjz2GNEQ8lG6dfOwikvFWY-O/view">
-                <img src="/resources/images/Boton_reglas_del_juego.PNG" width="350 rem" height="75rem" alt="Reglas del juego"
-                     onmouseover="this.src='https://pbs.twimg.com/profile_images/1292184934489128961/DFawhH9s_400x400.jpg'"
-                     onmouseout="this.src='/resources/images/Boton_reglas_del_juego.PNG'"/>
+                <img src="/resources/images/Boton_reglas_del_juego.PNG" width="350 rem" height="75rem" alt="Reglas del juego"/>
             </a>
             <a href="https://drive.google.com/file/d/1FDUgfsXFJ7DxGDmtIg76us_5u8sALhHx/view">
-                <img src="/resources/images/Boton_reglas_multiclase.PNG" width="350rem" height="75rem" alt="Reglas del juego (multiclase)"
-                     onmouseover="this.src='https://pbs.twimg.com/profile_images/1292184934489128961/DFawhH9s_400x400.jpg'"
-                     onmouseout="this.src='/resources/images/Boton_reglas_multiclase.PNG'"/>
+                <img src="/resources/images/Boton_reglas_multiclase.PNG" width="350rem" height="75rem" alt="Reglas del juego (multiclase)"/>
             </a>
         </div>
     </div>

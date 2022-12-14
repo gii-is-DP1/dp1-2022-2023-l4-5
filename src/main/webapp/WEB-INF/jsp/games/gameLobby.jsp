@@ -8,8 +8,8 @@
 
 <nt4h:layout pageName="lobby">
     <h2>Game Lobby</h2>
-    <div id="ready">
 
+    <div class="ready">
     </div>
 
     <div>
@@ -24,39 +24,7 @@
             </c:otherwise>
         </c:choose>
     </div>
-    <div id="next"></div>
+    <div class="next"></div>
+    <script src="/resources/js/playersInLobby.js" type="module">
+    </script>
 </nt4h:layout>
-
-<script type="text/javascript">
-    function reset(url, action) {
-        $(document).ready(function () {
-            setInterval(function () {
-                const http = new XMLHttpRequest();
-                http.open('GET', url, true);
-                http.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        action(this.responseText)
-                    }
-                }
-                http.send()
-            }, 1000);
-        });
-    }
-
-    gameId = window.location.pathname.split("/")[2];
-    timer = 0;
-    reset('/games/update/' + gameId, function (responseText) {
-        const resultado = JSON.parse(responseText);
-        const player = document.getElementById("ready");
-        const next = document.getElementById("next");
-        const lis = resultado.messages.map(function (m) {
-            return "<li>" + m + "</li>"
-        });
-        player.innerHTML = lis.join("");
-        var timer = resultado.timer;
-        if (timer > 0) next.innerHTML = "<h1>The game will start in " + timer + " seconds</h1>";
-        else next.innerHTML = "<a href='/games/selectOrder/'>Continue</a>";
-    })
-
-    console.log("hola" + timer);
-</script>

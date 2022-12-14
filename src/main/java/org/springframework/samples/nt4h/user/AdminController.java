@@ -18,10 +18,10 @@ public class AdminController {
 
     // Constantes.
     private static final String VIEW_USER_CREATE_OR_UPDATE_FORM = "admins/updateUserForm";
-    private static final String VIEW_USER_LIST = "admins/usersAdminList";
+
     private static final String VIEW_USER_DETAILS = "users/userDetails";
 
-    private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
+
     private static final String PAGE_USER_LIST = "redirect:/users";
     // Servicios.
     private final UserService userService;
@@ -42,16 +42,18 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
-    @ModelAttribute("user")
+    @ModelAttribute("loggedUser")
     public User getUser() {
         User loggedUser = userService.getLoggedUser();
         return loggedUser != null ? loggedUser : new User();
     }
 
+
+
     // Obtener todos los usuarios.
     @GetMapping("/usersAdminList")
     public String getUsers() {
-        return VIEW_USER_LIST;
+        return PAGE_USER_LIST;
     }
 
     @GetMapping("/details")
@@ -61,24 +63,22 @@ public class AdminController {
 
     //Editar usuario
     @GetMapping(value = "{userId}/edit")
-    public String initUpdateUserForm(Integer userId, ModelMap model) {
+    public String initUpdateUserForm(@PathVariable Integer userId, ModelMap model) {
         model.put("user", userService.getUserById(userId));
         return VIEW_USER_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "{userId}/edit")
-    public String processUpdateUserForm(@Valid User newUser, BindingResult result) {
-        User oldUser = this.userService.getLoggedUser();
+    public String processUpdateUserForm(@Valid User user, BindingResult result, @PathVariable Integer userId) {
+        User oldUser = this.userService.getUserById(userId);
         if (result.hasErrors()) return VIEW_USER_CREATE_OR_UPDATE_FORM;
         else {
-            BeanUtils.copyProperties(newUser, oldUser, "id", "password", "enable", "tier");
+            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).authority(oldUser.getAuthority()).build();
+            newUser.setId(oldUser.getId());
             userService.saveUser(newUser);
-            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(newUser.getId()));
+            return PAGE_USER_LIST;
         }
     }
-
-
-
 
     @GetMapping(value = "{userId}/delete")
     public String processDeleteUser(@PathVariable  Integer userId) {

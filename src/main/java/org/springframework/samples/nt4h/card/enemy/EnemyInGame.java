@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.card.enemy;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
@@ -15,6 +14,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnemyInGame extends BaseEntity {
     @NotNull
     @Max(value = 10)
@@ -34,5 +36,10 @@ public class EnemyInGame extends BaseEntity {
 
     @ManyToOne
     private Enemy enemy;
+
+    public static EnemyInGame createEnemy(Boolean isNightLord, Enemy enemy) {
+        return EnemyInGame.builder().enemy(enemy).actualHealth(enemy.getHealth())
+            .isDead(false).isNightLord(isNightLord).noAttackThisTurn(false).build();
+    }
 
 }

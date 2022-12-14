@@ -1,9 +1,9 @@
 package org.springframework.samples.nt4h.card.product;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.action.BuyProduct;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -82,7 +83,19 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductInGame> getMarket() {
-        return productInGameRepository.findAllByStateProduct(StateProduct.IN_SALE, PageRequest.of(0, 5));
+    public List<Product> getMarket() {
+        return productInGameRepository.findAll().stream().filter(product -> product.getStateProduct().equals(StateProduct.IN_SALE)).limit(5)
+            .map(ProductInGame::getProduct).collect(Collectors.toList());
+    }
+
+    public void addProduct(Game game) {
+        getAllProducts().forEach(
+            product -> {
+                for (int i = 0; i < product.getQuantity(); i++) {
+                    ProductInGame productInGame = ProductInGame.builder().product(product).game(game).stateProduct(StateProduct.IN_SALE).timesUsed(0).build();
+                    productInGame.setName(product.getName());
+                    saveProductInGame(productInGame);
+                }
+            });
     }
 }

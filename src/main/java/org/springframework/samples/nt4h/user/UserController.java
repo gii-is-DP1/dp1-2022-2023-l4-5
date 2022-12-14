@@ -39,7 +39,7 @@ public class UserController {
     private static final String VIEW_USER_LIST = "users/usersGameList";
     private static final String VIEW_USER_DETAILS = "users/userDetails";
     private static final String PAGE_WELCOME = "redirect:/welcome";
-    private static final String PAGE_USER_DETAILS = "redirect:/users/{userId}";
+    private static final String PAGE_USER_DETAILS = "redirect:/users/details";
 
     // Servicios.
     private final UserService userService;
@@ -59,6 +59,8 @@ public class UserController {
     public User loggedUser() {
         return this.userService.getLoggedUser();
     }
+
+
     // Obtener todos los usuarios.
     @GetMapping
     public String getUsers(@RequestParam(defaultValue = "0") int page, ModelMap model) {
@@ -108,7 +110,7 @@ public class UserController {
         User oldUser = this.userService.getLoggedUser();
         if (result.hasErrors()) return VIEW_USER_CREATE_OR_UPDATE_FORM;
         else {
-            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).build();
+            User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).authority(oldUser.getAuthority()).build();
             newUser.setId(oldUser.getId());
             userService.saveUser(newUser);
             return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));

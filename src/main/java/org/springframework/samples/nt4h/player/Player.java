@@ -1,5 +1,7 @@
 package org.springframework.samples.nt4h.player;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
@@ -16,6 +18,8 @@ import org.springframework.samples.nt4h.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import java.io.IOException;
+import java.io.Writer;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +31,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Player extends NamedEntity {
+public class Player extends NamedEntity implements Jsonable {
 
     @Min(0)
     private Integer gold;
@@ -101,13 +105,13 @@ public class Player extends NamedEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
     // Cartas
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inHand;
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDeck;
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<AbilityInGame> inDiscard;
 
@@ -205,6 +209,26 @@ public class Player extends NamedEntity {
             turns = Lists.newArrayList(turn);
         } else {
             turns.add(turn);
+        }
+    }
+
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("id", this.getId());
+        json.put("heroesInGame", heroes);
+        json.put("host", host);
+        json.put("name", this.getName());
+        json.put("ready", ready);
+        return json.toJson();
+    }
+
+    @Override
+    public void toJson(Writer writer) {
+        try {
+            writer.write(toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

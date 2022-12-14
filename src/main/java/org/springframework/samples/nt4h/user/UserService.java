@@ -114,15 +114,16 @@ public class UserService {
         limit = limit > getFriends().size() ? getFriends().size() : limit;
         return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), limit), page, getLoggedUser().getFriends().size());
     }
-    //ewo
 
     @Transactional
     public void addFriend(int friendId) {
         User user = getLoggedUser();
-        user.addFriend(getUserById(friendId));
-        if(!getLoggedUser().getFriends().contains(getUserById(friendId))){
-            user.addFriend(getUserById(friendId));
+        User friend = getUserById(friendId);
+        if(!getLoggedUser().getFriends().contains(friend)){
+            user.addFriend(friend);
+            friend.addFriend(user);
         }
+        saveUser(friend);
         saveUser(user);
     }
 
@@ -132,7 +133,9 @@ public class UserService {
         User friend = getUserById(friendId);
         if (user.getFriends().contains(friend)) {
             user.removeFriend(friend);
+            friend.removeFriend(user);
             saveUser(user);
+            saveUser(friend);
         }
     }
 
@@ -143,4 +146,8 @@ public class UserService {
     }
 
 
+    public void removeUserFromGame(User user, Game game) {
+        user.setGame(null);
+        saveUser(user);
+    }
 }
