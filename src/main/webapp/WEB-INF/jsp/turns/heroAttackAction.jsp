@@ -7,7 +7,7 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="Hero Attack Action">
-
+    <h1>Turno del jugador ${game.currentPlayer}</h1>
 <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
     <nt4h:selectField name="usedAbilities" label="abilities in hand" names="${player.inHand}" size="4"/>
     <nt4h:selectField name="usedEnemies" label="enemies in battle" names="${game.actualOrcs}" size="3"/>
