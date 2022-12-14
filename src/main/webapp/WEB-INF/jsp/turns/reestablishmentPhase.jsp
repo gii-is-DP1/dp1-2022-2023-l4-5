@@ -9,6 +9,7 @@
 <nt4h:layout pageName="Reestablishment Phase">
 <body class="background">
 <h2>Action decision</h2>
+    <h1>Turno del jugador ${game.currentPlayer}</h1>
 <img> </img>
 </nt4h:layout>
 
