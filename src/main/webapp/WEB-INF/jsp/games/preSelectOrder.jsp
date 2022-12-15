@@ -13,7 +13,7 @@
         </h2>
 
         <form:form modelAttribute="game" class="form-horizontal" >
-            <button id="waiting" hidden="hidden" type="submit">Create game</button>
+            <button id="waiting" hidden="hidden" type="submit">Start game</button>
         </form:form>
     </jsp:body>
 </nt4h:layout>

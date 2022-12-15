@@ -8,12 +8,46 @@
 
 <nt4h:layout pageName="Hero Attack Action">
     <h1>Turno del jugador ${game.currentPlayer}</h1>
-<form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
-    <nt4h:selectField name="usedAbilities" label="abilities in hand" names="${player.inHand}" size="4"/>
-    <nt4h:selectField name="usedEnemies" label="enemies in battle" names="${game.actualOrcs}" size="3"/>
-    <button class="btn btn-default" type="submit">Attack</button>
-</form:form>
+    <style>
+        .card-img-top {
+            width: 100%;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+    </style>
+    <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
 
-<a href="${pageContext.request.contextPath}/heroAttack/next" class="btn btn-default">Next phase</a>
+            <h1>Gold: ${game.currentPlayer.getGlory()},
+                Glory: ${game.currentPlayer.getGold()},
+                Wounds: ${game.currentPlayer.getWounds()}</h1>
+
+        <div class="container">
+            <c:forEach items="${player.inHand}" var="i">
+                <div class="col-sm-2">
+                    <form:radiobutton path="currentAbility" value="${i}"/>
+                    <img class="card-img-top" src="${i.getAbility().getFrontImage()}">
+                </div>
+            </c:forEach>
+        </div>
+
+        <div class="container">
+            <c:forEach items="${game.actualOrcs}" var="i">
+                <div class="col-sm-2">
+                    <form:radiobutton path="currentEnemy" value="${i}"/>
+                    <img class="card-img-top" src="${i.getEnemy().getFrontImage()}">
+                </div>
+            </c:forEach>
+        </div>
+
+        <c:if  test="${game.actualOrcs.size()!=0}">
+            <button class="btn btn-default" type="submit">Attack</button>
+        </c:if>
+
+    </form:form>
+
+    <a href="${pageContext.request.contextPath}/heroAttack/next" class="btn btn-default">Next phase</a><h3>Enemy_attack</h3>
+
 
 </nt4h:layout>
+
+
