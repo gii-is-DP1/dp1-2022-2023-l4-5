@@ -11,9 +11,11 @@
         <nt4h:selectField name="usedEnemies" label="enemies in battle" names="${game.actualOrcs}" size="3"/>
         <button class="btn btn-default" type="submit">Attack</button>
     </form:form>
+    <!-- Modal -->
+    <div class="nextTurn"></div>
     <script src="/resources/js/currentTurn.js" type="module"></script>
     <script type="text/javascript">
-        if(${damage} != undefined)
+        if (${game.currentTurn.phase.toString()=='enemyAttack'})
             alert("The orcs makes you " + ${damage} + ".");
     </script>
 
