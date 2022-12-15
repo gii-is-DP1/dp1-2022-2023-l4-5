@@ -1,5 +1,5 @@
 package org.springframework.samples.nt4h.hero;
-/*
+
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,36 +78,11 @@ class HeroServiceTest {
 
     @Test
     @Transactional
-    public void shouldInsertHero() {
-        Hero hero = new Hero();
-        hero.setName("Lis");
-        hero.setHealth(3);
-        hero.setRole(Role.EXPLORER);
-        Capacity capacity = new Capacity();
-        capacity.setStateCapacity(StateCapacity.EXPERTISE);
-        capacity.setLessDamage(true);
-        List<Capacity> capacities = List.of(capacity);
-        hero.setCapacities(capacities);
-        Ability ability = new Ability();
-        ability.setAttack(1);
-        ability.setQuantity(1);
-        ability.setMaxUses(1);
-        ability.setRole(Role.EXPLORER);
-        List<Ability> abilities = List.of(ability);
-        hero.setAbilities(abilities);
-        hero.setMaxUses(1);
-        this.heroService.saveHero(hero);
-        Assertions.assertEquals(this.heroService.getHeroByName("Lis"), hero);
-    }
-
-    @Test
-    @Transactional
     void shouldUpdateHero() {
         Hero hero = this.heroService.getHeroById(1);
         String oldName = hero.getName();
         String newName = oldName + "X";
         hero.setName(newName);
-        this.heroService.saveHero(hero);
         hero = this.heroService.getHeroById(1);
         Assertions.assertEquals(hero.getName(), newName);
     }
@@ -118,13 +93,5 @@ class HeroServiceTest {
         this.heroService.heroExists(1);
     }
 
-    @Test
-    public void deleteHeroTest() {
-        this.heroService.deleteHeroById(1);
-        Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
-            this.heroService.heroExists(1);
-        });
-    }
 }
 
- */
