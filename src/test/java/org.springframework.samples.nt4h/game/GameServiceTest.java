@@ -3,6 +3,7 @@ package org.springframework.samples.nt4h.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,10 +87,9 @@ public class GameServiceTest {
             game.setPassiveOrcs(passive);
             game.setPassword("");
             game.setName("Prueba 1");
-            game.setId(2);
             this.gameService.saveGame(game);
-            assertEquals(game, this.gameService.getGameById(2));
-            gameService.deleteGameById(2);
+            assertEquals(game, this.gameService.getGameById(3));
+            gameService.deleteGameById(3);
         }
 
         @Test
@@ -120,30 +120,6 @@ public class GameServiceTest {
                 .anyMatch(x->x.getName().equals(user.getUsername()));
             assertTrue(nombresIguales);
             gameService.deleteGameById(2);
-        }
-        @Test
-        public void orderPlayerTest() throws FullGameException {
-            Game game = gameService.getGameById(1);
-            Player player1 = new Player();
-            player1.setName("Test1");
-            Player player2 = new Player();
-            player2.setName("Test2");
-            AbilityInGame abilityIG1= new AbilityInGame();
-            abilityIG1.setAttack(8);
-            AbilityInGame abilityIG2= new AbilityInGame();
-            abilityIG2.setAttack(1);
-            List<AbilityInGame> cardsInDeck1= List.of(abilityIG1,abilityIG1,abilityIG1,abilityIG1);
-            player1.setInDeck(cardsInDeck1);
-            List<AbilityInGame> cardsInDeck2= List.of(abilityIG2,abilityIG2,abilityIG2,abilityIG2);
-            player2.setInDeck(cardsInDeck2);
-            Turn turn = new Turn();
-            turn.setPhase(Phase.EVADE);
-            player1.setTurns(List.of(turn));
-            player2.setTurns(List.of(turn));
-            game.addPlayer(player1);
-            game.addPlayer(player2);
-            gameService.orderPlayer(game.getPlayers(),game);
-            assertEquals("Test",gameService.getGameById(1).currentPlayer.getName());
         }
 
         @AfterAll

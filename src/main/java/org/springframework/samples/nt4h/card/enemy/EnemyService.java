@@ -84,8 +84,6 @@ public class EnemyService {
         //Lo que hace el método :)
         //Cambiar mazo de habilidad
         //Recibir herida o no
-
-
         Integer damage = 0; //repito el bucle porque no se me he encariñado de el
         if (game.getActualOrcs().size() != 0) {  // Si hay enemigos en el campo si no pues no recibe daño el heroe
             for (int i = 0; i <= game.getActualOrcs().size(); i++) {  //calculamos el daño total inflijido

@@ -3,13 +3,12 @@ package org.springframework.samples.nt4h.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
@@ -20,17 +19,13 @@ import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.stereotype.Service;
 
-@DataJpaTest(
-    includeFilters = {@Filter({Service.class})}
-)
-@TestInstance(Lifecycle.PER_CLASS)
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GameTest {
     @Autowired
     public HeroService heroService;
     public Game game;
 
-    public GameTest() {
-    }
 
     @BeforeEach
     void ini() throws HeroAlreadyChosenException, FullGameException {
@@ -64,12 +59,14 @@ public class GameTest {
         Player player3 = new Player();
         Player player4 = new Player();
         Player player5 = new Player();
+        Player player6 = new Player();
         this.game.addPlayer(player1);
         this.game.addPlayer(player2);
         this.game.addPlayer(player3);
         this.game.addPlayer(player4);
+        this.game .addPlayer(player5);
         Assertions.assertThrows(FullGameException.class, () -> {
-            this.game.addPlayer(player5);
+            this.game.addPlayer(player6);
         });
     }
 }
