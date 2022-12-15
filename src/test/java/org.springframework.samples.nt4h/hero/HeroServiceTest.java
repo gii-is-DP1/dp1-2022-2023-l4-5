@@ -78,17 +78,6 @@ class HeroServiceTest {
 
     @Test
     @Transactional
-    void shouldUpdateHero() {
-        Hero hero = this.heroService.getHeroById(1);
-        String oldName = hero.getName();
-        String newName = oldName + "X";
-        hero.setName(newName);
-        hero = this.heroService.getHeroById(1);
-        Assertions.assertEquals(hero.getName(), newName);
-    }
-
-    @Test
-    @Transactional
     void existHero() {
         this.heroService.heroExists(1);
     }

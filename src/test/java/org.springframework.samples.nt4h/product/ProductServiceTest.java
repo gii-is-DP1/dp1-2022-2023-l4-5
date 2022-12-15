@@ -5,10 +5,11 @@
 /*
 package org.springframework.samples.nt4h.product;
 
+import java.time.LocalDate;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+
+import org.junit.After;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,6 +22,11 @@ import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(
@@ -33,6 +39,20 @@ public class ProductServiceTest {
     @Autowired
     protected GameService gameService;
 
+    @Autowired
+    protected PlayerService playerService;
+
+    @BeforeAll
+    void setUp() throws RoleAlreadyChosenException {
+        Game game = new Game();
+        game.setMaxPlayers(4);
+        game.setMode(Mode.UNI_CLASS);
+        gameService.saveGame(game);
+
+        Player player = new Player();
+        player.setGold(20);
+        playerService.savePlayer(player);
+    }
     public ProductServiceTest() {
     }
 
@@ -40,7 +60,7 @@ public class ProductServiceTest {
         ProductInGame product = new ProductInGame();
         Product p = this.productService.getProductById(1);
         product.setProduct(p);
-        product.setStateProduct(StateProduct.INSALE);
+        product.setStateProduct(StateProduct.IN_SALE);
         Game game = this.gameService.getGameById(1);
         product.setGame(game);
         product.setName("Prueba");
@@ -48,8 +68,10 @@ public class ProductServiceTest {
         this.productService.saveProductInGame(product);
     }
 
+    @AfterAll
     @Test
     public void findByIDTrue() {
+        gameService.deleteGameById(1);
         Product product = this.productService.getProductById(2);
         Assertions.assertNotNull(product);
         Assertions.assertEquals("Poción curativa", product.getName());
@@ -62,8 +84,10 @@ public class ProductServiceTest {
         Assertions.assertNotEquals("Poción curativa", product.getName());
     }
 
+    @AfterAll
     @Test
     public void findByNameTrue() {
+        playerService.deletePlayerById(1);
         Product product = this.productService.getProductByName("Poción curativa");
         Assertions.assertNotNull(product);
         Assertions.assertEquals(8, product.getPrice());
@@ -84,33 +108,6 @@ public class ProductServiceTest {
         Assertions.assertFalse(list.isEmpty());
     }
 
-    @Test
-    public void shouldInsertProduct() {
-        Product product = new Product();
-        product.setName("Prueba");
-        product.setPrice(5);
-        product.setAttack(0);
-        product.setQuantity(7);
-        product.setMaxUses(1);
-        Capacity capacity = new Capacity();
-        capacity.setStateCapacity(StateCapacity.EXPERTISE);
-        capacity.setLessDamage(true);
-        List<Capacity> capacities = List.of(capacity);
-        product.setCapacity(capacities);
-        this.productService.saveProduct(product);
-        Assertions.assertEquals(this.productService.getProductByName("Prueba"), product);
-    }
-
-    @Test
-    void shouldUpdateProduct() {
-        Product product = this.productService.getProductById(1);
-        String oldName = product.getName();
-        String newName = oldName + "X";
-        product.setName(newName);
-        this.productService.saveProduct(product);
-        product = this.productService.getProductById(1);
-        Assertions.assertEquals(product.getName(), newName);
-    }
 
     @Test
     void existProduct() {
@@ -122,7 +119,7 @@ public class ProductServiceTest {
         ProductInGame product = new ProductInGame();
         Product p = this.productService.getProductById(1);
         product.setProduct(p);
-        product.setStateProduct(StateProduct.INSALE);
+        product.setStateProduct(StateProduct.IN_SALE);
         Game game = this.gameService.getGameById(1);
         product.setGame(game);
         product.setName("Prueba1");
@@ -136,7 +133,7 @@ public class ProductServiceTest {
     void shouldUpdateProductInGame() {
         this.createProductInGame();
         ProductInGame p = this.productService.getProductInGameById(1);
-        StateProduct newSta = StateProduct.PLAYER1;
+        StateProduct newSta = StateProduct.PLAYER;
         p.setStateProduct(newSta);
         this.productService.saveProductInGame(p);
         p = this.productService.getProductInGameById(1);
@@ -149,16 +146,11 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void deleteProductTest() {
-        this.productService.deleteProductById(1);
-        Assertions.assertFalse(this.productService.productExists(1));
-    }
-
-    @Test
     public void deleteProductInGameTest() throws Exception {
         this.createProductInGame();
         this.productService.deleteProductInGameById(2);
         Assertions.assertFalse(this.productService.productInGameExists(2));
+
     }
 }
 
