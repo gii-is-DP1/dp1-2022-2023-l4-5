@@ -149,4 +149,5 @@ public class GameService {
         game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));
         saveGame(game);
     }
+
 }

@@ -2,7 +2,6 @@
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by FernFlower decompiler)
 //
-/*
 package org.springframework.samples.nt4h.product;
 
 import java.time.LocalDate;
@@ -154,4 +153,3 @@ public class ProductServiceTest {
     }
 }
 
- */
