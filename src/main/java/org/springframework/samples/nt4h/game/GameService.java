@@ -72,7 +72,7 @@ public class GameService {
     }
 
     public Player addPlayerToGame(Player player, Game game, User user) throws FullGameException {
-        Player newPlayer = player.toBuilder().host(false).birthDate(user.getBirthDate()).game(game).wounds(0).build();
+        Player newPlayer = player.toBuilder().host(false).birthDate(user.getBirthDate()).game(game).wounds(0).glory(0).gold(0).sequence(-1).damageProtect(0).numOrcsKilled(0).numWarLordKilled(0).build();
         newPlayer.setName(user.getUsername());
         game.addPlayer(newPlayer);
         playerService.savePlayerAndCreateTurns(newPlayer);

@@ -83,6 +83,7 @@ import java.util.List;
                 player.addAbilityInDiscard(usedAbility);
                 playerService.savePlayer(player);
                 if(attackedEnemy.getActualHealth() <= 0) {
+                    player.setGlory(player.getGlory() + attackedEnemy.getEnemy().getGlory());
                     player.setGold(player.getGold() + attackedEnemy.getEnemy().getGold());
                     game.getActualOrcs().remove(attackedEnemy);
                     playerService.savePlayer(player);
