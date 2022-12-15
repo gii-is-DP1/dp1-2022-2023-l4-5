@@ -49,7 +49,7 @@ public class ReestablishmentController {
         return getGame().getActualOrcs();
     }
 
-    @ModelAttribute("enemiesInBattle")
+    @ModelAttribute("allEnemiesInGame")
     public List<EnemyInGame> getAllEnemies() {
         return getGame().getAllOrcsInGame();
     }
@@ -69,11 +69,6 @@ public class ReestablishmentController {
         return getPlayer().getInDeck();
     }
 
-    @GetMapping("/addCards")
-    public String reestablishmentAddCards() {
-        return VIEW_REESTABLISHMENT;
-    }
-
     @ModelAttribute("message")
     public String getMessage() {
         return advise.getMessage();
@@ -84,15 +79,17 @@ public class ReestablishmentController {
         return advise.getMessageType();
     }
 
+    @GetMapping("/addCards")
+    public String reestablishmentAddCards() {
+        playerService.restoreEnemyLife(getEnemiesInBattle());
+        playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
+        return VIEW_REESTABLISHMENT;
+    }
+
     @PostMapping("/addCards")
-    public String takeNewAbilitiesAndEnemies() {
-        try {
+    public String takeNewAbilities(Integer cardId) {
             playerService.takeNewCard(getPlayer());
-            playerService.restoreEnemyLife(getEnemiesInBattle());
-            playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
-        } catch (EnoughEnemiesException e) {
-            return advise.sendError("No te faltan orcos.", VIEW_REESTABLISHMENT);
-        }
+            playerService.removeAbilityCards(cardId, getPlayer());
         return reestablishmentAddCards();
     }
 
@@ -101,9 +98,4 @@ public class ReestablishmentController {
         return "redirect:/nextTurn";
     }
 
-    @PostMapping("/removeCards")
-    public String removeHandAbilitiesIntoDiscard(Integer cardId) {
-            playerService.removeAbilityCards(cardId, getPlayer());
-        return reestablishmentNextTurn();
-    }
 }
