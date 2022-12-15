@@ -34,10 +34,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
             .antMatchers("/users/new", "/session/**", "/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-            .antMatchers("/admins/**", "/achievements/new", "/achievements/edit", "/achievements/delete").hasAnyAuthority("DOKTOL")
+            .antMatchers("/admins/**", "/achievements/new", "/achievements/edit", "/achievements/delete",
+                "/swagger-ui.html"
+                ).hasAnyAuthority("DOKTOL")
             .antMatchers("/achievements/**", "/games/**", "/evasion/**", "/users/**", "/cards/**",
                 "/friends/**", "/turns/**", "/evade/**", "/messages/**", "/market/**", "/reestablishment/**",
-                "/api/**", "/heroAttack/**").authenticated()
+                "/api/**", "/heroAttack/**", "/enemyAttack/**").authenticated()
             .anyRequest().denyAll()
             .and()
             .formLogin()

@@ -72,7 +72,7 @@ public class GameService {
     }
 
     public Player addPlayerToGame(Player player, Game game, User user) throws FullGameException {
-        Player newPlayer = player.toBuilder().host(false).birthDate(user.getBirthDate()).game(game).build();
+        Player newPlayer = player.toBuilder().host(false).birthDate(user.getBirthDate()).game(game).wounds(0).build();
         newPlayer.setName(user.getUsername());
         game.addPlayer(newPlayer);
         playerService.savePlayerAndCreateTurns(newPlayer);
@@ -121,7 +121,6 @@ public class GameService {
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
-        System.out.println("Ordering players");
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
         for (var i = 0; i < players.size(); i++) {
             Player player = players.get(i);
@@ -129,7 +128,6 @@ public class GameService {
             datos.add(new Triplet<>(i, player, abilities.get(0).getAttack() + abilities.get(1).getAttack()));
         }
         datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
-        System.out.println("datos = " + datos);
         if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
             datos.get(0).getValue1().getBirthDate().isAfter(datos.get(1).getValue1().getBirthDate())) {
             var first = datos.get(0);
@@ -150,10 +148,5 @@ public class GameService {
         game.setCurrentPlayer(firstPlayer);
         game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));
         saveGame(game);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean existsGameById(int id) {
-        return gameRepository.existsById(id);
     }
 }

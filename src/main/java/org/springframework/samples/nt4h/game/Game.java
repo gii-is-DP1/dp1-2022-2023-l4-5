@@ -80,15 +80,11 @@ public class Game extends NamedEntity implements Jsonable {
     private List<Player> players;
 
     @OneToOne(cascade = CascadeType.ALL)
-    public Player currentPlayer;
+    private Player currentPlayer;
 
     public Player getNextPlayer() {
         int index = alivePlayersInTurnOrder.indexOf(currentPlayer);
-        if (index == alivePlayersInTurnOrder.size() - 1) {
-            return alivePlayersInTurnOrder.get(0);
-        } else {
-            return alivePlayersInTurnOrder.get(index + 1);
-        }
+        return alivePlayersInTurnOrder.get((index + 1) % alivePlayersInTurnOrder.size());
     }
 
     public void addPlayer(Player player) throws FullGameException {
@@ -111,15 +107,17 @@ public class Game extends NamedEntity implements Jsonable {
     }
 
     public boolean isHeroAlreadyChosen(Hero hero) {
-        if(this.players==null)return false;
-        return this.players.stream().anyMatch(player -> player.getHeroes().stream().anyMatch(h -> h.getHero().equals(hero)));
+        if (this.players == null) return false;
+        return this.players.stream()
+            .flatMap(player -> player.getHeroes().stream())
+            .anyMatch(h -> h.getHero().equals(hero));
     }
 
     public void addOrcsInGame(EnemyInGame enemy) {
-        if (this.allOrcsInGame == null)
-            allOrcsInGame = Lists.newArrayList(enemy);
-        else
-            this.allOrcsInGame.add(enemy);
+        if (this.allOrcsInGame == null) {
+            this.allOrcsInGame = Lists.newArrayList();
+        }
+        this.allOrcsInGame.add(enemy);
     }
 
     @Override

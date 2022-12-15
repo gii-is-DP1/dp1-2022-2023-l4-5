@@ -23,6 +23,6 @@ public class MessageResource {
         User loggedUser = userService.getLoggedUser();
         JsonObject jsonObject = new JsonObject();
         jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(loggedUser.getUsername(), username));
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+        return ResponseEntity.ok(jsonObject.toJson());
     }
 }

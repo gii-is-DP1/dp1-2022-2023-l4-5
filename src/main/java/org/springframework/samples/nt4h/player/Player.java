@@ -4,7 +4,6 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
@@ -14,7 +13,6 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.turn.Turn;
-import org.springframework.samples.nt4h.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -200,16 +198,17 @@ public class Player extends NamedEntity implements Jsonable {
         }
     }
 
-    public Turn getNextTurn(Turn turn) {
-        return getTurn(turn.getPhase().nextPhase());
-    }
-
     public void addTurn(Turn turn) {
         if (turns == null) {
             turns = Lists.newArrayList(turn);
         } else {
             turns.add(turn);
         }
+    }
+
+    public int getHealth() {
+        HeroInGame hero = this.getHeroes().get(0);
+    	return hero.getHero().getHealth() - wounds;
     }
 
     @Override

@@ -23,7 +23,7 @@ import java.util.List;
     public class HeroAttackController {
 
         public final String NEXT_TURN = "redirect:/turns";
-        public final String VIEW_ATTACK_ACTION = "turns/heroAttackAction";
+        public final String VIEW_ATTACK_ACTION = "turns/attackPhase";
 
         private final UserService userService;
         private final TurnService turnService;
@@ -59,15 +59,15 @@ import java.util.List;
             return getPlayer().getGame();
         }
 
-        @GetMapping()
-        public String showHeroAttackBoard() {
-            return VIEW_ATTACK_ACTION;
-        }
-
         @ModelAttribute("newTurn")
         public Turn getNewTurn() {
             return new Turn();
         }
+
+        @GetMapping()
+        public String showHeroAttackBoard() {
+        return VIEW_ATTACK_ACTION;
+    }
 
         @PostMapping()
         public String modifyCardAttributes(Turn turn) {
@@ -82,7 +82,9 @@ import java.util.List;
                 player.addAbilityInDiscard(usedAbility);
                 playerService.savePlayer(player);
                 if(attackedEnemy.getActualHealth() <= 0) {
+                    player.setGold(player.getGold() + attackedEnemy.getEnemy().getGold());
                     game.getActualOrcs().remove(attackedEnemy);
+                    playerService.savePlayer(player);
                     gameService.saveGame(game);
                 }
                 Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());

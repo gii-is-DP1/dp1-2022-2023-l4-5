@@ -34,12 +34,11 @@ public class GameResources {
         User loggedUser = userService.getLoggedUser();
         if (loggedUser != null && loggedUser.getGame() != null) {
             Game game = loggedUser.getGame();
-            System.out.println("Game: " + game.getPlayers());
             jsonObject.put("game", game);
             jsonObject.put("timer", duration - ChronoUnit.SECONDS.between(game.getStartDate(), now));
             jsonObject.put("loggedUser", loggedUser);
         }
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+        return ResponseEntity.ok(jsonObject.toJson());
     }
 
     @GetMapping("/ready")
@@ -50,6 +49,6 @@ public class GameResources {
             jsonObject.put("ready", false);
         else
             jsonObject.put("isReady", game.getPlayers().stream().allMatch(Player::getReady));
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+        return ResponseEntity.ok(jsonObject.toJson());
     }
 }

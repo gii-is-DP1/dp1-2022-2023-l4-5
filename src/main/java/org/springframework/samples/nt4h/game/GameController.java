@@ -202,7 +202,6 @@ public class GameController {
     @GetMapping(value = "/heroSelect")
     public String initHeroSelectForm() {
         // Los datos para el formulario.
-        System.out.println("initHeroSelectForm");
         return VIEW_GAME_HERO_SELECT;
     }
 
