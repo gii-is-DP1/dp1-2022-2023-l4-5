@@ -260,7 +260,7 @@ public class GameController {
     public String processOrderPlayers() {
         List<Player> players = getPlayers();
         Game game = getGame();
-        if (players.stream().anyMatch(player -> player.getSequence() == null))
+        if (players.stream().anyMatch(player -> player.getSequence() == -1))
             gameService.orderPlayer(players, game);
         return VIEW_GAME_ORDER;
     }

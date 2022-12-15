@@ -23,7 +23,7 @@ import java.util.List;
     public class HeroAttackController {
 
         public final String NEXT_TURN = "redirect:/turns";
-        public final String VIEW_ATTACK_ACTION = "turns/heroAttackAction";
+        public final String VIEW_ATTACK_ACTION = "turns/attackPhase";
 
         private final UserService userService;
         private final TurnService turnService;
