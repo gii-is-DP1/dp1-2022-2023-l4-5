@@ -114,7 +114,6 @@ public class UserService {
         limit = limit > getFriends().size() ? getFriends().size() : limit;
         return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), limit), page, getLoggedUser().getFriends().size());
     }
-    //ewo
 
     @Transactional
     public void addFriend(int friendId) {
