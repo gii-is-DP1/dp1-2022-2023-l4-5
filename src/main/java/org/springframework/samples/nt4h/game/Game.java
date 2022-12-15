@@ -83,7 +83,7 @@ public class Game extends NamedEntity implements Jsonable {
     private Player currentPlayer;
 
     public Player getNextPlayer() {
-        int index = alivePlayersInTurnOrder.indexOf(currentPlayer);
+        int index = alivePlayersInTurnOrder.indexOf(currentPlayer); // TODO: Hacer que se respete la secuencia.
         return alivePlayersInTurnOrder.get((index + 1) % alivePlayersInTurnOrder.size());
     }
 
