@@ -18,12 +18,12 @@
                 <br/> <!-- salto de linea/ meter un espacio en blanco entre texto -->
                 <div class="row">
                     <br/> <!-- salto de linea/ meter un espacio en blanco entre texto -->
-                    <h5 style="text-align:justify">
+                    <h5 style="text-align:justify;color: white;">
                         No time for heroes es un juego de cartas cooperativo y estratégico basado en los juegos de rol
                         clásicos. Se creó en el año 2016, a manos del diseñador español Rodrigo González, creador de otros juegos
                         como Omertá, El Poder de la Mafia o Dice Drivin’.
                     </h5>
-                    <h5 style="text-align:justify;">
+                    <h5 style="text-align:justify; color: white;">
                         Cada participante debe tomar el papel de uno de los 4 héroes arquetípicos (pícaro, guerrero, mago y
                         arquero) con el objetivo de ser quien más puntos obtenga eliminando hordas de orcos en distintos
                         escenarios. Para ello, dispondrán de un mazo de habilidades con el que poder atacar a los enemigos o causar
@@ -33,7 +33,7 @@
                         en ocasiones, monedas con las que poder adquirir equipamiento nuevo. El juego termina cuando se derrote
                         al enemigo final, el Señor de la Guerra, y el ganador será el que más puntos de gloria haya acumulado.
                     </h5>
-                    <h5 style="text-align:justify;">
+                    <h5 style="text-align:justify; color: white;">
                         Las partidas suelen durar unos 45 minutos aproximadamente, pudiendo competir en ellas entre 2 y 4
                         personas. También si se desea, existe un modo de juego individual.
                     </h5>
