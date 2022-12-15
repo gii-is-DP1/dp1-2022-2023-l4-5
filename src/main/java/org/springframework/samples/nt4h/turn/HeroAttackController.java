@@ -97,7 +97,7 @@ import java.util.List;
             return showHeroAttackBoard();
         }
 
-        @GetMapping("/next")
+        @GetMapping("/turns")
         public String next() {
             Player player = getPlayer();
             Game game = getGame();

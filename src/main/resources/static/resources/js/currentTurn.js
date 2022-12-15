@@ -9,7 +9,7 @@ sendPetitionInInterval("/api/turns", function(responseText) {
     const bottoms = document.getElementsByClassName("nextTurn");
     for (let i = 0; i < bottoms.length; i++) {
         if ((playerInTurn.name === loggedPlayer.name && turn.phase !== "evasion") || phase !== turn.phase) {
-            bottoms[i].innerHTML = '<a href = "/turns">' + 'Next Turn' + '</a>';
+            bottoms[i].innerHTML = '<a href = /' + phase +  '/turns>' + 'Next Turn' + '</a>';
         } else {
             bottoms[i].innerHTML = '';
         }

@@ -1,12 +1,13 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.turn.exceptions.EnoughEnemiesException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +23,20 @@ public class ReestablishmentController {
 
     private final UserService userService;
     private final PlayerService playerService;
+    private final TurnService turnService;
+    private final GameService gameService;
 
 
     public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
+    public final String NEXT_TURN = "redirect:/turns";
     private final Advise advise;
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService) {
+    public ReestablishmentController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService) {
         this.playerService = playerService;
         this.userService = userService;
+        this.turnService = turnService;
+        this.gameService = gameService;
         this.advise = new Advise();
     }
 
@@ -79,23 +85,41 @@ public class ReestablishmentController {
         return advise.getMessageType();
     }
 
-    @GetMapping("/addCards")
+    @ModelAttribute("loggedPLayer")
+    public Player getLoggedPlayer() {
+        return userService.getLoggedUser().getPlayer();
+    }
+
+    @ModelAttribute("newTurn")
+    public Turn getNewTurn() {
+        return new Turn();
+    }
+
+    @GetMapping
     public String reestablishmentAddCards() {
         playerService.restoreEnemyLife(getEnemiesInBattle());
         playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
         return VIEW_REESTABLISHMENT;
     }
 
-    @PostMapping("/addCards")
-    public String takeNewAbilities(Integer cardId) {
-            playerService.takeNewCard(getPlayer());
-            playerService.removeAbilityCards(cardId, getPlayer());
+    @PostMapping
+    public String takeNewAbilities(Turn newTurn) {
+        AbilityInGame currentAbility = newTurn.getCurrentAbility();
+        playerService.takeNewCard(getPlayer());
+        playerService.removeAbilityCards(currentAbility.getId(), getPlayer());
         return reestablishmentAddCards();
     }
 
-    @GetMapping("/removeCards")
+    @GetMapping("/turns")
     public String reestablishmentNextTurn() {
-        return "redirect:/nextTurn";
+        Player player = getPlayer();
+        Player loggedPlayer = getLoggedPlayer();
+        Game game = getGame();
+        if (loggedPlayer == player) {
+            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId()));
+            gameService.saveGame(game);
+        }
+        return NEXT_TURN;
     }
 
 }
