@@ -5,6 +5,7 @@ import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -29,6 +30,12 @@ public class Turn extends BaseEntity implements Jsonable {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<AbilityInGame> usedAbilities;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private AbilityInGame currentAbility;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private EnemyInGame currentEnemy;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> usedEnemies;

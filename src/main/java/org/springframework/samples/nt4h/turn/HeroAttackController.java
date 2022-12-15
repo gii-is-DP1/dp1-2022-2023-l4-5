@@ -23,7 +23,7 @@ import java.util.List;
     public class HeroAttackController {
 
         public final String NEXT_TURN = "redirect:/turns";
-        public final String VIEW_ATTACK_ACTION = "turns/attackPhase";
+        public final String VIEW_ATTACK_ACTION = "turns/heroAttackAction";
 
         private final UserService userService;
         private final TurnService turnService;
@@ -59,23 +59,24 @@ import java.util.List;
             return getPlayer().getGame();
         }
 
+        @GetMapping()
+        public String showHeroAttackBoard() {
+            return VIEW_ATTACK_ACTION;
+        }
+
         @ModelAttribute("newTurn")
         public Turn getNewTurn() {
             return new Turn();
         }
 
-        @GetMapping()
-        public String showHeroAttackBoard() {
-        return VIEW_ATTACK_ACTION;
-    }
-
         @PostMapping()
         public String modifyCardAttributes(Turn turn) {
             Player player = getPlayer();
             Game game = getGame();
+
             if(player == getGame().getCurrentPlayer()) {
-                AbilityInGame usedAbility = turn.getUsedAbilities().get(0);
-                EnemyInGame attackedEnemy = turn.getUsedEnemies().get(0);
+                AbilityInGame usedAbility = turn.getCurrentAbility();
+                EnemyInGame attackedEnemy = turn.getCurrentEnemy();
                 Integer enemyInitialHealth = attackedEnemy.getActualHealth();
                 attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
                 player.getInHand().remove(usedAbility);

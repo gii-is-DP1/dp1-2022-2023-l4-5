@@ -8,6 +8,7 @@
 
 <nt4h:layout pageName="Action decision">
     <h2>Action decision</h2>
+    <h1>Turno del jugador ${game.currentPlayer}</h1>
     <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
         <nt4h:selectField name="phase" label="Phases in turn?" names="${turns}" size="8"/>
         <button class="btn btn-default" type="submit">Action chosen</button>

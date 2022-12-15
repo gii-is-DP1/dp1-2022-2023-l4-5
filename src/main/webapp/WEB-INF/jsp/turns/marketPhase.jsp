@@ -8,6 +8,7 @@
 
 <nt4h:layout pageName="Market phase">
     <h2>Action decision</h2>
+    <h1>Turno del jugador ${game.currentPlayer}</h1>
     <form:form modelAttribute="productInGame" class="form-horizontal" id="product-selection-form">
         <nt4h:selectField name="product" label="Buy a product" names="${productsOnSale}" size="5"/>
         <div class="container">
