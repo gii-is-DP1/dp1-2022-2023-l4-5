@@ -1,6 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
-
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,20 +20,18 @@ public class TurnServiceTest {
     @Autowired
     protected TurnService turnService;
 
+
     @BeforeAll
     void ini() {
         Turn turn = new Turn();
-        turn.setEvasion(true);
-        turn.setGlory(0);
-        turn.setPhase(Phase.START);
-        turn.setGold(0);
+        turn.setPhase(Phase.EVADE);
         turnService.saveTurn(turn);
     }
     @Test
     public void findByIDTrue(){
         Turn turn = turnService.getTurnByID(1);
         assertNotNull(turn);
-        assertEquals(Phase.START, turn.getPhase());
+        assertEquals(Phase.EVADE, turn.getPhase());
     }
     @Test
     public void findByIDFalse(){
@@ -43,7 +41,7 @@ public class TurnServiceTest {
     }
     @Test
     public void shouldFindByPhase(){
-        List<Turn> ls = turnService.getTurnsByPhase(Phase.START);
+        List<Turn> ls = turnService.getTurnsByPhase(Phase.EVADE);
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
         assertEquals(1,ls.size());
@@ -58,12 +56,10 @@ public class TurnServiceTest {
     @Test
     public void shouldInsertTurn(){
         Turn turn = new Turn();
-        turn.setEvasion(true);
-        turn.setGlory(0);
-        turn.setPhase(Phase.START);
-        turn.setGold(0);
+        turn.setPhase(Phase.EVADE);
         turnService.saveTurn(turn);
         assertEquals(turn,turnService.getTurnByID(2));
+        turnService.deleteTurnById(2);
     }
     @Test
     public void shouldUpdateTurn(){
@@ -75,6 +71,7 @@ public class TurnServiceTest {
         assertEquals(newPhase,turnService.getTurnByID(1).getPhase());
         assertNotEquals(oldPhase,turnService.getTurnByID(1).getPhase());
     }
+    @AfterAll
     @Test
     public void deleteTurnTest(){
         turnService.deleteTurnById(1);
@@ -82,4 +79,7 @@ public class TurnServiceTest {
     }
 
 
+
+
 }
+

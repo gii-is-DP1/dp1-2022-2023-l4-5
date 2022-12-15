@@ -76,7 +76,6 @@ class HeroServiceTest {
         Assertions.assertNotEquals(2, hero.getHealth());
     }
 
-
     @Test
     @Transactional
     void existHero() {
@@ -84,3 +83,4 @@ class HeroServiceTest {
     }
 
 }
+

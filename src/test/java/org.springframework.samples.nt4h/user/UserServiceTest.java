@@ -103,4 +103,6 @@ public class UserServiceTest {
         this.userService.deleteUserById(1);
         Assertions.assertFalse(this.userService.userExists(1));
     }
+
+
 }
