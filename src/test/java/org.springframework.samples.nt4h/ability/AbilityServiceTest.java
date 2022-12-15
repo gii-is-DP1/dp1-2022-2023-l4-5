@@ -49,8 +49,6 @@ public class AbilityServiceTest {
         player.setName("Goat");
         player.setReady(false);
         player.setSequence(1);
-        player.setDamageDealt(0);
-        player.setDamageDealtToNightLords(0);
         player.setBirthDate(LocalDate.now());
 
         AbilityInGame habilidad = new AbilityInGame();
@@ -106,6 +104,7 @@ public class AbilityServiceTest {
     public void existByIdTestFalse(){
         assertFalse(abs.abilityExists(50));
     }
+
 
 //In Game----------------------------------------------------------------
 

@@ -118,16 +118,14 @@ public class PlayerService {
     }
 
     @Transactional
-    public List<EnemyInGame> addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) throws EnoughEnemiesException {
+    public List<EnemyInGame> addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) {
         if(enemies.size() == 1 || enemies.size() == 2) {
             enemies.add(allOrcs.get(1));
             allOrcs.remove(1);
         } else if(enemies.size() == 0) {
             enemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
             allOrcs.removeAll(enemies);
-        } else
-            throw new EnoughEnemiesException();
-        return allOrcs;
+        }return allOrcs;
     }
 
     @Transactional

@@ -4,10 +4,10 @@
 
 <nt4h:layout pageName="error">
 
-    <spring:url value="/resources/images/piter.png" var="logoImage"/>
+    <spring:url value="/resources/images/LogoNT4H.png" var="logoImage"/>
     <img class="img-responsive" src="${logoImage}" width=30%/>
 
-    <h2>Más vale mudo callao que proyecto fallao</h2>
+    <h2>Error</h2>
 
     <p>${exception.message}</p>
 

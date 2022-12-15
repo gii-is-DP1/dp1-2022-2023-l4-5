@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
     @RequestMapping("/heroAttack")
@@ -69,13 +71,15 @@ import java.util.List;
             return new Turn();
         }
 
+
         @PostMapping()
         public String modifyCardAttributes(Turn turn) {
             Player player = getPlayer();
             Game game = getGame();
+
             if(player == getGame().getCurrentPlayer()) {
-                AbilityInGame usedAbility = turn.getUsedAbilities().get(0);
-                EnemyInGame attackedEnemy = turn.getUsedEnemies().get(0);
+                AbilityInGame usedAbility = turn.getCurrentAbility();
+                EnemyInGame attackedEnemy = turn.getCurrentEnemy();
                 Integer enemyInitialHealth = attackedEnemy.getActualHealth();
                 attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
                 player.getInHand().remove(usedAbility);
