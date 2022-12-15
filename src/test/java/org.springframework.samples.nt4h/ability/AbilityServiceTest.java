@@ -1,5 +1,6 @@
 package org.springframework.samples.nt4h.ability;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -48,8 +49,8 @@ public class AbilityServiceTest {
         player.setName("Goat");
         player.setReady(false);
         player.setSequence(1);
-        player.setDamageDealed(0);
-        player.setDamageDealedToNightLords(0);
+        player.setDamageDealt(0);
+        player.setDamageDealtToNightLords(0);
         player.setBirthDate(LocalDate.now());
 
         AbilityInGame habilidad = new AbilityInGame();
@@ -93,7 +94,7 @@ public class AbilityServiceTest {
         List<Ability> ls = abs.getAllAbilities();
         assertNotNull(ls);
         assertFalse(ls.isEmpty());
-        assertEquals(32, ls.size());
+        assertEquals(33, ls.size());
     }
 
     @Test
@@ -106,33 +107,6 @@ public class AbilityServiceTest {
         assertFalse(abs.abilityExists(50));
     }
 
-
-    @Test
-    public void shouldInsertAchivement(){
-        Ability nuevo = new Ability();
-        nuevo.setName("Goat");
-        nuevo.setRole(Role.EXPLORER);
-        nuevo.setAttack(4);
-        nuevo.setQuantity(1);
-        nuevo.setMaxUses(1);
-        abs.saveAbility(nuevo);
-        assertEquals(nuevo,abs.getAbilityByName("Goat"));
-    }
-    @Test
-    public void shouldUpdateAchievement(){
-        Ability nuevo = abs.getAbilityById(1);
-        String OldName = nuevo.getName();
-        String NewName = OldName +"X";
-        nuevo.setName(NewName);
-        abs.saveAbility(nuevo);
-        assertEquals(NewName, abs.getAbilityById(1).getName());
-    }
-
-    @Test
-    public void deleteAchievementTest(){
-        abs.deleteAbilityById(1);
-        assertThrows(DataIntegrityViolationException.class,() -> abs.abilityExists(1));
-    }
 //In Game----------------------------------------------------------------
 
     @Test
@@ -185,9 +159,11 @@ public class AbilityServiceTest {
         assertEquals(5, abs.getAbilityInGameById(1).getAttack());
     }
 
+    @AfterAll
     @Test
-    public void deleteAchievementIGTest(){
-        abs.deleteAbilityById(1);
-        assertThrows(DataIntegrityViolationException.class,() -> abs.abilityExists(1));
+    public void deleteAbilityIGTest(){
+        playerService.deletePlayerById(1);
+        abs.deleteAbilityInGameById(1);
+        assertFalse(abs.abilityInGameExists(1));
     }
 }

@@ -102,23 +102,23 @@ public class PlayerService {
     }
 
     @Transactional
-    public void removeAbilityCards(Integer cardId, Player player) {
+    public List<AbilityInGame> removeAbilityCards(Integer cardId, Player player) {
         while (player.getInHand().size() > 4) {
             Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
             removeToDiscard.executeAction();
-        }
+        } return player.getInHand();
     }
 
     @Transactional
-    public void takeNewCard(Player player) {
+    public List<AbilityInGame> takeNewCard(Player player) {
         while (player.getInHand().size() < 4) {
             Action takeNewCard = new TakeCardFromAbilityPile(player);
             takeNewCard.executeAction();
-        }
+        } return player.getInHand();
     }
 
     @Transactional
-    public void addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) throws EnoughEnemiesException {
+    public List<EnemyInGame> addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) throws EnoughEnemiesException {
         if(enemies.size() == 1 || enemies.size() == 2) {
             enemies.add(allOrcs.get(1));
             allOrcs.remove(1);
@@ -127,6 +127,7 @@ public class PlayerService {
             allOrcs.removeAll(enemies);
         } else
             throw new EnoughEnemiesException();
+        return allOrcs;
     }
 
     @Transactional

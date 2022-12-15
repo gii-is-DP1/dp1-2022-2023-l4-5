@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @DataJpaTest(
     includeFilters = {@Filter({Service.class})}
@@ -24,16 +25,16 @@ public class MessageServiceTest {
 
     @Test
     public void findByIDTrue() {
-        ListMessage message = this.messageService.getMessageBySenderWithReceiver("","");
+        List<Message> message = this.messageService.getMessageBySenderWithReceiver("","");
         Assertions.assertNotNull(message);
-        Assertions.assertEquals("Hola, soy Alesanfe", message.getContent());
+        Assertions.assertTrue(message.isEmpty());
     }
 
     @Test
     public void findByIDFalse() {
-        Message message = this.messageService.getMessageBySenderWithReceiver("","");
+        List<Message> message = this.messageService.getMessageBySenderWithReceiver("","");
         Assertions.assertNotNull(message);
-        Assertions.assertNotEquals("Adios", message.getContent());
+        Assertions.assertFalse(!(message.isEmpty()));
     }
 
     @Test
@@ -42,14 +43,6 @@ public class MessageServiceTest {
         Assertions.assertNotNull(messages);
         Assertions.assertFalse(messages.isEmpty());
         Assertions.assertEquals(2, messages.size());
-    }
-
-    @Test
-    public void findAll() {
-        List<Message> ls = this.messageService.getAllMessages();
-        Assertions.assertNotNull(ls);
-        Assertions.assertFalse(ls.isEmpty());
-        Assertions.assertEquals(2, ls.size());
     }
 
     @Test

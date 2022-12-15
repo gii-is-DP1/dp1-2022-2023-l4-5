@@ -8,19 +8,19 @@ package org.springframework.samples.nt4h.player;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 )
 @TestInstance(Lifecycle.PER_CLASS)
 public class PlayerServiceTest {
+
     @Autowired
     protected PlayerService playerService;
     @Autowired
@@ -49,6 +50,11 @@ public class PlayerServiceTest {
         player.setSequence(1);
         player.setBirthDate(LocalDate.now());
         this.playerService.savePlayer(player);
+
+        Game game = new Game();
+        game.setMaxPlayers(4);
+        game.setMode(Mode.UNI_CLASS);
+        gameService.saveGame(game);
     }
 
     @Test
@@ -84,7 +90,7 @@ public class PlayerServiceTest {
         List<Player> ls = this.playerService.getAllPlayers();
         Assertions.assertNotNull(ls);
         Assertions.assertFalse(ls.isEmpty());
-        Assertions.assertEquals(2, ls.size());
+        Assertions.assertEquals(1, ls.size());
     }
 
     @Test
@@ -144,9 +150,13 @@ public class PlayerServiceTest {
         Assertions.assertTrue(esperado.getAbilities().containsAll(idHabilidades));
     }
 
+    @AfterAll
     @Test
     public void deletePlayerTest() {
+        gameService.deleteGameById(1);
         this.playerService.deletePlayerById(1);
         Assertions.assertFalse(this.playerService.playerExists(1));
     }
+
+
 }
