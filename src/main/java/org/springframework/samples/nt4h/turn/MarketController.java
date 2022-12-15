@@ -94,7 +94,7 @@ public class MarketController {
         return market();
     }
 
-    @GetMapping("/next")
+    @GetMapping("/turns")
     public String next() {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();

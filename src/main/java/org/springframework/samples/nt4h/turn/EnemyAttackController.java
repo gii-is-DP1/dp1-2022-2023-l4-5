@@ -63,7 +63,7 @@ public class EnemyAttackController {
         return VIEW_ATTACK;
     }
 
-    @GetMapping("/next")
+    @GetMapping("/turns")
     public String nextTurn() {
         Player player = getPlayer();
         Game game = getGame();
