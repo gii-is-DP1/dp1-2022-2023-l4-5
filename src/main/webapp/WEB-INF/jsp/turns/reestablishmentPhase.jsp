@@ -35,5 +35,12 @@
 
 </nt4h:layout>
 
+<style>
+    .background {
+        background-image: url("/resources/images/campo.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
 
 

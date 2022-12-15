@@ -21,7 +21,7 @@ import java.io.Writer;
 public class HeroInGame extends BaseEntity implements Jsonable {
 
     @Max(3)
-    private Integer actualHealth;
+    private Integer actualHealth; // TODO: quitar en algún momento.
 
     @Column(columnDefinition ="int default 0")
     private Integer effectUsed;

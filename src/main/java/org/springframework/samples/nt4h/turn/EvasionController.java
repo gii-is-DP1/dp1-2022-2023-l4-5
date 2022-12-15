@@ -102,11 +102,9 @@ public class EvasionController {
             player.setNextPhase(Phase.MARKET);
             // Action action = new DropCardFromHand(loggedPlayer, null); // TODO: Eliminar dos cartas
             // action.executeAction();
-            playerService.savePlayer(player);
-        } else {
+        } else
             player.setNextPhase(Phase.HERO_ATTACK);
-            playerService.savePlayer(player);
-        }
+        playerService.savePlayer(player);
         return NEXT_TURN;
     }
 }

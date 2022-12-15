@@ -122,10 +122,4 @@ public class GameServiceTest {
             gameService.deleteGameById(2);
         }
 
-        @AfterAll
-        @Test
-        public void deleteGameTest () {
-            gameService.deleteGameById(1);
-            Assertions.assertFalse(this.gameService.existsGameById(1));
-        }
     }
