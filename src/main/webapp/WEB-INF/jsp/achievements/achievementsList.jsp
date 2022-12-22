@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <nt4h:layout pageName="achievements">
     <h2>Achievements</h2>
@@ -14,8 +15,10 @@
             <th style="width: 200px;">Name</th>
             <th style="width: 200px;">Description</th>
             <th style="width: 200px;">Image</th>
-            <th style="width: 200px">Threshold</th>
+            <th style="width: 200px">Completado</th>
+            <sec:authorize access="hasAuthority('DOKTOL')">
             <th style="width: 200px">Action</th>
+            </sec:authorize>
         </tr>
         </thead>
         <tbody>
@@ -31,8 +34,10 @@
                     <c:out value="${achievement.image}"/>
                 </td>
                 <td>
-                    <c:out value="${achievement.threshold}"/>
+
+                    <c:out value="Lo hisiste pelotudo weon"/>
                 </td>
+                <sec:authorize access="hasAuthority('DOKTOL')">
                 <td>
                     <spring:url value="/achievements/{achievementId}/edit" var="editAchievement">
                     <spring:param name="achievementId" value="${achievement.id}"/>
@@ -44,6 +49,7 @@
                     </spring:url>
                     <a href="${fn:escapeXml(deleteAchievement)}" class="btn">Delete</a>
                 </td>
+                </sec:authorize>
             </tr>
         </c:forEach>
         </tbody>

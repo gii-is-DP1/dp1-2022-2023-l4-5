@@ -36,6 +36,11 @@
                         <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
                         <span>Friends</span>
                     </nt4h:menuItem>
+                    <nt4h:menuItem active="${name eq 'Achievements'}" url="/achievements"
+                                   title="achievements">
+                        <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+                        <span>Achievements</span>
+                    </nt4h:menuItem>
                     <nt4h:menuItem active="${name eq 'Card'}" url="/cards/buttonsCards"
                                    title="Card">
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span>

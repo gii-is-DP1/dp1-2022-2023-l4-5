@@ -25,6 +25,9 @@ public class Achievement extends NamedEntity {
     @Min(value = 0)
     private Integer threshold;
 
+    @NotNull
+    private thresholdType type;
+
     @URL
     private String image;
 }

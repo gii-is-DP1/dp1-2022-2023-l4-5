@@ -46,4 +46,12 @@ public class Statistic extends BaseEntity {
     @NotNull
     @Min(0)
     private Integer allDamageDealtToNightLords;
+
+    @NotNull
+    @Min(0)
+    private Integer purchasedProducts;
+
+    @NotNull
+    @Min(0)
+    private Integer multiclassGamesPlayed;
 }
