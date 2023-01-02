@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
 @Controller
     @RequestMapping("/heroAttack")
     public class HeroAttackController {
@@ -29,11 +27,6 @@ import java.util.List;
         private final TurnService turnService;
         private final PlayerService playerService;
         private final GameService gameService;
-
-        // @ModelAttribute("enemiesInBattle")
-        // public List<EnemyInGame> getEnemiesInBattle() {
-        //     return game.getEnemiesInBattle();
-        // }
 
 
         @Autowired
@@ -69,25 +62,25 @@ import java.util.List;
             return new Turn();
         }
 
-        @PostMapping()
+        @PostMapping
         public String modifyCardAttributes(Turn turn) {
             Player player = getPlayer();
             Game game = getGame();
-
+            // TODO: debe de lanzar una excepción si no es el jugador loguado y mover a un servicio.
             if(player == getGame().getCurrentPlayer()) {
                 AbilityInGame usedAbility = turn.getCurrentAbility();
                 EnemyInGame attackedEnemy = turn.getCurrentEnemy();
                 Integer enemyInitialHealth = attackedEnemy.getActualHealth();
                 attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
-                player.getInHand().remove(usedAbility);
-                player.addAbilityInDiscard(usedAbility);
-                playerService.savePlayer(player);
+                player.getDeck().getInHand().remove(usedAbility);
+                player.getDeck().getInDiscard().add(usedAbility);
+                //playerService.savePlayer(player);
                 if(attackedEnemy.getActualHealth() <= 0) {
-                    player.setGlory(player.getGlory() + attackedEnemy.getEnemy().getGlory());
-                    player.setGold(player.getGold() + attackedEnemy.getEnemy().getGold());
+                    player.getStatistic().setGlory(player.getStatistic().getGlory() + attackedEnemy.getEnemy().getGlory());
+                    player.getStatistic().setGold(player.getStatistic().getGold() + attackedEnemy.getEnemy().getGold());
                     game.getActualOrcs().remove(attackedEnemy);
-                    playerService.savePlayer(player);
-                    gameService.saveGame(game);
+                    //playerService.savePlayer(player);
+                    //gameService.saveGame(game);
                 }
                 Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
                 createdTurn.addEnemy(attackedEnemy);

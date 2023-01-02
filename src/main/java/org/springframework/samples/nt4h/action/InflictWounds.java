@@ -14,11 +14,11 @@ public class InflictWounds implements Action {
     @Override
     public void executeAction() {
         // Recover all the cards
-        int discardPileSize = playerTo.getInDiscard().size();
+        int discardPileSize = playerTo.getDeck().getInDiscard().size();
         IntStream.range(0, discardPileSize).forEach(i -> new RecoverCard(playerTo).executeAction());
 
         // Shuffle the new abilityPile
-        Collections.shuffle(playerTo.getInDeck());
+        Collections.shuffle(playerTo.getDeck().getInDeck());
 
         // Give the player a wound
         playerTo.setWounds(playerTo.getWounds() + 1);

@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.action;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
+import org.springframework.samples.nt4h.card.ability.AbilityEffect;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 
 import org.springframework.samples.nt4h.player.Player;
@@ -21,9 +21,9 @@ public class Attack implements Action {
     @Override
     public void executeAction() {
         Integer currentHealth = targetedEnemy.getActualHealth();
-        Integer playerKillCount = activePlayer.getNumOrcsKilled();
-        Boolean whetstoneCondition = targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.PIEDRA_DE_AMOLAR);
-        Boolean corrosiveArrow = targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.FLECHA_CORROSIVA);
+        Integer playerKillCount = activePlayer.getStatistic().getNumOrcsKilled();
+        Boolean whetstoneCondition = targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffect.PIEDRA_DE_AMOLAR);
+        Boolean corrosiveArrow = targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffect.FLECHA_CORROSIVA);
         if (whetstoneCondition || corrosiveArrow) {
             damage++;
         }
@@ -50,9 +50,9 @@ public class Attack implements Action {
         targetedEnemy.setActualHealth(currentHealth - damage);
         if (Boolean.TRUE.equals(targetedEnemy.isDead())) {
             activePlayer.getGame().getAllOrcsInGame().remove(targetedEnemy);
-            activePlayer.setNumOrcsKilled(playerKillCount + 1);
+            activePlayer.getStatistic().setNumOrcsKilled(playerKillCount + 1);
 
-            if (targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffectEnum.TRAMPA)) {
+            if (targetedEnemy.getPermanentEffectCardsUsed().contains(AbilityEffect.TRAMPA)) {
                 Integer enemyDefeatedGlory = targetedEnemy.getEnemy().getGlory();
                 new GainGlory(enemyDefeatedGlory, activePlayer).executeAction();
 

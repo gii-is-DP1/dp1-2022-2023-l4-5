@@ -29,6 +29,5 @@ public class Ability extends Card {
     private Integer quantity;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "abilityEffectEnum")
-    private AbilityEffectEnum abilityEffectEnum;
+    private AbilityEffect abilityEffect;
 }

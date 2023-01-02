@@ -4,7 +4,6 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
-import org.h2.util.json.JSONObject;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -73,51 +72,52 @@ public class Game extends NamedEntity implements Jsonable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
-    //@OneToMany
-    //private List<Stage> stages;
-
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player currentPlayer;
 
-    public Player getNextPlayer() {
-        int index = alivePlayersInTurnOrder.indexOf(currentPlayer);
-        return alivePlayersInTurnOrder.get((index + 1) % alivePlayersInTurnOrder.size());
-    }
-
     public void addPlayer(Player player) throws FullGameException {
-        if (this.players == null)
-            players = Lists.newArrayList(player);
-        else if (this.players.size() > this.maxPlayers)
+        if (this.players.size() > this.maxPlayers)
             throw new FullGameException();
-        else
-            this.players.add(player);
+        this.players.add(player);
     }
 
     public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
         if (isHeroAlreadyChosen(hero.getHero()))
             throw new HeroAlreadyChosenException();
-         else {
-            player.addHero(hero);
-            addPlayer(player);
-        }
-
+        player.addHero(hero);
+        addPlayer(player);
     }
 
     public boolean isHeroAlreadyChosen(Hero hero) {
-        if (this.players == null) return false;
-        return this.players.stream()
+        return this.players != null && this.players.stream()
             .flatMap(player -> player.getHeroes().stream())
-            .anyMatch(h -> h.getHero().equals(hero));
+            .anyMatch(h -> h.getHero() == hero);
     }
 
-    public void addOrcsInGame(EnemyInGame enemy) {
-        if (this.allOrcsInGame == null) {
-            this.allOrcsInGame = Lists.newArrayList();
-        }
-        this.allOrcsInGame.add(enemy);
+    public static Game createGame(String name, Accessibility accessibility, Mode mode, int maxPlayers, String password) {
+        Game game = Game.builder()
+            .accessibility(accessibility)
+            .mode(mode)
+            .maxPlayers(maxPlayers)
+            .password(accessibility == Accessibility.PUBLIC ? "": password)
+            .alivePlayersInTurnOrder(Lists.newArrayList())
+            .actualOrcs(Lists.newArrayList())
+            .allOrcsInGame(Lists.newArrayList())
+            .passiveOrcs(Lists.newArrayList())
+            .players(Lists.newArrayList())
+            .phase(Phase.EVADE)
+            .startDate(LocalDateTime.now())
+            .build();
+        game.setName(name);
+        return game;
+    }
+
+    public void onDeleteSetNull() {
+        players.forEach(Player::onDeleteSetNull);
+        allOrcsInGame.forEach(EnemyInGame::onDeleteSetNull);
     }
 
     @Override
@@ -136,5 +136,4 @@ public class Game extends NamedEntity implements Jsonable {
             e.printStackTrace();
         }
     }
-
 }

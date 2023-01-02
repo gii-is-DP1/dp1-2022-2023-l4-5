@@ -19,8 +19,8 @@ public class RecoverCardDiscardToAbility implements Action {
 
     @Override
     public void executeAction() {
-        List<AbilityInGame> discardPile = playerFrom.getInDiscard();
-        List<AbilityInGame> abilityPile = playerFrom.getInHand();
+        List<AbilityInGame> discardPile = playerFrom.getDeck().getInDiscard();
+        List<AbilityInGame> abilityPile = playerFrom.getDeck().getInHand();
 
         AbilityInGame sameTypeCard = discardPile.stream()
             .filter(card -> card.getAbilityCardType().equals(searchedCardType))

@@ -1,10 +1,8 @@
 package org.springframework.samples.nt4h.statistic;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -13,15 +11,18 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Statistic extends BaseEntity {
 
     @NotNull
     @Min(0)
-    private Integer allGold;
+    private Integer gold;
 
     @NotNull
     @Min(0)
-    private Integer allGlory;
+    private Integer glory;
 
     @NotNull
     @Min(0)
@@ -41,9 +42,14 @@ public class Statistic extends BaseEntity {
 
     @NotNull
     @Min(0)
-    private Integer allDamageDealt;
+    private Integer damageDealt;
 
     @NotNull
     @Min(0)
-    private Integer allDamageDealtToNightLords;
+    private Integer damageDealtToNightLords;
+
+    public static Statistic createStatistic() {
+        return Statistic.builder().glory(0).gold(0).numWarLordKilled(0).numOrcsKilled(0)
+            .damageDealt(0).damageDealtToNightLords(0).numPlayedGames(0).numWonGames(0).build();
+    }
 }

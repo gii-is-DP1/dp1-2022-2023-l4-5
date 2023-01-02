@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class EnemyAttackController {
 
 
-    private UserService userService;
+    private final UserService userService;
     private final TurnService turnService;
     private final GameService gameService;
 

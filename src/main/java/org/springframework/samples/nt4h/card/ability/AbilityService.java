@@ -2,8 +2,8 @@ package org.springframework.samples.nt4h.card.ability;
 
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.hero.Role;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,12 +60,15 @@ public class AbilityService {
 
     @Transactional
     public void deleteAbilityInGame(AbilityInGame abilityInGame) {
+        abilityInGame.onDeleteSetNull();
+        abilityInGameRepository.save(abilityInGame);
         abilityInGameRepository.delete(abilityInGame);
     }
 
     @Transactional
     public void deleteAbilityInGameById(Integer id) {
-        abilityInGameRepository.deleteById(id);
+        AbilityInGame abilityInGame = getAbilityInGameById(id);
+        deleteAbilityInGame(abilityInGame);
     }
 
     @Transactional

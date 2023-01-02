@@ -42,14 +42,14 @@ public class ProductServiceTest {
     protected PlayerService playerService;
 
     @BeforeAll
-    void setUp() throws RoleAlreadyChosenException {
+    void setUp() {
         Game game = new Game();
         game.setMaxPlayers(4);
         game.setMode(Mode.UNI_CLASS);
         gameService.saveGame(game);
 
         Player player = new Player();
-        player.setGold(20);
+        player.getStatistic().setGold(20);
         playerService.savePlayer(player);
     }
     public ProductServiceTest() {

@@ -16,7 +16,7 @@ public class DropCardFromHand implements Action {
 
     @Override
     public void executeAction() {
-        List<AbilityInGame> hand = playerFrom.getInHand();
+        List<AbilityInGame> hand = playerFrom.getDeck().getInHand();
         for (AbilityInGame card : hand) {
             AbilityCardType carta = card.getAbilityCardType();
             if (carta.equals(cardPlayed)) {

@@ -1,168 +1,155 @@
 package org.springframework.samples.nt4h.ability;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.samples.nt4h.achievement.Achievement;
-import org.springframework.samples.nt4h.achievement.AchievementService;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
-import org.springframework.samples.nt4h.card.hero.Role;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.game.Accessibility;
+import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
-import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
-
-import javax.validation.ConstraintViolationException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AbilityServiceTest {
-    @Mock
+    @Autowired
     PlayerService playerService;
     @Autowired
-    AbilityService abs;
+    UserService userService;
+    @Autowired
+    GameService gameService;
+    @Autowired
+    AbilityService abilityService;
     Player player;
+    private Ability ability;
+    private final int idAbility = 1;
+    private int idAbilityInGame;
+    Integer attack = 5;
 
-    @BeforeAll
-    void setUp() {
-        player = new Player();
-        player.setGold(0);
-        player.setGlory(0);
-        player.setName("Goat");
-        player.setReady(false);
-        player.setSequence(1);
-        player.setBirthDate(LocalDate.now());
+    @BeforeEach
+    void setUp() throws FullGameException {
+        Game game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
+        User user = userService.getUserById(1);
+        user.createPlayer(game);
+        player = user.getPlayer();
+        ability = abilityService.getAbilityById(idAbility);
+        AbilityInGame abilityInGame = AbilityInGame.fromAbility(ability, player);
+        player.getDeck().getInDeck().add(abilityInGame);
+        game.addPlayer(player);
+        gameService.saveGame(game);
+        idAbilityInGame = abilityInGame.getId();
+    }
 
-        AbilityInGame habilidad = new AbilityInGame();
-        habilidad.setAbility(abs.getAbilityById(1));
-        habilidad.setAttack(2);
-        habilidad.setPlayer(playerService.getPlayerByName("Goat"));
-        habilidad.setProduct(false);
-        habilidad.setTimesUsed(0);
-        abs.saveAbilityInGame(habilidad);
+    @AfterEach
+    void tearDown() {
+        if (player.getGame() != null)
+            gameService.deleteGameById(player.getGame().getId());
+
+
     }
 
 
-
     @Test
-    public void findByNameTrue() {
-        Ability nuevo = abs.getAbilityByName("Compañero Lobo");
-        assertNotNull(nuevo);
-        assertEquals(2, nuevo.getAttack());
+    public void testFindByName() {
+        assertEquals(ability.getName(), abilityService.getAbilityByName(ability.getName()).getName());
     }
 
     @Test
-    public void findByNameFalse() {
-        assertThrows(NotFoundException.class,() -> abs.getAbilityByName("Primeros pasos"));
+    public void testFindByNotFoundName() {
+        assertThrows(NotFoundException.class, () -> abilityService.getAbilityByName("No existe"));
     }
 
     @Test
-    public void findByIdTrue() {
-        Ability nuevo = abs.getAbilityById(1);
-        assertNotNull(nuevo);
-        assertEquals(2, nuevo.getAttack());
+    public void testFindByCorrectId() {
+        assertEquals(idAbility, abilityService.getAbilityById(idAbility).getId());
     }
 
     @Test
     public void findByIdFalse() {
-        Ability nuevo = abs.getAbilityById(5);
+        Ability nuevo = abilityService.getAbilityById(idAbility);
         assertNotEquals(1, nuevo.getAttack());
     }
 
     @Test
     public void findAllTestTrue() {
-        List<Ability> ls = abs.getAllAbilities();
-        assertNotNull(ls);
-        assertFalse(ls.isEmpty());
-        assertEquals(33, ls.size());
+        assertEquals(33, abilityService.getAllAbilities().size());
     }
 
     @Test
-    public void existsByIdTestTrue(){
-        assertTrue(abs.abilityExists(1));
-    }
-
-    @Test
-    public void existByIdTestFalse(){
-        assertFalse(abs.abilityExists(50));
+    public void testExistsByIdTest() {
+        assertTrue(abilityService.abilityExists(idAbility));
+        assertFalse(abilityService.abilityExists(-1));
     }
 
 
 //In Game----------------------------------------------------------------
 
     @Test
-    public void findByIdIGTrue() {
-        AbilityInGame nuevo = abs.getAbilityInGameById(1);
-        assertNotNull(nuevo);
-        assertEquals(2, nuevo.getAttack());
+    public void testFindById() {
+        assertEquals(idAbilityInGame, abilityService.getAbilityInGameById(idAbilityInGame).getId());
     }
 
     @Test
-    public void findByIdIGFalse() {
-        assertThrows(NotFoundException.class,() -> abs.getAbilityInGameById(5));
+    public void testFindByIncorrectId() {
+        assertThrows(NotFoundException.class, () -> abilityService.getAbilityInGameById(-1));
     }
 
     @Test
     public void findAllTestIGTrue() {
-        List<AbilityInGame> ls = abs.getAllAbilityInGame();
-        assertNotNull(ls);
-        assertFalse(ls.isEmpty());
-        assertEquals(1, ls.size());
+        assertEquals(1, abilityService.getAllAbilityInGame().size());
     }
 
     @Test
-    public void existsByIdTestIGTrue(){
-        assertTrue(abs.abilityInGameExists(1));
+    public void existsByIdTestIGTrue() {
+        assertTrue(abilityService.abilityInGameExists(idAbilityInGame));
     }
 
     @Test
-    public void existByIdTestIGFalse(){
-        assertFalse(abs.abilityInGameExists(50));
+    public void existByIdTestIGFalse() {
+        assertFalse(abilityService.abilityInGameExists(50));
     }
 
 
     @Test
-    public void shouldInsertIGAchivement(){
-        AbilityInGame nuevo = new AbilityInGame();
-        nuevo.setAbility(abs.getAbilityById(1));
-        nuevo.setAttack(5);
-        nuevo.setPlayer(player);
-        nuevo.setProduct(false);
-        nuevo.setTimesUsed(0);
-        abs.saveAbilityInGame(nuevo);
-        assertEquals(5,abs.getAbilityInGameById(2).getAttack());
-    }
-    @Test
-    public void shouldUpdateIGAchievement(){
-        AbilityInGame nuevo = abs.getAbilityInGameById(1);
-        nuevo.setAttack(5);
-        abs.saveAbilityInGame(nuevo);
-        assertEquals(5, abs.getAbilityInGameById(1).getAttack());
+    public void testSave() {
+
+        AbilityInGame newAbilityInGame = AbilityInGame.fromAbility(ability, player);
+        newAbilityInGame.setAttack(attack);
+        abilityService.saveAbilityInGame(newAbilityInGame);
+        assertEquals(attack, abilityService.getAbilityInGameById(idAbilityInGame + 1).getAttack());
     }
 
-    @AfterAll
     @Test
-    public void deleteAbilityIGTest(){
-        playerService.deletePlayerById(1);
-        abs.deleteAbilityInGameById(1);
-        assertFalse(abs.abilityInGameExists(1));
+    public void testUpdate() {
+        AbilityInGame oldAbilityInGame = abilityService.getAbilityInGameById(idAbilityInGame);
+        AbilityInGame newAbilityInGame = oldAbilityInGame.toBuilder()
+            .attack(attack)
+            .build();
+        newAbilityInGame.setId(idAbilityInGame);
+        abilityService.saveAbilityInGame(newAbilityInGame);
+        System.out.println("old: " + oldAbilityInGame.getAttack());
+        System.out.println("new: " + newAbilityInGame.getAttack());
+        assertEquals(attack, abilityService.getAbilityInGameById(idAbilityInGame).getAttack());
+    }
+
+    @Test
+    public void testDeleteAbility() {
+        playerService.deletePlayerById(player.getId());
+        assertThrows(NotFoundException.class, () -> abilityService.getAbilityInGameById(idAbilityInGame));
+        // assertFalse(abilityService.abilityInGameExists(idAbilityInGame));
     }
 }

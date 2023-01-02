@@ -12,11 +12,11 @@ public class GainGlory implements Action {
 
     @Override
     public void executeAction() {
-        Integer currentGlory = activePlayer.getGlory();
+        Integer currentGlory = activePlayer.getStatistic().getGlory();
         if(glory>=0 || currentGlory>=Math.abs(glory)){
-            activePlayer.setGlory(currentGlory + glory);
+            activePlayer.getStatistic().setGlory(currentGlory + glory);
         } else {
-            activePlayer.setGlory(0);
+            activePlayer.getStatistic().setGlory(0);
         }
     }
 }
