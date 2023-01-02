@@ -82,10 +82,6 @@ public class GameService {
         return newPlayer;
     }
 
-
-
-
-
     @Transactional
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException {
         game.addPlayerWithNewHero(player, heroInGame);
