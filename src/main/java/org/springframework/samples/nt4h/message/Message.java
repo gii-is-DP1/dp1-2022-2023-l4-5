@@ -12,7 +12,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 import java.time.LocalDateTime;
 
@@ -39,6 +38,11 @@ public class Message extends BaseEntity implements Jsonable {
     @Override
     public String toString() {
         return sender.getUsername() + ": " + content;
+    }
+
+    public void onDeleteSetNull() {
+        sender = null;
+        receiver = null;
     }
 
     @Override

@@ -7,10 +7,11 @@ import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.player.Player;
 
+
 public class BuyProduct implements Action {
 
-    private Player player;
-    private ProductInGame productInGame;
+    private final Player player;
+    private final ProductInGame productInGame;
 
     @Autowired
     private ProductService productService;
@@ -23,8 +24,9 @@ public class BuyProduct implements Action {
 
     @Override
     public void executeAction() {
-        AbilityInGame abilityInGame = AbilityInGame.builder().timesUsed(0).attack(productInGame.getProduct().getAttack()).isProduct(true).build();
-        player.addAbilityInDeck(abilityInGame);
+        AbilityInGame abilityInGame = AbilityInGame.builder().timesUsed(0).attack(productInGame.getProduct().getAttack()).isProduct(true)
+            .productInGame(productInGame).build();
+        player.getDeck().getInDeck().add(abilityInGame);
         productInGame.setStateProduct(StateProduct.PLAYER);
         productInGame.setPlayer(player);
         productService.saveProductInGame(productInGame);

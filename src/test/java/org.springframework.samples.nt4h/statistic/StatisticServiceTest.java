@@ -10,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,12 +21,12 @@ public class StatisticServiceTest {
     @BeforeAll
     void ini() {
         Statistic statistic= new Statistic();
-        statistic.setAllDamageDealt(0);
-        statistic.setAllGlory(0);
+        statistic.setDamageDealt(0);
+        statistic.setGlory(0);
         statistic.setNumOrcsKilled(0);
         statistic.setNumWarLordKilled(0);
-        statistic.setAllGold(0);
-        statistic.setAllDamageDealtToNightLords(0);
+        statistic.setGold(0);
+        statistic.setDamageDealtToNightLords(0);
         statistic.setNumWonGames(0);
         statistic.setNumPlayedGames(0);
         statisticService.saveStatistic(statistic);
@@ -36,13 +35,13 @@ public class StatisticServiceTest {
     public void findByIdTrue(){
         Statistic stat = statisticService.getStatisticById(1);
         assertNotNull(stat);
-        assertEquals(0, stat.getAllDamageDealtToNightLords());
+        assertEquals(0, stat.getDamageDealtToNightLords());
     }
     @Test
     public void findByIdFalse(){
         Statistic stat = statisticService.getStatisticById(1);
         assertNotNull(stat);
-        assertNotEquals(1, stat.getAllDamageDealtToNightLords());
+        assertNotEquals(1, stat.getDamageDealtToNightLords());
     }
     @Test
     public void findAll(){
@@ -54,12 +53,12 @@ public class StatisticServiceTest {
     @Test
     public void  shouldInsertStatistic(){
         Statistic statistic= new Statistic();
-        statistic.setAllDamageDealt(0);
-        statistic.setAllGlory(0);
+        statistic.setDamageDealt(0);
+        statistic.setGlory(0);
         statistic.setNumOrcsKilled(0);
         statistic.setNumWarLordKilled(0);
-        statistic.setAllGold(0);
-        statistic.setAllDamageDealtToNightLords(0);
+        statistic.setGold(0);
+        statistic.setDamageDealtToNightLords(0);
         statistic.setNumWonGames(0);
         statistic.setNumPlayedGames(0);
         statisticService.saveStatistic(statistic);
@@ -68,11 +67,11 @@ public class StatisticServiceTest {
     @Test
     public void shouldUpdateStatistic(){
         Statistic stat = statisticService.getStatisticById(1);
-        Integer oldGold= stat.getAllGold();
+        Integer oldGold= stat.getGold();
         Integer newGold= oldGold+1;
-        stat.setAllGold(newGold);
+        stat.setGold(newGold);
         statisticService.saveStatistic(stat);
-        assertEquals(newGold,statisticService.getStatisticById(1).getAllGold());
+        assertEquals(newGold,statisticService.getStatisticById(1).getGold());
     }
     @Test
     public void deleteStatisticTest(){

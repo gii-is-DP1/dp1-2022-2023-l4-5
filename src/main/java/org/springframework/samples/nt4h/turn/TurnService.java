@@ -4,13 +4,10 @@ package org.springframework.samples.nt4h.turn;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.InflictWounds;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.action.RemoveCardForEnemyAttack;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +29,7 @@ public class TurnService {
         for (Phase phase : Phase.values()) {
             Turn turn = Turn.builder().player(player).game(player.getGame()).phase(phase)
                 .usedEnemies(Lists.newArrayList()).usedAbilities(Lists.newArrayList()).build();
-            saveTurn(turn);
-            player.addTurn(turn);
+            player.getTurns().add(turn);
         }
     }
 
@@ -79,5 +75,24 @@ public class TurnService {
         return getAllTurns().stream().filter(turn -> turn.getPhase().equals(phase) && turn.getPlayer().getId() == playerId)
             .findFirst().orElseThrow(() -> new NotFoundException("Turn not found"));
     }
+
+    // Dependiendo de la fase.
+    @Transactional
+    public void chooseAttackOrEvasion(Player player, Player loggedPlayer, Phase phase, Game game) throws NoCurrentPlayer {
+        Turn turn = getTurnsByPhaseAndPlayerId(phase, player.getId());
+        if (loggedPlayer != player)
+            throw new NoCurrentPlayer();
+        game.setCurrentTurn(turn);
+        if (turn.getPhase() == Phase.EVADE) {
+            player.setHasEvasion(false);
+            player.setNextPhase(Phase.MARKET);
+            // TODO: Se deben de descartar dos cartas.
+        } else
+            player.setNextPhase(Phase.HERO_ATTACK);
+        saveTurn(turn); // TODO: Comprobar si se actualiza el jugador y la partida.
+    }
+
+
+
 
 }

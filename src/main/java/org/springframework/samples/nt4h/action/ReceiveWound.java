@@ -14,11 +14,11 @@ public class ReceiveWound implements Action {
     @Override
     public void executeAction() {
         // Recover all the cards
-        int discardPileSize = player.getInDiscard().size();
+        int discardPileSize = player.getDeck().getInDiscard().size();
         IntStream.range(0, discardPileSize).forEach(i -> new RecoverCard(player).executeAction());
 
         // Shuffle the new abilityPile
-        Collections.shuffle(player.getInDeck());
+        Collections.shuffle(player.getDeck().getInDeck());
 
         // Give the player a wound
         player.setWounds(player.getWounds() + 1);

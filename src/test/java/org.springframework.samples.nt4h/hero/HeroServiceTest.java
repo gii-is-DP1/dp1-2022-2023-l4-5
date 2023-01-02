@@ -1,85 +1,75 @@
 package org.springframework.samples.nt4h.hero;
 
-import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.samples.nt4h.capacity.Capacity;
-import org.springframework.samples.nt4h.capacity.StateCapacity;
-import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.card.hero.Role;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.game.Accessibility;
+import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(
     includeFilters = {@Filter({Service.class})}
 )
-@TestInstance(Lifecycle.PER_CLASS)
 class HeroServiceTest {
     @Autowired
     protected HeroService heroService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private GameService gameService;
+    private int idGame;
 
-    HeroServiceTest() {
-    }
+    private final int idHero = 1;
+    private String nameHero;
 
     @BeforeEach
-    void setUp() throws Exception {
-        Hero hero = new Hero();
-        hero.setName("Test");
-        hero.setMaxUses(0);
-        hero.setRole(Role.EXPLORER);
-        hero.setHealth(3);
-        hero.setAbilities(List.of());
-        hero.setCapacities(List.of());
-        HeroInGame heroInGame = new HeroInGame();
-        heroInGame.setPlayer(new Player());
-        heroInGame.setEffectUsed(0);
-        heroInGame.setActualHealth(1);
-        this.heroService.saveHeroInGame(heroInGame);
+    void setUp() throws RoleAlreadyChosenException, FullGameException {
+        User user = userService.getUserById(1);
+        Hero hero = heroService.getHeroById(idHero);
+        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
+        Game game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
+        user.createPlayer(game);
+        Player player = user.getPlayer();
+        player.addHero(heroInGame);
+        game.addPlayer(player);
+        gameService.saveGame(game);
+        idGame = game.getId();
+        nameHero = hero.getName();
+    }
+
+    @AfterEach
+    void tearDown() {
+        gameService.deleteGameById(idGame);
     }
 
     @Test
-    public void findByIDTrue() {
-        Hero hero = this.heroService.getHeroById(2);
-        Assertions.assertNotNull(hero);
-        Assertions.assertEquals("Lisavette", hero.getName());
+    public void testFindByCorrectId() {
+        assertEquals(idHero, heroService.getHeroById(idHero).getId());
     }
 
     @Test
     public void findByIDFalse() {
-        Hero hero = this.heroService.getHeroById(1);
-        Assertions.assertNotNull(hero);
-        Assertions.assertNotEquals("Lisavete", hero.getName());
+        assertThrows(NotFoundException.class, () -> heroService.getHeroById(-1));
     }
 
     @Test
-    public void findByNameTrue() {
-        Hero hero = this.heroService.getHeroByName("Lisavette");
-        Assertions.assertNotNull(hero);
-        Assertions.assertEquals(3, hero.getHealth());
-    }
-
-    @Test
-    public void findByNameFalse() {
-        Hero hero = this.heroService.getHeroByName("Lisavette");
-        Assertions.assertNotNull(hero);
-        Assertions.assertNotEquals(2, hero.getHealth());
-    }
-
-    @Test
-    @Transactional
-    void existHero() {
-        this.heroService.heroExists(1);
+    public void testFindByName() {
+        assertEquals(nameHero, heroService.getHeroByName(nameHero).getName());
     }
 
 }

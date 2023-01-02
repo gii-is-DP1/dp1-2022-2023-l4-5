@@ -2,9 +2,6 @@ package org.springframework.samples.nt4h.game;
 
 
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.github.cliftonlabs.json_simple.JsonObject;
-
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,12 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.game.exceptions.FullGameException;
-import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
+import org.springframework.samples.nt4h.game.exceptions.*;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.Advise;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -30,8 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 // TODO: Cambiar nombre y enlaces.
 @Controller
@@ -55,17 +49,14 @@ public class GameController {
     private final UserService userService;
     private final PlayerService playerService;
     private final Advise advise = new Advise();
-    private final PlayerRepository playerRepository;
 
 
     @Autowired
-    public GameController(GameService gameService, HeroService heroService, UserService userService, PlayerService playerService,
-                          PlayerRepository playerRepository) {
+    public GameController(GameService gameService, HeroService heroService, UserService userService, PlayerService playerService) {
         this.gameService = gameService;
         this.heroService = heroService;
         this.userService = userService;
         this.playerService = playerService;
-        this.playerRepository = playerRepository;
     }
 
     @InitBinder
@@ -94,17 +85,10 @@ public class GameController {
     }
 
 
-    private static List<String> createMessages(Game game) {
-        return game.getPlayers().stream().map(player -> player.getName() + " { " +
-                player.getHeroes().stream().map(hero -> hero.getHero().getName()).sorted().reduce((s, s2) -> s + ", " + s2)
-                    .orElse("No hero selected") + " }" + " " + (Boolean.TRUE.equals(player.getReady()) ? "Ready" : "Not ready"))
-            .collect(Collectors.toList());
-    }
-
     @ModelAttribute("player")
     public Player getPlayer() {
         User loggedUser = getUser();
-        return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().glory(0).gold(0).build();
+        return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
     @ModelAttribute("players")
@@ -129,20 +113,6 @@ public class GameController {
         return userService.getLoggedUser();
     }
 
-    @ModelAttribute("message")
-    public String getMessage() {
-        String message = advise.getMessage();
-        advise.resetMessage();
-        return message;
-    }
-
-    @ModelAttribute("messageType")
-    public String getMessageType() {
-        String messageType = advise.getMessageType();
-        advise.setMessageType("");
-        return messageType;
-    }
-
     // Obtener todas las partidas.
     @GetMapping
     public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model) {
@@ -156,46 +126,33 @@ public class GameController {
             gamePage = gameService.getAllGames(pageable);
         }
         model.put("isNext", gamePage.hasNext());
-        model.addAttribute("games", gamePage.getContent());
+        model.put("games", gamePage.getContent());
         model.put("page", page);
 
         return VIEW_GAME_LIST;
     }
 
+    // Parida actual
+    @GetMapping("/current")
+    public String showCurrentGame() {
+        Game game = getGame();
+        return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
+    }
+
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model) {
-        User loggedUser = getUser();
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model) throws UserInAGameException, IncorrectPasswordException {
         Game newGame = gameService.getGameById(gameId);
-        Game oldGame = loggedUser.getGame();
-        if (oldGame != null && oldGame != newGame)
-            return advise.sendError("Ya estás en una partida y esa es  " + loggedUser.getGame() + ".", PAGE_GAMES);
-        if (oldGame == null)  {
-            if (Objects.equals(newGame.getPassword(), password) || newGame.getAccessibility() == Accessibility.PUBLIC)
-                userService.addUserToGame(loggedUser, newGame);
-            else return advise.sendError("La contraseña es incorrecta.", PAGE_GAMES);
-        }
-        model.put("numHeroes", gameService.getGameById(gameId).isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
+        userService.addUserToGame(getUser(), newGame, password);
+        model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
         return VIEW_GAME_LOBBY;
     }
 
-    // TODO: SI es privada deberá de solicitar la contraseña.
-    // Crear un jugador y vincularlo con la partida.
+    // TODO: Este post no es necesario, el player no se utiliza, si acaso, si se introduce el nombre al jugador..
     @PostMapping(value = "/{gameId}")
-    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId) {
-        // Obtenemos los datos.
-        User loggedUser = getUser();
-        Game game = getGame();
-        if (loggedUser.getPlayer() != null)
-            return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", loggedUser.getPlayer().getId().toString());
-        // Creamos el jugador si el usuario no se había unido a la partida.
-        Player newPlayer;
-        try {
-            newPlayer = gameService.addPlayerToGame(player, game, loggedUser);
-        } catch (FullGameException e) {
-            return advise.sendError("Game is full", PAGE_GAMES);
-        }
-        return PAGE_GAME_HERO_SELECT.replace("{gameId}", gameId.toString()).replace("{playerId}", newPlayer.getId().toString());
+    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId) throws FullGameException, UserHasAlreadyAPlayerException {
+        gameService.addPlayerToGame(getGame(), getUser()); // TODO: permitir al jugador elegir el nombre.
+        return PAGE_GAME_HERO_SELECT;
     }
 
     //Elegir here
@@ -207,46 +164,24 @@ public class GameController {
 
     // Analizamos la elección del héroe.
     @PostMapping(value = "/heroSelect")
-    public String processHeroSelectForm(HeroInGame heroInGame) {
-        // Obtenemos los datos.
-        Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
-        Game game = getGame();
-        Player player = getPlayer();
-        HeroInGame updatedHero = heroInGame.createHero(hero, player);
-        // Esta línea va dedicada a Pedro, por su gran colaboración a la búsqueda de errores.
-        if (Boolean.TRUE.equals(player.getReady()))
-            return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
-        // Vinculamos el héroe al jugador.
-        try {
-            gameService.addHeroToPlayer(player, updatedHero, game);
-        } catch (HeroAlreadyChosenException e) {
-            return advise.sendError("Hero already chosen.", PAGE_GAME_HERO_SELECT);
-        } catch (FullGameException e) {
-            return advise.sendError("Game is full.", PAGE_GAMES);
-        } catch (RoleAlreadyChosenException e) {
-            return advise.sendError("Role already chosen", PAGE_GAME_HERO_SELECT);
-        }
-        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
+    public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
+        gameService.addHeroToPlayer(getPlayer(), heroInGame, getGame());
+        return showCurrentGame();
 
     }
 
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
     public String initCreationForm() {
-        // Comprobamos si está en otras partidas.
-        Game oldGame = getGame();
-        if (!oldGame.isNew())
-            return advise.sendError("Ya estás en una partida y esa es  " + oldGame + ".", PAGE_GAMES);
         return VIEW_GAME_CREATE;
     }
 
     // Comprobamos si la partida es correcta y la almacenamos.
     @PostMapping(value = "/new")
-    public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
-        User user = userService.getLoggedUser();
+    public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException, UserInAGameException {
         if (result.hasErrors()) return VIEW_GAME_CREATE;
-        gameService.createGame(user, game);
-        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
+        gameService.createGame(userService.getLoggedUser(), game);
+        return showCurrentGame();
     }
 
     @GetMapping("/selectOrder/")
@@ -268,7 +203,7 @@ public class GameController {
     @GetMapping("deletePlayer/{playerId}")
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
-        playerService.getOutGame(playerService.getPlayerById(playerId), game);
+        playerService.deletePlayerById(playerId);
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 }
