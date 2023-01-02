@@ -132,7 +132,7 @@ public class PlayerService {
     public void restoreEnemyLife(List<EnemyInGame> enemies) {
         for(int i = 0; enemies.size()<i; i++) {
             Enemy enemy = enemies.get(i).getEnemy();
-            if(enemy.getHasCure() == true) {
+            if(enemy.getHasCure()) {
                 Action recoverEnemyLife = new HealEnemy(enemies.get(i));
                 recoverEnemyLife.executeAction();
             }

@@ -7,7 +7,22 @@ public enum Phase {
     MARKET,
     RESUPPLY;
 
-    public Phase nextPhase() {
-        return values()[(ordinal() + 1) % values().length];
+    @Override
+    public String toString() {
+        if (this == EVADE) {
+            return "evasion";
+        } else if (this == HERO_ATTACK) {
+            return "heroAttack";
+        } else if (this == ENEMY_ATTACK) {
+            return "enemyAttack";
+        } else if (this == MARKET) {
+            return "market";
+        } else if (this == RESUPPLY) {
+            return "resupply";
+        } else {
+            return "Unknown";
+        }
     }
+
+
 }

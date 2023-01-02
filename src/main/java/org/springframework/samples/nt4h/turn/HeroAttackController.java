@@ -16,16 +16,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
     @RequestMapping("/heroAttack")
     public class HeroAttackController {
 
         public final String NEXT_TURN = "redirect:/turns";
-        public final String VIEW_ATTACK_ACTION = "turns/heroAttackAction";
+        public final String VIEW_ATTACK_ACTION = "turns/attackPhase";
 
         private final UserService userService;
         private final TurnService turnService;
@@ -71,7 +69,6 @@ import java.util.Map;
             return new Turn();
         }
 
-
         @PostMapping()
         public String modifyCardAttributes(Turn turn) {
             Player player = getPlayer();
@@ -86,7 +83,10 @@ import java.util.Map;
                 player.addAbilityInDiscard(usedAbility);
                 playerService.savePlayer(player);
                 if(attackedEnemy.getActualHealth() <= 0) {
+                    player.setGlory(player.getGlory() + attackedEnemy.getEnemy().getGlory());
+                    player.setGold(player.getGold() + attackedEnemy.getEnemy().getGold());
                     game.getActualOrcs().remove(attackedEnemy);
+                    playerService.savePlayer(player);
                     gameService.saveGame(game);
                 }
                 Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());

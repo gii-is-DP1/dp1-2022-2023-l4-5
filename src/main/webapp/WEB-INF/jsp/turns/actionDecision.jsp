@@ -12,6 +12,8 @@
     <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
         <nt4h:selectField name="phase" label="Phases in turn?" names="${turns}" size="8"/>
         <button class="btn btn-default" type="submit">Action chosen</button>
+        <div class="nextTurn"></div>
+        <script src="/resources/js/currentTurn.js" type="module"></script>
     </form:form>
 
 </nt4h:layout>
