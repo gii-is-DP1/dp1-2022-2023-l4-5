@@ -1,11 +1,12 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.RemoveCardFromHandToDiscard;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.user.UserService;
@@ -23,20 +24,15 @@ public class ReestablishmentController {
 
     private final UserService userService;
     private final PlayerService playerService;
-    private final TurnService turnService;
-    private final GameService gameService;
 
 
     public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
-    public final String NEXT_TURN = "redirect:/turns";
     private final Advise advise;
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService) {
+    public ReestablishmentController(UserService userService, PlayerService playerService) {
         this.playerService = playerService;
         this.userService = userService;
-        this.turnService = turnService;
-        this.gameService = gameService;
         this.advise = new Advise();
     }
 
@@ -62,17 +58,17 @@ public class ReestablishmentController {
 
     @ModelAttribute("handCards")
     public List<AbilityInGame> getHandDeckByPlayer() {
-        return getPlayer().getInHand();
+        return getPlayer().getDeck().getInHand();
     }
 
     @ModelAttribute("discardCards")
     public List<AbilityInGame> getDiscardDeckByPlayer() {
-        return getPlayer().getInDiscard();
+        return getPlayer().getDeck().getInDiscard();
     }
 
     @ModelAttribute("abilityCards")
     public List<AbilityInGame> getAbilityDeckByPlayer() {
-        return getPlayer().getInDeck();
+        return getPlayer().getDeck().getInDeck();
     }
 
     @ModelAttribute("message")
@@ -85,41 +81,26 @@ public class ReestablishmentController {
         return advise.getMessageType();
     }
 
-    @ModelAttribute("loggedPLayer")
-    public Player getLoggedPlayer() {
-        return userService.getLoggedUser().getPlayer();
-    }
-
-    @ModelAttribute("newTurn")
-    public Turn getNewTurn() {
-        return new Turn();
-    }
-
-    @GetMapping
+    @GetMapping("/addCards")
     public String reestablishmentAddCards() {
         playerService.restoreEnemyLife(getEnemiesInBattle());
         playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
         return VIEW_REESTABLISHMENT;
     }
 
-    @PostMapping
-    public String takeNewAbilities(Turn newTurn) {
-        AbilityInGame currentAbility = newTurn.getCurrentAbility();
-        playerService.takeNewCard(getPlayer());
-        playerService.removeAbilityCards(currentAbility.getId(), getPlayer());
+    @PostMapping("/addCards")
+    public String takeNewAbility(Integer cardId) {
+            Player player = getPlayer();
+            Deck deck = player.getDeck();
+            Action removeToDiscard = new RemoveCardFromHandToDiscard(deck, cardId);
+            removeToDiscard.executeAction();
+            deck.takeNewCard(); // TODO: cambiar a otro lugar,
         return reestablishmentAddCards();
     }
 
-    @GetMapping("/turns")
+    @GetMapping("/removeCards")
     public String reestablishmentNextTurn() {
-        Player player = getPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        Game game = getGame();
-        if (loggedPlayer == player) {
-            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId()));
-            gameService.saveGame(game);
-        }
-        return NEXT_TURN;
+        return "redirect:/nextTurn";
     }
 
 }

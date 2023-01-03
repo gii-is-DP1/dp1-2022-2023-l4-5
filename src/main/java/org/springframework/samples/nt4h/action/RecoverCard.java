@@ -13,11 +13,11 @@ public class RecoverCard implements Action {
 
     @Override
     public void executeAction() {
-        List<AbilityInGame> discardPile = playerFrom.getInDiscard();
+        List<AbilityInGame> discardPile = playerFrom.getDeck().getInDiscard();
         if (discardPile.isEmpty())
             return;
         AbilityInGame recoveredCard = discardPile.get(0);
         discardPile.remove(recoveredCard);
-        playerFrom.getInHand().add(recoveredCard);
+        playerFrom.getDeck().getInHand().add(recoveredCard);
     }
 }

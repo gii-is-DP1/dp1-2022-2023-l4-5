@@ -3,7 +3,6 @@ package org.springframework.samples.nt4h.turn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -16,19 +15,18 @@ public class TurnController {
 
 
     private final UserService userService;
-    private final GameService gameService;
+    private final String PAGE_START = "redirect:/start";
 
     private final String PAGE_EVADE = "redirect:/evasion";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
     private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
     private final String PAGE_MARKET = "redirect:/market";
-    private final String PAGE_RESUPPLY = "redirect:/reestablishment";
+    private final String PAGE_RESUPPLY = "redirect:/reestablishment/addCards";
     private final String PAGE_LOBBY = "redirect:/games/";
 
     @Autowired
-    public TurnController(UserService userService, GameService gameService) {
+    public TurnController(UserService userService) {
         this.userService = userService;
-        this.gameService = gameService;
     }
 
     @ModelAttribute("user")
@@ -60,12 +58,8 @@ public class TurnController {
     @GetMapping()
     public String enterInGame() {
         Phase phase = getTurn().getPhase();
-        if (phase.equals(Phase.EVADE)) {
-            // Game game = getGame();
-            // game.setCurrentPlayer(game.getNextPlayer());
-            // gameService.saveGame(game);
-            return PAGE_EVADE;
-        }
+        if (phase.equals(Phase.START)) return PAGE_START;
+        else if (phase.equals(Phase.EVADE)) return PAGE_EVADE;
         else if (phase.equals(Phase.HERO_ATTACK)) return PAGE_HERO_ATTACK;
         else if (phase.equals(Phase.ENEMY_ATTACK)) return PAGE_ENEMY_ATTACK;
         else if (phase.equals(Phase.MARKET)) return PAGE_MARKET;

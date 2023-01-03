@@ -17,16 +17,16 @@ public class DropCardOnPileAbility implements Action {
     @Override
     public void executeAction() {
 
-        List<AbilityInGame> inHand = playerFrom.getInHand();
-        List<AbilityInGame> abilityPile = playerFrom.getInDeck();
+        List<AbilityInGame> inHand = playerFrom.getDeck().getInHand();
+        List<AbilityInGame> abilityPile = playerFrom.getDeck().getInDeck();
 
         for (AbilityInGame card : inHand) {
             AbilityCardType cardEnum = card.getAbilityCardType();
             if (cardEnum == cardToReturn) {
                 abilityPile.add(card);
-                playerFrom.setInDeck(abilityPile);
+                playerFrom.getDeck().setInDeck(abilityPile);
                 inHand.remove(card);
-                playerFrom.setInHand(inHand);
+                playerFrom.getDeck().setInHand(inHand);
                 return;
             }
         }

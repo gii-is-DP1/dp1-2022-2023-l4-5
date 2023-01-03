@@ -20,7 +20,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * Simple JavaBean domain object representing an person.
+ * Simple JavaBean domain object representing a person.
  *
  * @author Ken Krebs
  */

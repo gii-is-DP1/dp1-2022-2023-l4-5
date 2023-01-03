@@ -10,6 +10,7 @@
     <h2>Action decision</h2>
     <h1>Turno del jugador ${game.currentPlayer}</h1>
     <form:form modelAttribute="productInGame" class="form-horizontal" id="product-selection-form">
+        <nt4h:selectField name="product" label="Buy a product" names="${productsOnSale}" size="5"/>
         <div class="container">
             <c:forEach begin="0" step="1" end="${productsOnSale.size()-1}" var="i">
                 <div class="col-sm-5">

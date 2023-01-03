@@ -17,6 +17,11 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AbilityInGame extends BaseEntity {
+
+
+    @Enumerated
+    private StateAbility stateAbility;
+
     @Min(0)
     private Integer timesUsed;
 
@@ -37,4 +42,31 @@ public class AbilityInGame extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private AbilityCardType abilityCardType;
+
+    public static AbilityInGame fromAbility(Ability ability, Player player) {
+        return AbilityInGame.builder()
+                .timesUsed(0)
+                .attack(ability.getAttack())
+                .isProduct(false)
+                .ability(ability)
+                .player(player)
+                .build();
+    }
+
+    public static AbilityInGame fromProduct(ProductInGame productInGame, Player player) {
+        return AbilityInGame.builder()
+                .timesUsed(0)
+                .attack(productInGame.getProduct().getAttack())
+                .isProduct(true)
+                .productInGame(productInGame)
+                .player(player)
+                .build();
+    }
+    public void onDeleteSetNull() {
+        ability = null;
+        player = null;
+        if (productInGame != null) {
+            productInGame.onDeleteSetNull();
+        }
+    }
 }

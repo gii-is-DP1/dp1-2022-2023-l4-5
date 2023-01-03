@@ -15,8 +15,8 @@ public class GoldOnKill implements Action {
     @Override
     public void executeAction() {
         if (targetedEnemy.getActualHealth() <= 0) {
-            Integer currentGold = activePlayer.getGold();
-            activePlayer.setGold(currentGold + gold);
+            Integer currentGold = activePlayer.getStatistic().getGold();
+            activePlayer.getStatistic().setGold(currentGold + gold);
         }
     }
 }

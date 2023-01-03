@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.capacity;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,16 +31,6 @@ public class CapacityService {
     @Transactional
     public void saveCapacity(Capacity capacity) {
         capacityRepository.save(capacity);
-    }
-
-    @Transactional
-    public void deleteCapacityById(int id) {
-        capacityRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void deleteCapacity(Capacity capacity) {
-        capacityRepository.delete(capacity);
     }
 
     @Transactional(readOnly = true)

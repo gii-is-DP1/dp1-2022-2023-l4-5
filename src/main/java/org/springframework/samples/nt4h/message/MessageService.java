@@ -26,8 +26,16 @@ public class MessageService {
     }
 
     @Transactional
+    public void deleteMessage(Message message) {
+        message.onDeleteSetNull();
+        messageRepository.save(message);
+        messageRepository.delete(message);
+    }
+
+    @Transactional
     public void deleteMessageById(int id) {
-        messageRepository.deleteById(id);
+        Message message = messageRepository.findById(id).orElseThrow(() -> new NotFoundException("Message not found"));
+        deleteMessage(message);
     }
 
     @Transactional(readOnly = true)
