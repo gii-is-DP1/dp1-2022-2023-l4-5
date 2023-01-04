@@ -31,6 +31,7 @@ public class ProductService {
 
     @Transactional
     public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException, NotInSaleException {
+        productInGame = getProductInGameById(productInGame.getId());
         Action bp = new BuyProduct(player, productInGame);
         if (Objects.requireNonNull(productInGame.getStateProduct()) == StateProduct.IN_SALE) {
             if (player.getStatistic().getGold() < productInGame.getProduct().getPrice()) {

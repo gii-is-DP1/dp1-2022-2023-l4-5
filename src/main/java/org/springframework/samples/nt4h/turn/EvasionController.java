@@ -10,8 +10,10 @@ import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.WhenEvasionDiscardAtLeast2Exception;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -55,7 +57,8 @@ public class EvasionController {
     }
 
     @GetMapping
-    public String getEvasion() {
+    public String getEvasion(HttpSession session, ModelMap modelMap) {
+        getMessage(session, modelMap);
         return VIEW_EVASION;
     }
 
@@ -85,5 +88,16 @@ public class EvasionController {
         game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));
         gameService.saveGame(game);
         return NEXT_TURN;
+    }
+
+    public void getMessage(HttpSession session, ModelMap model) {
+        Object message = session.getAttribute("message");
+        Object messageType = session.getAttribute("messageType");
+        if (message != null) {
+            model.addAttribute("message", message);
+            model.addAttribute("messageType", messageType);
+            session.removeAttribute("message");
+            session.removeAttribute("messageType");
+        }
     }
 }
