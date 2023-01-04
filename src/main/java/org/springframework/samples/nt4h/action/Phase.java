@@ -10,20 +10,13 @@ public enum Phase {
 
     @Override
     public String toString() {
-        if (this == EVADE) {
-            return "evasion";
-        } else if (this == HERO_ATTACK) {
-            return "heroAttack";
-        } else if (this == ENEMY_ATTACK) {
-            return "enemyAttack";
-        } else if (this == MARKET) {
-            return "market";
-        } else if (this == RESUPPLY) {
-            return "resupply";
-        } else {
-            return "Unknown";
-        }
+        if (this == START) return "Start";
+        if (this == EVADE) return "evasion";
+        else if (this == HERO_ATTACK) return "heroAttack";
+        else if (this == ENEMY_ATTACK) return "enemyAttack";
+        else if (this == MARKET) return "market";
+        else if (this == RESUPPLY) return "resupply";
+        else return "Unknown";
     }
-
-
+}
 }

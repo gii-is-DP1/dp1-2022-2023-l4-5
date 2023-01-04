@@ -181,13 +181,15 @@ public class GameController {
 
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
-    public String initCreationForm() {
+    public String initCreationForm() throws UserInAGameException {
+        if (getGame() != null)
+            throw new UserInAGameException();
         return VIEW_GAME_CREATE;
     }
 
     // Comprobamos si la partida es correcta y la almacenamos.
     @PostMapping(value = "/new")
-    public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException, UserInAGameException {
+    public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         if (result.hasErrors()) return VIEW_GAME_CREATE;
         gameService.createGame(userService.getLoggedUser(), game);
         return showCurrentGame();
