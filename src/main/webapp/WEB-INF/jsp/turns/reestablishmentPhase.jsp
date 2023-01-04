@@ -27,7 +27,8 @@
      <button class="btn btn-default" type="submit">Discard Ability</button>
 </form:form>
 
-<a href="${pageContext.request.contextPath}/nextTurn" class="btn btn-default">Next Turn</a>
+    <div class="nextTurn"></div>
+    <script src="/resources/js/currentTurn.js" type="module"></script>
 
 </nt4h:layout>
 

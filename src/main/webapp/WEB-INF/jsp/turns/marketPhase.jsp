@@ -14,7 +14,7 @@
         <div class="container">
             <c:forEach begin="0" step="1" end="${productsOnSale.size()-1}" var="i">
                 <div class="col-sm-5">
-                    <form:radiobutton id="i" type="radio" name="hero" value="${productsOnSale.get(i)}" />
+                    <input id="i" type="radio" name="hero" value="${productsOnSale.get(i)}" />
                     <img  class="card-img-top" src="${productsOnSale.get(i).getFrontImage()}">
                 </div>
             </c:forEach>
