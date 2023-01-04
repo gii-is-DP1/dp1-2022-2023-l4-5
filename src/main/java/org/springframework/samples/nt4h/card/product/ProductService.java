@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,18 +30,15 @@ public class ProductService {
     }
 
     @Transactional
-    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException {
+    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException, NotInSaleException {
         Action bp = new BuyProduct(player, productInGame);
-        switch (productInGame.getStateProduct()) {
-            case IN_SALE:
-                if (player.getStatistic().getGold() < productInGame.getProduct().getPrice()) {
-                    throw new NoMoneyException();
-                }
-                bp.executeAction();
-                break;
-            default:
-                // Excepción que indique que el producto no está a la venta.
-                throw new NotInSaleException("Este producto no está en venta");
+        if (Objects.requireNonNull(productInGame.getStateProduct()) == StateProduct.IN_SALE) {
+            if (player.getStatistic().getGold() < productInGame.getProduct().getPrice()) {
+                throw new NoMoneyException();
+            }
+            bp.executeAction();
+        } else {// Excepción que indique que el producto no está a la venta.
+            throw new NotInSaleException();
         }
     }
 

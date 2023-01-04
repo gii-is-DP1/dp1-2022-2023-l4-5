@@ -24,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class GameController {
     private final HeroService heroService;
     private final UserService userService;
     private final PlayerService playerService;
-    private final Advise advise = new Advise();
+    public final Advise advise = new Advise();
 
 
     @Autowired
@@ -113,9 +114,19 @@ public class GameController {
         return userService.getLoggedUser();
     }
 
+    @ModelAttribute("message")
+    public String getMessage() {
+        return advise.getMessage();
+    }
+
+    @ModelAttribute("messageType")
+    public String getMessageType() {
+        return advise.getMessageType();
+    }
+
     // Obtener todas las partidas.
     @GetMapping
-    public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model) {
+    public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model, HttpSession session) {
         page = page < 0 ? 0 : page;
         Pageable pageable = PageRequest.of(page, 5);
         List<Game> games = gameService.getAllGames();
@@ -125,6 +136,7 @@ public class GameController {
             pageable = PageRequest.of(page, 5);
             gamePage = gameService.getAllGames(pageable);
         }
+        getMessage(session, model);
         model.put("isNext", gamePage.hasNext());
         model.put("games", gamePage.getContent());
         model.put("page", page);
@@ -135,30 +147,27 @@ public class GameController {
     // Parida actual
     @GetMapping("/current")
     public String showCurrentGame() {
+        System.out.println("Current game");
         Game game = getGame();
         return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
     }
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model) throws UserInAGameException, IncorrectPasswordException {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session) throws UserInAGameException, IncorrectPasswordException, UserHasAlreadyAPlayerException, FullGameException {
         Game newGame = gameService.getGameById(gameId);
         userService.addUserToGame(getUser(), newGame, password);
+        gameService.addPlayerToGame(getGame(), getUser()); // Esto estaba antes en un post.
+        getMessage(session, model);
         model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
         return VIEW_GAME_LOBBY;
     }
 
-    // TODO: Este post no es necesario, el player no se utiliza, si acaso, si se introduce el nombre al jugador..
-    @PostMapping(value = "/{gameId}")
-    public String processCreationPlayerReady(@Valid Player player, @PathVariable Integer gameId) throws FullGameException, UserHasAlreadyAPlayerException {
-        gameService.addPlayerToGame(getGame(), getUser()); // TODO: permitir al jugador elegir el nombre.
-        return PAGE_GAME_HERO_SELECT;
-    }
-
     //Elegir here
     @GetMapping(value = "/heroSelect")
-    public String initHeroSelectForm() {
+    public String initHeroSelectForm(HttpSession session, ModelMap model) {
         // Los datos para el formulario.
+        getMessage(session, model);
         return VIEW_GAME_HERO_SELECT;
     }
 
@@ -184,7 +193,7 @@ public class GameController {
         return showCurrentGame();
     }
 
-    @GetMapping("/selectOrder/")
+    @GetMapping("/selectOrder")
     public String orderPlayers() {
         return VIEW_GAME_PREORDER;
     }
@@ -205,5 +214,16 @@ public class GameController {
         Game game = getGame();
         playerService.deletePlayerById(playerId);
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
+    }
+
+    public void getMessage(HttpSession session, ModelMap model) {
+        Object message = session.getAttribute("message");
+        Object messageType = session.getAttribute("messageType");
+        if (message != null) {
+            model.addAttribute("message", message);
+            model.addAttribute("messageType", messageType);
+            session.removeAttribute("message");
+            session.removeAttribute("messageType");
+        }
     }
 }

@@ -79,6 +79,7 @@ public class Game extends NamedEntity implements Jsonable {
     private Player currentPlayer;
 
     public void addPlayer(Player player) throws FullGameException {
+        System.out.println("PLayers size: " + players);
         if (this.players.size() > this.maxPlayers)
             throw new FullGameException();
         this.players.add(player);
@@ -108,7 +109,7 @@ public class Game extends NamedEntity implements Jsonable {
             .allOrcsInGame(Lists.newArrayList())
             .passiveOrcs(Lists.newArrayList())
             .players(Lists.newArrayList())
-            .phase(Phase.EVADE)
+            .phase(Phase.START)
             .startDate(LocalDateTime.now())
             .build();
         game.setName(name);

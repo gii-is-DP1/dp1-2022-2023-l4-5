@@ -1,8 +1,12 @@
 package org.springframework.samples.nt4h.player;
 
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.action.*;
+import org.springframework.samples.nt4h.card.ability.Ability;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
+import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
@@ -13,6 +17,7 @@ import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +37,7 @@ public class PlayerService {
     @Transactional
     public void createTurns(Player player) {
         turnService.createAllTurnForAPlayer(player);
+        savePlayer(player);
     }
 
     @Transactional
@@ -72,10 +78,31 @@ public class PlayerService {
     public void addDeckFromRole(Player player, Mode mode) {
         Role[] roles = player.getHeroes().stream().map(h -> h.getHero().getRole()).distinct().toArray(Role[]::new);
         if (roles.length == 1 && mode == Mode.UNI_CLASS)
-            player.createDeck(player, abilityService.getAbilitiesByRole(roles[0]), roles[0].getAbilities().size() - 1);
+            createDeck(player, abilityService.getAbilitiesByRole(roles[0]), null);
         else if (roles.length == 2 && mode == Mode.MULTI_CLASS) {
-            player.createDeck(player, abilityService.getAbilitiesByRole(roles[0]), 8);
-            player.createDeck(player, abilityService.getAbilitiesByRole(roles[1]), 7);
+            createDeck(player, abilityService.getAbilitiesByRole(roles[0]), 8);
+            createDeck(player, abilityService.getAbilitiesByRole(roles[1]), 7);
+        }
+    }
+
+    @Transactional
+    void createDeck(Player player, List<Ability> abilities, Integer limit) {
+        List<Ability> totalAbilities = Lists.newArrayList();
+        Deck deck = player.getDeck();
+        for (var ability : abilities)
+            for (int i = 0; i < ability.getQuantity(); i++)
+                totalAbilities.add(ability);
+        Collections.shuffle(totalAbilities);
+        for (int i = 0;(limit == null || i < limit) && i < totalAbilities.size(); i++) {
+            Ability ability = totalAbilities.get(i);
+            AbilityInGame abilityInGame = AbilityInGame.fromAbility(ability, player);
+            abilityService.saveAbilityInGame(abilityInGame);
+            if ((i < 5 && player.getHeroes().size() == 1) ||
+                (deck.getInDeck().isEmpty() && i < 3 && player.getHeroes().size() == 2) ||
+                (i < 2 && player.getHeroes().size() == 2))
+                deck.getInHand().add(abilityInGame);
+            else
+                deck.getInDeck().add(abilityInGame);
         }
     }
 
@@ -94,6 +121,7 @@ public class PlayerService {
 
     @Transactional
     public void restoreEnemyLife(List<EnemyInGame> enemies) {
+
         for (EnemyInGame enemyInGame : enemies) {
             Enemy enemy = enemyInGame.getEnemy();
             if (enemy.getHasCure()) {
@@ -102,5 +130,4 @@ public class PlayerService {
             }
         }
     }
-
 }

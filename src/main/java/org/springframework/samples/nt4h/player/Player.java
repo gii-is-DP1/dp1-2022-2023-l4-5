@@ -62,27 +62,17 @@ public class Player extends NamedEntity implements Jsonable {
                 .host(host)
                 .game(game)
                 .sequence(-1)
-                .nextPhase(Phase.EVADE)
+                .nextPhase(Phase.START)
                 .ready(false)
-                .statistic(Statistic.builder().build())
+                .statistic(Statistic.createStatistic())
                 .wounds(0)
                 .damageProtect(0)
                 .hasEvasion(true)
+                .turns(Lists.newArrayList())
+                .deck(Deck.createEmptyDeck())
                 .build();
         player.setName(user.getUsername());
         return player;
-    }
-
-    void createDeck(Player player, List<Ability> abilities, Integer limit) {
-        List<Ability> totalAbilities = Lists.newArrayList();
-        for (var ability : abilities)
-            for (int i = 0; i < ability.getQuantity(); i++)
-                totalAbilities.add(ability);
-        Collections.shuffle(totalAbilities);
-        for (int i = 0; i < limit && i < totalAbilities.size(); i++) {
-            Ability ability = totalAbilities.get(i);
-            deck.getInDeck().add(AbilityInGame.fromAbility(ability, player));
-        }
     }
 
 
