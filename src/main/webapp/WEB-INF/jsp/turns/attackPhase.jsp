@@ -15,15 +15,14 @@
         }
     </style>
     <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
-
-        <h1>Gold: ${game.currentPlayer.getGlory()},
-            Glory: ${game.currentPlayer.getGold()},
-            Wounds: ${game.currentPlayer.getWounds()}</h1>
+        <h1>Gold: ${player.statistic.glory},
+            Glory: ${player.statistic.gold},
+            Wounds: ${player.wounds}</h1>
         <div class="container">
-            <c:forEach items="${player.inHand}" var="i">
+            <c:forEach items="${player.deck.inHand}" var="i">
                 <div class="col-sm-2">
                     <form:radiobutton path="currentAbility" value="${i}"/>
-                    <img class="card-img-top" src="${i.getAbility().getFrontImage()}">
+                    <img class="card-img-top" src="${i.ability.frontImage}" alt="Card image cap">
                 </div>
             </c:forEach>
         </div>
@@ -36,7 +35,7 @@
             </c:forEach>
         </div>
 
-        <c:if  test="${game.actualOrcs.size()!=0}">
+        <c:if test="${game.actualOrcs.size()!=0}">
             <button class="btn btn-default" type="submit">Attack</button>
         </c:if>
 
@@ -45,7 +44,7 @@
     <script src="/resources/js/currentTurn.js" type="module"></script>
     <script type="text/javascript">
         if (${game.currentTurn.phase.toString()=='enemyAttack'})
-            alert("The orcs makes you " + ${damage} + ".");
+            alert("The orcs makes you " + ${damage} +".");
     </script>
 
 </nt4h:layout>

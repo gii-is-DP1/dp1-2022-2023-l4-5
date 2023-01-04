@@ -94,7 +94,6 @@ public class PlayerService {
 
     @Transactional
     public void restoreEnemyLife(List<EnemyInGame> enemies) {
-
         for (EnemyInGame enemyInGame : enemies) {
             Enemy enemy = enemyInGame.getEnemy();
             if (enemy.getHasCure()) {
@@ -103,4 +102,5 @@ public class PlayerService {
             }
         }
     }
+
 }
