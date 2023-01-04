@@ -1,16 +1,11 @@
 package org.springframework.samples.nt4h.turn;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.product.Product;
-import org.springframework.samples.nt4h.card.product.ProductInGame;
-import org.springframework.samples.nt4h.card.product.ProductService;
-import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
-import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,33 +18,19 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-@RequestMapping("/market")
-public class MarketController {
-    public final String VIEW_MARKET = "turns/marketPhase";
-    public final String PAGE_MARKET = "redirect:/market";
-    public final String NEXT_TURN = "redirect:/turns";
+@RequestMapping("/start")
+public class StartController {
 
+    public final String VIEW_CHOOSE_EVASION = "turns/actionDecision";
+    public final String NEXT_TURN = "redirect:/turns";
     private final UserService userService;
-    private final ProductService productService;
     private final TurnService turnService;
-    private final GameService gameService;
+
 
     @Autowired
-    public MarketController(UserService userService, ProductService productService, TurnService turnService, GameService gameService) {
+    public StartController(UserService userService, TurnService turnService) {
         this.userService = userService;
-        this.productService = productService;
         this.turnService = turnService;
-        this.gameService = gameService;
-    }
-
-    @ModelAttribute("productsOnSale")
-    public List<Product> getProductsInSell() {
-        return productService.getMarket();
-    }
-
-    @ModelAttribute("productInGame")
-    public ProductInGame getProductInGame() {
-        return new ProductInGame();
     }
 
     @ModelAttribute("game")
@@ -67,31 +48,29 @@ public class MarketController {
         return userService.getLoggedUser().getPlayer();
     }
 
+    @ModelAttribute("newTurn")
+    public Turn getNewTurn() {
+        return new Turn();
+    }
+
+    @ModelAttribute("turns")
+    public List<Phase> getTurns() {
+        return Lists.newArrayList(Phase.EVADE, Phase.HERO_ATTACK);
+    }
+
     @GetMapping
-    public String market(HttpSession session, ModelMap modelMap) {
+    public String chooseEvasion(HttpSession session, ModelMap modelMap) {
         getMessage(session, modelMap);
-        return VIEW_MARKET;
+        return VIEW_CHOOSE_EVASION;
     }
 
     @PostMapping
-    public String buyProduct(ProductInGame productInGame) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
+    public String selectEvasion(Turn turn) throws NoCurrentPlayer {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        productService.buyProduct(player, productInGame);
-        return PAGE_MARKET;
-    }
-
-    @GetMapping("/next")
-    public String next() {
-        Player player = getPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        Game game = getGame();
-        if (loggedPlayer == player) {
-            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, player.getId()));
-            gameService.saveGame(game);
-        }
+        turnService.chooseAttackOrEvasion(player, turn.getPhase(), getGame());
         return NEXT_TURN;
     }
 

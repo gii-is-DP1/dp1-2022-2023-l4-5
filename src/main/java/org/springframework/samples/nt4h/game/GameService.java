@@ -83,9 +83,6 @@ public class GameService {
     }
 
 
-
-
-
     @Transactional(rollbackFor = PlayerIsReadyException.class)
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
         if (player.getReady())
