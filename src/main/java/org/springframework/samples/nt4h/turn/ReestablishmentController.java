@@ -36,6 +36,9 @@ public class ReestablishmentController {
         this.advise = new Advise();
     }
 
+    @ModelAttribute("turn")
+    public Turn getTurn() { return new Turn(); }
+
     @ModelAttribute("game")
     public Game getGame() {
         return userService.getLoggedUser().getGame();
@@ -56,30 +59,11 @@ public class ReestablishmentController {
         return getGame().getAllOrcsInGame();
     }
 
-    @ModelAttribute("handCards")
-    public List<AbilityInGame> getHandDeckByPlayer() {
-        return getPlayer().getDeck().getInHand();
-    }
-
-    @ModelAttribute("discardCards")
-    public List<AbilityInGame> getDiscardDeckByPlayer() {
-        return getPlayer().getDeck().getInDiscard();
-    }
-
-    @ModelAttribute("abilityCards")
-    public List<AbilityInGame> getAbilityDeckByPlayer() {
-        return getPlayer().getDeck().getInDeck();
-    }
-
     @ModelAttribute("message")
     public String getMessage() {
         return advise.getMessage();
     }
 
-    @ModelAttribute("messageType")
-    public String getMessageType() {
-        return advise.getMessageType();
-    }
 
     @GetMapping("/addCards")
     public String reestablishmentAddCards() {
