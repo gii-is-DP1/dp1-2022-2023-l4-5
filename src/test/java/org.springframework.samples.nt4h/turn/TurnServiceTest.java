@@ -37,7 +37,7 @@ public class TurnServiceTest {
     public void findByIDFalse(){
         Turn turn = turnService.getTurnByID(1);
         assertNotNull(turn);
-        assertNotEquals(Phase.RESUPPLY, turn.getPhase());
+        assertNotEquals(Phase.REESTABLISHMENT, turn.getPhase());
     }
     @Test
     public void shouldFindByPhase(){
@@ -65,7 +65,7 @@ public class TurnServiceTest {
     public void shouldUpdateTurn(){
         Turn turn = turnService.getTurnByID(1);
         Phase oldPhase = turn.getPhase();
-        Phase newPhase = Phase.RESUPPLY;
+        Phase newPhase = Phase.REESTABLISHMENT;
         turn.setPhase(newPhase);
         turnService.saveTurn(turn);
         assertEquals(newPhase,turnService.getTurnByID(1).getPhase());

@@ -89,7 +89,7 @@ public class MarketController {
         Player loggedPlayer = getLoggedPlayer();
         Game game = getGame();
         if (loggedPlayer == player) {
-            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.RESUPPLY, player.getId()));
+            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, player.getId()));
             gameService.saveGame(game);
         }
         return NEXT_TURN;
