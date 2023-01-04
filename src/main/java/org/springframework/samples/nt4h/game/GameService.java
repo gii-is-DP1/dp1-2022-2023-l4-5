@@ -141,7 +141,7 @@ public class GameService {
         players = datos.stream()
             .map(triplet -> {
                 Player p = triplet.getValue1();
-                p.setSequence(triplet.getValue0());
+                p.setSequence(datos.indexOf(triplet));
                 return p;
             }).collect(Collectors.toList());
         Player firstPlayer = players.get(0);

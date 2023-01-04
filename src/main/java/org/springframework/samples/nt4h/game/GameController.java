@@ -182,7 +182,7 @@ public class GameController {
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
     public String initCreationForm() throws UserInAGameException {
-        if (getGame() != null)
+        if (!getGame().isNew())
             throw new UserInAGameException();
         return VIEW_GAME_CREATE;
     }
