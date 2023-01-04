@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.security.acls.model.NotFoundException;
@@ -18,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TurnService {
     private final TurnRepository turnRepository;
+    private final GameService gameService;
 
     @Transactional
     public void saveTurn(Turn turn) throws DataAccessException {
@@ -70,6 +72,7 @@ public class TurnService {
         return turnRepository.existsById(id);
     }
 
+
     @Transactional(readOnly = true)
     public Turn getTurnsByPhaseAndPlayerId(Phase phase, int playerId) {
         return getAllTurns().stream().filter(turn -> turn.getPhase().equals(phase) && turn.getPlayer().getId() == playerId)
@@ -92,7 +95,16 @@ public class TurnService {
         saveTurn(turn); // TODO: Comprobar si se actualiza el jugador y la partida.
     }
 
-
-
+    @Transactional
+    public void setNextPlayerAndNextTurn(Game game, Player loggedPlayer, Player player) throws NoCurrentPlayer {
+        if (loggedPlayer != player)
+            throw new NoCurrentPlayer();
+        Integer totalPlayers = game.getPlayers().size();
+        Integer nextSequence = (game.getCurrentPlayer().getSequence()+1) % totalPlayers;
+        Player nextPlayer = game.getPlayers().stream().filter(p -> p.getSequence() == nextSequence).findFirst().get();
+        game.setCurrentPlayer(nextPlayer);
+        game.setCurrentTurn(getTurnsByPhaseAndPlayerId(Phase.EVADE, nextPlayer.getId()));
+        gameService.saveGame(game);
+    }
 
 }

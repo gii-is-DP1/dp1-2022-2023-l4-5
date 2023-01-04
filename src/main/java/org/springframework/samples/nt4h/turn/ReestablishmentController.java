@@ -1,20 +1,18 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.RemoveCardFromHandToDiscard;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.ability.Deck;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,15 +22,21 @@ public class ReestablishmentController {
 
     private final UserService userService;
     private final PlayerService playerService;
+    private final TurnService turnService;
+    private final DeckService deckService;
+    private final GameService gameService;
 
-
+    public final String NEXT_TURN = "redirect:/turns";
     public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
     private final Advise advise;
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService) {
+    public ReestablishmentController(UserService userService, PlayerService playerService, TurnService turnService, DeckService deckService, GameService gameService) {
         this.playerService = playerService;
         this.userService = userService;
+        this.turnService = turnService;
+        this.deckService = deckService;
+        this.gameService = gameService;
         this.advise = new Advise();
     }
 
@@ -44,6 +48,11 @@ public class ReestablishmentController {
     @ModelAttribute("player")
     public Player getPlayer() {
         return getGame().getCurrentPlayer();
+    }
+
+    @ModelAttribute("loggedPLayer")
+    public Player getLoggedPlayer() {
+        return userService.getLoggedUser().getPlayer();
     }
 
     @ModelAttribute("enemiesInBattle")
@@ -81,26 +90,25 @@ public class ReestablishmentController {
         return advise.getMessageType();
     }
 
-    @GetMapping("/addCards")
-    public String reestablishmentAddCards() {
+    @GetMapping()
+    public String modifyEnemies() {
         playerService.restoreEnemyLife(getEnemiesInBattle());
         playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
         return VIEW_REESTABLISHMENT;
     }
 
-    @PostMapping("/addCards")
-    public String takeNewAbility(Integer cardId) {
-            Player player = getPlayer();
-            Deck deck = player.getDeck();
-            Action removeToDiscard = new RemoveCardFromHandToDiscard(deck, cardId);
-            removeToDiscard.executeAction();
-            deck.takeNewCard(); // TODO: cambiar a otro lugar,
-        return reestablishmentAddCards();
+    @PostMapping("/{cardId}")
+    public String takeAndRemoveAbilities(@PathVariable Integer cardId) {
+        Player player = getPlayer();
+        deckService.takeNewCard(getPlayer(), player.getDeck());
+        deckService.removeAbilityCards(cardId, getPlayer());
+        return modifyEnemies();
     }
 
-    @GetMapping("/removeCards")
-    public String reestablishmentNextTurn() {
-        return "redirect:/nextTurn";
+    @GetMapping("/next")
+    public String nextTurn(Turn turn) throws NoCurrentPlayer {
+        turnService.setNextPlayerAndNextTurn(getGame(), getPlayer(), getLoggedPlayer());
+        return NEXT_TURN;
     }
 
 }

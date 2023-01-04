@@ -103,7 +103,6 @@ public class MarketController {
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.RESUPPLY, player.getId()));
             gameService.saveGame(game);
         }
-
         return NEXT_TURN;
     }
 }

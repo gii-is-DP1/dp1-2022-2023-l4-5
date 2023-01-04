@@ -78,7 +78,11 @@ public class TurnServiceTest {
         assertFalse(turnService.turnExists(1));
     }
 
+    @Test
+    public void takeAndRemoveAbilitiesTest() {
+        Integer cardId = 1;
 
+    }
 
 
 }
