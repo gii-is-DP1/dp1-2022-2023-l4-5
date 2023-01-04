@@ -15,6 +15,7 @@ public class TurnController {
 
 
     private final UserService userService;
+    private final String PAGE_START = "redirect:/start";
 
     private final String PAGE_EVADE = "redirect:/evasion";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
@@ -57,7 +58,8 @@ public class TurnController {
     @GetMapping()
     public String enterInGame() {
         Phase phase = getTurn().getPhase();
-        if (phase.equals(Phase.EVADE)) return PAGE_EVADE;
+        if (phase.equals(Phase.START)) return PAGE_START;
+        else if (phase.equals(Phase.EVADE)) return PAGE_EVADE;
         else if (phase.equals(Phase.HERO_ATTACK)) return PAGE_HERO_ATTACK;
         else if (phase.equals(Phase.ENEMY_ATTACK)) return PAGE_ENEMY_ATTACK;
         else if (phase.equals(Phase.MARKET)) return PAGE_MARKET;

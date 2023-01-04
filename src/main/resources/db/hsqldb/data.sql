@@ -55,7 +55,7 @@ VALUES ('Valèrys', '/resources/images/heroes/valerys_hero_front.png',
         '/resources/images/heroes/aranel_hero_back.png', -1, 2, 'WIZARD');
 
 -- Creación de habilidades.
-INSERT INTO abilities(name, front_image, back_image, max_uses, role, attack, quantity, ability_effect_enum)
+INSERT INTO abilities(name, front_image, back_image, max_uses, role, attack, quantity, ability_effect)
 VALUES ('Compañero Lobo', '/resources/images/abilities/wolf_abilities_front.png',
         '/resources/images/abilities/parte_atras_general.png', -1, 'EXPLORER', 2, 1, 'COMPANERO_LOBO'),
        ('Disparo Certero', '/resources/images/abilities/sharp_abilities_front.png',
@@ -187,7 +187,7 @@ VALUES ('Honda', '/resources/images/orcs/0-0_orc_back.png',
         '/resources/images/orcs/shriek_nightlord_front.png', -1, 10, null, null, FALSE, FALSE, TRUE);
 
 -- Productos
-INSERT INTO products(name, front_image, back_image, max_uses, price, attack, quantity, ability_effect_enum)
+INSERT INTO products(name, front_image, back_image, max_uses, price, attack, quantity, ability_effect)
 VALUES ('Daga élfica', '/resources/images/products/dagaelfica_product_front.png',
         '/resources/images/products/product_back.png', -1, 3, 2, 2, 'DAGA_ELFICA'),
        ('Poción curativa', '/resources/images/products/pocioncurativa_product_front.png',

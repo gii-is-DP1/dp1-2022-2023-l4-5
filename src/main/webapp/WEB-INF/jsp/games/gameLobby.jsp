@@ -18,9 +18,7 @@
                 <h1>You are ready!</h1>
             </c:when>
             <c:otherwise>
-                <form:form modelAttribute="player" class="form-horizontal" id="add-game-form">
-                    <button class="btn btn-default" type="submit">Add hero!</button>
-                </form:form>
+                <a href="/games/heroSelect">Add hero!</a>
             </c:otherwise>
         </c:choose>
     </div>
