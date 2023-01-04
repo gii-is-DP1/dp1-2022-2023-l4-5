@@ -78,7 +78,6 @@ public class GameService {
         game.addPlayer(newPlayer);
         playerService.createTurns(newPlayer);
         user.setPlayer(newPlayer);
-        userService.saveUser(user);
         saveGame(game);
         return newPlayer;
     }
@@ -91,6 +90,7 @@ public class GameService {
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
         if (player.getReady())
             throw new PlayerIsReadyException();
+        System.out.println("addHeroToPlayer " + player.getId());
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -100,42 +100,47 @@ public class GameService {
         saveGame(game);
     }
 
-    @Transactional(rollbackFor = UserInAGameException.class)
-    public void createGame(User user, Game game) throws FullGameException, UserInAGameException {
-        if (user.getPlayer() != null)
-            throw new UserInAGameException();
-        Player newPlayer = Player.createPlayer(user, game, true);
-        user.setPlayer(newPlayer);
-        game.setStartDate(LocalDateTime.now());
+    @Transactional
+    public void createGame(User user, Game game) throws FullGameException {
+        // TODO: Crear un método a parte para creación de player.
+        Player newPlayer = Player.createPlayer(user, game, true);;
+        newPlayer.setName(user.getUsername());
+        game = Game.createGame(game.getName(), game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE, game.getMode(),  game.getMaxPlayers(), game.getPassword());
+        newPlayer.setGame(game);
+        playerService.savePlayer(newPlayer);
         game.addPlayer(newPlayer);
-        game.setAccessibility(game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE);
+        saveGame(game);
+        user.setGame(game);
+        user.setPlayer(newPlayer);
+        userService.saveUser(user);
         List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame();
         EnemyInGame nightLordInGame = enemyService.addNightLordToGame();
         game.setAllOrcsInGame(orcsInGame);
         game.getAllOrcsInGame().add(nightLordInGame);
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
-        saveGame(game);
+
     }
 
     // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
+
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
+        // Calcula ataque de las dos primeras cartas en mano.
         for (var i = 0; i < players.size(); i++) {
             Player player = players.get(i);
             List<AbilityInGame> abilities = player.getDeck().getInDeck();
             datos.add(new Triplet<>(i, player, abilities.get(0).getAttack() + abilities.get(1).getAttack()));
         }
-        datos.sort((o1, o2) -> o2.getValue2().compareTo(o1.getValue2()));
-        if (Objects.equals(datos.get(0).getValue2(), datos.get(1).getValue2()) &&
-            datos.get(0).getValue1().getBirthDate().isAfter(datos.get(1).getValue1().getBirthDate())) {
-            var first = datos.get(0);
-            var second = datos.get(1);
-            datos.set(0, second);
-            datos.set(1, first);
-        }
+        // Ordena por ataque.
+        datos.sort((o1, o2) -> {
+            int compare = o2.getValue2().compareTo(o1.getValue2());
+            if (compare == 0)
+                compare = o1.getValue1().getBirthDate().compareTo(o2.getValue1().getBirthDate());
+            return compare;
+        });
         players = datos.stream()
             .map(triplet -> {
                 Player p = triplet.getValue1();
@@ -143,11 +148,9 @@ public class GameService {
                 return p;
             }).collect(Collectors.toList());
         Player firstPlayer = players.get(0);
-        players.forEach(playerService::savePlayer);
-        System.out.println("First player: " + firstPlayer.getSequence());
         game.setPlayers(players);
         game.setCurrentPlayer(firstPlayer);
-        game.setCurrentTurn(firstPlayer.getTurn(Phase.EVADE));
+        game.setCurrentTurn(firstPlayer.getTurn(Phase.START));
         saveGame(game);
     }
 

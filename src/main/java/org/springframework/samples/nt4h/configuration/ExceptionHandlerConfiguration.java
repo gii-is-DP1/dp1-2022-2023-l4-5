@@ -6,18 +6,14 @@ import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.exceptions.*;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
-import org.springframework.samples.nt4h.turn.exceptions.EnoughCardsException;
-import org.springframework.samples.nt4h.turn.exceptions.EnoughEnemiesException;
-import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
-import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
+import org.springframework.samples.nt4h.turn.exceptions.*;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
+import javax.servlet.http.HttpSession;
 
 /**
  * This advice is necessary because MockMvc is not a real servlet environment, therefore it does not redirect error
@@ -36,6 +32,7 @@ public class ExceptionHandlerConfiguration
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String PAGE_GAME_LOBBY = "redirect:/games/current";
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/heroSelect";
+    private static final String PAGE_EVASION = "redirect:/evasion";
 
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException() {
@@ -43,50 +40,47 @@ public class ExceptionHandlerConfiguration
     }
 
     @ExceptionHandler(FullGameException.class)
-    public ModelAndView handleFullGameException() {
-        ModelAndView mav = new ModelAndView(PAGE_GAMES);
-        mav.addObject("message", "Game is full.");
-        mav.addObject("messageType", "error");
-        return mav;
+    public String handleFullGameException(HttpSession session) {
+        session.setAttribute("message", "The game is full.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAMES;
     }
 
     @ExceptionHandler(HeroAlreadyChosenException.class)
-    public ModelAndView handleHeroAlreadyChosenException() {
-        ModelAndView mav = new ModelAndView(PAGE_GAME_HERO_SELECT);
-        mav.addObject("message", "Hero already chosen.");
-        mav.addObject("messageType", "error");
-        return mav;
+    public String handleHeroAlreadyChosenException(HttpSession session) {
+        session.setAttribute("message", "The hero has been chosen by other player.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAME_HERO_SELECT;
     }
 
     @ExceptionHandler(PlayerInOtherGameException.class)
-    public String handlePlayerInOtherGameException() {
-        return "exception";
+    public String handlePlayerInOtherGameException(HttpSession session) {
+        session.setAttribute("message", "You are already in another game.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAME_LOBBY;
     }
 
     @ExceptionHandler(RoleAlreadyChosenException.class)
-    public ModelAndView handleRoleAlreadyChosenException() {
-        ModelAndView mav = new ModelAndView(PAGE_GAME_HERO_SELECT);
-        mav.addObject("message", "Role already chosen.");
-        mav.addObject("messageType", "error");
-        return mav;
+    public String handleRoleAlreadyChosenException(HttpSession session) {
+        session.setAttribute("message", "You already have that role.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAME_HERO_SELECT;
     }
 
     @ExceptionHandler(PlayerIsReadyException.class)
-    public ModelAndView handlePlayerIsReadyException() {
-        ModelAndView mav = new ModelAndView(PAGE_GAME_LOBBY);
-        mav.addObject("message", "Player is ready.");
-        mav.addObject("messageType", "error");
-        return mav;
+    public String handlePlayerIsReadyException(HttpSession session) {
+        session.setAttribute("message", "You are already ready.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAME_LOBBY;
     }
 
     @ExceptionHandler(UserInAGameException.class)
-    public ModelAndView handleUserInAGameException() {
+    public String handleUserInAGameException(HttpSession session) {
         User loggedUser = userService.getLoggedUser();
         Game game = loggedUser.getGame();
-        ModelAndView mav = new ModelAndView(PAGE_GAMES);
-        mav.addObject("message", "User is in a game (" + game.getName() + ").");
-        mav.addObject("messageType", "error");
-        return mav;
+        session.setAttribute("message", "User is in a game (" + game.getName() + ").");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAMES;
     }
 
     // TODO: decidir si esto debería de ser una excepción o no.
@@ -111,7 +105,16 @@ public class ExceptionHandlerConfiguration
     }
 
     @ExceptionHandler(NoCurrentPlayer.class)
-    public String handleNoCurrentPlayer() {
-        return "exception";
+    public String handleNoCurrentPlayer(HttpSession session, HttpServletRequest request) {
+        session.setAttribute("message", "It's not your turn");
+        session.setAttribute("messageType", "danger");
+        return "redirect:" + request.getRequestURI();
+    }
+
+    @ExceptionHandler(WhenEvasionDiscardAtLeast2Exception.class)
+    public String handleWhenEvasionDiscardAtLeast2Exception(HttpSession session) {
+        session.setAttribute("message", "You must discard at least 2 cards.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_EVASION;
     }
 }
