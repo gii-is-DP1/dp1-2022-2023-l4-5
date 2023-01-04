@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.card.Card;
-import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
+import org.springframework.samples.nt4h.card.ability.AbilityEffect;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -35,5 +35,5 @@ public class Product extends Card {
     private List<Capacity> capacity;
 
     @Enumerated(EnumType.STRING)
-    private AbilityEffectEnum abilityEffectEnum;
+    private AbilityEffect abilityEffect;
 }

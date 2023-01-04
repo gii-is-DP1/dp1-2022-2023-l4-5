@@ -16,7 +16,7 @@ public class DrawCards implements Action {
     @Override
     public void executeAction() {
         for (int i = 0; i < amountCards; i++) {
-            List<AbilityInGame> abilities = player.getInDeck();
+            List<AbilityInGame> abilities = player.getDeck().getInDeck();
             if (!abilities.isEmpty()) {
                 AbilityInGame drawnCard = abilities.get(0);
 
@@ -24,7 +24,7 @@ public class DrawCards implements Action {
                 if (abilities.isEmpty())
                     new ReceiveWound(player).executeAction();
 
-                player.getInHand().add(drawnCard);
+                player.getDeck().getInHand().add(drawnCard);
             } else {
                 break;
             }

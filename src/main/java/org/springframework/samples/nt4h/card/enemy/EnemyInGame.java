@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.card.enemy;
 
 import lombok.*;
-import org.springframework.samples.nt4h.card.ability.AbilityEffectEnum;
+import org.springframework.samples.nt4h.card.ability.AbilityEffect;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
 import javax.persistence.*;
@@ -24,10 +24,10 @@ public class EnemyInGame extends BaseEntity {
 
     // TODO: Decidir como pasarle las habilidades.
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = AbilityEffectEnum.class)
+    @ElementCollection(targetClass = AbilityEffect.class)
     @CollectionTable(name = "permanent_effect_cards_used", joinColumns = @JoinColumn(name = "enemy_in_game_id"))
     @Column(name = "ability_effect_enum")
-    private Set<AbilityEffectEnum> permanentEffectCardsUsed = new HashSet<>();
+    private Set<AbilityEffect> permanentEffectCardsUsed = new HashSet<>();
 
     @NotNull
     private boolean isNightLord;
@@ -40,6 +40,10 @@ public class EnemyInGame extends BaseEntity {
     public static EnemyInGame createEnemy(Boolean isNightLord, Enemy enemy) {
         return EnemyInGame.builder().enemy(enemy).actualHealth(enemy.getHealth())
             .isDead(false).isNightLord(isNightLord).noAttackThisTurn(false).build();
+    }
+
+    public void onDeleteSetNull() {
+        enemy = null;
     }
 
 }

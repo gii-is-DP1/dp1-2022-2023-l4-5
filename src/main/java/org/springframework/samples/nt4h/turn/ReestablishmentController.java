@@ -1,12 +1,14 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.RemoveCardFromHandToDiscard;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.turn.exceptions.EnoughEnemiesException;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,17 +58,17 @@ public class ReestablishmentController {
 
     @ModelAttribute("handCards")
     public List<AbilityInGame> getHandDeckByPlayer() {
-        return getPlayer().getInHand();
+        return getPlayer().getDeck().getInHand();
     }
 
     @ModelAttribute("discardCards")
     public List<AbilityInGame> getDiscardDeckByPlayer() {
-        return getPlayer().getInDiscard();
+        return getPlayer().getDeck().getInDiscard();
     }
 
     @ModelAttribute("abilityCards")
     public List<AbilityInGame> getAbilityDeckByPlayer() {
-        return getPlayer().getInDeck();
+        return getPlayer().getDeck().getInDeck();
     }
 
     @ModelAttribute("message")
@@ -87,9 +89,12 @@ public class ReestablishmentController {
     }
 
     @PostMapping("/addCards")
-    public String takeNewAbilities(Integer cardId) {
-            playerService.takeNewCard(getPlayer());
-            playerService.removeAbilityCards(cardId, getPlayer());
+    public String takeNewAbility(Integer cardId) {
+            Player player = getPlayer();
+            Deck deck = player.getDeck();
+            Action removeToDiscard = new RemoveCardFromHandToDiscard(deck, cardId);
+            removeToDiscard.executeAction();
+            deck.takeNewCard(); // TODO: cambiar a otro lugar,
         return reestablishmentAddCards();
     }
 

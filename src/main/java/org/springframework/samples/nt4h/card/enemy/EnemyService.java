@@ -1,16 +1,17 @@
 package org.springframework.samples.nt4h.card.enemy;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.action.InflictWounds;
 import org.springframework.samples.nt4h.action.RemoveCardForEnemyAttack;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,14 +37,17 @@ public class EnemyService {
         enemyInGameRepository.save(enemyInGame);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteEnemyInGame(EnemyInGame enemyInGame) {
+        enemyInGame.onDeleteSetNull();
+        enemyInGameRepository.save(enemyInGame);
         enemyInGameRepository.delete(enemyInGame);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteEnemyInGameById(int id) {
-        enemyInGameRepository.deleteById(id);
+        EnemyInGame enemyInGame = getEnemyInGameById(id);
+        deleteEnemyInGame(enemyInGame);
     }
 
     @Transactional(readOnly = true)
@@ -54,24 +58,32 @@ public class EnemyService {
 
     public List<Enemy> getAllEnemies() { return enemyRepository.findAll(); }
 
+    @Transactional
     public Enemy getNightLord() {
-        Integer randomNumber = (int) (Math.random() * 3);
-        List<Enemy> allNightLords = getAllEnemyByIsNightLord(true);
+        int randomNumber = (int) (Math.random() * 3);
+        List<Enemy> allNightLords = getAllNightLords();
         return allNightLords.get(randomNumber);
     }
 
     @Transactional(readOnly = true)
-    public List<Enemy> getAllEnemyByIsNightLord(Boolean isNightLord) {
-        return enemyRepository.findAll().stream().filter(enemy -> enemy.getIsNightLord() == isNightLord).collect(Collectors.toList());
+    public List<Enemy> getAllNightLords() {
+        return enemyRepository.findAllNightLords();
     }
 
-    public List<EnemyInGame> addOrcsToGame() {
-        List<EnemyInGame> orcs = getAllEnemyByIsNightLord(false).stream()
+    @Transactional(readOnly = true)
+    public List<Enemy> getAllNotNightLords() {
+        return enemyRepository.findAllNotNightLords();
+    }
+
+    @Transactional
+    public List<EnemyInGame> addOrcsToGame() { // TODO: dependiendo del juego deberán de ser un número u otro.
+        List<EnemyInGame> orcs = getAllNotNightLords().stream()
             .map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
         orcs.forEach(this::saveEnemyInGame);
         return orcs;
     }
 
+    @Transactional
     public EnemyInGame addNightLordToGame() {
         Enemy nightLord = getNightLord();
         EnemyInGame nightLordInGame = EnemyInGame.createEnemy(true, nightLord);
@@ -79,29 +91,28 @@ public class EnemyService {
         return nightLordInGame;
     }
     //Obetener el daño total de los enemigos en batalla
+    // TODO: comprobar.
 
-    public void attackEnemyToActualPlayer(Game game) {
-        //Lo que hace el método :)
-        //Cambiar mazo de habilidad
-        //Recibir herida o no
-        Integer damage = 0; //repito el bucle porque no se me he encariñado de el
-        if (game.getActualOrcs().size() != 0) {  // Si hay enemigos en el campo si no pues no recibe daño el heroe
-            for (int i = 0; i <= game.getActualOrcs().size(); i++) {  //calculamos el daño total inflijido
-                damage = damage + game.getActualOrcs().get(i).getActualHealth();
+    public Integer attackEnemyToActualPlayer(Game game) {
+        Player currentPlayer = game.getCurrentPlayer();
+        if (game.getActualOrcs().isEmpty()) return 0;
+        int numCardsInDeck = currentPlayer.getDeck().getInDeck().size();
+        int damage = game.getActualOrcs().stream().mapToInt(EnemyInGame::getActualHealth).sum();
+        if (numCardsInDeck <= damage) { //si el daño es mayor o igual a la cantidad de cartass quue tengo pues recibo la herida
+            new InflictWounds(currentPlayer).executeAction();  //Recibe herida
+            if (Objects.equals(currentPlayer.getWounds(), currentPlayer.getHealth())) {
+                game.getPlayers().remove(currentPlayer);  // de momento sales de la partida, mas adelante cambia a vista espectador
+                playerService.deletePlayer(currentPlayer);
             }
-            if (game.currentPlayer.getInDeck().size() <= damage) { //si el daño es mayor o igual a la cantidad de cartass quue tengo pues recibo la herida
-                Action DamageWithWounds = new InflictWounds(game.currentPlayer);  //Recibe herida
-                DamageWithWounds.executeAction();
-                if(game.currentPlayer.getWounds()==game.currentPlayer.getHeroes().get(0).getActualHealth()){
-                    game.getPlayers().remove(game.currentPlayer);  // de momento sales de la partida, mas adelante cambia a vista espectador
-                    playerService.getOutGame(game.currentPlayer, game);
-                }
-            } else {
-                Action DamageWithOUTWounds = new RemoveCardForEnemyAttack(game.currentPlayer, damage); //no recibe herida
-                DamageWithOUTWounds.executeAction();
-            }
+        } else {
+            new RemoveCardForEnemyAttack(currentPlayer, damage).executeAction(); //no recibe herida
         }
-        playerService.savePlayer(game.currentPlayer);
+        return damage;
+    }
+
+    @Transactional
+    public Enemy getEnemyById(int id) {
+        return enemyRepository.findById(id).orElseThrow(() -> new NotFoundException("Enemy not found"));
     }
 
 }

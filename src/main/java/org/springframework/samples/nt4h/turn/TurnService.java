@@ -4,13 +4,10 @@ package org.springframework.samples.nt4h.turn;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.InflictWounds;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.action.RemoveCardForEnemyAttack;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +29,8 @@ public class TurnService {
         for (Phase phase : Phase.values()) {
             Turn turn = Turn.builder().player(player).game(player.getGame()).phase(phase)
                 .usedEnemies(Lists.newArrayList()).usedAbilities(Lists.newArrayList()).build();
+            player.getTurns().add(turn);
             saveTurn(turn);
-            player.addTurn(turn);
         }
     }
 
@@ -80,4 +77,19 @@ public class TurnService {
             .findFirst().orElseThrow(() -> new NotFoundException("Turn not found"));
     }
 
+    // Dependiendo de la fase.
+    @Transactional
+    public void chooseAttackOrEvasion(Player player, Phase phase, Game game) {
+        Turn turn = getTurnsByPhaseAndPlayerId(phase, player.getId());
+        game.setCurrentTurn(turn);
+        System.out.println("Turno actual: " + game.getCurrentTurn().getPhase());
+        System.out.println(phase == Phase.EVADE);
+        if ((phase == Phase.EVADE) && player.getHasEvasion()) {
+            player.setHasEvasion(false);
+            player.setNextPhase(Phase.EVADE);
+            // TODO: Se deben de descartar dos cartas.
+        } else
+            player.setNextPhase(Phase.HERO_ATTACK);
+        saveTurn(turn); // TODO: Comprobar si se actualiza el jugador y la partida.
+    }
 }

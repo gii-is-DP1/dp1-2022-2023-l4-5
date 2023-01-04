@@ -1,9 +1,10 @@
 package org.springframework.samples.nt4h.turn;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -11,6 +12,8 @@ import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 @Entity
@@ -19,7 +22,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Turn extends BaseEntity {
+public class Turn extends BaseEntity implements Jsonable {
 
     @Enumerated
     private Phase phase;
@@ -58,5 +61,29 @@ public class Turn extends BaseEntity {
         }
     }
 
+    public void OnDeleteSetNull() {
+        usedAbilities = null;
+        currentAbility = null;
+        currentEnemy = null;
+        usedEnemies = null;
+        game = null;
+        player = null;
+    }
+
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("phase", getPhase().toString());
+        return json.toJson();
+    }
+
+    @Override
+    public void toJson(Writer writer) throws IOException {
+        try {
+            writer.write(toJson());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

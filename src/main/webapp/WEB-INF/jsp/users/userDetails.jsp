@@ -43,5 +43,4 @@
     <spring:url value="/" var="goToLobby">
     </spring:url>
     <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Menu</a>
-
 </nt4h:layout>

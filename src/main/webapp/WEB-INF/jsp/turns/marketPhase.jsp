@@ -21,5 +21,6 @@
         </div>
         <button class="btn btn-default" type="submit">Buy Product</button>
     </form:form>
-    <a href="${pageContext.request.contextPath}/market/next" class="btn btn-default">End phase</a>
+    <div class="nextTurn"></div>
+    <script src="/resources/js/currentTurn.js" type="module"></script>
 </nt4h:layout>

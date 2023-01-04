@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.message;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -23,6 +22,6 @@ public class MessageResource {
         User loggedUser = userService.getLoggedUser();
         JsonObject jsonObject = new JsonObject();
         jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(loggedUser.getUsername(), username));
-        return new ResponseEntity<>(jsonObject.toJson(), HttpStatus.OK);
+        return ResponseEntity.ok(jsonObject.toJson());
     }
 }

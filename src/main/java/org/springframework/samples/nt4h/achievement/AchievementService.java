@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.achievement;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+// TODO: @Slf4j
 public class AchievementService {
     private final AchievementRepository achievementRepository;
 
