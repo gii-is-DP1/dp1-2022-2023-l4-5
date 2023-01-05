@@ -79,8 +79,7 @@ public class Game extends NamedEntity implements Jsonable {
     private Player currentPlayer;
 
     public void addPlayer(Player player) throws FullGameException {
-        System.out.println("PLayers size: " + players);
-        if (this.players.size() > this.maxPlayers)
+        if ((this.players.size()+1) > this.maxPlayers)
             throw new FullGameException();
         this.players.add(player);
     }
@@ -89,7 +88,6 @@ public class Game extends NamedEntity implements Jsonable {
         if (isHeroAlreadyChosen(hero.getHero()))
             throw new HeroAlreadyChosenException();
         player.addHero(hero);
-        addPlayer(player);
     }
 
     public boolean isHeroAlreadyChosen(Hero hero) {
@@ -98,25 +96,32 @@ public class Game extends NamedEntity implements Jsonable {
             .anyMatch(h -> h.getHero() == hero);
     }
 
-    public static Game createGame(String name, Accessibility accessibility, Mode mode, int maxPlayers, String password) {
+    public static Game createGame(String name, Mode mode, int maxPlayers, String password) {
         Game game = Game.builder()
-            .accessibility(accessibility)
+            .accessibility(password.isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE)
             .mode(mode)
             .maxPlayers(maxPlayers)
-            .password(accessibility == Accessibility.PUBLIC ? "": password)
-            .alivePlayersInTurnOrder(Lists.newArrayList())
-            .actualOrcs(Lists.newArrayList())
-            .allOrcsInGame(Lists.newArrayList())
-            .passiveOrcs(Lists.newArrayList())
+            .password(password)
             .players(Lists.newArrayList())
-            .phase(Phase.START)
-            .startDate(LocalDateTime.now())
             .build();
+        game.defaultGame();
         game.setName(name);
         return game;
     }
 
+    public void defaultGame() {
+        alivePlayersInTurnOrder = Lists.newArrayList();
+        actualOrcs = Lists.newArrayList();
+        allOrcsInGame = Lists.newArrayList();
+        passiveOrcs = Lists.newArrayList();
+        players = Lists.newArrayList();
+        phase = Phase.START;
+        startDate = LocalDateTime.now();
+    }
+
     public void onDeleteSetNull() {
+        System.out.println("num players: " + players.size());
+        players.forEach(player -> System.out.println(player.getGame()));
         players.forEach(Player::onDeleteSetNull);
         allOrcsInGame.forEach(EnemyInGame::onDeleteSetNull);
     }

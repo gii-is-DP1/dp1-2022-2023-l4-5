@@ -68,6 +68,7 @@ public class GameService {
     @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
+        System.out.println("GameService.deleteGameById: " + game);
         deleteGame(game);
     }
 
@@ -99,21 +100,14 @@ public class GameService {
 
     @Transactional
     public void createGame(User user, Game game) throws FullGameException {
-        // TODO: Crear un método a parte para creación de player.
         Player newPlayer = Player.createPlayer(user, game, true);;
-        newPlayer.setName(user.getUsername());
-        game = Game.createGame(game.getName(), game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE, game.getMode(),  game.getMaxPlayers(), game.getPassword());
-        newPlayer.setGame(game);
+        game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
         playerService.savePlayer(newPlayer);
-        game.addPlayer(newPlayer);
         saveGame(game);
-        user.setGame(game);
-        user.setPlayer(newPlayer);
         userService.saveUser(user);
         List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame();
-        EnemyInGame nightLordInGame = enemyService.addNightLordToGame();
         game.setAllOrcsInGame(orcsInGame);
-        game.getAllOrcsInGame().add(nightLordInGame);
+        game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
 

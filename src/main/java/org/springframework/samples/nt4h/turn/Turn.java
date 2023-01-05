@@ -53,6 +53,7 @@ public class Turn extends BaseEntity implements Jsonable {
         }
     }
 
+
     public void addAbility(AbilityInGame usedAbility) {
         if(usedAbilities == null) {
             usedAbilities = Lists.newArrayList(usedAbility);
