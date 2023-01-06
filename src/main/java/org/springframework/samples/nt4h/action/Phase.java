@@ -6,7 +6,7 @@ public enum Phase {
     HERO_ATTACK,
     ENEMY_ATTACK,
     MARKET,
-    RESUPPLY;
+    REESTABLISHMENT;
 
     @Override
     public String toString() {
@@ -15,7 +15,7 @@ public enum Phase {
         else if (this == HERO_ATTACK) return "heroAttack";
         else if (this == ENEMY_ATTACK) return "enemyAttack";
         else if (this == MARKET) return "market";
-        else if (this == RESUPPLY) return "resupply";
+        else if (this == REESTABLISHMENT) return "reestablishment";
         else return "Unknown";
     }
 }
