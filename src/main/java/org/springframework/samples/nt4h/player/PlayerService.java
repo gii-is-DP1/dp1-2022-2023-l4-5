@@ -14,6 +14,7 @@ import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.turn.TurnService;
+import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class PlayerService {
     private final PlayerRepository playerRepository;
     private final AbilityService abilityService;
     private final TurnService turnService;
+    private final UserRepository userRepository;
 
 
     @Transactional(readOnly = true)
@@ -49,6 +51,10 @@ public class PlayerService {
     @Transactional
     public void deletePlayerById(int id) {
         Player player = getPlayerById(id);
+        playerRepository.findUserByPlayer(player).ifPresent(user -> {
+            user.setPlayer(null);
+            userRepository.save(user);
+        });
         deletePlayer(player);
     }
 

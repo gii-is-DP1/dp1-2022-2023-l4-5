@@ -72,11 +72,11 @@ public class GameService {
         deleteGame(game);
     }
 
+    @Transactional
     public Player addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
         Player newPlayer = Player.createPlayer(user, game, false);
-        game.addPlayer(newPlayer);
         playerService.createTurns(newPlayer);
         user.setPlayer(newPlayer);
         saveGame(game);
@@ -89,6 +89,7 @@ public class GameService {
         if (player.getReady())
             throw new PlayerIsReadyException();
         System.out.println("addHeroToPlayer " + player.getId());
+        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -100,8 +101,8 @@ public class GameService {
 
     @Transactional
     public void createGame(User user, Game game) throws FullGameException {
-        Player newPlayer = Player.createPlayer(user, game, true);;
         game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
+        Player newPlayer = Player.createPlayer(user, game, true);;
         playerService.savePlayer(newPlayer);
         saveGame(game);
         userService.saveUser(user);
@@ -112,8 +113,6 @@ public class GameService {
         productService.addProduct(game);
 
     }
-
-    // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {

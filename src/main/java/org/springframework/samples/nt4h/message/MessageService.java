@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.message;
 
 import lombok.AllArgsConstructor;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +42,9 @@ public class MessageService {
     @Transactional(readOnly = true)
     public boolean messageExists(int id) {
         return messageRepository.existsById(id);
+    }
+
+    public Object getGameMessages(Game game) {
+        return messageRepository.findByGame(game);
     }
 }

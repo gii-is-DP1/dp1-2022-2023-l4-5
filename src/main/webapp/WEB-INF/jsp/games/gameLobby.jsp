@@ -7,10 +7,9 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="lobby">
-    <h2>Game Lobby</h2>
 
-    <div class="ready">
-    </div>
+    <h2>Game Lobby</h2>
+    <div class="ready"></div>
 
     <div>
         <c:choose>
@@ -22,6 +21,15 @@
             </c:otherwise>
         </c:choose>
     </div>
+    <h2>"Chatea"</h2>
+    <div class="row">
+        <div class="chatGroup"></div>
+
+        <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
+            <nt4h:inputField label="Content" name="content"/>
+        </form:form>
+    </div>
+    <script src="/resources/js/chatGroup.js" type="module"></script>
     <div class="next"></div>
     <script src="/resources/js/playersInLobby.js" type="module">
     </script>

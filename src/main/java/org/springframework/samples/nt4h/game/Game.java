@@ -79,12 +79,15 @@ public class Game extends NamedEntity implements Jsonable {
     private Player currentPlayer;
 
     public void addPlayer(Player player) throws FullGameException {
+        System.out.println("Adding player " + player.getName() + " to game " + this.getName());
+        System.out.println("Players in game: " + players.size());
+        System.out.println("Max players: " + maxPlayers);
         if ((this.players.size()+1) > this.maxPlayers)
             throw new FullGameException();
         this.players.add(player);
     }
 
-    public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
+    public void addPlayerWithNewHero(Player player, HeroInGame hero) throws HeroAlreadyChosenException, RoleAlreadyChosenException {
         if (isHeroAlreadyChosen(hero.getHero()))
             throw new HeroAlreadyChosenException();
         player.addHero(hero);

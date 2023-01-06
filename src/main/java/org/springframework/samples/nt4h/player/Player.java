@@ -105,7 +105,6 @@ public class Player extends NamedEntity implements Jsonable {
     }
 
     public void onDeleteSetNull() {
-        System.out.println("game is null" + game);
         heroes.forEach(HeroInGame::onDeleteSetNull);
         game.setPlayers(game.getPlayers().stream().filter(player -> !player.equals(this)).collect(Collectors.toList()));
         deck.onDeleteSetNull();

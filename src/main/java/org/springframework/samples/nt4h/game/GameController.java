@@ -11,6 +11,7 @@ import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.exceptions.*;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
@@ -24,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
@@ -43,13 +45,13 @@ public class GameController {
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
     private static final String VIEW_GAME_PREORDER = "games/preSelectOrder";
+    private static final String PAGE_CURRENT_GAME = "redirect:/games/current";
     // Servicios
     private final GameService gameService;
 
     private final HeroService heroService;
     private final UserService userService;
     private final PlayerService playerService;
-    public final Advise advise = new Advise();
 
 
     @Autowired
@@ -80,9 +82,9 @@ public class GameController {
         return Lists.newArrayList(Accessibility.PUBLIC, Accessibility.PRIVATE);
     }
 
-    @ModelAttribute("hero")
+    @ModelAttribute("newHero")
     public HeroInGame getHero() {
-        return new HeroInGame(); // TODO: comprobar si necesita valores por defecto.
+        return new HeroInGame();
     }
 
 
@@ -114,14 +116,9 @@ public class GameController {
         return userService.getLoggedUser();
     }
 
-    @ModelAttribute("message")
-    public String getMessage() {
-        return advise.getMessage();
-    }
-
-    @ModelAttribute("messageType")
-    public String getMessageType() {
-        return advise.getMessageType();
+    @ModelAttribute("chat")
+    public Message getChat() {
+        return new Message();
     }
 
     // Obtener todas las partidas.
@@ -146,18 +143,19 @@ public class GameController {
 
     // Parida actual
     @GetMapping("/current")
-    public String showCurrentGame() {
-        System.out.println("Current game");
+    public String showCurrentGame(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
+        keapUrl(session, request);
         return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
     }
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session) throws UserInAGameException, IncorrectPasswordException, UserHasAlreadyAPlayerException, FullGameException {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session, HttpServletRequest request) throws UserInAGameException, IncorrectPasswordException, UserHasAlreadyAPlayerException, FullGameException {
         Game newGame = gameService.getGameById(gameId);
         userService.addUserToGame(getUser(), newGame, password);
         gameService.addPlayerToGame(getGame(), getUser()); // Esto estaba antes en un post.
+        keapUrl(session, request);
         getMessage(session, model);
         model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
         return VIEW_GAME_LOBBY;
@@ -175,7 +173,7 @@ public class GameController {
     @PostMapping(value = "/heroSelect")
     public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
         gameService.addHeroToPlayer(getPlayer(), heroInGame, getGame());
-        return showCurrentGame();
+        return PAGE_CURRENT_GAME;
 
     }
 
@@ -192,7 +190,7 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         if (result.hasErrors()) return VIEW_GAME_CREATE;
         gameService.createGame(userService.getLoggedUser(), game);
-        return showCurrentGame();
+        return PAGE_CURRENT_GAME;
     }
 
     @GetMapping("/selectOrder")
@@ -227,5 +225,9 @@ public class GameController {
             session.removeAttribute("message");
             session.removeAttribute("messageType");
         }
+    }
+
+    public void keapUrl(HttpSession session, HttpServletRequest request) {
+        session.setAttribute("url", request.getRequestURI());
     }
 }

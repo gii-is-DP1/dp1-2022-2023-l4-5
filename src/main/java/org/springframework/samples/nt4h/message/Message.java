@@ -5,6 +5,7 @@ import com.github.cliftonlabs.json_simple.Jsonable;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.user.User;
 
@@ -30,10 +31,11 @@ public class Message extends BaseEntity implements Jsonable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User sender;
-
-    //TODO probar Many To Many para un chat de grupo
     @ManyToOne(cascade = CascadeType.ALL)
     private User receiver;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Game game;
 
     @Override
     public String toString() {
@@ -43,15 +45,17 @@ public class Message extends BaseEntity implements Jsonable {
     public void onDeleteSetNull() {
         sender = null;
         receiver = null;
+        game = null;
     }
 
     @Override
     public String toJson() {
         JsonObject json = new JsonObject();
-        json.put("content", this.getContent());
-        json.put("time", this.getTime().toString());
-        json.put("sender", this.getSender().getUsername());
-        json.put("receiver", this.getReceiver().getUsername());
+        json.put("content", content);
+        json.put("time", time.toString());
+        json.put("sender", sender.getUsername());
+        if (receiver != null ) json.put("receiver", receiver.getUsername());
+        json.put("game", game.getName());
         return json.toJson();
     }
 
