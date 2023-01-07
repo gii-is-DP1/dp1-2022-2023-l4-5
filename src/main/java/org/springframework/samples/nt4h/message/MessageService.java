@@ -33,7 +33,7 @@ public class MessageService {
         messageRepository.delete(message);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = NotFoundException.class)
     public void deleteMessageById(int id) {
         Message message = messageRepository.findById(id).orElseThrow(() -> new NotFoundException("Message not found"));
         deleteMessage(message);
@@ -44,6 +44,7 @@ public class MessageService {
         return messageRepository.existsById(id);
     }
 
+    @Transactional
     public Object getGameMessages(Game game) {
         return messageRepository.findByGame(game);
     }

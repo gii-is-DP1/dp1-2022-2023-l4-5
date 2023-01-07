@@ -46,8 +46,6 @@ public class AdminController {
         return loggedUser != null ? loggedUser : new User();
     }
 
-
-
     // Obtener todos los usuarios.
     @GetMapping("/usersAdminList")
     public String getUsers() {

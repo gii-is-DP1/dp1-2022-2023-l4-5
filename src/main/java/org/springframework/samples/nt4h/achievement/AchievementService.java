@@ -13,7 +13,7 @@ import java.util.List;
 public class AchievementService {
     private final AchievementRepository achievementRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Achievement getAchievementById(int id) {
         return achievementRepository.findById(id).orElseThrow(() -> new NotFoundException("Achievement not found"));
     }

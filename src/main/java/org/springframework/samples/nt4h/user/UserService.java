@@ -157,7 +157,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     public void removeUserFromGame(User user) {
         user.setGame(null);
         saveUser(user);

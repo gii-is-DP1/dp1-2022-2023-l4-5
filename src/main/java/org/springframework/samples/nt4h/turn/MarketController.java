@@ -88,7 +88,7 @@ public class MarketController {
     @GetMapping
     public String market(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_MARKET;
     }
 

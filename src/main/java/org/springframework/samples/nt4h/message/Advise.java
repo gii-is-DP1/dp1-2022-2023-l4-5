@@ -1,7 +1,5 @@
 package org.springframework.samples.nt4h.message;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 
@@ -22,7 +20,7 @@ public class Advise {
         }
     }
 
-    public void keapUrl(HttpSession session, HttpServletRequest request) {
+    public void keepUrl(HttpSession session, HttpServletRequest request) {
         session.setAttribute("url", request.getRequestURI());
     }
 }
