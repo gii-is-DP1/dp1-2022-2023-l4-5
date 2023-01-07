@@ -73,4 +73,19 @@ public class MessageController {
         messageService.saveMessage(message);
         return "redirect:" + session.getAttribute("url");
     }
+
+    @GetMapping("/{username}/invite")
+    public String sendInviteMessage(@PathVariable String username) {
+        Message message = new Message();
+        User loggedUser = userService.getLoggedUser();
+        User receiver = userService.getUserByUsername(username);
+        User sender = userService.getUserByUsername(loggedUser.getUsername());
+        message.setReceiver(receiver);
+        message.setSender(sender);
+        message.setTime(LocalDateTime.now());
+        String urlPartida = "http://localhost:8080/games/" + sender.getGame().getId();
+        message.setContent(sender.getUsername() + " has invited you. Join: " + urlPartida);
+        messageService.saveMessage(message);
+        return PAGE_MESSAGE_WITH;
+    }
 }
