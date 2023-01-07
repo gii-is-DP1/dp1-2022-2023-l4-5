@@ -87,7 +87,6 @@ public class TurnService {
         if ((phase == Phase.EVADE) && player.getHasEvasion()) {
             player.setHasEvasion(false);
             player.setNextPhase(Phase.EVADE);
-            // TODO: Se deben de descartar dos cartas.
         } else
             player.setNextPhase(Phase.HERO_ATTACK);
         saveTurn(turn); // TODO: Comprobar si se actualiza el jugador y la partida.

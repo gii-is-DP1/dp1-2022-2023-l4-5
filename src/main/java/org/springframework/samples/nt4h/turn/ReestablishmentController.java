@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -13,6 +12,7 @@ import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
+import org.springframework.samples.nt4h.turn.exceptions.TooManyAbilitiesException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -95,26 +95,26 @@ public class ReestablishmentController {
     }
 
     @GetMapping("/addCards")
-    public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) {
+    public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) throws NoCurrentPlayer {
+        if (getLoggedPlayer() != getPlayer())
+            throw new NoCurrentPlayer();
         playerService.restoreEnemyLife(getEnemiesInBattle());
         playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_REESTABLISHMENT;
     }
 
     @PostMapping("/addCards")
-    public String takeNewAbility(Integer cardId) {
-        Player player = getPlayer();
-        Deck deck = player.getDeck();
-        deckService.takeNewCard(player, deck);
-        deckService.removeAbilityCards(cardId, player);
+    public String takeNewAbility(Integer cardId) throws NoCurrentPlayer, TooManyAbilitiesException {
+        if (getLoggedPlayer() != getPlayer())
+            throw new NoCurrentPlayer();
+        deckService.takeNewCard(getPlayer());
+        deckService.removeAbilityCards(cardId, getPlayer());
         return PAGE_REESTABLISHMENT;
     }
 
     @GetMapping("/next")
-    public String reestablishmentNextTurn() throws NoCurrentPlayer {
-        if (getLoggedPlayer() != getPlayer())
-            throw new NoCurrentPlayer();
+    public String reestablishmentNextTurn() {
         int totalPlayers = getGame().getPlayers().size();
         Integer nextSequence = (getGame().getCurrentPlayer().getSequence()+1) % totalPlayers;
         Player nextPlayer = getGame().getPlayers().stream().filter(p -> p.getSequence() == nextSequence).findFirst().get();

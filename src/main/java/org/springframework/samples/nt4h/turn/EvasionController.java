@@ -79,7 +79,7 @@ public class EvasionController {
     @GetMapping
     public String getEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_EVASION;
     }
 
