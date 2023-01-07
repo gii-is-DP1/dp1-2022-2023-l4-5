@@ -51,10 +51,9 @@ public class User extends BaseEntity implements Jsonable {
     @Enumerated
     private Tier tier;
 
-    // TODO: Decidir tamaño.
     @NotBlank
+    @Size(min = 0, max = 100)
     private String description;
-
 
     private String authority;
 

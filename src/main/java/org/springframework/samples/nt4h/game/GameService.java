@@ -85,7 +85,7 @@ public class GameService {
     }
 
 
-    @Transactional(rollbackFor = {FullGameException.class, HeroAlreadyChosenException.class, PlayerIsReadyException.class})
+    @Transactional(rollbackFor = {PlayerIsReadyException.class, RoleAlreadyChosenException.class, HeroAlreadyChosenException.class})
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (player.getReady())
             throw new PlayerIsReadyException();
@@ -98,7 +98,7 @@ public class GameService {
         saveGame(game);
     }
 
-    @Transactional(rollbackFor = {FullGameException.class})
+    @Transactional(rollbackFor = FullGameException.class)
     public void createGame(User user, Game game) throws FullGameException {
         game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
         Player newPlayer = Player.createPlayer(user, game, true);;
@@ -143,7 +143,7 @@ public class GameService {
         saveGame(game);
     }
 
-    @Transactional(rollbackFor = {UserInAGameException.class})
+    @Transactional(rollbackFor = UserInAGameException.class)
     public void addSpectatorToGame(Game game, User user) throws UserInAGameException {
         if (user.getGame() == null) {
             game.getSpectators().add(user);

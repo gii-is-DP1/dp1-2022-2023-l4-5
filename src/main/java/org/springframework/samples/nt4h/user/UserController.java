@@ -117,7 +117,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping(value = "/delete")
     public String processDeleteUser() {
         User loggedUser = userService.getLoggedUser();

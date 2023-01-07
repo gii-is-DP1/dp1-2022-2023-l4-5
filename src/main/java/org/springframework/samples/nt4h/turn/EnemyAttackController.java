@@ -79,7 +79,7 @@ public class EnemyAttackController {
     @GetMapping
     public String getEnemyAttack(ModelMap model, HttpSession session, HttpServletRequest request) {
         model.put("damage", enemyService.attackEnemyToActualPlayer(getGame()));
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_ATTACK;
     }
 

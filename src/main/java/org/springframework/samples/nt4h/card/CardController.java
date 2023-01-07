@@ -18,13 +18,11 @@ public class CardController {
     private static final String VIEW_STAGES_CARDS="cards/stagesCards";
 
 
-
     @GetMapping(value = "/buttonsCards")
     public String getViewBotonesCards() {
         // Los datos para el formulario.
         return VIEW_BOTONES_CARDS;
     }
-
 
     @GetMapping(value = "/warriorCards")
     public String getViewWarriorCards() {

@@ -45,6 +45,7 @@ public class GameController {
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
     private static final String VIEW_GAME_PREORDER = "games/preSelectOrder";
     private static final String PAGE_CURRENT_GAME = "redirect:/games/current";
+
     // Servicios
     private final GameService gameService;
 
@@ -75,7 +76,7 @@ public class GameController {
 
     @ModelAttribute("heroes")
     public List<Hero> getHeroes() {
-        return heroService.getAllHeros();
+        return heroService.getAllHeroes();
     }
 
     @ModelAttribute("accessibility")
@@ -145,7 +146,7 @@ public class GameController {
     @GetMapping("/current")
     public String showCurrentGame(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
     }
 
@@ -166,7 +167,7 @@ public class GameController {
         User loggedUser = getUser();
         userService.addUserToGame(loggedUser, newGame, password);
         gameService.addPlayerToGame(newGame, loggedUser); // Esto estaba antes en un post.
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         advise.getMessage(session, model);
         model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
         return PAGE_CURRENT_GAME;
@@ -177,7 +178,7 @@ public class GameController {
     public String initHeroSelectForm(HttpSession session, ModelMap model, HttpServletRequest request) {
         // Los datos para el formulario.
         advise.getMessage(session, model);
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_GAME_HERO_SELECT;
     }
 
@@ -207,7 +208,7 @@ public class GameController {
 
     @GetMapping("/selectOrder")
     public String orderPlayers(HttpSession session, HttpServletRequest request) {
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_GAME_PREORDER;
     }
 
@@ -219,7 +220,7 @@ public class GameController {
         Game game = getGame();
         if (players.stream().anyMatch(player -> player.getSequence() == -1))
             gameService.orderPlayer(players, game);
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_GAME_ORDER;
     }
 
