@@ -24,8 +24,4 @@ public class AuditoryGame extends BaseEntity {
     @OneToOne
         @NotAudited
     User user;
-
-
-
-
 }
