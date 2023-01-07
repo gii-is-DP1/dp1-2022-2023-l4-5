@@ -19,15 +19,15 @@
             justify-content: center;
         }
     </style>
-    <h1>Gold: ${player.statistic.glory},
-        Glory: ${player.statistic.gold},
-        Wounds: ${player.wounds}</h1>
+    <h1>Gold: ${currentPlayer.statistic.glory},
+        Glory: ${currentPlayer.statistic.gold},
+        Wounds: ${currentPlayer.wounds}</h1>
     <c:if test="${!loggedPlayer.isNew()}">
     <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
         <div class="container">
             <div class="pointer">
-                <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
-                    <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                    <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
                     <div class="col-sm-2">
                         <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}" frontImage="${abilityInGame.ability.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
                     </div>
@@ -40,8 +40,8 @@
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
             <div style="display: flex; justify-content: center;">
-                <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
-                    <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                    <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
                     <div class="col-sm-2">
                         <img src="${abilityInGame.ability.frontImage}">
                     </div>

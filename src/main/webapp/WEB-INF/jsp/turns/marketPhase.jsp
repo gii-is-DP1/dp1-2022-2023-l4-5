@@ -14,7 +14,7 @@
         }
     </style>
     <h1>Action decision</h1>
-    <h1>${game.currentPlayer}`s Turn</h1>
+    <h1>${currentPlayer}`s Turn</h1>
     <h2>Buy a product</h2>
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="newProductInGame" class="form-horizontal" id="product-selection-form">
@@ -22,12 +22,14 @@
                 <div class="pointer">
                     <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
                         <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                        <!-- Comprar no fufa -->
                         <div class="col-sm-2">
                             <nt4h:radioButtom name="product" element="${product.id}" frontImage="${product.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
                         </div>
                     </c:forEach>
                 </div>
             </div>
+            <button class="btn btn-default" type="submit">buy Product</button>
         </form:form>
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">

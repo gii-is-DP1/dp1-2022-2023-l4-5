@@ -45,7 +45,7 @@ public class StartController {
         return userService.getLoggedUser().getGame();
     }
 
-    @ModelAttribute("player")
+    @ModelAttribute("currentPlayer")
     public Player getPlayer() {
         return getGame().getCurrentPlayer();
     }

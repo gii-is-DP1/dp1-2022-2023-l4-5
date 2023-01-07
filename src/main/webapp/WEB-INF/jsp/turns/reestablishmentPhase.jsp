@@ -15,18 +15,19 @@
 <nt4h:layout pageName="Reestablishment Phase">
     <body class="background">
     <h1>Reestablishment Phase</h1>
-    <h2>${game.currentPlayer}`s Turn</h2>
+    <h2>${currentPlayer}`s Turn</h2>
     <div class="container">
-        <c:forEach items="${game.actualOrcs}" var="i">
-            <img class="card-img-top" src="${i.enemy.frontImage}">
+        <c:forEach items="${game.actualOrcs}" var="orc">
+            <img src="${orc.enemy.frontImage}"> <!-- TODO: Reducir tamaño -->
         </c:forEach>
     </div>
-    <c:if test="${loggedPlayer.isNew()}">
+    <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="turn" class="form-horizontal" id="choose-player-form">
             <div class="container">
                 <div class="pointer">
                     <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
                         <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                        <!-- TODO: Peta al obtener al descartar habilidades -->
                         <div class="col-sm-2">
                             <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}" frontImage="${abilityInGame.ability.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
                         </div>
@@ -48,7 +49,6 @@
             </div>
         </div>
     </c:if>
-
     <div class="row">
         <div class="chatGroup"></div>
         <c:if test="${!loggedPlayer.isNew()}">
@@ -60,7 +60,7 @@
     <div class="nextTurn"></div>
     <script src="/resources/js/chatGroup.js" type="module"></script>
     <script src="/resources/js/currentTurn.js" type="module"></script>
-
+    <script src="/resources/js/radioButtom.js" type="module">
 </nt4h:layout>
 
 <style>

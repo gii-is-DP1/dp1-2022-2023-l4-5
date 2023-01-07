@@ -39,6 +39,11 @@ public class EnemyAttackController {
         return userService.getLoggedUser();
     }
 
+    @ModelAttribute("currentPlayer")
+    public Player getCurrentPlayer() {
+        return getGame().getCurrentPlayer();
+    }
+
     @ModelAttribute("loggedPlayer")
     public Player getPlayer() {
         User loggedUser = getUser();
@@ -47,7 +52,7 @@ public class EnemyAttackController {
 
     @ModelAttribute("game")
     public Game getGame() {
-        return getPlayer().getGame();
+        return getUser().getGame();
     }
 
     @ModelAttribute("newTurn")

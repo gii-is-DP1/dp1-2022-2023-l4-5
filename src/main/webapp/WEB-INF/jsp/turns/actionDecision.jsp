@@ -15,17 +15,17 @@
         }
     </style>
     <h2>Action decision</h2>
-    <h1>Turno del jugador ${game.currentPlayer}</h1>
+    <h1>Turno del jugador ${currentPlayer}</h1>
     <c:set var="evasion" value="/resources/images/rajoy.png"/>
-    <c:set var="attack" value="${evasion.action}"/>
+    <c:set var="attack" value="/resources/images/espada.png"/>
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
             <div class="pointer">
                 <div class="col-sm-2">
-                    <nt4h:radioButtom name="phase" element="${turns[0]}" frontImage="/resources/images/rajoy.png" i="00" image="/resources/images/muszka.png"/>
+                    <nt4h:radioButtom name="phase" element="${turns[0]}" frontImage="${evasion}" i="00" image="/resources/images/muszka.png"/>
                 </div>
                 <div class="col-sm-2">
-                    <nt4h:radioButtom name="phase" element="${turns[1]}" frontImage="/resources/images/espada.png" i="10" image="/resources/images/muszka.png"/>
+                    <nt4h:radioButtom name="phase" element="${turns[1]}" frontImage="${attack}" i="10" image="/resources/images/muszka.png"/>
                 </div>
             </div>
             <button class="btn btn-default" type="submit">Action chosen</button>

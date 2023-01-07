@@ -74,6 +74,8 @@ public class GameService {
 
     @Transactional
     public Player addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
+        if (game.getPlayers().contains(user.getPlayer()))
+            return user.getPlayer();
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
         Player newPlayer = Player.createPlayer(user, game, false);

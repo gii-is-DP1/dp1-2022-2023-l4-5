@@ -61,6 +61,11 @@ public class ReestablishmentController {
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
+    @ModelAttribute("currentPlayer")
+    public Player getCurrentPlayer() {
+        return getGame().getCurrentPlayer();
+    }
+
     @ModelAttribute("turn")
     public Turn getTurn() { return new Turn(); }
 
@@ -114,7 +119,7 @@ public class ReestablishmentController {
         Integer nextSequence = (getGame().getCurrentPlayer().getSequence()+1) % totalPlayers;
         Player nextPlayer = getGame().getPlayers().stream().filter(p -> p.getSequence() == nextSequence).findFirst().get();
         getGame().setCurrentPlayer(nextPlayer);
-        getGame().setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, nextPlayer.getId()));
+        getGame().setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));
         gameService.saveGame(getGame());
         return NEXT_TURN;
     }

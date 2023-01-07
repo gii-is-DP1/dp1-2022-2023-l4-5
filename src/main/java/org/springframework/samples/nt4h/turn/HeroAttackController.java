@@ -50,9 +50,9 @@ public class HeroAttackController {
         return userService.getLoggedUser();
     }
 
-    @ModelAttribute("player")
+    @ModelAttribute("currentPlayer")
     public Player getPlayer() {
-        return userService.getLoggedUser().getPlayer();
+        return getLoggedUser().getGame().getCurrentPlayer();
     }
 
     @ModelAttribute("game")

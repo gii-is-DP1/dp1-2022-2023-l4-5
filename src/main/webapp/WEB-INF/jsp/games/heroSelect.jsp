@@ -39,7 +39,7 @@
     <form:form modelAttribute="newHero" class="form-horizontal" id="choose-hero-form">
         <div class="container">
             <div class="pointer">
-                <c:if test="${!loggedPlayer.isNew}">
+                <c:if test="${!loggedPlayer.isNew()}">
                     <c:forEach var="i" begin="0" end="${heroes.size()-1}">
                         <c:set var="hero" value="${heroes[i]}" scope="page"/>
                         <div class="col-sm-2">
@@ -48,7 +48,7 @@
                         </div>
                     </c:forEach>
                 </c:if>
-                <c:if test="${loggedPlayer.isNew}">
+                <c:if test="${loggedPlayer.isNew()}">
                     <c:forEach var="i" begin="0" end="${heroes.size()-1}">
                         <c:set var="hero" value="${heroes[i]}" scope="page"/>
                         <div class="col-sm-2">
