@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDateTime;
+
 @Controller
 public class AuditoryGameController {
 
@@ -19,6 +21,8 @@ public class AuditoryGameController {
     @GetMapping("AuditoryGame/get")
     public @ResponseBody AuditoryGame createAuditoryGame(){
     AuditoryGame AG= new AuditoryGame();
+    AG.setCreator(userService.getLoggedUser().getUsername());
+    AG.setCreateDate(LocalDateTime.now());
     AG.setUser(userService.getLoggedUser());
     AG.setGame(userService.getLoggedUser().getGame());
     auditoryGameService.saveGame(AG);
