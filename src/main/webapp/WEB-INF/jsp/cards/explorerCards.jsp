@@ -28,7 +28,7 @@
         <h2 style="padding-top: 10px" >Explorer Cards</h2>
         <img class="card-img-top" src="\resources\images\abilities\wolf_abilities_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\diana_abilities_front.png" alt="Card image cap">
-        <img class="card-img-top" src="\resources\images\abilities\pick_abilities_front.png" alt="Card image cap">
+        <img class="card-img-top" src="\resources\images\abilities\pick_abilites_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\rain_abilities_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\rapid_abilities_front.png" alt="Card image cap">
         <img class="card-img-top" src="\resources\images\abilities\sharp_abilities_front.png" alt="Card image cap">
@@ -38,7 +38,6 @@
 
     <br/> <!-- salto de linea/ meter un espacio en blanco entre texto -->
     <form method="get" action="/cards/buttonsCards">
-        <button type="submit" style="height: 5rem; width: 20rem">Return</button>
-    </form>
+        <button type="submit" style="height: 5rem; width: 20rem"  >Return</button></form>
 
 </nt4h:layout>

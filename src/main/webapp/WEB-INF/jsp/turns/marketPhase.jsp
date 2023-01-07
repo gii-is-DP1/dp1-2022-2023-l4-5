@@ -17,49 +17,34 @@
     <h1>${currentPlayer}`s Turn</h1>
     <h2>Buy a product</h2>
     <c:if test="${!loggedPlayer.isNew()}">
-        <form:form modelAttribute="newTurn" class="form-horizontal" id="product-selection-form">
+        <form:form modelAttribute="newProductInGame" class="form-horizontal" id="product-selection-form">
             <div class="container">
-                <c:if test="${productsOnSale.size()!=0}">
-                    <div class="pointer">
-                        <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
-                            <c:set var="productInGame" value="${productsOnSale[i]}" scope="page"/>
-                            <!-- Comprar no fufa -->
-                            <div class="col-sm-2">
-                                <nt4h:radioButtom name="currentProduct" element="${productInGame.id}"
-                                                  frontImage="${productInGame.product.frontImage}"
-                                                  i="${i}0" image="/resources/images/muszka.png"/>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </c:if>
-                <c:if test="${productsOnSale.size()==0}">
-                    <div style="display: flex; justify-content: center;">
-                        <h1>There are no products on sale</h1>
-                    </div>
-                </c:if>
+                <div class="pointer">
+                    <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
+                        <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                        <!-- Comprar no fufa -->
+                        <div class="col-sm-2">
+                            <nt4h:radioButtom name="product" element="${product.id}" frontImage="${product.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
+                        </div>
+                    </c:forEach>
+                </div>
             </div>
-            <c:if test="${productsOnSale.size()!=0}">
-                <button class="btn btn-default" type="submit">buy Product</button>
-            </c:if>
+            <button class="btn btn-default" type="submit">buy Product</button>
         </form:form>
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
             <div style="display: flex;justify-content: center;">
-                <c:if test="${productsOnSale.size()}">
-                    <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
-                        <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
-                        <div class="col-sm-2">
-                            <img src="${product.frontImage}">
-                        </div>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${productsOnSale.size()==0}">
-                    <h1>There are no products on sale</h1>
-                </c:if>
+                <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
+                    <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                    <div class="col-sm-2">
+                        <img src="${product.frontImage}">
+                    </div>
+                </c:forEach>
             </div>
         </div>
     </c:if>
+
     <div class="row">
         <div class="chatGroup"></div>
         <c:if test="${!loggedPlayer.isNew()}">
