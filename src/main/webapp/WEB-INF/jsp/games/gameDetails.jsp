@@ -9,7 +9,7 @@
     <h2>Game Information</h2>
     El código de abajo está puseto para ver si en añgún momento peta la aplicación.
     <spring:layout pageName=""
-    <spring:url value="/welcome"  var="goToLobby">
+    <spring:url value="/welcome" var="goToLobby">
     </spring:url>
     <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Lobby</a>
 

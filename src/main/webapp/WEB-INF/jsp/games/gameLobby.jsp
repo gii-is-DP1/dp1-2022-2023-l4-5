@@ -21,7 +21,7 @@
             <a href="/games/heroSelect">Add hero!</a>
         </c:if>
     </div>
-    <h2>"Chatea"</h2>
+    <h2>"Chat"</h2>
     <div class="next"></div>
     <div class="row">
         <div class="chatGroup"></div>
