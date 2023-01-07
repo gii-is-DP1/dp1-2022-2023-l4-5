@@ -11,6 +11,7 @@ import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -106,7 +107,9 @@ public class ProductService {
 
     @Transactional
     public void addProduct(Game game) {
-        getAllProducts().forEach(
+        List<Product> shuffledProducts = getAllProducts();
+        Collections.shuffle(shuffledProducts);
+        shuffledProducts.forEach(
             product -> IntStream.range(0, product.getQuantity()).forEach(i -> {
                 ProductInGame productInGame = ProductInGame.builder().product(product).game(game).stateProduct(StateProduct.IN_SALE).timesUsed(0).build();
                 productInGame.setName(product.getName());

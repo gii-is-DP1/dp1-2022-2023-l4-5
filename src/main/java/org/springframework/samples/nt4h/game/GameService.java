@@ -105,12 +105,11 @@ public class GameService {
         playerService.savePlayer(newPlayer);
         saveGame(game);
         userService.saveUser(user);
-        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame();
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
         game.setAllOrcsInGame(orcsInGame);
         game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
-
     }
 
     @Transactional
