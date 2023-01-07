@@ -11,13 +11,13 @@
     <div class="ready"></div>
 
     <div>
-        <c:if test="${!loggedPlayer.isNew()}">
+        <c:if test="${loggedPlayer.isNew()}">
             <h1>You are watching the game!</h1>
         </c:if>
         <c:if test="${loggedPlayer.ready}">
             <h1>You are ready!</h1>
         </c:if>
-        <c:if test="${!loggedPlayer.ready}">
+        <c:if test="${!loggedPlayer.ready && !loggedPlayer.isNew()}">
             <a href="/games/heroSelect">Add hero!</a>
         </c:if>
     </div>

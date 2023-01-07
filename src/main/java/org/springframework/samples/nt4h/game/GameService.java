@@ -48,7 +48,7 @@ public class GameService {
         return gameRepository.findAll(page);
     }
 
-    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
+    @Transactional(readOnly = true)
     public Game getGameById(int id) {
         return gameRepository.findById(id).orElseThrow(() -> new NotFoundException("Game not found"));
     }
@@ -68,11 +68,10 @@ public class GameService {
     @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
-        System.out.println("GameService.deleteGameById: " + game);
         deleteGame(game);
     }
 
-    @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})
+    @Transactional(rollbackFor = {FullGameException.class, HeroAlreadyChosenException.class})
     public Player addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
         if (game.getPlayers().contains(user.getPlayer()))
             return user.getPlayer();
@@ -90,8 +89,6 @@ public class GameService {
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (player.getReady())
             throw new PlayerIsReadyException();
-        System.out.println("addHeroToPlayer " + player.getId());
-        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -118,6 +115,7 @@ public class GameService {
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
+
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
         // Calcula ataque de las dos primeras cartas en mano.
         for (var i = 0; i < players.size(); i++) {
@@ -147,11 +145,13 @@ public class GameService {
 
     @Transactional(rollbackFor = UserInAGameException.class)
     public void addSpectatorToGame(Game game, User user) throws UserInAGameException {
-        game.getSpectators().add(user);
-        if (user.getGame() != null)
+        if (user.getGame() == null) {
+            game.getSpectators().add(user);
+            user.setGame(game);
+            userService.saveUser(user);
+            saveGame(game);
+        }
+        if (user.getGame() != game)
             throw new UserInAGameException();
-        user.setGame(game);
-        userService.saveUser(user);
-        saveGame(game);
     }
 }
