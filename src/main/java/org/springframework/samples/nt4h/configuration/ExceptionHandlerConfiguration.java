@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
-import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.exceptions.*;
@@ -34,7 +33,6 @@ public class ExceptionHandlerConfiguration
     private static final String PAGE_GAME_LOBBY = "redirect:/games/current";
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/heroSelect";
     private static final String PAGE_EVASION = "redirect:/evasion";
-    private static final String PAGE_MARKET = "redirect:/market";
 
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException() {
@@ -102,17 +100,8 @@ public class ExceptionHandlerConfiguration
     }
 
     @ExceptionHandler(NoMoneyException.class)
-    public String handleNoMoneyException(HttpSession session) {
-        session.setAttribute("message", "You don't have enough money.");
-        session.setAttribute("messageType", "danger");
-        return PAGE_MARKET;
-    }
-
-    @ExceptionHandler(NotInSaleException.class)
-    public String handleNotInSaleException(HttpSession session) {
-        session.setAttribute("message", "The product is not in sale.");
-        session.setAttribute("messageType", "danger");
-        return PAGE_MARKET;
+    public String handleNoMoneyException() {
+        return "exception";
     }
 
     @ExceptionHandler(NoCurrentPlayer.class)

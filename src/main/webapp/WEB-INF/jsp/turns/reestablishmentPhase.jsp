@@ -17,36 +17,22 @@
     <h1>Reestablishment Phase</h1>
     <h2>${currentPlayer}`s Turn</h2>
     <div class="container">
-        <div style="display: flex; justify-content: center;">
-            <c:if test="${game.actualOrcs.size() != 0}">
-                <c:forEach items="${game.actualOrcs}" var="orc">
-                    <img src="${orc.enemy.frontImage}"> <!-- TODO: Reducir tamaño -->
-                </c:forEach>
-            </c:if>
-            <c:if test="${game.actualOrcs.size() == 0}">
-                <h2>There are no more Orcs</h2>
-            </c:if>
-        </div>
+        <c:forEach items="${game.actualOrcs}" var="orc">
+            <img src="${orc.enemy.frontImage}"> <!-- TODO: Reducir tamaño -->
+        </c:forEach>
     </div>
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="turn" class="form-horizontal" id="choose-player-form">
             <div class="container">
-                <c:if test="${player.deck.inHand.size()!=0}">
                 <div class="pointer">
                     <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
                         <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
                         <!-- TODO: Peta al obtener al descartar habilidades -->
                         <div class="col-sm-2">
-                            <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}"
-                                              frontImage="${abilityInGame.ability.frontImage}" i="${i}0"
-                                              image="/resources/images/muszka.png"/>
+                            <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}" frontImage="${abilityInGame.ability.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
                         </div>
                     </c:forEach>
                 </div>
-                </c:if>
-                <c:if test="${player.deck.inHand.size()==0}">
-                    <h2>You have no abilities in hand</h2>
-                </c:if>
             </div>
             <button class="btn btn-default" type="submit">Discard Ability</button>
         </form:form>
@@ -54,17 +40,12 @@
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
             <div class="display: flex; justify-content: center;">
-                <c:if test="${player.deck.inHand.size()!=0}">
                 <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
                     <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
                     <div class="col-sm-2">
                         <img src="${abilityInGame.ability.frontImage}">
                     </div>
                 </c:forEach>
-                </c:if>
-                <c:if test="${player.deck.inHand.size()==0}">
-                    <h2>You have no abilities in hand</h2>
-                </c:if>
             </div>
         </div>
     </c:if>
@@ -87,7 +68,7 @@
         background-image: url("/resources/images/campo.jpg");
         background-repeat: no-repeat;
         background-size: cover;
-        }
+    }
 </style>
 
 
