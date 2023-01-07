@@ -144,4 +144,12 @@ public class GameService {
         saveGame(game);
     }
 
+    public void addSpectatorToGame(Game game, User user) throws UserInAGameException {
+        game.getSpectators().add(user);
+        if (user.getGame() != null)
+            throw new UserInAGameException();
+        user.setGame(game);
+        userService.saveUser(user);
+        saveGame(game);
+    }
 }

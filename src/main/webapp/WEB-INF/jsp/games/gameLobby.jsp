@@ -7,30 +7,30 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="lobby">
-
     <h2>Game Lobby</h2>
     <div class="ready"></div>
 
     <div>
-        <c:choose>
-            <c:when test="${player.ready}">
-                <h1>You are ready!</h1>
-            </c:when>
-            <c:otherwise>
-                <a href="/games/heroSelect">Add hero!</a>
-            </c:otherwise>
-        </c:choose>
+        <c:if test="${!loggedPlayer.isNew()}">
+            <h1>You are watching the game!</h1>
+        </c:if>
+        <c:if test="${loggedPlayer.ready}">
+            <h1>You are ready!</h1>
+        </c:if>
+        <c:if test="${!loggedPlayer.ready}">
+            <a href="/games/heroSelect">Add hero!</a>
+        </c:if>
     </div>
     <h2>"Chatea"</h2>
+    <div class="next"></div>
     <div class="row">
         <div class="chatGroup"></div>
-
-        <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
-            <nt4h:inputField label="Content" name="content"/>
-        </form:form>
+        <c:if test="${!loggedPlayer.isNew()}">
+            <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
+                <nt4h:inputField label="Content" name="content"/>
+            </form:form>
+        </c:if>
     </div>
     <script src="/resources/js/chatGroup.js" type="module"></script>
-    <div class="next"></div>
-    <script src="/resources/js/playersInLobby.js" type="module">
-    </script>
+    <script src="/resources/js/playersInLobby.js" type="module"></script>
 </nt4h:layout>

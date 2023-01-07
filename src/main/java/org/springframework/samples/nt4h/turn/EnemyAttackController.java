@@ -5,7 +5,10 @@ import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/enemyAttack")
@@ -26,15 +32,17 @@ public class EnemyAttackController {
     private final EnemyService enemyService; //este debe cambiar por Service Enemey supongo
     public final String VIEW_ATTACK = "turns/attackPhase";
     public final String NEXT_TURN = "redirect:/turns";
+    private final Advise advise;
 
-    @ModelAttribute("user")
+    @ModelAttribute("loggedUser")
     public User getUser() {
         return userService.getLoggedUser();
     }
 
-    @ModelAttribute("player")
+    @ModelAttribute("loggedPlayer")
     public Player getPlayer() {
-        return userService.getLoggedUser().getPlayer();
+        User loggedUser = getUser();
+        return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
     @ModelAttribute("game")
@@ -47,19 +55,26 @@ public class EnemyAttackController {
         return new Turn();
     }
 
+    @ModelAttribute("chat")
+    public Message getChat() {
+        return new Message();
+    }
+
 
 
     @Autowired
-    public EnemyAttackController(UserService userService, TurnService turnService, GameService gameService, EnemyService enemyService) {
+    public EnemyAttackController(UserService userService, TurnService turnService, GameService gameService, EnemyService enemyService, Advise advise) {
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
         this.enemyService = enemyService;
+        this.advise = advise;
     }
 
     @GetMapping
-    public String getEnemyAttack(ModelMap model) {
+    public String getEnemyAttack(ModelMap model, HttpSession session, HttpServletRequest request) {
         model.put("damage", enemyService.attackEnemyToActualPlayer(getGame()));
+        advise.keapUrl(session, request);
         return VIEW_ATTACK;
     }
 

@@ -18,11 +18,11 @@
         height: 50%;
     }
 
-    .custom-radio {
+    .custom-box {
         display: none;
     }
 
-    .custom-radio + label {
+    .custom-box + label {
         background-size: cover;
     }
 
@@ -37,7 +37,7 @@
     <c:set var="valid" value="${not status.error and not empty status.actualValue}"/>
     <div class="${cssGroup}">
         <div class="container">
-            <form:checkbox path="${name}" id="${i}r" value="${element}" class="custom-radio" alt="${frontImage}"/>
+            <form:checkbox path="${name}" id="${i}r" value="${element}" class="custom-box" alt="${frontImage}"/>
             <label for="${i}r" style="cursor: pointer;">
                 <div id="${i}d">
                     <img src="${frontImage}" class="card-img-top" id="${i}i" alt="${image}">

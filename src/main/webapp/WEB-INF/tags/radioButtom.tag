@@ -7,8 +7,8 @@
               description="Name of corresponding property in bean object" %>
 <%@ attribute name="image" required="true" rtexprvalue="true" description="Image path" %>
 <%@attribute name="i" required="true" rtexprvalue="true" %>
-<%@attribute name="element" required="true" rtexprvalue="true"%>
-<%@attribute name="frontImage" required="true" rtexprvalue="true"%>
+<%@attribute name="element" required="true" rtexprvalue="true" %>
+<%@attribute name="frontImage" required="true" rtexprvalue="true" %>
 <style>
     .overlay {
         position: absolute;
@@ -28,22 +28,18 @@
 
     .card-img-top {
         width: 100%;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding-top: 5rem;
+        padding-bottom: 5rem;
     }
 </style>
 <spring:bind path="${name}">
     <c:set var="cssGroup" value="form-group ${status.error ? 'error' : '' }"/>
     <c:set var="valid" value="${not status.error and not empty status.actualValue}"/>
-    <div class="${cssGroup}">
-        <div class="container">
-        <form:radiobutton path="${name}" id="${i}r" value="${element}" class="custom-radio" alt="${frontImage}"/>
-        <label for="${i}r" style="cursor: pointer;">
-            <div id="${i}d">
-                <img src="${frontImage}" class="card-img-top" id="${i}i" alt="${image}">
-            </div>
-        </label>
+    <form:radiobutton path="${name}" id="${i}r" value="${element}" class="custom-radio" alt="${frontImage}"/>
+    <label for="${i}r" style="cursor: pointer;">
+        <div id="${i}d">
+            <img src="${frontImage}" class="card-img-top" id="${i}i" alt="${image}">
         </div>
-    </div>
+    </label>
 </spring:bind>
 

@@ -14,6 +14,7 @@ import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -78,10 +79,10 @@ public class Game extends NamedEntity implements Jsonable {
     @OneToOne(cascade = CascadeType.ALL)
     private Player currentPlayer;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<User> spectators;
+
     public void addPlayer(Player player) throws FullGameException {
-        System.out.println("Adding player " + player.getName() + " to game " + this.getName());
-        System.out.println("Players in game: " + players.size());
-        System.out.println("Max players: " + maxPlayers);
         if ((this.players.size()+1) > this.maxPlayers)
             throw new FullGameException();
         this.players.add(player);
@@ -120,6 +121,7 @@ public class Game extends NamedEntity implements Jsonable {
         players = Lists.newArrayList();
         phase = Phase.START;
         startDate = LocalDateTime.now();
+        spectators = Lists.newArrayList();
     }
 
     public void onDeleteSetNull() {

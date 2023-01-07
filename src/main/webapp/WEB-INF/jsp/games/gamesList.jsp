@@ -6,7 +6,6 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 
-
 <nt4h:layout pageName="games">
     <h2>Games</h2>
     <c:out value="${message}"/>
@@ -40,50 +39,59 @@
                     <c:out value="${game.accessibility}"/>
                 </td>
                 <td>
-                <c:choose>
-
-                    <c:when test="${game.accessibility.isPublic()}">
-                        <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join Game</a>
-                    </c:when>
-                    <c:otherwise>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                            Join Game
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Introduce Password</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div style="text-align: center;">
-
-                                            <input type="password" class="input">
+                    <a href="/games/view/${game.id}" class="btn btn-primary">
+                        <c:if test="${game.spectators == null}">
+                            <c:out value="0 View"/>
+                        </c:if>
+                        <c:if test="${game.spectators != null}">
+                            <c:out value="${fn:length(game.spectators)}  View"/>
+                        </c:if>
+                    </a>
+                    <c:choose>
+                        <c:when test="${game.accessibility.isPublic()}">
+                            <a class="btn btn-default" href='<spring:url value="/games/${game.id}" htmlEscape="true"/>'>Join
+                                Game</a>
+                        </c:when>
+                        <c:otherwise>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                Join Game
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Introduce Password</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                        </button>
-                                        <a class="redirection" href="/games/${game.id}?password=">
-                                            <button type="button" class="btn btn-primary">Join</button>
-                                        </a>
+                                        <div class="modal-body">
+                                            <div style="text-align: center;">
+
+                                                <input type="password" class="input">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <a class="redirection" href="/games/${game.id}?password=">
+                                                <button type="button" class="btn btn-primary">Join</button>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                        </c:otherwise>
+                    </c:choose>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
-
     <c:if test="${page > 0}">
         <spring:url value="/games?page={previous}" var="previous">
             <spring:param name="previous" value="${page-1}"/>
