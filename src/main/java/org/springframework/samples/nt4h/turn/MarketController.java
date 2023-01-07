@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
@@ -50,13 +49,14 @@ public class MarketController {
     }
 
     @ModelAttribute("productsOnSale")
-    public List<Product> getProductsInSell() {
+    public List<ProductInGame> getProductsInSell() {
         return productService.getMarket();
     }
 
-    @ModelAttribute("newProductInGame")
-    public ProductInGame getProductInGame() {
-        return new ProductInGame();
+    @ModelAttribute("newTurn")
+    public Turn getTurn() {
+
+        return new Turn();
     }
 
     @ModelAttribute("game")
@@ -93,12 +93,15 @@ public class MarketController {
     }
 
     @PostMapping
-    public String buyProduct(ProductInGame productInGame) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
+    public String buyProduct(Turn turn) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        productService.buyProduct(player, productInGame);
+        productService.buyProduct(player, turn.getCurrentProduct());
+        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId());
+        oldTurn.addProduct(turn.getCurrentProduct());
+        turnService.saveTurn(oldTurn);
         return PAGE_MARKET;
     }
 
