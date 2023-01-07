@@ -20,9 +20,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.exceptions.IncorrectPasswordException;
+import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.samples.nt4h.player.Tier;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -76,12 +79,15 @@ public class UserService {
 
     @Transactional
     public void deleteUser(User user) {
+        user.onDeleteSetNull();
+        userRepository.save(user);
         userRepository.delete(user);
     }
 
     @Transactional
     public void deleteUserById(int id) {
-        userRepository.deleteById(id);
+        User user = getUserById(id);
+        deleteUser(user);
     }
 
     @Transactional(readOnly = true)
@@ -110,7 +116,7 @@ public class UserService {
 
     @Transactional
     public Page<User> getFriendsPaged(Pageable page) {
-        Integer limit = (int) page.getOffset() + page.getPageSize();
+        int limit = (int) page.getOffset() + page.getPageSize();
         limit = limit > getFriends().size() ? getFriends().size() : limit;
         return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), limit), page, getLoggedUser().getFriends().size());
     }
@@ -120,8 +126,8 @@ public class UserService {
         User user = getLoggedUser();
         User friend = getUserById(friendId);
         if(!getLoggedUser().getFriends().contains(friend)){
-            user.addFriend(friend);
-            friend.addFriend(user);
+            user.getFriends().add(friend);
+            friend.getFriends().add(user);
         }
         saveUser(friend);
         saveUser(user);
@@ -132,21 +138,27 @@ public class UserService {
         User user = getLoggedUser();
         User friend = getUserById(friendId);
         if (user.getFriends().contains(friend)) {
-            user.removeFriend(friend);
-            friend.removeFriend(user);
+            user.getFriends().remove(friend);
+            friend.getFriends().remove(user);
             saveUser(user);
             saveUser(friend);
         }
     }
 
     @Transactional
-    public void addUserToGame(User user, Game game) {
-        user.setGame(game);
-        saveUser(user);
+    public void addUserToGame(User user, Game game, String password) throws UserInAGameException, IncorrectPasswordException {
+        if (user.getGame() != null && !user.getGame().equals(game))
+            throw new UserInAGameException();
+        if (!(Objects.equals(game.getPassword(), password) || game.getAccessibility() == Accessibility.PUBLIC))
+            throw new IncorrectPasswordException();
+        if (user.getGame() == null) {
+            user.setGame(game);
+            saveUser(user);
+        }
     }
 
 
-    public void removeUserFromGame(User user, Game game) {
+    public void removeUserFromGame(User user) {
         user.setGame(null);
         saveUser(user);
     }

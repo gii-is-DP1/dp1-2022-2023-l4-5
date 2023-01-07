@@ -6,38 +6,61 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
+<style>
+    .pointer {
+        display: flex;
+        justify-content: center;
+    }
+</style>
 <nt4h:layout pageName="Reestablishment Phase">
-    <style>
-        .card-img-top {
-            width: 100%;
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-        }
-    </style>
     <body class="background">
-    <h2>Reestablishment Phase</h2>
-    <h1>Player´s turn: ${game.currentPlayer}</h1>
+    <h1>Reestablishment Phase</h1>
+    <h2>${currentPlayer}`s Turn</h2>
     <div class="container">
         <c:forEach items="${game.actualOrcs}" var="orc">
-            <div class="col-sm-2">
-            <img class="card-img-top" src="${orc.enemy.frontImage}">
-            </div>
+            <img src="${orc.enemy.frontImage}"> <!-- TODO: Reducir tamaño -->
         </c:forEach>
     </div>
-    <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-enemy-form">
-        <div class="container">
-            <c:forEach items="${player.inHand}" var="abilityInGame">
-                <div class="col-sm-2">
-                    <form:radiobutton path="currentAbility" value="${abilityInGame}"/>
-                    <img class="card-img-top" src="${abilityInGame.ability.frontImage}">
+    <c:if test="${!loggedPlayer.isNew()}">
+        <form:form modelAttribute="turn" class="form-horizontal" id="choose-player-form">
+            <div class="container">
+                <div class="pointer">
+                    <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
+                        <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                        <!-- TODO: Peta al obtener al descartar habilidades -->
+                        <div class="col-sm-2">
+                            <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}" frontImage="${abilityInGame.ability.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
+                        </div>
+                    </c:forEach>
                 </div>
-            </c:forEach>
+            </div>
+            <button class="btn btn-default" type="submit">Discard Ability</button>
+        </form:form>
+    </c:if>
+    <c:if test="${loggedPlayer.isNew()}">
+        <div class="container">
+            <div class="display: flex; justify-content: center;">
+                <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
+                    <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                    <div class="col-sm-2">
+                        <img src="${abilityInGame.ability.frontImage}">
+                    </div>
+                </c:forEach>
+            </div>
         </div>
-
-        <button class="btn btn-default" type="submit">Discard Ability</button>
-    </form:form>
-    <a href="${pageContext.request.contextPath}/reestablishment/turns" class="btn btn-default">Next Turn</a>
-
+    </c:if>
+    <div class="row">
+        <div class="chatGroup"></div>
+        <c:if test="${!loggedPlayer.isNew()}">
+            <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
+                <nt4h:inputField label="Content" name="content"/>
+            </form:form>
+        </c:if>
+    </div>
+    <div class="nextTurn"></div>
+    <script src="/resources/js/chatGroup.js" type="module"></script>
+    <script src="/resources/js/currentTurn.js" type="module"></script>
+    <script src="/resources/js/radioButtom.js" type="module">
 </nt4h:layout>
 
 <style>

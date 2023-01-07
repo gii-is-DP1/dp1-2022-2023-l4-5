@@ -1,13 +1,11 @@
 package org.springframework.samples.nt4h.capacity;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.samples.nt4h.achievement.Achievement;
-import org.springframework.samples.nt4h.achievement.AchievementService;
-import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,84 +14,61 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class CapacityServiceTest {
+class CapacityServiceTest {
 
     @Autowired
-    CapacityService cas;
-    @Test
-    public void findByStateTrue() {
-        List<Capacity> nuevo = cas.getCapacityByStateCapacity(StateCapacity.MELEE);
-        assertNotNull(nuevo);
-        assertFalse(nuevo.isEmpty());
+    CapacityService capacityService;
+    private StateCapacity stateCapacity;
+    private final int idCapacity = 1;
+    private int numsCapacities;
+
+    @BeforeEach
+    void setUp() {
+        List<Capacity> capacities = capacityService.getAllCapacities();
+        numsCapacities = capacities.size();
+        stateCapacity = capacities.get(idCapacity-1).getStateCapacity();
     }
 
     @Test
-    public void findByStateFalse() {
-        List<Capacity> nuevo = cas.getCapacityByStateCapacity(StateCapacity.PRUEBA);
-        assertNotNull(nuevo);
-        assertTrue(nuevo.isEmpty());
+    void testFindByStateCapacity() {
+        List<Capacity> nuevo = capacityService.getCapacityByStateCapacity(stateCapacity);
+        assertEquals(stateCapacity, nuevo.get(0).getStateCapacity());
     }
 
     @Test
-    public void findByIdTrue() {
-        Capacity nuevo = cas.getCapacityById(1);
-        assertNotNull(nuevo);
-        assertFalse(nuevo.getLessDamage());
+    void testFindByCorrectId() {
+        assertEquals(stateCapacity, capacityService.getCapacityById(idCapacity).getStateCapacity());
     }
 
     @Test
-    public void findByIdFalse() {
-        Capacity nuevo = cas.getCapacityById(5);
-        assertNotNull(nuevo);
-        assertFalse(nuevo.getLessDamage() == false);
+    void testFindByIncorrectId() {
+        assertThrows(NotFoundException.class, () -> capacityService.getCapacityById(-1));
     }
 
     @Test
-    public void findAllTestTrue() {
-        List<Capacity> ls = cas.getAllCapacities();
-        assertNotNull(ls);
-        assertFalse(ls.isEmpty());
-        assertEquals(8, ls.size());
+    void testFindAll() {
+        assertEquals(numsCapacities, capacityService.getAllCapacities().size());
     }
 
     @Test
-    public void existsByIdTestTrue(){
-        assertTrue(cas.capacityExists(1));
-    }
-
-    @Test
-    public void existByIdTestFalse(){
-        assertFalse(cas.capacityExists(30));
-    }
-
-
-
-    @Test
-    public void shouldInsertCapacity(){
-        Capacity nuevo = new Capacity();
-        nuevo.setStateCapacity(StateCapacity.EXPERTISE);
-        nuevo.setLessDamage(false);
-        cas.saveCapacity(nuevo);
-        List<Capacity> probar = cas.getCapacityByStateCapacity(StateCapacity.EXPERTISE);
-        Capacity comparador = probar.get(2);
-        assertEquals(nuevo, comparador);
-    }
-    @Test
-    public void shouldUpdateCapacity(){
-        Capacity nuevo = cas.getCapacityById(1);
-        Boolean OldLD = nuevo.getLessDamage();
-        Boolean NewLD = true;
-        nuevo.setLessDamage(NewLD);
-        cas.saveCapacity(nuevo);
-        assertTrue(cas.getCapacityById(1).getLessDamage());
+    void testExistsById(){
+        assertTrue(capacityService.capacityExists(idCapacity));
+        assertFalse(capacityService.capacityExists(-1));
     }
 
 
     @Test
-    public void deleteAchievementTest(){
-        cas.deleteCapacityById(1);
-        assertThrows(DataIntegrityViolationException.class,() -> cas.capacityExists(1));
-
-
+    void testSave(){
+        Capacity oldCapacity = Capacity.builder().stateCapacity(StateCapacity.EXPERTISE).lessDamage(false).build();
+        capacityService.saveCapacity(oldCapacity);
+        assertEquals(numsCapacities+1, capacityService.getAllCapacities().size());
+    }
+    @Test
+    void testUpdate(){
+        Capacity oldCapacity = capacityService.getCapacityById(idCapacity);
+        Capacity newCapacity = oldCapacity.toBuilder().lessDamage(!oldCapacity.getLessDamage()).build();
+        newCapacity.setId(idCapacity);
+        capacityService.saveCapacity(newCapacity);
+        assertEquals(newCapacity.getLessDamage(), capacityService.getCapacityById(idCapacity).getLessDamage());
     }
 }

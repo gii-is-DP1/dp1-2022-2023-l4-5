@@ -23,7 +23,6 @@ public class HeroInGame extends BaseEntity implements Jsonable {
     @Max(3)
     private Integer actualHealth; // TODO: quitar en algún momento.
 
-    @Column(columnDefinition ="int default 0")
     private Integer effectUsed;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -32,8 +31,14 @@ public class HeroInGame extends BaseEntity implements Jsonable {
     @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
 
-    public HeroInGame createHero(Hero hero, Player player) {
-        return toBuilder().hero(hero).player(player).actualHealth(hero.getHealth()).build();
+    public static HeroInGame createHeroInGame(Hero hero, Player player) {
+        return HeroInGame.builder().hero(hero).player(player).actualHealth(hero.getHealth())
+            .effectUsed(hero.maxUses == -1 ? -1: 0).build();
+    }
+
+    public void onDeleteSetNull() {
+        this.hero = null;
+        this.player = null;
     }
 
     @Override

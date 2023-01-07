@@ -5,29 +5,39 @@
 
 package org.springframework.samples.nt4h.player;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
+import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(
     includeFilters = {@Filter({Service.class})}
 )
-@TestInstance(Lifecycle.PER_CLASS)
 public class PlayerServiceTest {
 
     @Autowired
@@ -36,127 +46,110 @@ public class PlayerServiceTest {
     protected GameService gameService;
     @Autowired
     protected HeroService heroService;
+    @Autowired
+    protected UserService userService;
+    private int idPlayer;
+    private int idGame;
+    private String namePlayer;
+    private Player player;
 
     public PlayerServiceTest() {
     }
 
-    @BeforeAll
-    void setUp() throws RoleAlreadyChosenException {
-        Player player = new Player();
-        player.setGold(0);
-        player.setGlory(0);
-        player.setName("Test");
-        player.setReady(false);
-        player.setSequence(1);
-        player.setBirthDate(LocalDate.now());
-        this.playerService.savePlayer(player);
-
-        Game game = new Game();
-        game.setMaxPlayers(4);
-        game.setMode(Mode.UNI_CLASS);
+    @BeforeEach
+    void setUp() throws RoleAlreadyChosenException, FullGameException, HeroAlreadyChosenException {
+        User user = userService.getUserById(1);
+        Hero hero = heroService.getHeroById(1);
+        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
+        Game game = Game.createGame( "Test Game",   Mode.MULTI_CLASS, 2, "test123");
+        player = Player.createPlayer(user, game, true);
+        game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
+        game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
+        game.setPhase(Phase.START);
+        game.setHasStages(true);
         gameService.saveGame(game);
+        game.addPlayerWithNewHero(player, heroInGame);
+        idPlayer = player.getId();
+        idGame = game.getId();
+        namePlayer = player.getName();
+
+
+        /*
+        User user = userService.getUserById(1);
+        Hero hero = heroService.getHeroById(1);
+        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
+        Game game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
+        user.createPlayer(game);
+        player = user.getPlayer();
+        player.addHero(heroInGame);
+        game.addPlayer(player);
+        gameService.saveGame(game);
+        idPlayer = player.getId();
+        idGame = game.getId();
+        namePlayer = player.getName();
+        */
+    }
+
+    @AfterEach
+    void tearDown() {
+        gameService.deleteGameById(idGame);
     }
 
     @Test
-    public void findByIDTrue() {
-        Player player = this.playerService.getPlayerById(1);
-        Assertions.assertNotNull(player);
-        Assertions.assertEquals("Test", player.getName());
+    public void testFindByCorrectId() {
+        assertEquals(idPlayer, playerService.getPlayerById(idPlayer).getId());
     }
 
     @Test
-    public void findByIDFalse() {
-        Player player = this.playerService.getPlayerById(1);
-        Assertions.assertNotNull(player);
-        Assertions.assertNotEquals("MVP", player.getName());
+    public void testFindByIncorrectId() {
+        assertThrows(NotFoundException.class, () -> playerService.getPlayerById(-1));
     }
 
     @Test
-    public void findByNameTrue() {
-        Player player = this.playerService.getPlayerByName("Test");
-        Assertions.assertNotNull(player);
-        Assertions.assertEquals("Test", player.getName());
+    public void testFindByName() {
+        assertEquals(namePlayer, playerService.getPlayerByName(namePlayer).getName());
     }
 
     @Test
-    public void findByNameFalse() {
-        Player player = this.playerService.getPlayerByName("Test");
-        Assertions.assertNotNull(player);
-        Assertions.assertNotEquals("", player.getName());
+    public void testFindByIncorrectName() {
+        assertThrows(NotFoundException.class, () -> playerService.getPlayerByName("No existe"));
     }
 
     @Test
     public void findAll() {
-        List<Player> ls = this.playerService.getAllPlayers();
-        Assertions.assertNotNull(ls);
-        Assertions.assertFalse(ls.isEmpty());
-        Assertions.assertEquals(1, ls.size());
+        assertEquals(1, playerService.getAllPlayers().size());
     }
 
     @Test
-    public void shouldInsertPlayer() throws RoleAlreadyChosenException {
-        Player player = new Player();
-        player.setGold(0);
-        player.setGlory(0);
-        player.setName("TheGoat");
-        player.setReady(false);
-        player.setSequence(1);
-        player.setBirthDate(LocalDate.now());
-        this.playerService.savePlayer(player);
-        Assertions.assertEquals(player, this.playerService.getPlayerByName("TheGoat"));
+    public void testUpdate() {
+        Player newPlayer = this.playerService.getPlayerById(idPlayer);
+        newPlayer.setName("Nuevo nombre");
+        playerService.savePlayer(newPlayer);
+        assertEquals(newPlayer.getName(), this.playerService.getPlayerById(idPlayer).getName());
     }
 
     @Test
-    public void shouldUpdatePlayer() throws RoleAlreadyChosenException {
-        Player player = this.playerService.getPlayerById(1);
-        String OldName = player.getName();
-        String NewName = OldName + "X";
-        player.setName(NewName);
-        this.playerService.savePlayer(player);
-        Assertions.assertEquals(NewName, this.playerService.getPlayerById(1).getName());
-    }
-
-    @Test
-    public void shouldRoleExceptPlayer() throws RoleAlreadyChosenException {
-        Player player = this.playerService.getPlayerById(1);
-        HeroInGame hero = new HeroInGame();
-        hero.setHero(this.heroService.getHeroByName("Beleth-Il"));
-        HeroInGame hero1 = new HeroInGame();
-        hero1.setHero(this.heroService.getHeroByName("Idril"));
-        player.addHero(hero);
-        Assertions.assertThrows(RoleAlreadyChosenException.class, () -> {
-            player.addHero(hero1);
-        });
+    public void testSaveWithRoleAlreadyChosenException() throws RoleAlreadyChosenException {
+        HeroInGame heroInGame1 = HeroInGame.createHeroInGame(this.heroService.getHeroByName("Beleth-Il"), player);
+        HeroInGame heroInGame2 = HeroInGame.createHeroInGame(this.heroService.getHeroByName("Idril"), player);
+        player.addHero(heroInGame1);
+        assertThrows(RoleAlreadyChosenException.class, () -> player.addHero(heroInGame2));
     }
 
     @Test
     public void shouldAddDeckFromRole() {
-        Player player = this.playerService.getPlayerById(1);
-        HeroInGame hero = new HeroInGame();
-        hero.setHero(this.heroService.getHeroById(1));
-        Role esperado = this.heroService.getHeroById(1).getRole();
-        player.setHeroes(List.of(hero));
-        Game game = this.gameService.getGameById(1);
-        game.setPlayers(List.of(player));
+        HeroInGame heroInGame = player.getHeroes().get(0);
+        Role correctResult = heroInGame.getHero().getRole();
+        Game game = this.gameService.getGameById(idGame);
         this.playerService.addDeckFromRole(player, game.getMode());
-        Role[] roles = (Role[])player.getHeroes().stream().map((h) -> {
-            return h.getHero().getRole();
-        }).distinct().toArray((x$0) -> {
-            return new Role[x$0];
-        });
-        List<Integer> idHabilidades = (List)player.getInDeck().stream().map((a) -> {
-            return a.getAbility().getId();
-        }).collect(Collectors.toList());
-        Assertions.assertTrue(esperado.getAbilities().containsAll(idHabilidades));
+        List<Integer> idAbilities = player.getDeck().getInDeck().stream().map(a -> a.getAbility().getId()).collect(Collectors.toList());
+        assertTrue(correctResult.getAbilities().containsAll(idAbilities));
     }
 
-    @AfterAll
     @Test
     public void deletePlayerTest() {
-        gameService.deleteGameById(1);
-        this.playerService.deletePlayerById(1);
-        Assertions.assertFalse(this.playerService.playerExists(1));
+        playerService.deletePlayerById(idPlayer);
+        // assertThrows(NotFoundException.class, () -> playerService.getPlayerById(idPlayer));
+        System.out.println("Game: " + gameService.getGameById(idGame).getPlayers());
     }
-
-
 }

@@ -5,7 +5,6 @@ import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -54,12 +53,22 @@ public class Turn extends BaseEntity implements Jsonable {
         }
     }
 
+
     public void addAbility(AbilityInGame usedAbility) {
         if(usedAbilities == null) {
             usedAbilities = Lists.newArrayList(usedAbility);
         } else {
             usedAbilities.add(usedAbility);
         }
+    }
+
+    public void OnDeleteSetNull() {
+        usedAbilities = null;
+        currentAbility = null;
+        currentEnemy = null;
+        usedEnemies = null;
+        game = null;
+        player = null;
     }
 
     @Override

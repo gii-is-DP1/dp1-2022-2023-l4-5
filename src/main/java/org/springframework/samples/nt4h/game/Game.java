@@ -4,7 +4,6 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
-import org.h2.util.json.JSONObject;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -15,6 +14,7 @@ import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -73,51 +73,62 @@ public class Game extends NamedEntity implements Jsonable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
-    //@OneToMany
-    //private List<Stage> stages;
-
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player currentPlayer;
 
-    public Player getNextPlayer() {
-        int index = alivePlayersInTurnOrder.indexOf(currentPlayer); // TODO: Hacer que se respete la secuencia.
-        return alivePlayersInTurnOrder.get((index + 1) % alivePlayersInTurnOrder.size());
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<User> spectators;
 
     public void addPlayer(Player player) throws FullGameException {
-        if (this.players == null)
-            players = Lists.newArrayList(player);
-        else if (this.players.size() > this.maxPlayers)
+        if ((this.players.size()+1) > this.maxPlayers)
             throw new FullGameException();
-        else
-            this.players.add(player);
+        this.players.add(player);
     }
 
-    public void addPlayerWithNewHero(Player player, HeroInGame hero) throws FullGameException, HeroAlreadyChosenException, RoleAlreadyChosenException {
+    public void addPlayerWithNewHero(Player player, HeroInGame hero) throws HeroAlreadyChosenException, RoleAlreadyChosenException {
         if (isHeroAlreadyChosen(hero.getHero()))
             throw new HeroAlreadyChosenException();
-         else {
-            player.addHero(hero);
-            addPlayer(player);
-        }
-
+        player.addHero(hero);
     }
 
     public boolean isHeroAlreadyChosen(Hero hero) {
-        if (this.players == null) return false;
-        return this.players.stream()
+        return this.players != null && this.players.stream()
             .flatMap(player -> player.getHeroes().stream())
-            .anyMatch(h -> h.getHero().equals(hero));
+            .anyMatch(h -> h.getHero() == hero);
     }
 
-    public void addOrcsInGame(EnemyInGame enemy) {
-        if (this.allOrcsInGame == null) {
-            this.allOrcsInGame = Lists.newArrayList();
-        }
-        this.allOrcsInGame.add(enemy);
+    public static Game createGame(String name, Mode mode, int maxPlayers, String password) {
+        Game game = Game.builder()
+            .accessibility(password.isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE)
+            .mode(mode)
+            .maxPlayers(maxPlayers)
+            .password(password)
+            .players(Lists.newArrayList())
+            .build();
+        game.defaultGame();
+        game.setName(name);
+        return game;
+    }
+
+    public void defaultGame() {
+        alivePlayersInTurnOrder = Lists.newArrayList();
+        actualOrcs = Lists.newArrayList();
+        allOrcsInGame = Lists.newArrayList();
+        passiveOrcs = Lists.newArrayList();
+        players = Lists.newArrayList();
+        phase = Phase.START;
+        startDate = LocalDateTime.now();
+        spectators = Lists.newArrayList();
+    }
+
+    public void onDeleteSetNull() {
+        System.out.println("num players: " + players.size());
+        players.forEach(player -> System.out.println(player.getGame()));
+        players.forEach(Player::onDeleteSetNull);
+        allOrcsInGame.forEach(EnemyInGame::onDeleteSetNull);
     }
 
     @Override
@@ -136,5 +147,4 @@ public class Game extends NamedEntity implements Jsonable {
             e.printStackTrace();
         }
     }
-
 }

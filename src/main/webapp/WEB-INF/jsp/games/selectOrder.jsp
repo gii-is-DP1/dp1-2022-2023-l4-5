@@ -26,7 +26,7 @@
                     <c:out value="${player.sequence + 1}"/>
                 </td>
                 <td>
-                    <c:out value="${player.birthDate.year} - ${player.birthDate.month.value} - ${player.birthDate.dayOfMonth} | ${player.inDeck.get(0).ability.name} + ${player.inDeck.get(1).ability.name} = ${player.inDeck.get(0).ability.attack+player.inDeck.get(1).ability.attack}"/>
+                    <c:out value="${player.birthDate.year} - ${player.birthDate.month.value} - ${player.birthDate.dayOfMonth} | ${player.deck.inDeck.get(0).ability.name} + ${player.deck.inDeck.get(1).ability.name} = ${player.deck.inDeck.get(0).ability.attack+player.deck.inDeck.get(1).ability.attack}"/>
                 </td>
             </tr>
             </tbody>
@@ -35,4 +35,12 @@
     <a href="/turns">
         <button type="button" class="btn btn-primary">Next</button>
     </a>
+    <div class="row">
+        <div class="chatGroup"></div>
+
+        <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
+            <nt4h:inputField label="Content" name="content"/>
+        </form:form>
+    </div>
+    <script src="/resources/js/chatGroup.js" type="module"></script>
 </nt4h:layout>

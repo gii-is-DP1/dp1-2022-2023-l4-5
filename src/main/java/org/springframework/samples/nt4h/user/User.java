@@ -4,10 +4,11 @@ package org.springframework.samples.nt4h.user;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.model.BaseEntity;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -80,14 +80,19 @@ public class User extends BaseEntity implements Jsonable {
     @OneToOne(cascade = CascadeType.ALL)
     private Player player;
 
-    void addFriend(User user) {
-        if (friends == null)
-            friends = Lists.newArrayList();
-        friends.add(user);
+    public void defaultUser() {
+        this.authority = Authority.USER.toString();
+        this.enable = "true";
+        this.tier = Tier.BRONZE;
+        this.friends = Lists.newArrayList();
+        this.statistic = Statistic.createStatistic();
     }
 
-    public void removeFriend(User user) {
-        friends.remove(user);
+    public void onDeleteSetNull() {
+        game = null;
+        friends = null;
+        sentMessages.forEach(Message::onDeleteSetNull);
+        receivedMessages.forEach(Message::onDeleteSetNull);
     }
 
     @Override

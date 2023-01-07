@@ -1,12 +1,11 @@
 package org.springframework.samples.nt4h.card.hero;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +18,8 @@ public class HeroService {
     public Hero getHeroById(Integer id) {
         return heroRepository.findById(id).orElseThrow(() -> new NotFoundException("Hero not found"));
     }
+
+
 
     @Transactional(readOnly = true)
     public List<Hero> getAllHeros() {
@@ -53,23 +54,19 @@ public class HeroService {
 
     @Transactional
     public void deleteHeroInGame(HeroInGame heroInGame) {
+        heroInGame.onDeleteSetNull();
+        heroInGameRepository.save(heroInGame);
         heroInGameRepository.delete(heroInGame);
     }
 
     @Transactional
     public void deleteHeroInGameById(Integer id) {
-        heroInGameRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void deleteAllHeroInGame(Set<HeroInGame> heroInGames) {
-        heroInGameRepository.deleteAll(heroInGames);
+        HeroInGame heroInGame = getHeroInGameById(id);
+        deleteHeroInGame(heroInGame);
     }
 
     @Transactional(readOnly = true)
     public boolean heroInGameExists(int id) {
         return heroInGameRepository.existsById(id);
     }
-
-
 }

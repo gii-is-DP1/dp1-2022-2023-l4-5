@@ -12,6 +12,7 @@ public interface AbilityRepository extends CrudRepository<Ability, Integer> {
 
     Optional<Ability> findById(Integer id);
 
+    // TODO: Comprobar si funciona
     @Query("SELECT a FROM Ability a WHERE a.id IN ?1")
     List<Ability> findAllByIds(List<Integer> ids);
 

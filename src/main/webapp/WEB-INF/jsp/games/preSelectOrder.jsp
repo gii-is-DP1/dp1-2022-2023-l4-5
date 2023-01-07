@@ -15,21 +15,19 @@
         <form:form modelAttribute="game" class="form-horizontal" >
             <button id="waiting" hidden="hidden" type="submit">Start game</button>
         </form:form>
+        <div class="row">
+            <div class="chatGroup"></div>
+            <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
+                <nt4h:inputField label="Content" name="content"/>
+            </form:form>
+        </div>
+        <script src="/resources/js/chatGroup.js" type="module"></script>
+        <script src="/resources/js/waitUntilAllReady.js" type="module"></script>
     </jsp:body>
+
 </nt4h:layout>
 
-<script type="module">
-    import sendPetitionInInterval from "../../../../resources/js/petition.js";
 
-    sendPetitionInInterval('/api/games/ready/', function (responseText) {
-        const resultado = JSON.parse(responseText)
-        const form = document.getElementById("waiting");
-        if (resultado.isReady&& form.hasAttribute("hidden"))
-            form.removeAttribute("hidden")
-        else if (!resultado.isReady && !form.hasAttribute("hidden"))
-            form.setAttribute("hidden", "hidden")
-    })
-</script>
 
 
 

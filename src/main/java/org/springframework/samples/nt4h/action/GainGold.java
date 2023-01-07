@@ -11,11 +11,11 @@ public class GainGold implements Action {
 
     @Override
     public void executeAction() {
-        Integer currentGold = activePlayer.getGold();
+        Integer currentGold = activePlayer.getStatistic().getGold();
         if(gold>=0 || currentGold>=Math.abs(gold)){
-            activePlayer.setGold(currentGold + gold);
+            activePlayer.getStatistic().setGold(currentGold + gold);
         } else {
-            activePlayer.setGold(0);
+            activePlayer.getStatistic().setGold(0);
         }
     }
 }

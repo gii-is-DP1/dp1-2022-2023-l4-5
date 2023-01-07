@@ -1,6 +1,5 @@
 package org.springframework.samples.nt4h.card.ability;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Repository;

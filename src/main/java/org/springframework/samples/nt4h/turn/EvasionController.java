@@ -1,46 +1,46 @@
 package org.springframework.samples.nt4h.turn;
 
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.DropCardFromHand;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.hero.Hero;
-import org.springframework.samples.nt4h.card.hero.HeroInGame;
-import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.statistic.Statistic;
+import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
+import org.springframework.samples.nt4h.turn.exceptions.WhenEvasionDiscardAtLeast2Exception;
+import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/evasion")
 public class EvasionController {
 
-    public final String VIEW_CHOOSE_EVASION = "turns/actionDecision";
-    public final String NEXT_TURN = "redirect:/turns";
+    private final String PAGE_EVASION = "redirect:/evasion";
+    private final String VIEW_EVASION = "turns/evasionPhase";
+    private final String NEXT_TURN = "redirect:/turns";
     private final UserService userService;
-    private final PlayerService playerService;
     private final TurnService turnService;
+    private final PlayerService playerService;
     private final GameService gameService;
-
-    private final Advise advise = new Advise();
-
+    private final Advise advise;
 
     @Autowired
-    public EvasionController(UserService userService, PlayerService playerService, TurnService turnService, GameService gameService) {
-        this.playerService = playerService;
+    public EvasionController(UserService userService, TurnService turnService, PlayerService playerService, GameService gameService, Advise advise) {
         this.userService = userService;
         this.turnService = turnService;
+        this.playerService = playerService;
         this.gameService = gameService;
+        this.advise = advise;
     }
 
     @ModelAttribute("game")
@@ -48,63 +48,67 @@ public class EvasionController {
         return userService.getLoggedUser().getGame();
     }
 
-    @ModelAttribute("player")
+    @ModelAttribute("currentPlayer")
     public Player getPlayer() {
         return getGame().getCurrentPlayer();
     }
 
-    @ModelAttribute("loggedPLayer")
+    @ModelAttribute("loggedUser")
+    public User getLoggedUser() {
+        return userService.getLoggedUser();
+    }
+
+    @ModelAttribute("loggedPlayer")
     public Player getLoggedPlayer() {
-        return userService.getLoggedUser().getPlayer();
+        User loggedUser = getLoggedUser();
+        return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
-    @ModelAttribute("message")
-    public String getMessage() {
-        String message = advise.getMessage();
-        advise.resetMessage();
-        return message;
-    }
 
-    @ModelAttribute("messageType")
-    public String getMessageType() {
-        String messageType = advise.getMessageType();
-        advise.setMessageType("");
-        return messageType;
-    }
 
     @ModelAttribute("newTurn")
     public Turn getNewTurn() {
         return new Turn();
     }
 
-    @ModelAttribute("turns")
-    public List<Phase> getTurns() {
-        return Lists.newArrayList(Phase.EVADE, Phase.HERO_ATTACK);
+    @ModelAttribute("chat")
+    public Message getChat() {
+        return new Message();
     }
 
     @GetMapping
-    public String chooseEvasion() {
-        return VIEW_CHOOSE_EVASION;
+    public String getEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
+        advise.getMessage(session, modelMap);
+        advise.keapUrl(session, request);
+        return VIEW_EVASION;
     }
 
     @PostMapping
-    public String selectEvasion(Turn turn) {
+    public String postEvasion(@Valid Turn turn) throws NoCurrentPlayer {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
-        turn = turnService.getTurnsByPhaseAndPlayerId(turn.getPhase(), player.getId());
         if (loggedPlayer != player)
-            return advise.sendError("No puedes seleccionar si atacar o evadir.",chooseEvasion());
-        Game game = getGame();
-        game.setCurrentTurn(turn);
-        gameService.saveGame(game);
-        if (turn.getPhase() == Phase.EVADE) {
-            player.setHasEvasion(false);
-            player.setNextPhase(Phase.MARKET);
-            // Action action = new DropCardFromHand(loggedPlayer, null); // TODO: Eliminar dos cartas
-            // action.executeAction();
-        } else
-            player.setNextPhase(Phase.HERO_ATTACK);
+            throw new NoCurrentPlayer();
+        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
+        oldTurn.addAbility(turn.getCurrentAbility());
+        turnService.saveTurn(oldTurn);
+        player.getDeck().discardCardOnHand(turn.getCurrentAbility());
         playerService.savePlayer(player);
+        return PAGE_EVASION;
+    }
+
+    @GetMapping("/next")
+    public String nextTurn() throws WhenEvasionDiscardAtLeast2Exception {
+        Player player = getPlayer();
+        Game game = getGame();
+        if (player != getGame().getCurrentPlayer())
+            return NEXT_TURN;
+        Turn turn = turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
+        if (turn.getUsedAbilities().size() < 2)
+            throw new WhenEvasionDiscardAtLeast2Exception();
+        game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));
+        gameService.saveGame(game);
         return NEXT_TURN;
     }
+
 }

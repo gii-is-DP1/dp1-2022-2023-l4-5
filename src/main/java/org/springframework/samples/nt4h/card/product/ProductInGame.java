@@ -34,4 +34,22 @@ public class ProductInGame extends NamedEntity {
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
+
+    public static ProductInGame createProduct(Product product, Player player, Game game) {
+        ProductInGame productInGame = ProductInGame.builder()
+                .timesUsed(0)
+                .stateProduct(StateProduct.IN_SALE)
+                .product(product)
+                .player(player)
+                .game(game)
+                .build();
+        product.setName(product.getName());
+    return productInGame;
+    }
+
+    public void onDeleteSetNull() {
+        product = null;
+        player = null;
+        game = null;
+    }
 }
