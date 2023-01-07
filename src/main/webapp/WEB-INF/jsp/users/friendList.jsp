@@ -56,16 +56,18 @@
                         <spring:param name="username" value="${localUser.username}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(chatWith)}" class="btn">Chat</a>
-                    <!--
-                    <c:if test="${game != null}">
+                    <c:if test="${localUser.game != null}">
                         <spring:url value="/games/{gameId}" var="game">
                             <spring:param name="gameId" value="${game.id}"/>
                         </spring:url>
                         <a href="${fn:escapeXml(game)}" class="btn">Join</a>
                     </c:if>
-
-                    -->
-
+                    <c:if test="${localUser.game == null}">
+                        <spring:url value="/messages/{username}/invite" var="invite">
+                            <spring:param name="username" value="${localUser.username}"/>
+                        </spring:url>
+                        <a href="${fn:escapeXml(invite)}" class="btn">Invite</a>
+                    </c:if>
                 </td>
             </tr>
         </c:forEach>

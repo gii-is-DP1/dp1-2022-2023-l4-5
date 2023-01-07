@@ -55,7 +55,7 @@ public class Message extends BaseEntity implements Jsonable {
         json.put("time", time.toString());
         json.put("sender", sender.getUsername());
         if (receiver != null ) json.put("receiver", receiver.getUsername());
-        json.put("game", game.getName());
+        if (game != null ) json.put("game", game.getName());
         return json.toJson();
     }
 
