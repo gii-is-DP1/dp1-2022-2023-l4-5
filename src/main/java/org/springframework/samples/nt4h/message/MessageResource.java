@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @AllArgsConstructor
@@ -22,6 +21,14 @@ public class MessageResource {
         User loggedUser = userService.getLoggedUser();
         JsonObject jsonObject = new JsonObject();
         jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(loggedUser.getUsername(), username));
+        return ResponseEntity.ok(jsonObject.toJson());
+    }
+
+    @GetMapping("/game")
+    public ResponseEntity<String> gameMessages() {
+        JsonObject jsonObject = new JsonObject();
+        User loggedUser = userService.getLoggedUser();
+        jsonObject.put("messages", messageService.getGameMessages(loggedUser.getGame()));
         return ResponseEntity.ok(jsonObject.toJson());
     }
 }

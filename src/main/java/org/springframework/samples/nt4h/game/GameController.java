@@ -11,11 +11,12 @@ import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.game.exceptions.*;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.samples.nt4h.turn.Advise;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
@@ -39,25 +41,26 @@ public class GameController {
     private static final String VIEW_GAME_LOBBY = "games/gameLobby";
     private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
     private static final String VIEW_GAME_HERO_SELECT = "games/heroSelect";
-    private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/heroSelect";
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
     private static final String VIEW_GAME_PREORDER = "games/preSelectOrder";
+    private static final String PAGE_CURRENT_GAME = "redirect:/games/current";
     // Servicios
     private final GameService gameService;
 
     private final HeroService heroService;
     private final UserService userService;
     private final PlayerService playerService;
-    public final Advise advise = new Advise();
+    private final Advise advise;
 
 
     @Autowired
-    public GameController(GameService gameService, HeroService heroService, UserService userService, PlayerService playerService) {
+    public GameController(GameService gameService, HeroService heroService, UserService userService, PlayerService playerService, Advise advise) {
         this.gameService = gameService;
         this.heroService = heroService;
         this.userService = userService;
         this.playerService = playerService;
+        this.advise = advise;
     }
 
     @InitBinder
@@ -80,13 +83,13 @@ public class GameController {
         return Lists.newArrayList(Accessibility.PUBLIC, Accessibility.PRIVATE);
     }
 
-    @ModelAttribute("hero")
+    @ModelAttribute("newHero")
     public HeroInGame getHero() {
-        return new HeroInGame(); // TODO: comprobar si necesita valores por defecto.
+        return new HeroInGame();
     }
 
 
-    @ModelAttribute("player")
+    @ModelAttribute("loggedPlayer")
     public Player getPlayer() {
         User loggedUser = getUser();
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
@@ -109,19 +112,14 @@ public class GameController {
         return gameService.getAllGames();
     }
 
-    @ModelAttribute("user")
+    @ModelAttribute("loggedUser")
     public User getUser() {
         return userService.getLoggedUser();
     }
 
-    @ModelAttribute("message")
-    public String getMessage() {
-        return advise.getMessage();
-    }
-
-    @ModelAttribute("messageType")
-    public String getMessageType() {
-        return advise.getMessageType();
+    @ModelAttribute("chat")
+    public Message getChat() {
+        return new Message();
     }
 
     // Obtener todas las partidas.
@@ -136,7 +134,7 @@ public class GameController {
             pageable = PageRequest.of(page, 5);
             gamePage = gameService.getAllGames(pageable);
         }
-        getMessage(session, model);
+        advise.getMessage(session, model);
         model.put("isNext", gamePage.hasNext());
         model.put("games", gamePage.getContent());
         model.put("page", page);
@@ -146,28 +144,44 @@ public class GameController {
 
     // Parida actual
     @GetMapping("/current")
-    public String showCurrentGame() {
-        System.out.println("Current game");
+    public String showCurrentGame(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
+        advise.keapUrl(session, request);
+        System.out.println(game.getSpectators());
         return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
+    }
+
+    // Visualizar una partida.
+    @GetMapping("/view/{gameId}")
+    public String showGame(@PathVariable("gameId") int gameId, ModelMap model, HttpSession session, HttpServletRequest request) throws UserInAGameException {
+        Game game = gameService.getGameById(gameId);
+        // advise.keapUrl(session, request);
+        model.put("game", game);
+        gameService.addSpectatorToGame(game, getUser());
+        return VIEW_GAME_LOBBY;
     }
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session) throws UserInAGameException, IncorrectPasswordException, UserHasAlreadyAPlayerException, FullGameException {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session, HttpServletRequest request) throws UserInAGameException, IncorrectPasswordException, UserHasAlreadyAPlayerException, FullGameException {
         Game newGame = gameService.getGameById(gameId);
-        userService.addUserToGame(getUser(), newGame, password);
-        gameService.addPlayerToGame(getGame(), getUser()); // Esto estaba antes en un post.
-        getMessage(session, model);
+        User loggedUser = getUser();
+
+        userService.addUserToGame(loggedUser, newGame, password);
+        gameService.addPlayerToGame(newGame, loggedUser); // Esto estaba antes en un post.
+        advise.keapUrl(session, request);
+        advise.getMessage(session, model);
         model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
-        return VIEW_GAME_LOBBY;
+        System.out.println("El jugador todavía no se ha unido, CUIODADO.");
+        return PAGE_CURRENT_GAME;
     }
 
     //Elegir here
     @GetMapping(value = "/heroSelect")
-    public String initHeroSelectForm(HttpSession session, ModelMap model) {
+    public String initHeroSelectForm(HttpSession session, ModelMap model, HttpServletRequest request) {
         // Los datos para el formulario.
-        getMessage(session, model);
+        advise.getMessage(session, model);
+        advise.keapUrl(session, request);
         return VIEW_GAME_HERO_SELECT;
     }
 
@@ -175,7 +189,7 @@ public class GameController {
     @PostMapping(value = "/heroSelect")
     public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
         gameService.addHeroToPlayer(getPlayer(), heroInGame, getGame());
-        return showCurrentGame();
+        return PAGE_CURRENT_GAME;
 
     }
 
@@ -192,22 +206,24 @@ public class GameController {
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         if (result.hasErrors()) return VIEW_GAME_CREATE;
         gameService.createGame(userService.getLoggedUser(), game);
-        return showCurrentGame();
+        return PAGE_CURRENT_GAME;
     }
 
     @GetMapping("/selectOrder")
-    public String orderPlayers() {
+    public String orderPlayers(HttpSession session, HttpServletRequest request) {
+        advise.keapUrl(session, request);
         return VIEW_GAME_PREORDER;
     }
 
 
     // Tiene que recibir las cartas de habilidad que desea utilizar el jugador, por tanto, se va a modificar entero.
     @PostMapping("/selectOrder")
-    public String processOrderPlayers() {
+    public String processOrderPlayers(HttpSession session, HttpServletRequest request) {
         List<Player> players = getPlayers();
         Game game = getGame();
         if (players.stream().anyMatch(player -> player.getSequence() == -1))
             gameService.orderPlayer(players, game);
+        advise.keapUrl(session, request);
         return VIEW_GAME_ORDER;
     }
 
@@ -216,16 +232,5 @@ public class GameController {
         Game game = getGame();
         playerService.deletePlayerById(playerId);
         return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
-    }
-
-    public void getMessage(HttpSession session, ModelMap model) {
-        Object message = session.getAttribute("message");
-        Object messageType = session.getAttribute("messageType");
-        if (message != null) {
-            model.addAttribute("message", message);
-            model.addAttribute("messageType", messageType);
-            session.removeAttribute("message");
-            session.removeAttribute("messageType");
-        }
     }
 }

@@ -1,10 +1,13 @@
-package org.springframework.samples.nt4h.hero;
+package org.springframework.samples.nt4h.card.hero;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.ability.Ability;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
@@ -19,6 +22,8 @@ import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenExcep
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,8 +42,23 @@ class HeroServiceTest {
     private final int idHero = 1;
     private String nameHero;
 
+
     @BeforeEach
-    void setUp() throws RoleAlreadyChosenException, FullGameException {
+    void setUp() throws FullGameException, RoleAlreadyChosenException {
+        User user = userService.getUserById(1);
+        Game game = Game.createGame( "Prueba",   Mode.UNI_CLASS, 2, "");
+        Player player = Player.createPlayer(user, game, true);
+        System.out.println("numPlayers: " + game.getPlayers().size());
+        game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
+        game.setHasStages(true);
+        Hero hero = heroService.getHeroById(idHero);
+        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
+        player.addHero(heroInGame);
+        gameService.saveGame(game);
+        idGame = game.getId();
+        nameHero = hero.getName();
+
+        /*
         User user = userService.getUserById(1);
         Hero hero = heroService.getHeroById(idHero);
         HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
@@ -50,6 +70,7 @@ class HeroServiceTest {
         gameService.saveGame(game);
         idGame = game.getId();
         nameHero = hero.getName();
+         */
     }
 
     @AfterEach
@@ -71,6 +92,5 @@ class HeroServiceTest {
     public void testFindByName() {
         assertEquals(nameHero, heroService.getHeroByName(nameHero).getName());
     }
-
 }
 

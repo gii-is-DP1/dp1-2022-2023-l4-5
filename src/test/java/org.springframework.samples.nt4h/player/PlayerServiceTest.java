@@ -5,6 +5,7 @@
 
 package org.springframework.samples.nt4h.player;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
@@ -25,6 +27,7 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
+import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -54,7 +57,24 @@ public class PlayerServiceTest {
     }
 
     @BeforeEach
-    void setUp() throws RoleAlreadyChosenException, FullGameException {
+    void setUp() throws RoleAlreadyChosenException, FullGameException, HeroAlreadyChosenException {
+        User user = userService.getUserById(1);
+        Hero hero = heroService.getHeroById(1);
+        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
+        Game game = Game.createGame( "Test Game",   Mode.MULTI_CLASS, 2, "test123");
+        player = Player.createPlayer(user, game, true);
+        game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
+        game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
+        game.setPhase(Phase.START);
+        game.setHasStages(true);
+        gameService.saveGame(game);
+        game.addPlayerWithNewHero(player, heroInGame);
+        idPlayer = player.getId();
+        idGame = game.getId();
+        namePlayer = player.getName();
+
+
+        /*
         User user = userService.getUserById(1);
         Hero hero = heroService.getHeroById(1);
         HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
@@ -67,6 +87,7 @@ public class PlayerServiceTest {
         idPlayer = player.getId();
         idGame = game.getId();
         namePlayer = player.getName();
+        */
     }
 
     @AfterEach

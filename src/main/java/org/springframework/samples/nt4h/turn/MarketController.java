@@ -8,9 +8,13 @@ import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
+import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -33,13 +38,15 @@ public class MarketController {
     private final ProductService productService;
     private final TurnService turnService;
     private final GameService gameService;
+    private final Advise advise;
 
     @Autowired
-    public MarketController(UserService userService, ProductService productService, TurnService turnService, GameService gameService) {
+    public MarketController(UserService userService, ProductService productService, TurnService turnService, GameService gameService, Advise advise) {
         this.userService = userService;
         this.productService = productService;
         this.turnService = turnService;
         this.gameService = gameService;
+        this.advise = advise;
     }
 
     @ModelAttribute("productsOnSale")
@@ -47,7 +54,7 @@ public class MarketController {
         return productService.getMarket();
     }
 
-    @ModelAttribute("productInGame")
+    @ModelAttribute("newProductInGame")
     public ProductInGame getProductInGame() {
         return new ProductInGame();
     }
@@ -57,19 +64,31 @@ public class MarketController {
         return userService.getLoggedUser().getGame();
     }
 
-    @ModelAttribute("player")
+    @ModelAttribute("currentPlayer")
     public Player getPlayer() {
         return getGame().getCurrentPlayer();
     }
 
-    @ModelAttribute("loggedPLayer")
+    @ModelAttribute("loggedPlayer")
     public Player getLoggedPlayer() {
-        return userService.getLoggedUser().getPlayer();
+        User loggedUser = getLoggedUser();
+        return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
+    }
+
+    @ModelAttribute("loggedUser")
+    public User getLoggedUser() {
+        return userService.getLoggedUser();
+    }
+
+    @ModelAttribute("chat")
+    public Message getChat() {
+        return new Message();
     }
 
     @GetMapping
-    public String market(HttpSession session, ModelMap modelMap) {
-        getMessage(session, modelMap);
+    public String market(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
+        advise.getMessage(session, modelMap);
+        advise.keapUrl(session, request);
         return VIEW_MARKET;
     }
 
@@ -93,16 +112,5 @@ public class MarketController {
             gameService.saveGame(game);
         }
         return NEXT_TURN;
-    }
-
-    public void getMessage(HttpSession session, ModelMap model) {
-        Object message = session.getAttribute("message");
-        Object messageType = session.getAttribute("messageType");
-        if (message != null) {
-            model.addAttribute("message", message);
-            model.addAttribute("messageType", messageType);
-            session.removeAttribute("message");
-            session.removeAttribute("messageType");
-        }
     }
 }

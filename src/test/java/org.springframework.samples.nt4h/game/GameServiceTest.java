@@ -18,6 +18,8 @@ import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -36,6 +38,18 @@ public class GameServiceTest {
     @BeforeEach
     void setUp() throws FullGameException, RoleAlreadyChosenException {
         User user = userService.getUserById(1);
+        game = Game.createGame( "Prueba",   Mode.UNI_CLASS, 2, "");
+        Player player = Player.createPlayer(user, game, true);
+        game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
+        game.setHasStages(true);
+        Hero hero = heroService.getHeroById(1);
+        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
+        player.addHero(heroInGame);
+        gameService.saveGame(game);
+        idGame = game.getId();
+        numGames = gameService.getAllGames().size();
+        /*
+        User user = userService.getUserById(1);
         Hero hero = heroService.getHeroById(1);
         HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
         game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
@@ -46,6 +60,7 @@ public class GameServiceTest {
         gameService.saveGame(game);
         idGame = game.getId();
         numGames = gameService.getAllGames().size();
+         */
     }
 
     @AfterEach

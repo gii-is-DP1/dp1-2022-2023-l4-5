@@ -8,7 +8,7 @@ sendPetitionInInterval('/api/games', function (responseText) {
         const namePlayer = player.name;
         const nameHeroes = player.heroesInGame.sort().map(h => h.hero.name).join(", ")
         const ready = player.ready ? "Ready" : "Not ready";
-        const actions = resultado.loggedUser.player.host ? " - " + "<a href='/games/deletePlayer/" + player.id + "'>Get Out!!</a>" : "";
+        const actions = resultado.loggedUser.player != null && resultado.loggedUser.player.host ? " - " + "<a href='/games/deletePlayer/" + player.id + "'>Get Out!!</a>" : "";
         return createHtml(namePlayer, nameHeroes,ready,actions);
     })
     for (let i = 0; i < readys.length; i++) {

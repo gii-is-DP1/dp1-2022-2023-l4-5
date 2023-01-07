@@ -14,12 +14,12 @@ public class ProductInGameFormatter implements Formatter<ProductInGame> {
 
     @Override
     public ProductInGame parse(String s, Locale locale) {
-        return productService.getProductInGameById(Integer.parseInt(s.split("-")[0].trim()));
+        return productService.getProductInGameById(Integer.parseInt(s));
     }
 
     @Override
     public String print(ProductInGame productInGame, Locale locale) {
-        return productInGame.getName() + "-" + productInGame.getId();
+        return productInGame.getId().toString();
     }
 }
 

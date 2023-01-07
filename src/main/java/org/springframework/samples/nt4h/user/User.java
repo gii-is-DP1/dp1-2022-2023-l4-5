@@ -80,32 +80,12 @@ public class User extends BaseEntity implements Jsonable {
     @OneToOne(cascade = CascadeType.ALL)
     private Player player;
 
-    public void createUser() {
-        this.authority = Authority.USER.toString(); // TODO: Corregir para que sea con enum.
+    public void defaultUser() {
+        this.authority = Authority.USER.toString();
         this.enable = "true";
         this.tier = Tier.BRONZE;
         this.friends = Lists.newArrayList();
         this.statistic = Statistic.createStatistic();
-        this.player = null;
-    }
-
-    public void createPlayer(Game game) {
-        this.player = Player.builder()
-            .statistic(Statistic.createStatistic())
-            .hasEvasion(true)
-            .sequence(-1)
-            .nextPhase(Phase.EVADE)
-            .wounds(0)
-            .damageProtect(0)
-            .birthDate(this.birthDate)
-            .game(game)
-            .host(game.getPlayers().isEmpty())
-            .ready(false)
-            .turns(Lists.newArrayList())
-            .heroes(Lists.newArrayList())
-            .deck(Deck.createEmptyDeck())
-            .build();
-        player.setName(this.username);
     }
 
     public void onDeleteSetNull() {

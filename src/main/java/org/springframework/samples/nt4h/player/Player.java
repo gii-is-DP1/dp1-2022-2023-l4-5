@@ -12,6 +12,7 @@ import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.statistic.Statistic;
@@ -56,23 +57,32 @@ public class Player extends NamedEntity implements Jsonable {
     private Deck deck;
 
 
-    public static Player createPlayer(User user, Game game, Boolean host) {
+    public static Player createPlayer(User user, Game game, Boolean host) throws FullGameException {
         Player player = Player.builder()
                 .birthDate(user.getBirthDate())
                 .host(host)
                 .game(game)
-                .sequence(-1)
-                .nextPhase(Phase.START)
-                .ready(false)
-                .statistic(Statistic.createStatistic())
-                .wounds(0)
-                .damageProtect(0)
-                .hasEvasion(true)
-                .turns(Lists.newArrayList())
-                .deck(Deck.createEmptyDeck())
                 .build();
+        player.defaultPlayer();
         player.setName(user.getUsername());
+        user.setPlayer(player);
+        user.setGame(game);
+        player.setGame(game);
+        game.addPlayer(player);
         return player;
+    }
+
+    public void defaultPlayer() {
+        sequence = -1;
+        nextPhase = Phase.START;
+        ready = false;
+        statistic = Statistic.createStatistic();
+        wounds = 0;
+        damageProtect = 0;
+        hasEvasion = true;
+        turns = Lists.newArrayList();
+        deck = Deck.createEmptyDeck();
+        heroes = Lists.newArrayList();
     }
 
 

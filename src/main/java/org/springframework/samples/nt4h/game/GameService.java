@@ -68,14 +68,17 @@ public class GameService {
     @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
+        System.out.println("GameService.deleteGameById: " + game);
         deleteGame(game);
     }
 
+    @Transactional
     public Player addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
+        if (game.getPlayers().contains(user.getPlayer()))
+            return user.getPlayer();
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
         Player newPlayer = Player.createPlayer(user, game, false);
-        game.addPlayer(newPlayer);
         playerService.createTurns(newPlayer);
         user.setPlayer(newPlayer);
         saveGame(game);
@@ -88,6 +91,7 @@ public class GameService {
         if (player.getReady())
             throw new PlayerIsReadyException();
         System.out.println("addHeroToPlayer " + player.getId());
+        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -99,27 +103,18 @@ public class GameService {
 
     @Transactional
     public void createGame(User user, Game game) throws FullGameException {
-        // TODO: Crear un método a parte para creación de player.
+        game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
         Player newPlayer = Player.createPlayer(user, game, true);;
-        newPlayer.setName(user.getUsername());
-        game = Game.createGame(game.getName(), game.getPassword().isEmpty() ? Accessibility.PUBLIC : Accessibility.PRIVATE, game.getMode(),  game.getMaxPlayers(), game.getPassword());
-        newPlayer.setGame(game);
         playerService.savePlayer(newPlayer);
-        game.addPlayer(newPlayer);
         saveGame(game);
-        user.setGame(game);
-        user.setPlayer(newPlayer);
         userService.saveUser(user);
         List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame();
-        EnemyInGame nightLordInGame = enemyService.addNightLordToGame();
         game.setAllOrcsInGame(orcsInGame);
-        game.getAllOrcsInGame().add(nightLordInGame);
+        game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
 
     }
-
-    // user.getFriends().sublist(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
@@ -151,4 +146,12 @@ public class GameService {
         saveGame(game);
     }
 
+    public void addSpectatorToGame(Game game, User user) throws UserInAGameException {
+        game.getSpectators().add(user);
+        if (user.getGame() != null)
+            throw new UserInAGameException();
+        user.setGame(game);
+        userService.saveUser(user);
+        saveGame(game);
+    }
 }

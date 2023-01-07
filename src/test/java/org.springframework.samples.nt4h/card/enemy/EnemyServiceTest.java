@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.enemy;
+package org.springframework.samples.nt4h.card.enemy;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

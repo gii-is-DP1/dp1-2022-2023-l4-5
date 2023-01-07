@@ -1,10 +1,11 @@
-package org.springframework.samples.nt4h.ability;
+package org.springframework.samples.nt4h.card.ability;
 
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
@@ -19,6 +20,8 @@ import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,6 +45,17 @@ public class AbilityServiceTest {
 
     @BeforeEach
     void setUp() throws FullGameException {
+        User user = userService.getUserById(1);
+        Game game = Game.createGame( "Prueba",   Mode.UNI_CLASS, 2, "");
+        player = Player.createPlayer(user, game, true);
+        game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
+        game.setHasStages(true);
+        ability = abilityService.getAbilityById(idAbility);
+        AbilityInGame abilityInGame = AbilityInGame.fromAbility(ability, player);
+        player.getDeck().getInDeck().add(abilityInGame);
+        gameService.saveGame(game);
+        idAbilityInGame = abilityInGame.getId();
+        /*
         Game game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
         User user = userService.getUserById(1);
         user.createPlayer(game);
@@ -52,6 +66,7 @@ public class AbilityServiceTest {
         game.addPlayer(player);
         gameService.saveGame(game);
         idAbilityInGame = abilityInGame.getId();
+        */
     }
 
     @AfterEach
