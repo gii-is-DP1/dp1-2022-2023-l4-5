@@ -68,11 +68,10 @@ public class GameService {
     @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
-        System.out.println("GameService.deleteGameById: " + game);
         deleteGame(game);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {FullGameException.class, HeroAlreadyChosenException.class})
     public Player addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
         if (game.getPlayers().contains(user.getPlayer()))
             return user.getPlayer();
@@ -86,12 +85,10 @@ public class GameService {
     }
 
 
-    @Transactional(rollbackFor = PlayerIsReadyException.class)
-    public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
+    @Transactional(rollbackFor = {FullGameException.class, HeroAlreadyChosenException.class, PlayerIsReadyException.class})
+    public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (player.getReady())
             throw new PlayerIsReadyException();
-        System.out.println("addHeroToPlayer " + player.getId());
-        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -101,7 +98,7 @@ public class GameService {
         saveGame(game);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {FullGameException.class})
     public void createGame(User user, Game game) throws FullGameException {
         game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
         Player newPlayer = Player.createPlayer(user, game, true);;
@@ -146,12 +143,15 @@ public class GameService {
         saveGame(game);
     }
 
+    @Transactional(rollbackFor = {UserInAGameException.class})
     public void addSpectatorToGame(Game game, User user) throws UserInAGameException {
-        game.getSpectators().add(user);
-        if (user.getGame() != null)
+        if (user.getGame() == null) {
+            game.getSpectators().add(user);
+            user.setGame(game);
+            userService.saveUser(user);
+            saveGame(game);
+        }
+        if (user.getGame() != game)
             throw new UserInAGameException();
-        user.setGame(game);
-        userService.saveUser(user);
-        saveGame(game);
     }
 }

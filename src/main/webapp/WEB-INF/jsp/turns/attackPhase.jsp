@@ -13,6 +13,7 @@
             padding-top: 2rem;
             padding-bottom: 2rem;
         }
+
         .pointer {
             display: flex;
             justify-content: center;
@@ -21,30 +22,48 @@
     <h1>Gold: ${currentPlayer.statistic.glory},
         Glory: ${currentPlayer.statistic.gold},
         Wounds: ${currentPlayer.wounds}</h1>
-    <c:if test="${!loggedPlayer.isNew()}">
+    <c:if test="${!loggedPlayer.isNew() && game.actualOrcs.size()!=0}">
         <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
             <div class="container">
-            <div class="pointer">
-            <c:forEach var="i" begin="0" end="${game.actualOrcs.size()-1}">
-                <c:set var="enemyInGame" value="${game.actualOrcs[i]}" scope="page"/>
-                <div class="col-sm-2">
-                    <nt4h:radioButtom name="currentEnemy" element="${enemyInGame.id}" frontImage="${enemyInGame.enemy.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
-                </div>
-            </c:forEach>
-            </div>
+                <c:if test="${game.actualOrcs.size()!=0}">
+                    <div class="pointer">
+                        <c:forEach var="i" begin="0" end="${game.actualOrcs.size()-1}">
+                            <c:set var="enemyInGame" value="${game.actualOrcs[i]}" scope="page"/>
+                            <div class="col-sm-2">
+                                <nt4h:radioButtom name="currentEnemy" element="${enemyInGame.id}"
+                                                  frontImage="${enemyInGame.enemy.frontImage}" i="${i}0"
+                                                  image="/resources/images/muszka.png"/>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:if>
+                <c:if test="${game.actualOrcs.size()!=0}">
+                    <div style="display: flex; justify-content: center;">
+                    <h1>Todos los orcos han sido asesinados.</h1>
+                    </div>
+                </c:if>
             </div>
             <div class="container">
-                <div class="pointer">
-                    <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
-                        <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
-                        <div class="col-sm-2">
-                            <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}" frontImage="${abilityInGame.ability.frontImage}" i="${i}1" image="/resources/images/muszka.png"/>
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
+                <c:if test="${currentPlayer.deck.inHand.size()==0}">
+                    <div class="pointer">
 
-            <c:if test="${game.actualOrcs.size()!=0}">
+                        <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                            <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
+                            <div class="col-sm-2">
+                                <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}"
+                                                  frontImage="${abilityInGame.ability.frontImage}" i="${i}1"
+                                                  image="/resources/images/muszka.png"/>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:if>
+                <c:if test="${currentPlayer.deck.inHand.size()==0}">
+                    <div style="display: flex;justify-content: center;">
+                        <h1>No tienes cartas en la mano.</h1>
+                    </div>
+                </c:if>
+            </div>
+            <c:if test="${game.actualOrcs.size()!=0 && currentPlayer.deck.inHand.size()==0}">
                 <button class="btn btn-default" type="submit">Attack</button>
             </c:if>
         </form:form>
@@ -52,24 +71,35 @@
     <c:if test="${logggedPlayer.isNew()}">
         <div class="container">
             <div style="display: flex; justify-content: center;">
-                <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
-                    <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
-                    <div class="col-sm-2">
-                        <img src="${abilityInGame.ability.frontImage}">
-                    </div>
-                </c:forEach>
+                <c:if test="${game.actualOrcs.size()!=0}">
+                    <c:forEach var="i" begin="0" end="${game.actualOrcs.size()-1}">
+                        <c:set var="enemyInGame" value="${game.actualOrcs[i]}" scope="page"/>
+                        <div class="col-sm-2">
+                            <img src="${enemyInGame.enemy.frontImage}">
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${game.actualOrcs.size()==0}">
+                    <h1>Todos los orcos han sido asesinados.</h1>
+                </c:if>
             </div>
         </div>
         <div class="container">
-            <div class="display: flex; justify-content: center;">
-                <c:forEach var="i" begin="0" end="${game.actualOrcs.size()-1}">
-                    <c:set var="enemyInGame" value="${game.actualOrcs[i]}" scope="page"/>
-                    <div class="col-sm-2">
-                        <img src="${enemyInGame.enemy.frontImage}">
-                    </div>
-                </c:forEach>
+            <div style="display: flex; justify-content: center;">
+                <c:if test="${currentPlayer.deck.inHand.size()!=0}">
+                    <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                        <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
+                        <div class="col-sm-2">
+                            <img src="${abilityInGame.ability.frontImage}">
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${currentPlayer.deck.inHand.size()==0}">
+                    <h1>No tienes cartas en la mano.</h1>
+                </c:if>
             </div>
         </div>
+
     </c:if>
     <div class="row">
         <div class="chatGroup"></div>

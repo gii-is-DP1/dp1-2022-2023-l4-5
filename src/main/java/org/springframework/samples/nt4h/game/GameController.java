@@ -138,7 +138,6 @@ public class GameController {
         model.put("isNext", gamePage.hasNext());
         model.put("games", gamePage.getContent());
         model.put("page", page);
-
         return VIEW_GAME_LIST;
     }
 
@@ -147,7 +146,6 @@ public class GameController {
     public String showCurrentGame(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
         advise.keapUrl(session, request);
-        System.out.println(game.getSpectators());
         return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
     }
 
@@ -166,13 +164,11 @@ public class GameController {
     public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session, HttpServletRequest request) throws UserInAGameException, IncorrectPasswordException, UserHasAlreadyAPlayerException, FullGameException {
         Game newGame = gameService.getGameById(gameId);
         User loggedUser = getUser();
-
         userService.addUserToGame(loggedUser, newGame, password);
         gameService.addPlayerToGame(newGame, loggedUser); // Esto estaba antes en un post.
         advise.keapUrl(session, request);
         advise.getMessage(session, model);
         model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
-        System.out.println("El jugador todavía no se ha unido, CUIODADO.");
         return PAGE_CURRENT_GAME;
     }
 
