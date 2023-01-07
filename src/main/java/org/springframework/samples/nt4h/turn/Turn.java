@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
@@ -40,8 +41,13 @@ public class Turn extends BaseEntity implements Jsonable {
     private List<EnemyInGame> usedEnemies;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    private Game game;
+    private ProductInGame currentProduct;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<ProductInGame> usedProductsInGame;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Game game;
     @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
 
@@ -59,6 +65,14 @@ public class Turn extends BaseEntity implements Jsonable {
             usedAbilities = Lists.newArrayList(usedAbility);
         } else {
             usedAbilities.add(usedAbility);
+        }
+    }
+
+    public void addProduct(ProductInGame usedProduct) {
+        if(usedProductsInGame == null) {
+            usedProductsInGame = Lists.newArrayList(usedProduct);
+        } else {
+            usedProductsInGame.add(usedProduct);
         }
     }
 

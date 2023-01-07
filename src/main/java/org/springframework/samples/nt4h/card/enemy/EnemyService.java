@@ -5,11 +5,13 @@ import org.springframework.samples.nt4h.action.InflictWounds;
 import org.springframework.samples.nt4h.action.RemoveCardForEnemyAttack;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ public class EnemyService {
     private final EnemyInGameRepository enemyInGameRepository;
     private final EnemyRepository enemyRepository;
     private final PlayerService playerService;
+    private final GameService gameService;
 
     // EnemyInGame
     @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
@@ -76,11 +79,17 @@ public class EnemyService {
     }
 
     @Transactional
-    public List<EnemyInGame> addOrcsToGame() { // TODO: dependiendo del juego deberán de ser un número u otro.
-        List<EnemyInGame> orcs = getAllNotNightLords().stream()
-            .map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
-        orcs.forEach(this::saveEnemyInGame);
-        return orcs;
+    public List<EnemyInGame> addOrcsToGame(Integer numPlayers) {
+        Integer limitEnemies = 19;
+        if(numPlayers == 2) limitEnemies = 19;
+        else if(numPlayers == 3) limitEnemies = 23;
+        else if(numPlayers == 4) limitEnemies = 27;
+        List<EnemyInGame> orcs = getAllNotNightLords().stream().map(enemy -> EnemyInGame.createEnemy(false, enemy))
+            .collect(Collectors.toList());;
+        Collections.shuffle(orcs);
+        List<EnemyInGame> limitedOrcs = orcs.subList(0, limitEnemies);
+        limitedOrcs.forEach(this::saveEnemyInGame);
+        return limitedOrcs;
     }
 
     @Transactional

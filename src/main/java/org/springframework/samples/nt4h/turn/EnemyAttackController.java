@@ -24,12 +24,11 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/enemyAttack")
 public class EnemyAttackController {
 
-
     private final UserService userService;
     private final TurnService turnService;
     private final GameService gameService;
 
-    private final EnemyService enemyService; //este debe cambiar por Service Enemey supongo
+    private final EnemyService enemyService;
     public final String VIEW_ATTACK = "turns/attackPhase";
     public final String NEXT_TURN = "redirect:/turns";
     private final Advise advise;
@@ -64,7 +63,6 @@ public class EnemyAttackController {
     public Message getChat() {
         return new Message();
     }
-
 
 
     @Autowired

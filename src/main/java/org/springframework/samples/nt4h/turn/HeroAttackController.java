@@ -83,7 +83,6 @@ public class HeroAttackController {
         return VIEW_HERO_ATTACK;
     }
 
-
     @PostMapping
     public String modifyCardAttributes(Turn turn) throws NoCurrentPlayer {
         Player player = getPlayer();
