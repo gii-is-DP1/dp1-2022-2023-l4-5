@@ -85,7 +85,7 @@ public class ReestablishmentController {
         return new Message();
     }
 
-    @GetMapping("/addCards")
+    @GetMapping
     public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) throws NoCurrentPlayer {
         Game game = getGame();
         advise.keepUrl(session, request);
@@ -98,7 +98,7 @@ public class ReestablishmentController {
         return VIEW_REESTABLISHMENT;
     }
 
-    @PostMapping("/addCards")
+    @PostMapping
     public String takeNewAbility(Integer cardId) throws NoCurrentPlayer, TooManyAbilitiesException {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();

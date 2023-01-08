@@ -18,20 +18,28 @@ public class DeckService {
 
     @Transactional()
     public List<AbilityInGame> takeNewCard(Player player) {
-        while(player.getDeck().getInHand().size() < 4) {
-            Action takeNewCard = new TakeCardFromAbilityPile(player);
-            takeNewCard.executeAction();
-        } return player.getDeck().getInHand();
+        List<AbilityInGame> handPile = player.getDeck().getInHand();
+        List<AbilityInGame> abilityPile = player.getDeck().getInDeck();
+        while (handPile.size() < 4 && abilityPile.size() > 0) {
+            int lastCardFromPile = abilityPile.size() - 1;
+            AbilityInGame card = abilityPile.get(lastCardFromPile);
+            handPile.add(card);
+            abilityPile.remove(card);
+        }
+        return player.getDeck().getInHand();
     }
 
     @Transactional(rollbackFor = TooManyAbilitiesException.class)
     public List<AbilityInGame> removeAbilityCards(Integer cardId, Player player) throws TooManyAbilitiesException {
-        while(player.getDeck().getInHand().size() > 4) {
-            Action removeToDiscard = new RemoveCardFromHandToDiscard(player, cardId);
-            removeToDiscard.executeAction();
-        } if(player.getDeck().getInHand().size() > 4)
-            throw new TooManyAbilitiesException();
+        while (player.getDeck().getInHand().size() > 4) {
+            List<AbilityInGame> handPile = player.getDeck().getInHand();
+            List<AbilityInGame> discardPile = player.getDeck().getInDiscard();
+            AbilityInGame cardToRemove = handPile.stream().filter(card -> card.getId().equals(cardId)).findFirst().orElseThrow(() -> new NotFoundException("Card not found"));
+            handPile.remove(cardToRemove);
+            discardPile.add(cardToRemove);
+        }
         return player.getDeck().getInHand();
     }
+
 
 }

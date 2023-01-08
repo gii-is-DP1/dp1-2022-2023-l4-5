@@ -83,10 +83,10 @@ public class EnemyAttackController {
         if (getCurrentPlayer() == getLoggedPlayer() && session.getAttribute("attack") == null) {
             attack = enemyService.attackEnemyToActualPlayer(game);
             session.setAttribute("attack", attack);
-            model.put("damage", attack);
             advise.playerIsAttacked(attack, game);
         }
         attack = (Integer) session.getAttribute("attack");
+        model.put("damage", attack);
         advise.keepUrl(session, request);
 
         return VIEW_ATTACK;
