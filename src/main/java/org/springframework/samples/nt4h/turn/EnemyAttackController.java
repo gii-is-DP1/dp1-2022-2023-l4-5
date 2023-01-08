@@ -45,7 +45,7 @@ public class EnemyAttackController {
     }
 
     @ModelAttribute("loggedPlayer")
-    public Player getPlayer() {
+    public Player getLoggedPlayer() {
         User loggedUser = getUser();
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
@@ -78,18 +78,22 @@ public class EnemyAttackController {
 
     @GetMapping
     public String getEnemyAttack(ModelMap model, HttpSession session, HttpServletRequest request) {
-        model.put("damage", enemyService.attackEnemyToActualPlayer(getGame()));
+        Game game = getGame();
+        Integer attack = enemyService.attackEnemyToActualPlayer(getGame());
+        model.put("damage", attack);
         advise.keepUrl(session, request);
+        advise.playerIsAttacked(attack, game);
         return VIEW_ATTACK;
     }
 
     @GetMapping("/next")
     public String nextTurn() {
-        Player player = getPlayer();
+        Player player = getLoggedPlayer();
         Game game = getGame();
         if(player == getGame().getCurrentPlayer()) {
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));
             gameService.saveGame(game);
+            advise.passPhase(game);
         }
         return NEXT_TURN;
     }

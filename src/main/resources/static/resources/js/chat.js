@@ -8,11 +8,18 @@ sendPetitionInInterval('/api/messages/' + username, function (responseText) {
     console.log(chats);
     for (let i = 0; i < chats.length; i++) {
         // TODO: mejorar.
-        const lis = resultado.messages.map((m) => createHtml(m.sender, m.content));
-        chats[i].innerHTML = lis.join("")
+        const lis = resultado.messages.map((m) => createHtml(m.sender + (m.read ? '': '(Not Read)'), m.content, m.type, m.game));
+        chats[i].innerHTML = '<div style="overflow-y: scroll; height: 200px;">' + lis.join("") + '</div>'
     }
 }, 1000)
 
-function createHtml(sender, content)  {
-    return '<li>' + sender + ': ' + '<pre>' + '<code>' + content.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + '</code>' + '</pre>' + '</li>'
+function createHtml(sender, content, type, game)  {
+    const notDangerContent = content.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+    const notDangerSender = sender.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+    if (type === 'INVITATION') {
+        const notDangerGame = game.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+        return '<li>' + notDangerSender + ': Te ha invitado a jugar a ' + '<a href=' + notDangerContent + '>' + notDangerGame + '</a>' + '.</li>'
+    }
+    else if (type === 'CHAT')
+        return '<li>' + notDangerSender + ': ' + notDangerContent + '</li>'
 }
