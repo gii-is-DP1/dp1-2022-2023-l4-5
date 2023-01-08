@@ -2,8 +2,6 @@ package org.springframework.samples.nt4h.card.ability;
 
 import com.google.common.collect.Lists;
 import lombok.*;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.TakeCardFromAbilityPile;
 import org.springframework.samples.nt4h.model.BaseEntity;
 
 import javax.persistence.CascadeType;
@@ -25,13 +23,6 @@ public class Deck extends BaseEntity {
     private List<AbilityInGame> inDeck;
     @OneToMany(cascade = CascadeType.ALL)
     private List<AbilityInGame> inDiscard;
-
-    public List<AbilityInGame> takeNewCard() {
-        while (inHand.size() < 4) {
-            Action takeNewCard = new TakeCardFromAbilityPile(this);
-            takeNewCard.executeAction();
-        } return inHand;
-    }
 
     public static Deck createEmptyDeck() {
         return Deck.builder().inDeck(Lists.newArrayList()).inHand(Lists.newArrayList()).inDiscard(Lists.newArrayList()).build();

@@ -4,14 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.WhenEvasionDiscardAtLeast2Exception;
+import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -20,18 +27,20 @@ public class EvasionController {
 
     private final String PAGE_EVASION = "redirect:/evasion";
     private final String VIEW_EVASION = "turns/evasionPhase";
-    public final String NEXT_TURN = "redirect:/turns";
+    private final String NEXT_TURN = "redirect:/turns";
     private final UserService userService;
     private final TurnService turnService;
     private final PlayerService playerService;
     private final GameService gameService;
+    private final Advise advise;
 
     @Autowired
-    public EvasionController(UserService userService, TurnService turnService, PlayerService playerService, GameService gameService) {
+    public EvasionController(UserService userService, TurnService turnService, PlayerService playerService, GameService gameService, Advise advise) {
         this.userService = userService;
         this.turnService = turnService;
         this.playerService = playerService;
         this.gameService = gameService;
+        this.advise = advise;
     }
 
     @ModelAttribute("game")
@@ -39,23 +48,38 @@ public class EvasionController {
         return userService.getLoggedUser().getGame();
     }
 
-    @ModelAttribute("player")
+    @ModelAttribute("currentPlayer")
     public Player getPlayer() {
         return getGame().getCurrentPlayer();
     }
 
-    @ModelAttribute("loggedPLayer")
-    public Player getLoggedPlayer() {
-        return userService.getLoggedUser().getPlayer();
+    @ModelAttribute("loggedUser")
+    public User getLoggedUser() {
+        return userService.getLoggedUser();
     }
+
+    @ModelAttribute("loggedPlayer")
+    public Player getLoggedPlayer() {
+        User loggedUser = getLoggedUser();
+        return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
+    }
+
+
 
     @ModelAttribute("newTurn")
     public Turn getNewTurn() {
         return new Turn();
     }
 
+    @ModelAttribute("chat")
+    public Message getChat() {
+        return new Message();
+    }
+
     @GetMapping
-    public String getEvasion() {
+    public String getEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
+        advise.getMessage(session, modelMap);
+        advise.keepUrl(session, request);
         return VIEW_EVASION;
     }
 
@@ -86,4 +110,5 @@ public class EvasionController {
         gameService.saveGame(game);
         return NEXT_TURN;
     }
+
 }

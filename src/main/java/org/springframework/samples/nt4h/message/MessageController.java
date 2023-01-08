@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.message;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -57,6 +59,32 @@ public class MessageController {
         message.setReceiver(receiver);
         message.setSender(sender);
         message.setTime(LocalDateTime.now());
+        messageService.saveMessage(message);
+        return PAGE_MESSAGE_WITH;
+    }
+
+    @PostMapping("/game")
+    public String sendMessage(Message message, HttpSession session) {
+        System.out.println("Mensaje: " + message.getContent());
+        User loggedUser = userService.getLoggedUser();
+        message.setSender(loggedUser);
+        message.setTime(LocalDateTime.now());
+        message.setGame(loggedUser.getGame());
+        messageService.saveMessage(message);
+        return "redirect:" + session.getAttribute("url");
+    }
+
+    @GetMapping("/{username}/invite")
+    public String sendInviteMessage(@PathVariable String username) {
+        Message message = new Message();
+        User loggedUser = userService.getLoggedUser();
+        User receiver = userService.getUserByUsername(username);
+        User sender = userService.getUserByUsername(loggedUser.getUsername());
+        message.setReceiver(receiver);
+        message.setSender(sender);
+        message.setTime(LocalDateTime.now());
+        String urlPartida = "http://localhost:8080/games/" + sender.getGame().getId();
+        message.setContent(sender.getUsername() + " has invited you. Join: " + urlPartida);
         messageService.saveMessage(message);
         return PAGE_MESSAGE_WITH;
     }

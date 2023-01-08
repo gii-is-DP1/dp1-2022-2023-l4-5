@@ -14,6 +14,7 @@ import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.turn.TurnService;
+import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +28,10 @@ public class PlayerService {
     private final PlayerRepository playerRepository;
     private final AbilityService abilityService;
     private final TurnService turnService;
+    private final UserRepository userRepository;
 
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Player getPlayerById(int id) {
         return playerRepository.findById(id).orElseThrow(() -> new NotFoundException("Player not found"));
     }
@@ -49,6 +51,10 @@ public class PlayerService {
     @Transactional
     public void deletePlayerById(int id) {
         Player player = getPlayerById(id);
+        playerRepository.findUserByPlayer(player).ifPresent(user -> {
+            user.setPlayer(null);
+            userRepository.save(user);
+        });
         deletePlayer(player);
     }
 
@@ -64,7 +70,7 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Player getPlayerByName(String name) {
         return playerRepository.findByName(name).orElseThrow(() -> new NotFoundException("Player not found"));
     }
@@ -113,8 +119,8 @@ public class PlayerService {
             enemies.add(allOrcs.get(1));
             allOrcs.remove(1);
         } else if (enemies.size() == 0) {
-            enemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
-            allOrcs.removeAll(enemies);
+            List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
+            allOrcs.removeAll(newEnemies);
         }
         return allOrcs;
     }

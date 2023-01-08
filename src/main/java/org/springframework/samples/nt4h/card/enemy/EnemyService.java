@@ -22,7 +22,7 @@ public class EnemyService {
     private final PlayerService playerService;
 
     // EnemyInGame
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public EnemyInGame getEnemyInGameById(int id) {
         return enemyInGameRepository.findById(id).orElseThrow(() -> new NotFoundException("EnemyInGame not found"));
     }
@@ -55,7 +55,7 @@ public class EnemyService {
         return enemyInGameRepository.existsById(id);
     }
 
-
+    @Transactional
     public List<Enemy> getAllEnemies() { return enemyRepository.findAll(); }
 
     @Transactional
@@ -76,7 +76,7 @@ public class EnemyService {
     }
 
     @Transactional
-    public List<EnemyInGame> addOrcsToGame() {
+    public List<EnemyInGame> addOrcsToGame() { // TODO: dependiendo del juego deberán de ser un número u otro.
         List<EnemyInGame> orcs = getAllNotNightLords().stream()
             .map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
         orcs.forEach(this::saveEnemyInGame);
@@ -90,7 +90,10 @@ public class EnemyService {
         saveEnemyInGame(nightLordInGame);
         return nightLordInGame;
     }
+    //Obtener el daño total de los enemigos en batalla
+    // TODO: comprobar.
 
+    @Transactional
     public Integer attackEnemyToActualPlayer(Game game) {
         Player currentPlayer = game.getCurrentPlayer();
         if (game.getActualOrcs().isEmpty()) return 0;

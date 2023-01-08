@@ -14,19 +14,17 @@ public class HeroService {
     private HeroInGameRepository heroInGameRepository;
 
     // Hero
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Hero getHeroById(Integer id) {
         return heroRepository.findById(id).orElseThrow(() -> new NotFoundException("Hero not found"));
     }
 
-
-
     @Transactional(readOnly = true)
-    public List<Hero> getAllHeros() {
+    public List<Hero> getAllHeroes() {
         return heroRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Hero getHeroByName(String name) {
         return heroRepository.findByName(name).orElseThrow(() -> new NotFoundException("Hero not found"));
     }
@@ -37,7 +35,7 @@ public class HeroService {
     }
 
     // HeroInGame
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public HeroInGame getHeroInGameById(Integer id) {
         return heroInGameRepository.findById(id).orElseThrow(() -> new NotFoundException("HeroInGame not found"));
     }

@@ -12,6 +12,7 @@ import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.statistic.Statistic;
@@ -34,47 +35,66 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player extends NamedEntity implements Jsonable {
+
     private Boolean hasEvasion;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Statistic statistic;
+
     private Integer sequence;
+
     private Phase nextPhase;
+
     private Boolean ready;
+
     private Boolean host;
+
     private Integer wounds;
+
     private Integer damageProtect;
+
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     private List<HeroInGame> heroes;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Turn> turns;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Deck deck;
 
-
-    public static Player createPlayer(User user, Game game, Boolean host) {
+    public static Player createPlayer(User user, Game game, Boolean host) throws FullGameException {
         Player player = Player.builder()
                 .birthDate(user.getBirthDate())
                 .host(host)
                 .game(game)
-                .sequence(-1)
-                .nextPhase(Phase.START)
-                .ready(false)
-                .statistic(Statistic.createStatistic())
-                .wounds(0)
-                .damageProtect(0)
-                .hasEvasion(true)
-                .turns(Lists.newArrayList())
-                .deck(Deck.createEmptyDeck())
                 .build();
+        player.defaultPlayer();
         player.setName(user.getUsername());
+        user.setPlayer(player);
+        user.setGame(game);
+        player.setGame(game);
+        game.addPlayer(player);
         return player;
     }
 
+    public void defaultPlayer() {
+        sequence = -1;
+        nextPhase = Phase.START;
+        ready = false;
+        statistic = Statistic.createStatistic();
+        wounds = 0;
+        damageProtect = 0;
+        hasEvasion = true;
+        turns = Lists.newArrayList();
+        deck = Deck.createEmptyDeck();
+        heroes = Lists.newArrayList();
+    }
 
     public Turn getTurn(Phase phase) {
         return this.turns.stream()

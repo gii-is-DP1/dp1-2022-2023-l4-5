@@ -20,12 +20,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.exceptions.IncorrectPasswordException;
 import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.samples.nt4h.player.Tier;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -157,7 +157,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     public void removeUserFromGame(User user) {
         user.setGame(null);
         saveUser(user);

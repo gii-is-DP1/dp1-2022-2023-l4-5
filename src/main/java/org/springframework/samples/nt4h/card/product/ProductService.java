@@ -24,38 +24,26 @@ public class ProductService {
     private final ProductInGameRepository productInGameRepository;
 
     // Product
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Product getProductById(int id) {
         return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {NoMoneyException.class, NotInSaleException.class})
     public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException, NotInSaleException {
-        Action bp = new BuyProduct(player, productInGame);
-        if (Objects.requireNonNull(productInGame.getStateProduct()) == StateProduct.IN_SALE) {
-            if (player.getStatistic().getGold() < productInGame.getProduct().getPrice()) {
+        ProductInGame selectedProduct = getProductInGameById(productInGame.getId());
+        Action buy = new BuyProduct(player, selectedProduct);
+        if (Objects.requireNonNull(selectedProduct.getStateProduct()) == StateProduct.IN_SALE) {
+            if (player.getStatistic().getGold() < selectedProduct.getProduct().getPrice()) {
                 throw new NoMoneyException();
             }
-            bp.executeAction();
-        } else {// Excepción que indique que el producto no está a la venta.
+            buy.executeAction();
+        } else if (Objects.requireNonNull(selectedProduct.getStateProduct()) != StateProduct.IN_SALE) {
             throw new NotInSaleException();
         }
     }
 
-    /*
-    @Transactional
-    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException {
-
-        if (player.getStatistic().getGold() < productInGame.getProduct().getPrice())
-            throw new NoMoneyException();
-        else if (productInGame.getStateProduct() == StateProduct.IN_SALE) {
-            Action bp = new BuyProduct(player, productInGame);
-            bp.executeAction();
-        }
-    }
-     */
-
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Product getProductByName(String name) {
         return productRepository.findByName(name).orElseThrow(() -> new NotFoundException("Product not found"));
     }
@@ -71,7 +59,7 @@ public class ProductService {
     }
 
     // ProductInGame
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public ProductInGame getProductInGameById(int id) {
         return productInGameRepository.findById(id).orElseThrow(() -> new NotFoundException("ProductInGame not found"));
     }
@@ -110,6 +98,7 @@ public class ProductService {
             .map(ProductInGame::getProduct).collect(Collectors.toList());
     }
 
+    @Transactional
     public void addProduct(Game game) {
         getAllProducts().forEach(
             product -> IntStream.range(0, product.getQuantity()).forEach(i -> {

@@ -7,20 +7,54 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="Market phase">
-    <h2>Action decision</h2>
-    <h1>Turno del jugador ${game.currentPlayer}</h1>
-    <form:form modelAttribute="productInGame" class="form-horizontal" id="product-selection-form">
-        <nt4h:selectField name="product" label="Buy a product" names="${productsOnSale}" size="5"/>
-        <div class="container">
-            <c:forEach begin="0" step="1" end="${productsOnSale.size()-1}" var="i">
-                <div class="col-sm-5">
-                    <input id="i" type="radio" name="hero" value="${productsOnSale.get(i)}" />
-                    <img  class="card-img-top" src="${productsOnSale.get(i).getFrontImage()}">
+    <style>
+        .pointer {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <h1>Action decision</h1>
+    <h1>${currentPlayer}`s Turn</h1>
+    <h2>Buy a product</h2>
+    <c:if test="${!loggedPlayer.isNew()}">
+        <form:form modelAttribute="newProductInGame" class="form-horizontal" id="product-selection-form">
+            <div class="container">
+                <div class="pointer">
+                    <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
+                        <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                        <!-- Comprar no fufa -->
+                        <div class="col-sm-2">
+                            <nt4h:radioButtom name="product" element="${product.id}" frontImage="${product.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
+                        </div>
+                    </c:forEach>
                 </div>
-            </c:forEach>
+            </div>
+            <button class="btn btn-default" type="submit">buy Product</button>
+        </form:form>
+    </c:if>
+    <c:if test="${loggedPlayer.isNew()}">
+        <div class="container">
+            <div style="display: flex;justify-content: center;">
+                <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
+                    <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                    <div class="col-sm-2">
+                        <img src="${product.frontImage}">
+                    </div>
+                </c:forEach>
+            </div>
         </div>
-        <button class="btn btn-default" type="submit">Buy Product</button>
-    </form:form>
+    </c:if>
+
+    <div class="row">
+        <div class="chatGroup"></div>
+        <c:if test="${!loggedPlayer.isNew()}">
+            <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
+                <nt4h:inputField label="Content" name="content"/>
+            </form:form>
+        </c:if>
+    </div>
     <div class="nextTurn"></div>
+    <script src="/resources/js/chatGroup.js" type="module"></script>
     <script src="/resources/js/currentTurn.js" type="module"></script>
+    <script src="/resources/js/radioButtom.js" type="module">
 </nt4h:layout>
