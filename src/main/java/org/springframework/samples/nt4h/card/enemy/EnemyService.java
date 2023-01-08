@@ -76,7 +76,7 @@ public class EnemyService {
     }
 
     @Transactional
-    public List<EnemyInGame> addOrcsToGame() { // TODO: dependiendo del juego deberán de ser un número u otro.
+    public List<EnemyInGame> addOrcsToGame() {
         List<EnemyInGame> orcs = getAllNotNightLords().stream()
             .map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
         orcs.forEach(this::saveEnemyInGame);
@@ -90,8 +90,6 @@ public class EnemyService {
         saveEnemyInGame(nightLordInGame);
         return nightLordInGame;
     }
-    //Obetener el daño total de los enemigos en batalla
-    // TODO: comprobar.
 
     public Integer attackEnemyToActualPlayer(Game game) {
         Player currentPlayer = game.getCurrentPlayer();
