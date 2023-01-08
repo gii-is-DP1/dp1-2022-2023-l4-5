@@ -20,14 +20,16 @@
         <form:form modelAttribute="newTurn" class="form-horizontal" id="product-selection-form">
             <div class="container">
                 <c:if test="${productsOnSale.size()!=0}">
-                <div class="pointer">
-                    <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
-                        <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
-                        <div class="col-sm-2">
-                            <nt4h:radioButtom name="currentProduct" element="${product.id}" frontImage="${product.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
-                        </div>
-                    </c:forEach>
-                </div>
+                    <div class="pointer">
+                        <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
+                            <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                            <div class="col-sm-2">
+                                <nt4h:radioButtom name="currentProduct" element="${product.id}"
+                                                  frontImage="${product.frontImage}" i="${i}0"
+                                                  image="/resources/images/muszka.png"/>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </c:if>
                 <c:if test="${productsOnSale.size()==0}">
                     <div class="display: flex; justify-content: center;">
@@ -41,23 +43,25 @@
         </form:form>
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">
-        <div class="container">
-            <c:if test="${productsOnSale.size()!=0}">
-            <div style="display: flex;justify-content: center;">
-                <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
-                    <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
-                    <div class="col-sm-2">
-                        <img src="${product.frontImage}">
-                    </div>
-                </c:forEach>
+    <div class="container">
+    <c:if test="${productsOnSale.size()!=0}">
+        <div style="display: flex;justify-content: center;">
+            <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
+                <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                <div class="col-sm-2">
+                    <img src="${product.frontImage}">
+                </div>
+            </c:forEach>
+        </div>
+        </c:if>
+        <c:if test="${productsOnSale.size()==0}">
+            <div class="display: flex; justify-content: center;">
+                <c:out value="No products on sale."/>
             </div>
+        </c:if>
         </div>
     </c:if>
-    <c:if test="${productsOnSale.size()==0}">
-        <div class="display: flex; justify-content: center;">
-            <c:out value="No products on sale."/>
-        </div>
-    </c:if>
+
 
     <div class="row">
         <div class="chatGroup"></div>

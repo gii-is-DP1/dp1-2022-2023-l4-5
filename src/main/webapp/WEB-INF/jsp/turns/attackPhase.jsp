@@ -103,22 +103,22 @@
             </c:if>
         </div>
     </div>
-</c:if>
-<div class="row">
-    <div class="chatGroup"></div>
-    <c:if test="${!loggedPlayer.isNew()}">
-        <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
-            <nt4h:inputField label="Content" name="content"/>
-        </form:form>
     </c:if>
-</div>
-<div class="nextTurn"></div>
-<script src="/resources/js/chatGroup.js" type="module"></script>
-<script src="/resources/js/currentTurn.js" type="module"></script>
-<script type="text/javascript">
-    if (${game.currentTurn.phase.toString()=='enemyAttack'})
-        alert("The orcs makes you " + ${damage} +".");
-</script>
-<script src="/resources/js/radioButtom.js" type="module"></script>
+    <div class="row">
+        <div class="chatGroup"></div>
+        <c:if test="${!loggedPlayer.isNew()}">
+            <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
+                <nt4h:inputField label="Content" name="content"/>
+            </form:form>
+        </c:if>
+    </div>
+    <div class="nextTurn"></div>
+    <script src="/resources/js/chatGroup.js" type="module"></script>
+    <script src="/resources/js/currentTurn.js" type="module"></script>
+    <script type="text/javascript">
+        if (${game.currentTurn.phase.toString()=='enemyAttack'})
+            alert("The orcs makes you " + ${damage} +".");
+    </script>
+    <script src="/resources/js/radioButtom.js" type="module"></script>
 
 </nt4h:layout>
