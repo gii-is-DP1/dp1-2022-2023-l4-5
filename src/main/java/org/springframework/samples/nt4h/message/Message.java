@@ -26,6 +26,8 @@ public class Message extends BaseEntity implements Jsonable {
     @Size(max = 500)
     private String content;
 
+    private boolean read;
+
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     private LocalDateTime time;
 
@@ -56,6 +58,7 @@ public class Message extends BaseEntity implements Jsonable {
         json.put("sender", sender.getUsername());
         if (receiver != null ) json.put("receiver", receiver.getUsername());
         if (game != null ) json.put("game", game.getName());
+        json.put("read", read);
         return json.toJson();
     }
 

@@ -22,8 +22,18 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
+    public List<Message> getMessageByPair(String user1, String user2) {
+        return messageRepository.findByPair(user1, user2);
+    }
+
+    @Transactional(readOnly = true)
     public List<Message> getMessageBySenderWithReceiver(String usernameSender, String usernameReceiver) {
         return messageRepository.findBySenderWithReceiver(usernameSender, usernameReceiver);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getUnreadMessages(String usernameSender, String usernameReceiver) {
+        return getMessageBySenderWithReceiver(usernameSender, usernameReceiver).stream().filter(message -> !message.isRead()).toArray().length;
     }
 
     @Transactional
@@ -47,5 +57,12 @@ public class MessageService {
     @Transactional
     public Object getGameMessages(Game game) {
         return messageRepository.findByGame(game);
+    }
+
+    @Transactional
+    public void markAsRead(String usernameSender, String usernameReceiver) {
+        List<Message> messages = getMessageBySenderWithReceiver(usernameSender, usernameReceiver);
+        messages.stream().filter(message -> !message.isRead()).forEach(message -> message.setRead(true));
+        messageRepository.saveAll(messages);
     }
 }

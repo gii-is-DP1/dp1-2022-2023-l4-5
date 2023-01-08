@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -46,7 +47,8 @@ public class MessageController {
         User loggedUser = userService.getLoggedUser();
         model.addAttribute("receiver", username);
         model.addAttribute("chat", new Message());
-        model.addAttribute("messages", messageService.getMessageBySenderWithReceiver(loggedUser.getUsername(), username));
+        List<Message> messages = messageService.getMessageByPair(loggedUser.getUsername(), username);
+        model.addAttribute("messages", messages);
         return VIEW_MESSAGE_LIST;
     }
 
@@ -59,6 +61,7 @@ public class MessageController {
         message.setReceiver(receiver);
         message.setSender(sender);
         message.setTime(LocalDateTime.now());
+        message.setRead(false);
         messageService.saveMessage(message);
         return PAGE_MESSAGE_WITH;
     }

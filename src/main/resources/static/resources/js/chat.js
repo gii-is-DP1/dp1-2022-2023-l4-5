@@ -8,7 +8,7 @@ sendPetitionInInterval('/api/messages/' + username, function (responseText) {
     console.log(chats);
     for (let i = 0; i < chats.length; i++) {
         // TODO: mejorar.
-        const lis = resultado.messages.map((m) => createHtml(m.sender, m.content));
+        const lis = resultado.messages.map((m) => createHtml(m.sender + (m.read ? '': '(Not Read)'), m.content));
         chats[i].innerHTML = lis.join("")
     }
 }, 1000)
