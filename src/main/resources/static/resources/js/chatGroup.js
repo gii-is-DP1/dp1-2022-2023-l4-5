@@ -10,11 +10,13 @@ sendPetitionInInterval('/api/messages/game', function (responseText) {
 
 function createHtml(sender, content, type, game)  {
     const notDangerContent = content.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-    const notDangerSender = sender.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-    if (type === 'GAME')
+    if (type === 'GAME') {
+        const notDangerSender = sender.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
         return '<li>' + notDangerSender + ': ' + notDangerContent + '</li>'
+    }
+
     else if (type === 'ADVISE') {
-        const notDangerGame = sender.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+        const notDangerGame = game.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
         return '<li>' + notDangerGame + ': ' + notDangerContent + '</li>'
     }
 

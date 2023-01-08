@@ -3,9 +3,11 @@ package org.springframework.samples.nt4h.card.product;
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.action.BuyProduct;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductInGameRepository productInGameRepository;
+    private final PlayerService playerService;
 
     // Product
     @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
@@ -32,13 +35,18 @@ public class ProductService {
     @Transactional(rollbackFor = {NoMoneyException.class, NotInSaleException.class})
     public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException, NotInSaleException {
         ProductInGame selectedProduct = getProductInGameById(productInGame.getId());
-        Action buy = new BuyProduct(player, selectedProduct);
         if (Objects.requireNonNull(selectedProduct.getStateProduct()) == StateProduct.IN_SALE) {
-            if (player.getStatistic().getGold() < selectedProduct.getProduct().getPrice()) {
+            if (player.getStatistic().getGold() < selectedProduct.getProduct().getPrice())
                 throw new NoMoneyException();
-            }
-            buy.executeAction();
-        } else if (Objects.requireNonNull(selectedProduct.getStateProduct()) != StateProduct.IN_SALE) {
+            AbilityInGame abilityInGame = AbilityInGame.builder().timesUsed(0).attack(productInGame.getProduct().getAttack()).isProduct(true)
+                .productInGame(productInGame).build();
+            player.getDeck().getInDeck().add(abilityInGame);
+            productInGame.setStateProduct(StateProduct.PLAYER);
+            productInGame.setPlayer(player);
+            saveProductInGame(productInGame);
+            player.getStatistic().setGold(player.getStatistic().getGold() - selectedProduct.getProduct().getPrice());
+            playerService.savePlayer(player);
+        } else {
             throw new NotInSaleException();
         }
     }
@@ -102,10 +110,10 @@ public class ProductService {
     public void addProduct(Game game) {
         getAllProducts().forEach(
             product -> IntStream.range(0, product.getQuantity()).forEach(i -> {
-                ProductInGame productInGame = ProductInGame.builder().product(product).game(game).stateProduct(StateProduct.IN_SALE).timesUsed(0).build();
-                productInGame.setName(product.getName());
-                saveProductInGame(productInGame);
-            }
-        ));
+                    ProductInGame productInGame = ProductInGame.builder().product(product).game(game).stateProduct(StateProduct.IN_SALE).timesUsed(0).build();
+                    productInGame.setName(product.getName());
+                    saveProductInGame(productInGame);
+                }
+            ));
     }
 }

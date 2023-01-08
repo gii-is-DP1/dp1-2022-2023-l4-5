@@ -17,23 +17,32 @@
     <h1>${currentPlayer}`s Turn</h1>
     <h2>Buy a product</h2>
     <c:if test="${!loggedPlayer.isNew()}">
-        <form:form modelAttribute="newProductInGame" class="form-horizontal" id="product-selection-form">
+        <form:form modelAttribute="newTurn" class="form-horizontal" id="product-selection-form">
             <div class="container">
+                <c:if test="${productsOnSale.size()!=0}">
                 <div class="pointer">
                     <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
                         <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
-                        <!-- Comprar no fufa -->
                         <div class="col-sm-2">
-                            <nt4h:radioButtom name="product" element="${product.id}" frontImage="${product.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
+                            <nt4h:radioButtom name="currentProduct" element="${product.id}" frontImage="${product.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
                         </div>
                     </c:forEach>
                 </div>
+                </c:if>
+                <c:if test="${productsOnSale.size()==0}">
+                    <div class="display: flex; justify-content: center;">
+                        <c:out value="No products on sale."/>
+                    </div>
+                </c:if>
             </div>
-            <button class="btn btn-default" type="submit">buy Product</button>
+            <c:if test="${productsOnSale.size()!=0}">
+                <button class="btn btn-default" type="submit">buy Product</button>
+            </c:if>
         </form:form>
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
+            <c:
             <div style="display: flex;justify-content: center;">
                 <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
                     <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
