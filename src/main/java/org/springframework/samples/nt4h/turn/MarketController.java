@@ -58,9 +58,9 @@ public class MarketController {
         return new Turn();
     }
 
-    @ModelAttribute("newProductInGame")
-    public ProductInGame getProductInGame() {
-        return new ProductInGame();
+    @ModelAttribute("newTurn")
+    public Turn getTurn() {
+        return new Turn();
     }
 
     @ModelAttribute("game")
@@ -97,13 +97,17 @@ public class MarketController {
     }
 
     @PostMapping
-    public String buyProduct(ProductInGame productInGame) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
+    public String buyProduct(Turn turn) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
         Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
+        ProductInGame productInGame = turn.getCurrentProduct();
         Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
         productService.buyProduct(player, productInGame);
+        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId());
+        oldTurn.addProduct(productInGame);
+        turnService.saveTurn(oldTurn);
         advise.buyProduct(productInGame, game);
         return PAGE_MARKET;
     }
