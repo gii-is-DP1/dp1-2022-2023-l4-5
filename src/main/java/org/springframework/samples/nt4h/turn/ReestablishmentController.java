@@ -41,7 +41,7 @@ public class ReestablishmentController {
     private final AbilityService abilityService;
 
     public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
-    private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment/addCards";
+    private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String NEXT_TURN = "redirect:/turns";
 
 
@@ -91,8 +91,8 @@ public class ReestablishmentController {
         advise.keepUrl(session, request);
         if (getLoggedPlayer() == getCurrentPlayer()) {
             List<EnemyInGame> enemiesInBattle = game.getActualOrcs();
-            playerService.restoreEnemyLife(enemiesInBattle);
-            List<EnemyInGame> added = playerService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game); // TODO: Por qué está en playerService?
+            gameService.restoreEnemyLife(enemiesInBattle);
+            List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game); // TODO: Por qué está en playerService?
             advise.addEnemies(added, game);
         }
         return VIEW_REESTABLISHMENT;

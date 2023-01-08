@@ -113,31 +113,4 @@ public class PlayerService {
     }
 
 
-    @Transactional
-    public List<EnemyInGame> addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) {
-        List<EnemyInGame> added = Lists.newArrayList();
-        if (enemies.size() == 1 || enemies.size() == 2) {
-            EnemyInGame enemy = allOrcs.get(1);
-            enemies.add(enemy); // Comprobar si el primero es el señor de la guerra.
-            added.add(enemy);
-            allOrcs.remove(1);
-        } else if (enemies.size() == 0) {
-            List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
-            added.addAll(newEnemies);
-            allOrcs.removeAll(newEnemies);
-        }
-        return added;
-    }
-
-    @Transactional
-    public void restoreEnemyLife(List<EnemyInGame> enemies) {
-
-        for (EnemyInGame enemyInGame : enemies) {
-            Enemy enemy = enemyInGame.getEnemy();
-            if (enemy.getHasCure()) {
-                Action recoverEnemyLife = new HealEnemy(enemyInGame);
-                recoverEnemyLife.executeAction();
-            }
-        }
-    }
 }
