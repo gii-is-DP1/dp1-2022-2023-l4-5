@@ -62,7 +62,7 @@
                     </div>
                 </c:if>
             </div>
-            <c:if test="${game.actualOrcs.size()!=0 && currentPlayer.deck.inHand.size()!=0}">
+            <c:if test="${game.actualOrcs.size()!=0 && currentPlayer.deck.inHand.size()!=0 && game.currentTurn.phase.toString()!='enemyAttack'}">
                 <button class="btn btn-default" type="submit">Attack</button>
             </c:if>
         </form:form>

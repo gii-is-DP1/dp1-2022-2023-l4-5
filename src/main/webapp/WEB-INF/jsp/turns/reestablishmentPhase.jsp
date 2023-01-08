@@ -11,6 +11,12 @@
         display: flex;
         justify-content: center;
     }
+
+    .background {
+        background-image: url("/resources/images/campo.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 </style>
 <nt4h:layout pageName="Reestablishment Phase">
     <body class="background">
@@ -78,13 +84,3 @@
     <script src="/resources/js/currentTurn.js" type="module"></script>
     <script src="/resources/js/radioButtom.js" type="module">
 </nt4h:layout>
-
-<style>
-    .background {
-        background-image: url("/resources/images/campo.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        }
-</style>
-
-

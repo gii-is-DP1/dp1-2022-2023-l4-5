@@ -80,17 +80,22 @@ public class StartController {
     public String chooseEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
         advise.keepUrl(session, request);
+        if (session.getAttribute("choose") == null) {
+            advise.choose(getGame());
+            session.setAttribute("choose", true);
+        }
         advise.choose(getGame());
         return VIEW_CHOOSE_EVASION;
     }
 
     @PostMapping
-    public String selectEvasion(Turn turn) throws NoCurrentPlayer {
+    public String selectEvasion(Turn turn,  HttpSession session) throws NoCurrentPlayer {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
         Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+        session.removeAttribute("choose");
         turnService.chooseAttackOrEvasion(player, turn.getPhase(), game);
         advise.passPhase(game);
         return NEXT_TURN;
