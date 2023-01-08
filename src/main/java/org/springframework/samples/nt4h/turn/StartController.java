@@ -79,7 +79,7 @@ public class StartController {
     @GetMapping
     public String chooseEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_CHOOSE_EVASION;
     }
 

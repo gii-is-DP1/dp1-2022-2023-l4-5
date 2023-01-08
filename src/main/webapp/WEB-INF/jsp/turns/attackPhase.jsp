@@ -6,7 +6,7 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="Hero Attack Action">
-    <h1>Turno del jugador ${game.currentPlayer}</h1>
+    <h1>${game.currentPlayer}`s Turn</h1>
     <style>
         .card-img-top {
             width: 100%;
@@ -49,7 +49,7 @@
             </c:if>
         </form:form>
     </c:if>
-    <c:if test="${logggedPlayer.isNew()}">
+    <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
             <div style="display: flex; justify-content: center;">
                 <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">

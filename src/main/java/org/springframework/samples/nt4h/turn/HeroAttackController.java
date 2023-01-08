@@ -79,7 +79,7 @@ public class HeroAttackController {
     @GetMapping
     public String showHeroAttackBoard(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
-        advise.keapUrl(session, request);
+        advise.keepUrl(session, request);
         return VIEW_HERO_ATTACK;
     }
 
@@ -91,7 +91,6 @@ public class HeroAttackController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        // TODO: debe de lanzar una excepción si no es el jugador loguado y mover a un servicio.
         if (player == getGame().getCurrentPlayer()) {
             AbilityInGame usedAbility = turn.getCurrentAbility();
             EnemyInGame attackedEnemy = turn.getCurrentEnemy();
