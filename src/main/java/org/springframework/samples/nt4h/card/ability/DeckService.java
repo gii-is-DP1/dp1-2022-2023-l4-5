@@ -30,7 +30,7 @@ public class DeckService {
     }
 
     @Transactional(rollbackFor = TooManyAbilitiesException.class)
-    public List<AbilityInGame> removeAbilityCards(Integer cardId, Player player) throws TooManyAbilitiesException {
+    public List<AbilityInGame> removeAbilityCards(Integer cardId, Player player) {
         while (player.getDeck().getInHand().size() > 4) {
             List<AbilityInGame> handPile = player.getDeck().getInHand();
             List<AbilityInGame> discardPile = player.getDeck().getInDiscard();
