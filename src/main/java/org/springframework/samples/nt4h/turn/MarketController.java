@@ -50,8 +50,12 @@ public class MarketController {
     }
 
     @ModelAttribute("productsOnSale")
-    public List<Product> getProductsInSell() {
+    public List<ProductInGame> getProductsInSell() {
         return productService.getMarket();
+    }
+    @ModelAttribute("newTurn")
+    public Turn getTurn() {
+        return new Turn();
     }
 
     @ModelAttribute("newProductInGame")
