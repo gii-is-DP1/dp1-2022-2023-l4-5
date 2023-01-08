@@ -31,7 +31,7 @@ public class PlayerService {
     private final UserRepository userRepository;
 
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Player getPlayerById(int id) {
         return playerRepository.findById(id).orElseThrow(() -> new NotFoundException("Player not found"));
     }
@@ -70,7 +70,7 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Player getPlayerByName(String name) {
         return playerRepository.findByName(name).orElseThrow(() -> new NotFoundException("Player not found"));
     }
@@ -119,8 +119,8 @@ public class PlayerService {
             enemies.add(allOrcs.get(1));
             allOrcs.remove(1);
         } else if (enemies.size() == 0) {
-            enemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
-            allOrcs.removeAll(enemies);
+            List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
+            allOrcs.removeAll(newEnemies);
         }
         return allOrcs;
     }

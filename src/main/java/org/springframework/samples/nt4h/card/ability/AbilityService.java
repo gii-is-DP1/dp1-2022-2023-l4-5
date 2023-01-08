@@ -16,7 +16,7 @@ public class AbilityService {
     private AbilityRepository abilityRepository;
     private AbilityInGameRepository abilityInGameRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Ability getAbilityById(Integer id) {
         return abilityRepository.findById(id).orElseThrow(() -> new NotFoundException("Ability not found"));
     }
@@ -26,7 +26,7 @@ public class AbilityService {
         return abilityRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Ability getAbilityByName(String name) {
         return abilityRepository.findByName(name).orElseThrow(() -> new NotFoundException("Ability not found"));
     }
@@ -37,7 +37,7 @@ public class AbilityService {
     }
 
     // AbilityInGame
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public AbilityInGame getAbilityInGameById(Integer id) {
         return abilityInGameRepository.findById(id).orElseThrow(() -> new NotFoundException("AbilityInGame not found"));
     }

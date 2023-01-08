@@ -211,8 +211,6 @@ VALUES ('Daga élfica', '/resources/images/products/dagaelfica_product_front.png
         '/resources/images/products/product_back.png', -1, 5, 4, 1, 'ARCO_COMPUESTO');
 
 
--- Nuevo
-
 -- Creación de la relación entre capacidades y productos.
 INSERT INTO products_capacity(product_id, capacity_id)
 VALUES (3, 1),

@@ -35,27 +35,38 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player extends NamedEntity implements Jsonable {
+
     private Boolean hasEvasion;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Statistic statistic;
+
     private Integer sequence;
+
     private Phase nextPhase;
+
     private Boolean ready;
+
     private Boolean host;
+
     private Integer wounds;
+
     private Integer damageProtect;
+
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     private List<HeroInGame> heroes;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Turn> turns;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Deck deck;
-
 
     public static Player createPlayer(User user, Game game, Boolean host) throws FullGameException {
         Player player = Player.builder()
@@ -84,7 +95,6 @@ public class Player extends NamedEntity implements Jsonable {
         deck = Deck.createEmptyDeck();
         heroes = Lists.newArrayList();
     }
-
 
     public Turn getTurn(Phase phase) {
         return this.turns.stream()

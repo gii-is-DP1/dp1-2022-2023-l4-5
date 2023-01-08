@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.IncorrectPasswordException;
 import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.samples.nt4h.player.Tier;
@@ -145,19 +146,21 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public void addUserToGame(User user, Game game, String password) throws UserInAGameException, IncorrectPasswordException {
+    @Transactional(rollbackFor = {IncorrectPasswordException.class, FullGameException.class, UserInAGameException.class})
+    public void addUserToGame(User user, Game game, String password) throws UserInAGameException, IncorrectPasswordException, FullGameException {
         if (user.getGame() != null && !user.getGame().equals(game))
             throw new UserInAGameException();
         if (!(Objects.equals(game.getPassword(), password) || game.getAccessibility() == Accessibility.PUBLIC))
             throw new IncorrectPasswordException();
+        if ((game.getPlayers().size()+1) < game.getMaxPlayers())
+            throw new FullGameException();
         if (user.getGame() == null) {
             user.setGame(game);
             saveUser(user);
         }
     }
 
-
+    @Transactional
     public void removeUserFromGame(User user) {
         user.setGame(null);
         saveUser(user);

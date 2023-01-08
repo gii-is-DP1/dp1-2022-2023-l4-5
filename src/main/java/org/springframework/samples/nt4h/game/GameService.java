@@ -48,7 +48,7 @@ public class GameService {
         return gameRepository.findAll(page);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
     public Game getGameById(int id) {
         return gameRepository.findById(id).orElseThrow(() -> new NotFoundException("Game not found"));
     }
@@ -72,7 +72,7 @@ public class GameService {
         deleteGame(game);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})
     public Player addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
         if (game.getPlayers().contains(user.getPlayer()))
             return user.getPlayer();
@@ -86,8 +86,8 @@ public class GameService {
     }
 
 
-    @Transactional(rollbackFor = PlayerIsReadyException.class)
-    public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
+    @Transactional(rollbackFor = {PlayerIsReadyException.class, RoleAlreadyChosenException.class, HeroAlreadyChosenException.class})
+    public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (player.getReady())
             throw new PlayerIsReadyException();
         System.out.println("addHeroToPlayer " + player.getId());
@@ -101,14 +101,14 @@ public class GameService {
         saveGame(game);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = FullGameException.class)
     public void createGame(User user, Game game) throws FullGameException {
         game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
         Player newPlayer = Player.createPlayer(user, game, true);;
         playerService.savePlayer(newPlayer);
         saveGame(game);
         userService.saveUser(user);
-        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame();
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
         game.setAllOrcsInGame(orcsInGame);
         game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
@@ -118,7 +118,6 @@ public class GameService {
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
-
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
         // Calcula ataque de las dos primeras cartas en mano.
         for (var i = 0; i < players.size(); i++) {
@@ -146,6 +145,7 @@ public class GameService {
         saveGame(game);
     }
 
+    @Transactional(rollbackFor = UserInAGameException.class)
     public void addSpectatorToGame(Game game, User user) throws UserInAGameException {
         game.getSpectators().add(user);
         if (user.getGame() != null)

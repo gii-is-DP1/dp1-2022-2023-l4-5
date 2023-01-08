@@ -12,5 +12,6 @@ public interface EnemyRepository extends CrudRepository<Enemy, Integer> {
 
     @Query("SELECT e FROM Enemy e WHERE e.isNightLord IS FALSE")
     List<Enemy> findAllNotNightLords();
+
     List<Enemy> findAll();
 }
