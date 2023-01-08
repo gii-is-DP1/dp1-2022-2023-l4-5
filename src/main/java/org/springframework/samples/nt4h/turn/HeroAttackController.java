@@ -11,6 +11,8 @@ import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
+import org.springframework.samples.nt4h.turn.exceptions.WithOutAbilityException;
+import org.springframework.samples.nt4h.turn.exceptions.WithOutEnemyException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -85,7 +87,7 @@ public class HeroAttackController {
 
 
     @PostMapping
-    public String modifyCardAttributes(Turn turn) throws NoCurrentPlayer {
+    public String modifyCardAttributes(Turn turn) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
         Player player = getPlayer();
         Game game = getGame();
         Player loggedPlayer = getLoggedPlayer();
@@ -93,6 +95,10 @@ public class HeroAttackController {
             throw new NoCurrentPlayer();
         AbilityInGame usedAbility = turn.getCurrentAbility();
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
+        if (usedAbility == null)
+            throw new WithOutAbilityException();
+        if (attackedEnemy == null)
+            throw new WithOutEnemyException();
         Integer enemyInitialHealth = attackedEnemy.getActualHealth();
         attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
         player.getDeck().getInHand().remove(usedAbility);

@@ -98,8 +98,9 @@ public class ReestablishmentController {
         return VIEW_REESTABLISHMENT;
     }
 
+    // TODO: TO no me responsabilizo de esto.
     @PostMapping
-    public String takeNewAbility(Integer cardId) throws NoCurrentPlayer, TooManyAbilitiesException {
+    public String takeNewAbility(Integer cardId) throws NoCurrentPlayer {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         if (getLoggedPlayer() != currentPlayer)

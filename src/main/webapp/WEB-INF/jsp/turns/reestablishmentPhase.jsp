@@ -30,9 +30,9 @@
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="turn" class="form-horizontal" id="choose-player-form">
             <div class="container">
-                <c:if test="${player.deck.inHand.size()!=0}">
+                <c:if test="${currentPlayer.deck.inHand.size()!=0}">
                 <div class="pointer">
-                    <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
+                    <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
                         <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
                         <!-- TODO: Peta al obtener al descartar habilidades -->
                         <div class="col-sm-2">
@@ -54,10 +54,10 @@
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
-            <c:if test="${loggedPlayer.player.deck.inHand.size()!=0}">
+            <c:if test="${currentPlayer.deck.inHand.size()!=0}">
                 <div class="display: flex; justify-content: center;">
-                    <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
-                        <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                    <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                        <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
                         <div class="col-sm-2">
                             <img src="${abilityInGame.ability.frontImage}">
                         </div>

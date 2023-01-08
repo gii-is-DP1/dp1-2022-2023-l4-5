@@ -129,4 +129,25 @@ public class ExceptionHandlerConfiguration
         session.setAttribute("messageType", "danger");
         return PAGE_EVASION;
     }
+
+    @ExceptionHandler(WithOutPhaseException.class)
+    public String handleWithOutPhaseException(HttpSession session) {
+        session.setAttribute("message", "You must choose a phase: EVADE or ATTACK.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAME_LOBBY;
+    }
+
+    @ExceptionHandler(WithOutAbilityException.class)
+    public String handleWithOutAbilityException(HttpSession session, HttpServletRequest request) {
+        session.setAttribute("message", "You must choose an ability.");
+        session.setAttribute("messageType", "danger");
+        return "redirect:" + request.getRequestURI();
+    }
+
+    @ExceptionHandler(WithOutProductException.class)
+    public String handleWithOutProductException(HttpSession session) {
+        session.setAttribute("message", "You must choose a product.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_MARKET;
+    }
 }
