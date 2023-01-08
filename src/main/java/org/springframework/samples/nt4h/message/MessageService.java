@@ -2,6 +2,7 @@ package org.springframework.samples.nt4h.message;
 
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.user.User;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,5 +65,13 @@ public class MessageService {
         List<Message> messages = getMessageBySenderWithReceiver(usernameSender, usernameReceiver);
         messages.stream().filter(message -> !message.isRead()).forEach(message -> message.setRead(true));
         messageRepository.saveAll(messages);
+    }
+
+    @Transactional
+    public void createNotification(Game game, String content) {
+        Message notification = new Message();
+        notification.setGame(game);
+        notification.setContent(content);
+        saveMessage(notification);
     }
 }

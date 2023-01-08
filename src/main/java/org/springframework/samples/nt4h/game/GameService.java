@@ -15,6 +15,7 @@ import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.exceptions.*;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
@@ -37,6 +38,7 @@ public class GameService {
     private final HeroService heroService;
     private final ProductService productService;
     private final EnemyService enemyService;
+    private final Advise advise;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -68,7 +70,6 @@ public class GameService {
     @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
-        System.out.println("GameService.deleteGameById: " + game);
         deleteGame(game);
     }
 
@@ -82,6 +83,7 @@ public class GameService {
         playerService.createTurns(newPlayer);
         user.setPlayer(newPlayer);
         saveGame(game);
+        advise.playerJoinGame(newPlayer, game);
         return newPlayer;
     }
 
@@ -90,8 +92,6 @@ public class GameService {
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (player.getReady())
             throw new PlayerIsReadyException();
-        System.out.println("addHeroToPlayer " + player.getId());
-        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -99,6 +99,7 @@ public class GameService {
         playerService.addDeckFromRole(player, game.getMode());
         playerService.createTurns(player);
         saveGame(game);
+        advise.choosenHero(player, heroInGame, game);
     }
 
     @Transactional(rollbackFor = FullGameException.class)
@@ -113,6 +114,7 @@ public class GameService {
         game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
+        advise.createGame(user, game);
 
     }
 
@@ -143,6 +145,7 @@ public class GameService {
         game.setCurrentPlayer(firstPlayer);
         game.setCurrentTurn(firstPlayer.getTurn(Phase.START));
         saveGame(game);
+        advise.playersOrdered(game);
     }
 
     @Transactional(rollbackFor = UserInAGameException.class)
@@ -153,5 +156,6 @@ public class GameService {
         user.setGame(game);
         userService.saveUser(user);
         saveGame(game);
+        advise.spectatorJoinGame(user, game);
     }
 }

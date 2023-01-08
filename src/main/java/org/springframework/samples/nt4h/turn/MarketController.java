@@ -65,7 +65,7 @@ public class MarketController {
     }
 
     @ModelAttribute("currentPlayer")
-    public Player getPlayer() {
+    public Player getCurrentPlayer() {
         return getGame().getCurrentPlayer();
     }
 
@@ -94,22 +94,25 @@ public class MarketController {
 
     @PostMapping
     public String buyProduct(ProductInGame productInGame) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
-        Player player = getPlayer();
+        Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
+        Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
         productService.buyProduct(player, productInGame);
+        advise.buyProduct(productInGame, game);
         return PAGE_MARKET;
     }
 
     @GetMapping("/next")
     public String next() {
-        Player player = getPlayer();
+        Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         Game game = getGame();
-        if (loggedPlayer == player) {
-            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, player.getId()));
+        if (loggedPlayer == currentPlayer) {
+            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId()));
             gameService.saveGame(game);
+            advise.passPhase(game);
         }
         return NEXT_TURN;
     }

@@ -2,6 +2,8 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/reestablishment")
@@ -34,20 +37,23 @@ public class ReestablishmentController {
     private final DeckService deckService;
     private final GameService gameService;
     private final TurnService turnService;
+    private final Advise advise;
+    private final AbilityService abilityService;
 
     public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
     private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment/addCards";
     private final String NEXT_TURN = "redirect:/turns";
-    private final Advise advise;
+
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService) {
+    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise, AbilityService abilityService) {
         this.playerService = playerService;
         this.userService = userService;
         this.deckService = deckService;
         this.gameService = gameService;
         this.turnService = turnService;
-        this.advise = new Advise();
+        this.advise = advise;
+        this.abilityService = abilityService;
     }
 
     @ModelAttribute("loggedUser")
@@ -74,11 +80,6 @@ public class ReestablishmentController {
         return userService.getLoggedUser().getGame();
     }
 
-    @ModelAttribute("player")
-    public Player getPlayer() {
-        return getGame().getCurrentPlayer();
-    }
-
     @ModelAttribute("enemiesInBattle")
     public List<EnemyInGame> getEnemiesInBattle() {
         return getGame().getActualOrcs();
@@ -96,31 +97,44 @@ public class ReestablishmentController {
 
     @GetMapping("/addCards")
     public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) throws NoCurrentPlayer {
-        if (getLoggedPlayer() != getPlayer())
-            throw new NoCurrentPlayer();
-        playerService.restoreEnemyLife(getEnemiesInBattle());
-        playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), getGame());
+        Game game = getGame();
         advise.keepUrl(session, request);
+        if (getLoggedPlayer() == getCurrentPlayer()) {
+            playerService.restoreEnemyLife(getEnemiesInBattle());
+            List<EnemyInGame> added = playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), game);
+            advise.addEnemies(added, game);
+        }
         return VIEW_REESTABLISHMENT;
     }
 
     @PostMapping("/addCards")
     public String takeNewAbility(Integer cardId) throws NoCurrentPlayer, TooManyAbilitiesException {
-        if (getLoggedPlayer() != getPlayer())
+        Game game = getGame();
+        Player currentPlayer = getCurrentPlayer();
+        if (getLoggedPlayer() != currentPlayer)
             throw new NoCurrentPlayer();
-        deckService.takeNewCard(getPlayer());
-        deckService.removeAbilityCards(cardId, getPlayer());
+        AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
+        deckService.takeNewCard(currentPlayer);
+        deckService.removeAbilityCards(cardId, currentPlayer);
+        advise.addAbility(ability, game);
         return PAGE_REESTABLISHMENT;
     }
 
     @GetMapping("/next")
     public String reestablishmentNextTurn() {
-        int totalPlayers = getGame().getPlayers().size();
-        Integer nextSequence = (getGame().getCurrentPlayer().getSequence()+1) % totalPlayers;
-        Player nextPlayer = getGame().getPlayers().stream().filter(p -> p.getSequence() == nextSequence).findFirst().get();
-        getGame().setCurrentPlayer(nextPlayer);
-        getGame().setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));
-        gameService.saveGame(getGame());
+        Game game = getGame();
+        Player currentPlayer = getCurrentPlayer();
+        Player loggedPlayer = getLoggedPlayer();
+        if (loggedPlayer == currentPlayer) {
+            List<Player> players = game.getPlayers();
+            int totalPlayers = players.size();
+            Integer nextSequence = (getCurrentPlayer().getSequence()+1) % totalPlayers;
+            Player nextPlayer = players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).findFirst().get();
+            game.setCurrentPlayer(nextPlayer);
+            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));
+            gameService.saveGame(game);
+            advise.changePlayer(loggedPlayer, game);
+        }
         return NEXT_TURN;
     }
 

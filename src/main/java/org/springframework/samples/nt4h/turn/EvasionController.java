@@ -2,6 +2,7 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.Advise;
@@ -87,13 +88,16 @@ public class EvasionController {
     public String postEvasion(@Valid Turn turn) throws NoCurrentPlayer {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
+        Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
-        oldTurn.addAbility(turn.getCurrentAbility());
+        AbilityInGame currentAbility = turn.getCurrentAbility();
+        oldTurn.addAbility(currentAbility);
         turnService.saveTurn(oldTurn);
-        player.getDeck().discardCardOnHand(turn.getCurrentAbility());
+        player.getDeck().discardCardOnHand(currentAbility);
         playerService.savePlayer(player);
+        advise.discardCard(currentAbility, game);
         return PAGE_EVASION;
     }
 
@@ -108,6 +112,7 @@ public class EvasionController {
             throw new WhenEvasionDiscardAtLeast2Exception();
         game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));
         gameService.saveGame(game);
+        advise.passPhase(game);
         return NEXT_TURN;
     }
 

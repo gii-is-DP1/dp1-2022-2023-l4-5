@@ -91,26 +91,25 @@ public class HeroAttackController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        if (player == getGame().getCurrentPlayer()) {
-            AbilityInGame usedAbility = turn.getCurrentAbility();
-            EnemyInGame attackedEnemy = turn.getCurrentEnemy();
-            Integer enemyInitialHealth = attackedEnemy.getActualHealth();
-            attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
-            player.getDeck().getInHand().remove(usedAbility);
-            player.getDeck().getInDiscard().add(usedAbility);
+        AbilityInGame usedAbility = turn.getCurrentAbility();
+        EnemyInGame attackedEnemy = turn.getCurrentEnemy();
+        Integer enemyInitialHealth = attackedEnemy.getActualHealth();
+        attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
+        player.getDeck().getInHand().remove(usedAbility);
+        player.getDeck().getInDiscard().add(usedAbility);
+        //playerService.savePlayer(player);
+        if (attackedEnemy.getActualHealth() <= 0) {
+            player.getStatistic().setGlory(player.getStatistic().getGlory() + attackedEnemy.getEnemy().getGlory());
+            player.getStatistic().setGold(player.getStatistic().getGold() + attackedEnemy.getEnemy().getGold());
+            game.getActualOrcs().remove(attackedEnemy);
             //playerService.savePlayer(player);
-            if (attackedEnemy.getActualHealth() <= 0) {
-                player.getStatistic().setGlory(player.getStatistic().getGlory() + attackedEnemy.getEnemy().getGlory());
-                player.getStatistic().setGold(player.getStatistic().getGold() + attackedEnemy.getEnemy().getGold());
-                game.getActualOrcs().remove(attackedEnemy);
-                //playerService.savePlayer(player);
-                //gameService.saveGame(game);
-            }
-            Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
-            createdTurn.addEnemy(attackedEnemy);
-            createdTurn.addAbility(usedAbility);
-            turnService.saveTurn(createdTurn);
+            //gameService.saveGame(game);
         }
+        Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
+        createdTurn.addEnemy(attackedEnemy);
+        createdTurn.addAbility(usedAbility);
+        turnService.saveTurn(createdTurn);
+        advise.heroAttack(usedAbility, attackedEnemy, game);
         return PAGE_HERO_ATTACK;
     }
 
@@ -121,6 +120,7 @@ public class HeroAttackController {
         if (player == getGame().getCurrentPlayer()) {
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.ENEMY_ATTACK, player.getId()));
             gameService.saveGame(game);
+            advise.passPhase(game);
         }
         return NEXT_TURN;
     }

@@ -78,8 +78,11 @@ public class EnemyAttackController {
 
     @GetMapping
     public String getEnemyAttack(ModelMap model, HttpSession session, HttpServletRequest request) {
-        model.put("damage", enemyService.attackEnemyToActualPlayer(getGame()));
+        Game game = getGame();
+        Integer attack = enemyService.attackEnemyToActualPlayer(getGame());
+        model.put("damage", attack);
         advise.keepUrl(session, request);
+        advise.playerIsAttacked(attack, game);
         return VIEW_ATTACK;
     }
 
@@ -90,6 +93,7 @@ public class EnemyAttackController {
         if(player == getGame().getCurrentPlayer()) {
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));
             gameService.saveGame(game);
+            advise.passPhase(game);
         }
         return NEXT_TURN;
     }
