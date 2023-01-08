@@ -62,6 +62,7 @@ public class MessageController {
         message.setSender(sender);
         message.setTime(LocalDateTime.now());
         message.setRead(false);
+        message.setType(MessageType.CHAT);
         messageService.saveMessage(message);
         return PAGE_MESSAGE_WITH;
     }
@@ -73,6 +74,7 @@ public class MessageController {
         message.setSender(loggedUser);
         message.setTime(LocalDateTime.now());
         message.setGame(loggedUser.getGame());
+        message.setType(MessageType.GAME);
         messageService.saveMessage(message);
         return "redirect:" + session.getAttribute("url");
     }
@@ -85,9 +87,10 @@ public class MessageController {
         User sender = userService.getUserByUsername(loggedUser.getUsername());
         message.setReceiver(receiver);
         message.setSender(sender);
+        message.setGame(sender.getGame());
         message.setTime(LocalDateTime.now());
-        String urlPartida = "http://localhost:8080/games/" + sender.getGame().getId();
-        message.setContent(sender.getUsername() + " has invited you. Join: " + urlPartida);
+        message.setType(MessageType.INVITATION);
+        message.setContent("http://localhost:8080/games/" + sender.getGame().getId());
         messageService.saveMessage(message);
         return PAGE_MESSAGE_WITH;
     }

@@ -50,7 +50,7 @@ public class EvasionController {
     }
 
     @ModelAttribute("currentPlayer")
-    public Player getPlayer() {
+    public Player getCurrentPlayer() {
         return getGame().getCurrentPlayer();
     }
 
@@ -86,7 +86,7 @@ public class EvasionController {
 
     @PostMapping
     public String postEvasion(@Valid Turn turn) throws NoCurrentPlayer {
-        Player player = getPlayer();
+        Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         Game game = getGame();
         if (loggedPlayer != player)
@@ -103,7 +103,7 @@ public class EvasionController {
 
     @GetMapping("/next")
     public String nextTurn() throws WhenEvasionDiscardAtLeast2Exception {
-        Player player = getPlayer();
+        Player player = getCurrentPlayer();
         Game game = getGame();
         if (player != getGame().getCurrentPlayer())
             return NEXT_TURN;

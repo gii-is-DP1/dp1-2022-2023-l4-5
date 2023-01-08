@@ -45,7 +45,7 @@ public class EnemyAttackController {
     }
 
     @ModelAttribute("loggedPlayer")
-    public Player getPlayer() {
+    public Player getLoggedPlayer() {
         User loggedUser = getUser();
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
@@ -88,7 +88,7 @@ public class EnemyAttackController {
 
     @GetMapping("/next")
     public String nextTurn() {
-        Player player = getPlayer();
+        Player player = getLoggedPlayer();
         Game game = getGame();
         if(player == getGame().getCurrentPlayer()) {
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));

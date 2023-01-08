@@ -80,16 +80,6 @@ public class ReestablishmentController {
         return userService.getLoggedUser().getGame();
     }
 
-    @ModelAttribute("enemiesInBattle")
-    public List<EnemyInGame> getEnemiesInBattle() {
-        return getGame().getActualOrcs();
-    }
-
-    @ModelAttribute("allEnemiesInGame")
-    public List<EnemyInGame> getAllEnemies() {
-        return getGame().getAllOrcsInGame();
-    }
-
     @ModelAttribute("chat")
     public Message getChat() {
         return new Message();
@@ -100,8 +90,9 @@ public class ReestablishmentController {
         Game game = getGame();
         advise.keepUrl(session, request);
         if (getLoggedPlayer() == getCurrentPlayer()) {
-            playerService.restoreEnemyLife(getEnemiesInBattle());
-            List<EnemyInGame> added = playerService.addNewEnemiesToBattle(getEnemiesInBattle(), getAllEnemies(), game);
+            List<EnemyInGame> enemiesInBattle = game.getActualOrcs();
+            playerService.restoreEnemyLife(enemiesInBattle);
+            List<EnemyInGame> added = playerService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game); // TODO: Por qué está en playerService?
             advise.addEnemies(added, game);
         }
         return VIEW_REESTABLISHMENT;
@@ -128,7 +119,7 @@ public class ReestablishmentController {
         if (loggedPlayer == currentPlayer) {
             List<Player> players = game.getPlayers();
             int totalPlayers = players.size();
-            Integer nextSequence = (getCurrentPlayer().getSequence()+1) % totalPlayers;
+            Integer nextSequence = (currentPlayer.getSequence()+1) % totalPlayers;
             Player nextPlayer = players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).findFirst().get();
             game.setCurrentPlayer(nextPlayer);
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));

@@ -72,6 +72,7 @@ public class MessageService {
         Message notification = new Message();
         notification.setGame(game);
         notification.setContent(content);
+        notification.setType(MessageType.ADVISE);
         saveMessage(notification);
     }
 }
