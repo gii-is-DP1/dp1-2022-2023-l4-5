@@ -230,7 +230,12 @@ public class GameController {
     @GetMapping("deletePlayer/{playerId}")
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
-        playerService.deletePlayerById(playerId);
-        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
+        if(playerService.getPlayerById(playerId).getHost()) {
+            playerService.deletePlayerById(playerId);
+            return PAGE_GAMES;
+        }else{
+            playerService.deletePlayerById(playerId);
+            return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
+        }
     }
 }
