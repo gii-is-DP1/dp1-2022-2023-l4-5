@@ -81,9 +81,7 @@ public class EnemyAttackController {
         Game game = getGame();
         Integer attack;
         if (getCurrentPlayer() == getLoggedPlayer() && session.getAttribute("attack") == null) {
-            System.out.println(game.getCurrentPlayer().getDeck().getInHand().size());
             attack = enemyService.attackEnemyToActualPlayer(game);
-            System.out.println(game.getCurrentPlayer().getDeck().getInHand().size());
             session.setAttribute("attack", attack);
             advise.playerIsAttacked(attack, game);
         }

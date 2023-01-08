@@ -19,7 +19,7 @@ public class InflictWounds implements Action {
         for (int i = 0; i < discardPileSize; i++) {
             AbilityInGame recoveredCard = playerTo.getDeck().getInDiscard().get(0);
             playerTo.getDeck().getInDiscard().remove(recoveredCard);
-            playerTo.getDeck().getInHand().add(recoveredCard);
+            playerTo.getDeck().getInDeck().add(recoveredCard);
         }
 
         // Shuffle the new abilityPile
