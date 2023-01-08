@@ -22,10 +22,10 @@
                 <c:if test="${productsOnSale.size()!=0}">
                     <div class="pointer">
                         <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
-                            <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                            <c:set var="productInGame" value="${productsOnSale[i]}" scope="page"/>
                             <div class="col-sm-2">
-                                <nt4h:radioButtom name="currentProduct" element="${product.id}"
-                                                  frontImage="${product.frontImage}" i="${i}0"
+                                <nt4h:radioButtom name="currentProduct" element="${productInGame.id}"
+                                                  frontImage="${productInGame.product.frontImage}" i="${i}0"
                                                   image="/resources/images/muszka.png"/>
                             </div>
                         </c:forEach>
@@ -47,9 +47,9 @@
     <c:if test="${productsOnSale.size()!=0}">
         <div style="display: flex;justify-content: center;">
             <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
-                <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
+                <c:set var="productInGame" value="${productsOnSale[i]}" scope="page"/>
                 <div class="col-sm-2">
-                    <img src="${product.frontImage}">
+                    <img src="${productInGame.product.frontImage}">
                 </div>
             </c:forEach>
         </div>
