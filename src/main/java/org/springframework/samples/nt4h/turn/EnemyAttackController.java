@@ -79,18 +79,25 @@ public class EnemyAttackController {
     @GetMapping
     public String getEnemyAttack(ModelMap model, HttpSession session, HttpServletRequest request) {
         Game game = getGame();
-        Integer attack = enemyService.attackEnemyToActualPlayer(getGame());
-        model.put("damage", attack);
+        Integer attack;
+        if (getCurrentPlayer() == getLoggedPlayer() && session.getAttribute("attack") == null) {
+            attack = enemyService.attackEnemyToActualPlayer(game);
+            session.setAttribute("attack", attack);
+            model.put("damage", attack);
+            advise.playerIsAttacked(attack, game);
+        }
+        attack = (Integer) session.getAttribute("attack");
         advise.keepUrl(session, request);
-        advise.playerIsAttacked(attack, game);
+
         return VIEW_ATTACK;
     }
 
     @GetMapping("/next")
-    public String nextTurn() {
+    public String nextTurn(HttpSession session) {
         Player player = getLoggedPlayer();
         Game game = getGame();
         if(player == getGame().getCurrentPlayer()) {
+            session.removeAttribute("attack");
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));
             gameService.saveGame(game);
             advise.passPhase(game);
