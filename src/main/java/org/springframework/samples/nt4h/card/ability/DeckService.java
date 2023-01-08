@@ -1,11 +1,9 @@
 package org.springframework.samples.nt4h.card.ability;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.RemoveCardFromHandToDiscard;
-import org.springframework.samples.nt4h.action.TakeCardFromAbilityPile;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.exceptions.TooManyAbilitiesException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +13,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class DeckService {
+
+    private final PlayerService playerService;
 
     @Transactional()
     public List<AbilityInGame> takeNewCard(Player player) {
@@ -26,6 +26,7 @@ public class DeckService {
             handPile.add(card);
             abilityPile.remove(card);
         }
+        playerService.savePlayer(player);
         return player.getDeck().getInHand();
     }
 
@@ -38,6 +39,7 @@ public class DeckService {
             handPile.remove(cardToRemove);
             discardPile.add(cardToRemove);
         }
+        playerService.savePlayer(player);
         return player.getDeck().getInHand();
     }
 

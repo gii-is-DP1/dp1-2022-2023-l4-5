@@ -91,7 +91,13 @@ public class ReestablishmentController {
         advise.keepUrl(session, request);
         if (getLoggedPlayer() == getCurrentPlayer()) {
             List<EnemyInGame> enemiesInBattle = game.getActualOrcs();
+
+            System.out.println(enemiesInBattle.get(0).getActualHealth());
+
             gameService.restoreEnemyLife(enemiesInBattle);
+
+            System.out.println(enemiesInBattle.get(0).getActualHealth());
+
             List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game); // TODO: Por qué está en playerService?
             advise.addEnemies(added, game);
         }
@@ -107,7 +113,7 @@ public class ReestablishmentController {
             throw new NoCurrentPlayer();
         AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
         deckService.takeNewCard(currentPlayer);
-        deckService.removeAbilityCards(cardId, currentPlayer);
+        //deckService.removeAbilityCards(cardId, currentPlayer);
         advise.addAbility(ability, game);
         return PAGE_REESTABLISHMENT;
     }
