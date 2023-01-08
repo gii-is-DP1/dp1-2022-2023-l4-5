@@ -85,7 +85,7 @@
                 </c:if>
             </div>
         </div>
-    </c:if>
+
     <div class="container">
         <div class="display: flex; justify-content: center;">
             <c:if test="${game.actualOrcs.size()!=0}">

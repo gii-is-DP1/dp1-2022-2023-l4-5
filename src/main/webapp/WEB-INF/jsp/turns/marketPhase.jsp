@@ -42,7 +42,7 @@
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
-            <c:
+            <c:if test="${productsOnSale.size()!=0}">
             <div style="display: flex;justify-content: center;">
                 <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
                     <c:set var="product" value="${productsOnSale[i]}" scope="page"/>
@@ -51,6 +51,11 @@
                     </div>
                 </c:forEach>
             </div>
+        </div>
+    </c:if>
+    <c:if test="${productsOnSale.size()==0}">
+        <div class="display: flex; justify-content: center;">
+            <c:out value="No products on sale."/>
         </div>
     </c:if>
 
@@ -65,5 +70,5 @@
     <div class="nextTurn"></div>
     <script src="/resources/js/chatGroup.js" type="module"></script>
     <script src="/resources/js/currentTurn.js" type="module"></script>
-    <script src="/resources/js/radioButtom.js" type="module">
+    <script src="/resources/js/radioButtom.js" type="module"></script>
 </nt4h:layout>

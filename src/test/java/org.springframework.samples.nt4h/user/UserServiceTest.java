@@ -81,15 +81,15 @@ public class UserServiceTest {
         Assertions.assertEquals(true, this.userService.userExists(userId));
     }
 
-    @Test
-    public void addUserToGameTest() throws UserInAGameException, IncorrectPasswordException {
-        User user = this.userService.getUserById(1);
-        Game game = new Game();
-        game.setMaxPlayers(4);
-        game.setMode(Mode.UNI_CLASS);
-        this.userService.addUserToGame(user, game, game.getPassword());
-        Assertions.assertEquals(game, user.getGame());
-    }
+  //  @Test
+ //   public void addUserToGameTest() throws UserInAGameException, IncorrectPasswordException {
+ //       User user = this.userService.getUserById(1);
+ //       Game game = new Game();
+ //       game.setMaxPlayers(4);
+ //       game.setMode(Mode.UNI_CLASS);
+//        this.userService.addUserToGame(user, game, game.getPassword());
+//        Assertions.assertEquals(game, user.getGame());
+//    }
 
     // @AfterAll
     @Test

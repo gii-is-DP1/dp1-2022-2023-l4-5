@@ -53,10 +53,6 @@ public class MarketController {
     public List<ProductInGame> getProductsInSell() {
         return productService.getMarket();
     }
-    @ModelAttribute("newTurn")
-    public Turn getTurn() {
-        return new Turn();
-    }
 
     @ModelAttribute("newTurn")
     public Turn getTurn() {

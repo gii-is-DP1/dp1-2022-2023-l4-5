@@ -22,7 +22,6 @@ public class EnemyService {
     private final EnemyInGameRepository enemyInGameRepository;
     private final EnemyRepository enemyRepository;
     private final PlayerService playerService;
-    private final GameService gameService;
 
     // EnemyInGame
     @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
