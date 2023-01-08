@@ -14,6 +14,7 @@ import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
+import org.springframework.samples.nt4h.turn.exceptions.WithOutProductException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -93,13 +94,15 @@ public class MarketController {
     }
 
     @PostMapping
-    public String buyProduct(Turn turn) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
+    public String buyProduct(Turn turn) throws NoCurrentPlayer, NoMoneyException, NotInSaleException, WithOutProductException {
         Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         ProductInGame productInGame = turn.getCurrentProduct();
         Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+        if (productInGame == null)
+            throw new WithOutProductException();
         productService.buyProduct(player, productInGame);
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId());
         oldTurn.addProduct(productInGame);

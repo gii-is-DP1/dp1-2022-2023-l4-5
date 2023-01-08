@@ -12,6 +12,7 @@ import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.WhenEvasionDiscardAtLeast2Exception;
+import org.springframework.samples.nt4h.turn.exceptions.WithOutPhaseException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -85,12 +86,14 @@ public class EvasionController {
     }
 
     @PostMapping
-    public String postEvasion(@Valid Turn turn) throws NoCurrentPlayer {
+    public String postEvasion(@Valid Turn turn) throws NoCurrentPlayer, WithOutPhaseException {
         Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+        if (turn.getPhase() == null)
+            throw new WithOutPhaseException();
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
         AbilityInGame currentAbility = turn.getCurrentAbility();
         oldTurn.addAbility(currentAbility);
