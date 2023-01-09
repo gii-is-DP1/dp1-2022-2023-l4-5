@@ -130,6 +130,7 @@ public class GameService {
         advise.createGame(user, game);
 
     }
+    //
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {

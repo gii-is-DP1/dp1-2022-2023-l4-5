@@ -240,7 +240,6 @@ public class GameController {
         Game game = getGame();
         if(playerService.getPlayerById(playerId).getHost()) {
             if(game.getCurrentPlayer()==null) gameService.deleteGame(game);
-            advise.getOutPlayer(player, game);
             playerService.deletePlayerById(playerId);
             return PAGE_GAMES;
         }else{
