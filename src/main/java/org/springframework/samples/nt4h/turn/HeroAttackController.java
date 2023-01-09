@@ -130,7 +130,7 @@ public class HeroAttackController {
         Player player = getPlayer();
         Game game = getGame();
         if (player == getGame().getCurrentPlayer()) {
-            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.ENEMY_ATTACK, player.getId()));
+            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(((game.getActualOrcs().isEmpty()) && (game.getAllOrcsInGame().isEmpty())) ? Phase.END: Phase.ENEMY_ATTACK, player.getId()));
             gameService.saveGame(game);
             advise.passPhase(game);
         }
