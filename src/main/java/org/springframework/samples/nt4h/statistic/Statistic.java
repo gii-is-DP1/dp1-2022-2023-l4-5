@@ -42,6 +42,16 @@ public class Statistic extends BaseEntity {
 
     @NotNull
     @Min(0)
+    private Integer timePlayed;
+
+    @NotNull
+    @Min(0)
+    private Integer numPlayers;
+
+
+
+    @NotNull
+    @Min(0)
     private Integer damageDealt;
 
     @NotNull
