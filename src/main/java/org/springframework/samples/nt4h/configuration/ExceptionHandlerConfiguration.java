@@ -2,6 +2,7 @@ package org.springframework.samples.nt4h.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
+import org.springframework.samples.nt4h.card.ability.exceptions.LessThan4AbilitiesException;
 import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
@@ -154,6 +155,13 @@ public class ExceptionHandlerConfiguration
     @ExceptionHandler(TooManyAbilitiesException.class)
     public String handleTooManyAbilitiesException(HttpSession session) {
         session.setAttribute("message", "You can't have more than 4 abilities.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_REESTABLISHMENT;
+    }
+
+    @ExceptionHandler(LessThan4AbilitiesException.class)
+    public String handleLessThan4AbilitiesException(HttpSession session) {
+        session.setAttribute("message", "You must have at least 4 abilities.");
         session.setAttribute("messageType", "danger");
         return PAGE_REESTABLISHMENT;
     }

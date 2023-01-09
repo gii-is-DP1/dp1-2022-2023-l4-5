@@ -34,14 +34,14 @@ public class DeckService {
     }
 
     @Transactional(rollbackFor = TooManyAbilitiesException.class)
-    public List<AbilityInGame> removeAbilityCards(Integer cardId, Player player) {
-        while (player.getDeck().getInHand().size() > 4) {
-            List<AbilityInGame> handPile = player.getDeck().getInHand();
-            List<AbilityInGame> discardPile = player.getDeck().getInDiscard();
-            AbilityInGame cardToRemove = handPile.stream().filter(card -> card.getId().equals(cardId)).findFirst().orElseThrow(() -> new NotFoundException("Card not found"));
-            handPile.remove(cardToRemove);
-            discardPile.add(cardToRemove);
-        }
+    public List<AbilityInGame> removeAbilityCards(Integer cardId, Player player) throws TooManyAbilitiesException {
+        if (player.getDeck().getInHand().size() < 5)
+            throw new TooManyAbilitiesException();
+        List<AbilityInGame> handPile = player.getDeck().getInHand();
+        List<AbilityInGame> discardPile = player.getDeck().getInDiscard();
+        AbilityInGame cardToRemove = handPile.stream().filter(card -> card.getId().equals(cardId)).findFirst().orElseThrow(() -> new NotFoundException("Card not found"));
+        handPile.remove(cardToRemove);
+        discardPile.add(cardToRemove);
         playerService.savePlayer(player);
         return player.getDeck().getInHand();
     }

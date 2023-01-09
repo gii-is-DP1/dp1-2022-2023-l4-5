@@ -3,6 +3,7 @@ package org.springframework.samples.nt4h.turn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.AbilityRepository;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -44,10 +45,12 @@ public class ReestablishmentController {
     private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String NEXT_TURN = "redirect:/turns";
     private boolean hasAddedEnemies = false;
+    private final AbilityRepository abilityRepository;
 
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise, AbilityService abilityService) {
+    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise, AbilityService abilityService,
+                                     AbilityRepository abilityRepository) {
         this.playerService = playerService;
         this.userService = userService;
         this.deckService = deckService;
@@ -55,6 +58,7 @@ public class ReestablishmentController {
         this.turnService = turnService;
         this.advise = advise;
         this.abilityService = abilityService;
+        this.abilityRepository = abilityRepository;
     }
 
     @ModelAttribute("loggedUser")
@@ -73,7 +77,7 @@ public class ReestablishmentController {
         return getGame().getCurrentPlayer();
     }
 
-    @ModelAttribute("turn")
+    @ModelAttribute("newTurn")
     public Turn getTurn() { return new Turn(); }
 
     @ModelAttribute("game")
@@ -98,12 +102,13 @@ public class ReestablishmentController {
             List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game);
             advise.addEnemies(added, game);
             hasAddedEnemies = true;
+            playerService.savePlayer(currentPlayer);
         }
         return VIEW_REESTABLISHMENT;
     }
 
     @PostMapping
-    public String discardAbility(Turn turn) throws NoCurrentPlayer {
+    public String discardAbility(Turn turn) throws NoCurrentPlayer, TooManyAbilitiesException {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         if (getLoggedPlayer() != currentPlayer)

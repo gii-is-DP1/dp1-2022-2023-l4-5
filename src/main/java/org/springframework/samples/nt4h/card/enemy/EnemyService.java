@@ -111,10 +111,12 @@ public class EnemyService {
             if (Objects.equals(currentPlayer.getWounds(), currentPlayer.getHealth())) {
                 game.getPlayers().remove(currentPlayer);  // de momento sales de la partida, mas adelante cambia a vista espectador
                 playerService.deletePlayer(currentPlayer);
+                return damage;
             }
         } else {
             new RemoveCardForEnemyAttack(currentPlayer, damage).executeAction(); //no recibe herida
         }
+        playerService.savePlayer(currentPlayer);
         return damage;
     }
 

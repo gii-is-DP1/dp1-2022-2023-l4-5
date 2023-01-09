@@ -9,6 +9,7 @@ import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.WithOutAbilityException;
@@ -36,14 +37,16 @@ public class HeroAttackController {
     private final UserService userService;
     private final TurnService turnService;
     private final GameService gameService;
+    private final PlayerService playerService;
     private final Advise advise;
 
 
     @Autowired
-    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, Advise advise) {
+    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise) {
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
+        this.playerService = playerService;
         this.advise = advise;
     }
 
@@ -103,15 +106,18 @@ public class HeroAttackController {
         attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
         player.getDeck().getInHand().remove(usedAbility);
         player.getDeck().getInDiscard().add(usedAbility);
-        //playerService.savePlayer(player);
+        //
         if (attackedEnemy.getActualHealth() <= 0) {
             player.getStatistic().setGlory(player.getStatistic().getGlory() + attackedEnemy.getEnemy().getGlory());
             player.getStatistic().setGold(player.getStatistic().getGold() + attackedEnemy.getEnemy().getGold());
+            playerService.savePlayer(player);
             game.getActualOrcs().remove(attackedEnemy);
-            //playerService.savePlayer(player);
-            //gameService.saveGame(game);
+            gameService.saveGame(game);
+        } else {
+            playerService.savePlayer(player);
         }
         Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
+        playerService.savePlayer(player);
         createdTurn.addEnemy(attackedEnemy);
         createdTurn.addAbility(usedAbility);
         turnService.saveTurn(createdTurn);

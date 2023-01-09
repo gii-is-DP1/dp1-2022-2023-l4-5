@@ -170,7 +170,7 @@ public class GameService {
             enemies.add(enemy);
             added.add(enemy);
             allOrcs.remove(1);
-        } else if (enemies.size() == 0) {
+        } else if (enemies.isEmpty()) {
             List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
             added.addAll(newEnemies);
             allOrcs.removeAll(newEnemies);
