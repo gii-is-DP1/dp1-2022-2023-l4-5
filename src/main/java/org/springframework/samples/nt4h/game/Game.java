@@ -64,13 +64,13 @@ public class Game extends NamedEntity implements Jsonable {
     @OneToOne(cascade = CascadeType.ALL)
     private Turn currentTurn;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<EnemyInGame> actualOrcs;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<EnemyInGame> allOrcsInGame;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<EnemyInGame> passiveOrcs;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)

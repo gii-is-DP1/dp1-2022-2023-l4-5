@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGameRepository;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,6 +39,7 @@ public class GameService {
     private final HeroService heroService;
     private final ProductService productService;
     private final EnemyService enemyService;
+    private final EnemyInGameRepository enemyInGameRepository;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -58,12 +61,21 @@ public class GameService {
         gameRepository.save(game);
     }
 
+
     @Transactional
     public void deleteGame(Game game) {
         game.onDeleteSetNull();
+        for(Player player : game.getPlayers()) {
+            User user = userService.getAllUsers().stream().filter(x->x.getBirthDate()==player.getBirthDate()).collect(Collectors.toList()).get(0);
+            user.setGame(null);
+            userService.saveUser(user);
+        }
+        game.setActualOrcs(null);
         gameRepository.save(game);
         gameRepository.delete(game);
     }
+
+
 
     @Transactional
     public void deleteGameById(int id) {

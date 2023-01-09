@@ -57,7 +57,7 @@ public class User extends BaseEntity implements Jsonable {
 
     private String authority;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
 
     @NotNull
