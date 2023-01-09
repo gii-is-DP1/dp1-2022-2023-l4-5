@@ -43,6 +43,7 @@ public class ReestablishmentController {
     public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
     private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String NEXT_TURN = "redirect:/turns";
+    private boolean hasAddedEnemies = false;
 
 
     @Autowired
@@ -91,40 +92,42 @@ public class ReestablishmentController {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         advise.keepUrl(session, request);
-        if (getLoggedPlayer() == getCurrentPlayer()) {
+        if ((getLoggedPlayer() == currentPlayer) && !hasAddedEnemies) {
             List<EnemyInGame> enemiesInBattle = game.getActualOrcs();
             gameService.restoreEnemyLife(enemiesInBattle);
             List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game);
             advise.addEnemies(added, game);
-            deckService.takeNewCard(currentPlayer);
+            hasAddedEnemies = true;
         }
         return VIEW_REESTABLISHMENT;
     }
 
     @PostMapping
-    public String takeNewAbility(Turn turn) throws NoCurrentPlayer {
+    public String discardAbility(Turn turn) throws NoCurrentPlayer {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         if (getLoggedPlayer() != currentPlayer)
             throw new NoCurrentPlayer();
         AbilityInGame currentAbility = turn.getCurrentAbility();
-
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId());
         oldTurn.addAbility(currentAbility);
         turnService.saveTurn(oldTurn);
-
         deckService.removeAbilityCards(currentAbility.getId(), currentPlayer);
-        advise.addAbility(currentAbility, game);
+        advise.discardAbilityInHand(currentAbility, game);
         return PAGE_REESTABLISHMENT;
     }
 
     @GetMapping("/next")
-    public String reestablishmentNextTurn() {
+    public String reestablishmentNextTurn() throws TooManyAbilitiesException {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer == currentPlayer) {
+            if (currentPlayer.getDeck().getInHand().size() > 4)
+                throw new TooManyAbilitiesException();
             List<Player> players = game.getPlayers();
+
+            advise.addAbilityInHand(deckService.takeNewCard(currentPlayer), game);
             int totalPlayers = players.size();
             Integer nextSequence = (currentPlayer.getSequence()+1) % totalPlayers;
             Player nextPlayer = players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).findFirst().get();
@@ -132,6 +135,7 @@ public class ReestablishmentController {
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));
             gameService.saveGame(game);
             advise.changePlayer(loggedPlayer, game);
+            hasAddedEnemies = false;
         }
         return NEXT_TURN;
     }

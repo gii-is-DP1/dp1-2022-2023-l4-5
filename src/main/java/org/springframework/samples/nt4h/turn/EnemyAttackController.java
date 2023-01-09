@@ -34,6 +34,8 @@ public class EnemyAttackController {
     public final String NEXT_TURN = "redirect:/turns";
     private final Advise advise;
 
+    private Integer damage;
+
     @ModelAttribute("loggedUser")
     public User getUser() {
         return userService.getLoggedUser();
@@ -74,30 +76,27 @@ public class EnemyAttackController {
         this.gameService = gameService;
         this.enemyService = enemyService;
         this.advise = advise;
+        this.damage = null;
     }
 
     @GetMapping
     public String getEnemyAttack(ModelMap model, HttpSession session, HttpServletRequest request) {
         Game game = getGame();
-        Integer attack;
-        if (getCurrentPlayer() == getLoggedPlayer() && session.getAttribute("attack") == null) {
-            attack = enemyService.attackEnemyToActualPlayer(game);
-            session.setAttribute("attack", attack);
-            advise.playerIsAttacked(attack, game);
+        if (getCurrentPlayer() == getLoggedPlayer() && damage == null) {
+            damage = enemyService.attackEnemyToActualPlayer(game);
+            advise.playerIsAttacked(damage, game);
         }
-        attack = (Integer) session.getAttribute("attack");
-        model.put("damage", attack);
+        model.put("damage", damage);
         advise.keepUrl(session, request);
-
         return VIEW_ATTACK;
     }
 
     @GetMapping("/next")
-    public String nextTurn(HttpSession session) {
+    public String nextTurn() {
         Player player = getLoggedPlayer();
         Game game = getGame();
-        if(player == getGame().getCurrentPlayer()) {
-            session.removeAttribute("attack");
+        if(player == game.getCurrentPlayer()) {
+            damage = null;
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()));
             gameService.saveGame(game);
             advise.passPhase(game);

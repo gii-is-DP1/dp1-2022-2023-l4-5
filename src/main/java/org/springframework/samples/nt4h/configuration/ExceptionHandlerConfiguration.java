@@ -34,8 +34,8 @@ public class ExceptionHandlerConfiguration
     private static final String PAGE_GAME_LOBBY = "redirect:/games/current";
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/heroSelect";
     private static final String PAGE_EVASION = "redirect:/evasion";
-
     private static final String PAGE_MARKET = "redirect:/market";
+    private static final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
 
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException() {
@@ -149,5 +149,12 @@ public class ExceptionHandlerConfiguration
         session.setAttribute("message", "You must choose a product.");
         session.setAttribute("messageType", "danger");
         return PAGE_MARKET;
+    }
+
+    @ExceptionHandler(TooManyAbilitiesException.class)
+    public String handleTooManyAbilitiesException(HttpSession session) {
+        session.setAttribute("message", "You can't have more than 4 abilities.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_REESTABLISHMENT;
     }
 }

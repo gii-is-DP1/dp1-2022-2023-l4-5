@@ -35,5 +35,5 @@ PetClinic :: a Spring Framework demonstration
 
     <!-- Custom -->
     <script src="/resources/js/petition.js" type="module"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 </head>

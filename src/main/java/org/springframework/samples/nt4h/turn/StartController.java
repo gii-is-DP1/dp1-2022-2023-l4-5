@@ -31,6 +31,7 @@ public class StartController {
     private final UserService userService;
     private final TurnService turnService;
     private final Advise advise;
+    private Boolean isChosen = false;
 
 
     @Autowired
@@ -80,11 +81,10 @@ public class StartController {
     public String chooseEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
         advise.keepUrl(session, request);
-        if (session.getAttribute("choose") == null) {
+        if (!isChosen) {
             advise.choose(getGame());
-            session.setAttribute("choose", true);
+            isChosen = true;
         }
-        advise.choose(getGame());
         return VIEW_CHOOSE_EVASION;
     }
 
@@ -95,7 +95,7 @@ public class StartController {
         Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        session.removeAttribute("choose");
+        isChosen = false;
         turnService.chooseAttackOrEvasion(player, turn.getPhase(), game);
         advise.passPhase(game);
         return NEXT_TURN;

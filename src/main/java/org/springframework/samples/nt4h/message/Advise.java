@@ -73,7 +73,7 @@ public class Advise {
 
     public void passPhase(Game game) {
         Player currentPlayer = game.getCurrentPlayer();
-        messageService.createNotification(game, currentPlayer.getName() + " has passed to phase" + game.getPhase() + ".");
+        messageService.createNotification(game, currentPlayer.getName() + " has passed to phase " + game.getCurrentTurn().getPhase() + ".");
     }
 
     public void discardCard(AbilityInGame currentAbility, Game game) {
@@ -100,9 +100,9 @@ public class Advise {
         messageService.createNotification(game, currentPlayer.getName() + " has added " + enemies + "to the game.");
     }
 
-    public void addAbility(AbilityInGame ability, Game game) {
+    public void discardAbilityInHand(AbilityInGame ability, Game game) {
         Player currentPlayer = game.getCurrentPlayer();
-        messageService.createNotification(game, currentPlayer.getName() + " has added " + ability.getAbility().getName() + " to the game.");
+        messageService.createNotification(game, currentPlayer.getName() + " has discarded " + ability.getAbility().getName() + " from hand.");
     }
 
     public void changePlayer(Player loggedPlayer, Game game) {
@@ -113,5 +113,14 @@ public class Advise {
     public void choose(Game game) {
         Player currentPlayer = game.getCurrentPlayer();
         messageService.createNotification(game, currentPlayer.getName() + " is choosing between two options, evade or attack.");
+    }
+
+    public void addAbilityInHand(List<AbilityInGame> takeNewCard, Game game) {
+        Player currentPlayer = game.getCurrentPlayer();
+        StringBuilder abilities = new StringBuilder();
+        for (AbilityInGame ability : takeNewCard) {
+            abilities.append(ability.getAbility().getName()).append(", ");
+        }
+        messageService.createNotification(game, currentPlayer.getName() + " has taken " + abilities + "from the deck.");
     }
 }

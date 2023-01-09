@@ -11,12 +11,6 @@
         display: flex;
         justify-content: center;
     }
-
-    .background {
-        background-image: url("/resources/images/campo.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
 </style>
 <nt4h:layout pageName="Reestablishment Phase">
     <body class="background">
@@ -33,7 +27,7 @@
                 <c:if test="${currentPlayer.deck.inHand.size()!=0}">
                 <div class="pointer">
                     <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
-                        <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                        <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
                         <!-- TODO: Peta al obtener al descartar habilidades -->
                         <div class="col-sm-2">
                             <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}"
