@@ -11,7 +11,7 @@ public class HealEnemy implements Action {
     @Override
     public void executeAction() {
         Integer enemyLife = enemy.getEnemy().getHealth();
-        if(enemy.getActualHealth() > 0) {
+        if(enemy.getActualHealth() > 0 && enemy.getActualHealth() < enemyLife) {
             enemy.setActualHealth(enemyLife);
         }
     }

@@ -20,9 +20,9 @@ VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c
         'pepito de carne mechá', 'USER', '2004-07-14', 1);
 
 -- Creación de mensajes.
-INSERT INTO messages(content, time, receiver_id, sender_id)
-VALUES ('Hola, soy Alesanfe', '2020-02-01 12:00', 1, 2),
-       ('Hola, soy Antonio', '2020-02-01 12:00', 2, 1);
+INSERT INTO messages(content, time, receiver_id, sender_id, read, type)
+VALUES ('Hola, soy Alesanfe', '2020-02-01 12:00', 1, 2, 1, 'CHAT'),
+       ('Hola, soy Antonio', '2020-02-01 12:00', 2, 1, 1, 'CHAT');
 
 -- Creación de capacidades.
 INSERT INTO capacities(state_capacity, less_damage)

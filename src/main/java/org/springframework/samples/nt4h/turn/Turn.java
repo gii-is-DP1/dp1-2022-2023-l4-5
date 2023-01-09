@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
@@ -40,10 +41,23 @@ public class Turn extends BaseEntity implements Jsonable {
     private List<EnemyInGame> usedEnemies;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    private ProductInGame currentProduct;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<ProductInGame> usedProducts;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Player player;
+
+    public void addProduct(ProductInGame product) {
+        if (usedProducts == null) {
+            usedProducts = Lists.newArrayList();
+        }
+        usedProducts.add(product);
+    }
 
     public void addEnemy(EnemyInGame attackedEnemy) {
         if(usedEnemies == null) {
