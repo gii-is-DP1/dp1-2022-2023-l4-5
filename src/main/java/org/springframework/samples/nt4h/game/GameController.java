@@ -172,7 +172,6 @@ public class GameController {
         advise.keepUrl(session, request);
         advise.getMessage(session, model);
         model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
-        System.out.println("El jugador todavía no se ha unido, CUIODADO.");
         return PAGE_CURRENT_GAME;
     }
 
@@ -180,15 +179,20 @@ public class GameController {
     @GetMapping(value = "/heroSelect")
     public String initHeroSelectForm(HttpSession session, ModelMap model, HttpServletRequest request) {
         // Los datos para el formulario.
+        User loggedUser = getUser();
+        Game game = getGame();
         advise.getMessage(session, model);
         advise.keepUrl(session, request);
+        advise.chooseHero(loggedUser, game);
         return VIEW_GAME_HERO_SELECT;
     }
 
     // Analizamos la elección del héroe.
     @PostMapping(value = "/heroSelect")
     public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
-        gameService.addHeroToPlayer(getPlayer(), heroInGame, getGame());
+        Player loggedPlayer = getPlayer();
+        Game game = getGame();
+        gameService.addHeroToPlayer(loggedPlayer, heroInGame, game);
         return PAGE_CURRENT_GAME;
 
     }
@@ -205,12 +209,15 @@ public class GameController {
     @PostMapping(value = "/new")
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
         if (result.hasErrors()) return VIEW_GAME_CREATE;
-        gameService.createGame(userService.getLoggedUser(), game);
+        User loggedUser = userService.getLoggedUser();
+        gameService.createGame(loggedUser, game);
         return PAGE_CURRENT_GAME;
     }
 
     @GetMapping("/selectOrder")
     public String orderPlayers(HttpSession session, HttpServletRequest request) {
+        User loggedUser = getUser();
+        Game game = getGame();
         advise.keepUrl(session, request);
         return VIEW_GAME_PREORDER;
     }
@@ -230,12 +237,9 @@ public class GameController {
     @GetMapping("deletePlayer/{playerId}")
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
-        if(playerService.getPlayerById(playerId).getHost()) {
-            playerService.deletePlayerById(playerId);
-            return PAGE_GAMES;
-        }else{
-            playerService.deletePlayerById(playerId);
-            return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
-        }
+        Player player = playerService.getPlayerById(playerId);
+        playerService.deletePlayerById(player.getId());
+        advise.getOutPlayer(player, game);
+        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 }

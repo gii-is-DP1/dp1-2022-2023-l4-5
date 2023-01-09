@@ -14,6 +14,7 @@ import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
+import org.springframework.samples.nt4h.turn.exceptions.WithOutProductException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -53,14 +54,10 @@ public class MarketController {
     public List<ProductInGame> getProductsInSell() {
         return productService.getMarket();
     }
+
     @ModelAttribute("newTurn")
     public Turn getTurn() {
         return new Turn();
-    }
-
-    @ModelAttribute("newProductInGame")
-    public ProductInGame getProductInGame() {
-        return new ProductInGame();
     }
 
     @ModelAttribute("game")
@@ -69,7 +66,7 @@ public class MarketController {
     }
 
     @ModelAttribute("currentPlayer")
-    public Player getPlayer() {
+    public Player getCurrentPlayer() {
         return getGame().getCurrentPlayer();
     }
 
@@ -97,23 +94,32 @@ public class MarketController {
     }
 
     @PostMapping
-    public String buyProduct(ProductInGame productInGame) throws NoCurrentPlayer, NoMoneyException, NotInSaleException {
-        Player player = getPlayer();
+    public String buyProduct(Turn turn) throws NoCurrentPlayer, NoMoneyException, NotInSaleException, WithOutProductException {
+        Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
+        ProductInGame productInGame = turn.getCurrentProduct();
+        Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+        if (productInGame == null)
+            throw new WithOutProductException();
         productService.buyProduct(player, productInGame);
+        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId());
+        oldTurn.addProduct(productInGame);
+        turnService.saveTurn(oldTurn);
+        advise.buyProduct(productInGame, game);
         return PAGE_MARKET;
     }
 
     @GetMapping("/next")
     public String next() {
-        Player player = getPlayer();
+        Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         Game game = getGame();
-        if (loggedPlayer == player) {
-            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, player.getId()));
+        if (loggedPlayer == currentPlayer) {
+            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId()));
             gameService.saveGame(game);
+            advise.passPhase(game);
         }
         return NEXT_TURN;
     }

@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import org.javatuples.Triplet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.nt4h.action.Action;
+import org.springframework.samples.nt4h.action.HealEnemy;
 import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -15,6 +18,7 @@ import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.exceptions.*;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
@@ -37,6 +41,7 @@ public class GameService {
     private final HeroService heroService;
     private final ProductService productService;
     private final EnemyService enemyService;
+    private final Advise advise;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -68,7 +73,6 @@ public class GameService {
     @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
-        System.out.println("GameService.deleteGameById: " + game);
         deleteGame(game);
     }
 
@@ -82,6 +86,7 @@ public class GameService {
         playerService.createTurns(newPlayer);
         user.setPlayer(newPlayer);
         saveGame(game);
+        advise.playerJoinGame(newPlayer, game);
         return newPlayer;
     }
 
@@ -90,8 +95,6 @@ public class GameService {
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (player.getReady())
             throw new PlayerIsReadyException();
-        System.out.println("addHeroToPlayer " + player.getId());
-        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -99,6 +102,7 @@ public class GameService {
         playerService.addDeckFromRole(player, game.getMode());
         playerService.createTurns(player);
         saveGame(game);
+        advise.choosenHero(player, heroInGame, game);
     }
 
     @Transactional(rollbackFor = FullGameException.class)
@@ -113,6 +117,7 @@ public class GameService {
         game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
+        advise.createGame(user, game);
 
     }
 
@@ -143,6 +148,7 @@ public class GameService {
         game.setCurrentPlayer(firstPlayer);
         game.setCurrentTurn(firstPlayer.getTurn(Phase.START));
         saveGame(game);
+        advise.playersOrdered(game);
     }
 
     @Transactional(rollbackFor = UserInAGameException.class)
@@ -153,5 +159,35 @@ public class GameService {
         user.setGame(game);
         userService.saveUser(user);
         saveGame(game);
+        advise.spectatorJoinGame(user, game);
     }
+
+    @Transactional
+    public List<EnemyInGame> addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) {
+        List<EnemyInGame> added = Lists.newArrayList();
+        if (enemies.size() == 1 || enemies.size() == 2) {
+            EnemyInGame enemy = allOrcs.get(1);
+            enemies.add(enemy);
+            added.add(enemy);
+            allOrcs.remove(1);
+        } else if (enemies.size() == 0) {
+            List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
+            added.addAll(newEnemies);
+            allOrcs.removeAll(newEnemies);
+        }
+        saveGame(game);
+        return added;
+    }
+
+    @Transactional
+    public void restoreEnemyLife(List<EnemyInGame> enemies) {
+        for (EnemyInGame enemyInGame : enemies) {
+            Enemy enemy = enemyInGame.getEnemy();
+            if (enemy.getHasCure()) {
+                Action recoverEnemyLife = new HealEnemy(enemyInGame);
+                recoverEnemyLife.executeAction();
+            }
+        }
+    }
+
 }

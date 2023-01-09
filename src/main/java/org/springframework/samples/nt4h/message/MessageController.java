@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -46,7 +47,8 @@ public class MessageController {
         User loggedUser = userService.getLoggedUser();
         model.addAttribute("receiver", username);
         model.addAttribute("chat", new Message());
-        model.addAttribute("messages", messageService.getMessageBySenderWithReceiver(loggedUser.getUsername(), username));
+        List<Message> messages = messageService.getMessageByPair(loggedUser.getUsername(), username);
+        model.addAttribute("messages", messages);
         return VIEW_MESSAGE_LIST;
     }
 
@@ -59,6 +61,8 @@ public class MessageController {
         message.setReceiver(receiver);
         message.setSender(sender);
         message.setTime(LocalDateTime.now());
+        message.setRead(false);
+        message.setType(MessageType.CHAT);
         messageService.saveMessage(message);
         return PAGE_MESSAGE_WITH;
     }
@@ -70,6 +74,7 @@ public class MessageController {
         message.setSender(loggedUser);
         message.setTime(LocalDateTime.now());
         message.setGame(loggedUser.getGame());
+        message.setType(MessageType.GAME);
         messageService.saveMessage(message);
         return "redirect:" + session.getAttribute("url");
     }
@@ -82,9 +87,10 @@ public class MessageController {
         User sender = userService.getUserByUsername(loggedUser.getUsername());
         message.setReceiver(receiver);
         message.setSender(sender);
+        message.setGame(sender.getGame());
         message.setTime(LocalDateTime.now());
-        String urlPartida = "http://localhost:8080/games/" + sender.getGame().getId();
-        message.setContent(sender.getUsername() + " has invited you. Join: " + urlPartida);
+        message.setType(MessageType.INVITATION);
+        message.setContent("http://localhost:8080/games/" + sender.getGame().getId());
         messageService.saveMessage(message);
         return PAGE_MESSAGE_WITH;
     }
