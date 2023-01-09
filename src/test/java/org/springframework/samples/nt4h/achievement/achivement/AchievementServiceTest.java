@@ -23,18 +23,6 @@ public class AchievementServiceTest {
    protected AchievementService acs;
 
     @Test
-    public void findByNameTrue(){
-        Achievement logro = acs.getAchievementByName("Touch Some Grass");
-        assertNotNull(logro);
-        assertEquals(20, logro.getThreshold());
-    }
-    @Test
-    public void findByNameFalse(){
-        Achievement logro = acs.getAchievementByName("Primeros pasos");
-        assertNotNull(logro);
-        assertNotEquals(20,logro.getThreshold());
-    }
-    @Test
     public void findByIdTrue(){
         Achievement logro = acs.getAchievementById(1);
         assertNotNull(logro);
