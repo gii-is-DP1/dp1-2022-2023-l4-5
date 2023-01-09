@@ -85,36 +85,36 @@ public class ReestablishmentController {
         return new Message();
     }
 
+
     @GetMapping
     public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) throws NoCurrentPlayer {
         Game game = getGame();
+        Player currentPlayer = getCurrentPlayer();
         advise.keepUrl(session, request);
         if (getLoggedPlayer() == getCurrentPlayer()) {
             List<EnemyInGame> enemiesInBattle = game.getActualOrcs();
-
-            System.out.println(enemiesInBattle.get(0).getActualHealth());
-
             gameService.restoreEnemyLife(enemiesInBattle);
-
-            System.out.println(enemiesInBattle.get(0).getActualHealth());
-
-            List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game); // TODO: Por qué está en playerService?
+            List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game);
             advise.addEnemies(added, game);
+            deckService.takeNewCard(currentPlayer);
         }
         return VIEW_REESTABLISHMENT;
     }
 
-    // TODO: TO no me responsabilizo de esto.
     @PostMapping
-    public String takeNewAbility(Integer cardId) throws NoCurrentPlayer {
+    public String takeNewAbility(Turn turn) throws NoCurrentPlayer {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         if (getLoggedPlayer() != currentPlayer)
             throw new NoCurrentPlayer();
-        AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
-        deckService.takeNewCard(currentPlayer);
-        //deckService.removeAbilityCards(cardId, currentPlayer);
-        advise.addAbility(ability, game);
+        AbilityInGame currentAbility = turn.getCurrentAbility();
+
+        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId());
+        oldTurn.addAbility(currentAbility);
+        turnService.saveTurn(oldTurn);
+
+        deckService.removeAbilityCards(currentAbility.getId(), currentPlayer);
+        advise.addAbility(currentAbility, game);
         return PAGE_REESTABLISHMENT;
     }
 
