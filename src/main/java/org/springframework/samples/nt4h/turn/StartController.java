@@ -31,6 +31,7 @@ public class StartController {
     private final UserService userService;
     private final TurnService turnService;
     private final Advise advise;
+    private Boolean isChosen = false;
 
 
     @Autowired
@@ -80,16 +81,23 @@ public class StartController {
     public String chooseEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
         advise.keepUrl(session, request);
+        if (!isChosen) {
+            advise.choose(getGame());
+            isChosen = true;
+        }
         return VIEW_CHOOSE_EVASION;
     }
 
     @PostMapping
-    public String selectEvasion(Turn turn) throws NoCurrentPlayer {
+    public String selectEvasion(Turn turn,  HttpSession session) throws NoCurrentPlayer {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
+        Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        turnService.chooseAttackOrEvasion(player, turn.getPhase(), getGame());
+        isChosen = false;
+        turnService.chooseAttackOrEvasion(player, turn.getPhase(), game);
+        advise.passPhase(game);
         return NEXT_TURN;
     }
 }

@@ -26,6 +26,8 @@ public class Message extends BaseEntity implements Jsonable {
     @Size(max = 500)
     private String content;
 
+    private boolean read;
+
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     private LocalDateTime time;
 
@@ -36,6 +38,9 @@ public class Message extends BaseEntity implements Jsonable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
+
+    @Enumerated(EnumType.STRING)
+    private MessageType type;
 
     @Override
     public String toString() {
@@ -53,9 +58,11 @@ public class Message extends BaseEntity implements Jsonable {
         JsonObject json = new JsonObject();
         json.put("content", content);
         json.put("time", time.toString());
-        json.put("sender", sender.getUsername());
-        if (receiver != null ) json.put("receiver", receiver.getUsername());
-        if (game != null ) json.put("game", game.getName());
+        if (type != MessageType.ADVISE)json.put("sender", sender.getUsername());
+        if (type != MessageType.GAME && type != MessageType.ADVISE ) json.put("receiver", receiver.getUsername());
+        if (type != MessageType.CHAT) json.put("game", game.getName());
+        json.put("read", read);
+        json.put("type", type.toString());
         return json.toJson();
     }
 

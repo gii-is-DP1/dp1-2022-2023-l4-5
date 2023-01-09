@@ -11,12 +11,12 @@ sendPetitionInInterval("/api/turns", function(responseText) {
     const url2 = '\'/resources/images/jojo2.png\'';
     const bottom = '<a href =  "/' + turn.phase + '/next">' +
         '<img src=' + url1 + ' alt="Texto alternativo" onmouseout="this.src=' + url1 + '" onmouseover="this.src=' + url2 + '">' +'</a>';
-    for (let i = 0; i < bottoms.length; i++) {
-        if (loggedPlayer == null)
-            bottoms[i].innerHTML = bottom;
-        else if ((playerInTurn.name === loggedPlayer.name && turn.phase !== "start") || phase !== turn.phase)
-            bottoms[i].innerHTML = bottom;
-        else
-            bottoms[i].innerHTML = '';
+    if (loggedPlayer.id === playerInTurn.id) {
+        for (let i = 0; i < bottoms.length; i++) {
+            if (turn.phase !== "start" || phase !== turn.phase)
+                bottoms[i].innerHTML = bottom;
+        }
     }
+    else if (phase !== turn.phase)
+        window.location.replace("/turns");
 }, 1000);

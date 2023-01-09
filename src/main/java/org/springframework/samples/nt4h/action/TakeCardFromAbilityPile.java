@@ -14,11 +14,7 @@ public class TakeCardFromAbilityPile implements Action {
 
     @Override
     public void executeAction() {
-        List<AbilityInGame> handPile = player.getDeck().getInHand();
-        List<AbilityInGame> abilityPile = player.getDeck().getInDeck();
-        Integer lastCardFromPile = abilityPile.size()-1;
-        handPile.add(abilityPile.get(lastCardFromPile));
-        abilityPile.remove(lastCardFromPile);
+
     }
 
 }

@@ -23,29 +23,47 @@
         Glory: ${currentPlayer.statistic.gold},
         Wounds: ${currentPlayer.wounds}</h1>
     <c:if test="${!loggedPlayer.isNew()}">
-    <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
-        <div class="container">
-            <div class="pointer">
-                <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
-                    <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
-                    <div class="col-sm-2">
-                        <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}" frontImage="${abilityInGame.ability.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
+        <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
+            <div class="container">
+                <c:if test="${currentPlayer.deck.inHand.size()!=0}">
+                    <div class="pointer">
+                        <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                            <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
+                            <div class="col-sm-2">
+                                <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}"
+                                                  frontImage="${abilityInGame.ability.frontImage}" i="${i}0"
+                                                  image="/resources/images/muszka.png"/>
+                            </div>
+                        </c:forEach>
                     </div>
-                </c:forEach>
+                </c:if>
+                <c:if test="${currentPlayer.deck.inHand.size()==0}">
+                    <div style="display: flex; justify-content: center;">
+                        <c:out value="There are no abilities in hand."/>
+                    </div>
+                </c:if>
             </div>
-        </div>
-        <button class="btn btn-default" type="submit">Discard</button>
-    </form:form>
+            <c:if test="${currentPlayer.deck.inHand.size()!=0}">
+                <button class="btn btn-default" type="submit">Discard</button>
+            </c:if>
+        </form:form>
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
             <div style="display: flex; justify-content: center;">
-                <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
-                    <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
+                <c:if test="${currentPlayer.deck.inHand.size()!=0}">
+                    <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                        <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
+                        <div class="col-sm-2">
+                            <img src="${abilityInGame.ability.frontImage}">
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${currentPlayer.deck.inHand.size()==0}">
                     <div class="col-sm-2">
-                        <img src="${abilityInGame.ability.frontImage}">
+                        <c:out value="There are no cards in hand"/>
                     </div>
-                </c:forEach>
+                </c:if>
             </div>
         </div>
     </c:if>

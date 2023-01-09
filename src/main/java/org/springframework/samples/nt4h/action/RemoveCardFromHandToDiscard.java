@@ -15,13 +15,7 @@ public class RemoveCardFromHandToDiscard implements Action {
 
     @Override
     public void executeAction() {
-        List<AbilityInGame> handPile = player.getDeck().getInHand();
-        List<AbilityInGame> discardPile = player.getDeck().getInDiscard();
-        List<AbilityInGame> abilityPile = player.getDeck().getInDeck();
-        if (handPile.size() >= 0) {
-            handPile.remove(idCard);
-            discardPile.add(handPile.get(idCard));
-        }
+
     }
 
 }
