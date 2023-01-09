@@ -24,13 +24,22 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${friendsList}" var="localUser">
+        <c:forEach items="${friendsList}" var="pair">
+            <c:set var="localUser" value="${pair.value0}"/>
+            <c:set var="unread" value="${pair.value1}"/>
             <tr>
                 <td>
                     <spring:url value="/user/{userId}" var="userUrl">
                         <spring:param name="userId" value="${localUser.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username}"/></a>
+                    <c:if test="${unread == 0}">
+                        <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username}"/></a>
+                    </c:if>
+                    <c:if test="${unread != 0}">
+                        <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username} "/><span class="badge">${unread}</span></a>
+                    </c:if>
+
+
                 </td>
                 <td>
                     <img src="${localUser.avatar}" alt="No image found" height="50rem" width="50rem"/>

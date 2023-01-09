@@ -47,9 +47,6 @@ public class Game extends NamedEntity implements Jsonable {
         return mode == Mode.UNI_CLASS ? 1 : 2;
     }
 
-    @Enumerated(EnumType.STRING)
-    private Phase phase;
-
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -64,13 +61,13 @@ public class Game extends NamedEntity implements Jsonable {
     @OneToOne(cascade = CascadeType.ALL)
     private Turn currentTurn;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<EnemyInGame> actualOrcs;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<EnemyInGame> allOrcsInGame;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<EnemyInGame> passiveOrcs;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
@@ -119,7 +116,6 @@ public class Game extends NamedEntity implements Jsonable {
         allOrcsInGame = Lists.newArrayList();
         passiveOrcs = Lists.newArrayList();
         players = Lists.newArrayList();
-        phase = Phase.START;
         startDate = LocalDateTime.now();
         spectators = Lists.newArrayList();
     }

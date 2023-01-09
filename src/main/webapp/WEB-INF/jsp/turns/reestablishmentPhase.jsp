@@ -24,29 +24,45 @@
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="turn" class="form-horizontal" id="choose-player-form">
             <div class="container">
+                <c:if test="${currentPlayer.deck.inHand.size()!=0}">
                 <div class="pointer">
-                    <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
-                        <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
+                    <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                        <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
                         <!-- TODO: Peta al obtener al descartar habilidades -->
                         <div class="col-sm-2">
-                            <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}" frontImage="${abilityInGame.ability.frontImage}" i="${i}0" image="/resources/images/muszka.png"/>
+                            <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}"
+                                              frontImage="${abilityInGame.ability.frontImage}" i="${i}0"
+                                              image="/resources/images/muszka.png"/>
                         </div>
                     </c:forEach>
                 </div>
+                </c:if>
+                <c:if test="${player.deck.inHand.size()==0}">
+                    <div class="pointer">
+                        <c:out value="There are no abilities in hand."/>
+                    </div>
+                </c:if>
             </div>
             <button class="btn btn-default" type="submit">Discard Ability</button>
         </form:form>
     </c:if>
     <c:if test="${loggedPlayer.isNew()}">
         <div class="container">
-            <div class="display: flex; justify-content: center;">
-                <c:forEach var="i" begin="0" end="${player.deck.inHand.size()-1}">
-                    <c:set var="abilityInGame" value="${player.deck.inHand[i]}" scope="page"/>
-                    <div class="col-sm-2">
-                        <img src="${abilityInGame.ability.frontImage}">
-                    </div>
-                </c:forEach>
-            </div>
+            <c:if test="${currentPlayer.deck.inHand.size()!=0}">
+                <div class="display: flex; justify-content: center;">
+                    <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
+                        <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
+                        <div class="col-sm-2">
+                            <img src="${abilityInGame.ability.frontImage}">
+                        </div>
+                    </c:forEach>
+                </div>
+            </c:if>
+            <c:if test="${loggedPlayer.player.deck.inHand.size()==0}">
+                <div class="display: flex; justify-content: center;">
+                    <c:out value="No abilities in hand"/>
+                </div>
+            </c:if>
         </div>
     </c:if>
     <div class="row">
@@ -62,13 +78,3 @@
     <script src="/resources/js/currentTurn.js" type="module"></script>
     <script src="/resources/js/radioButtom.js" type="module">
 </nt4h:layout>
-
-<style>
-    .background {
-        background-image: url("/resources/images/campo.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-</style>
-
-

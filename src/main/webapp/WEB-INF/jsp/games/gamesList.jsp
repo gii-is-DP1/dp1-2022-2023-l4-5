@@ -8,7 +8,6 @@
 
 <nt4h:layout pageName="games">
     <h2>Games</h2>
-    <c:out value="${message}"/>
     <table id="games" class="table table-striped">
         <thead>
         <tr>

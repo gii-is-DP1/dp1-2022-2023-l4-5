@@ -20,7 +20,8 @@ public class MessageResource {
     public ResponseEntity<String> updateMessages(@PathVariable String username) {
         User loggedUser = userService.getLoggedUser();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.put("messages", messageService.getMessageBySenderWithReceiver(loggedUser.getUsername(), username));
+        messageService.markAsRead(username, loggedUser.getUsername());
+        jsonObject.put("messages", messageService.getMessageByPair(loggedUser.getUsername(), username));
         return ResponseEntity.ok(jsonObject.toJson());
     }
 
