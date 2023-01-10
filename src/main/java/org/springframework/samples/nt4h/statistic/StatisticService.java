@@ -54,6 +54,20 @@ public class StatisticService {
 
     @Transactional
     public Integer getNumMinutesPlayedByUser(int userId) { return statisticRepository.numMinutesPlayedByUserId(userId); }
+
+    @Transactional
+    public List<Integer> getNumGamesByAllNumPlayers() {
+        List<Integer> aux = new ArrayList<>();
+        aux.add(statisticRepository.numPlayerPerGame(2));
+        aux.add(statisticRepository.numPlayerPerGame(3));
+        aux.add(statisticRepository.numPlayerPerGame(4));
+        return aux;
+    }
+
+    @Transactional
+    public Integer getNumGamesByNumPlayers(int numP){
+        return statisticRepository.numPlayerPerGame(numP);
+    }
     @Transactional
     public Integer getMaxNumPlayedGames() {
         List<Integer> aux = new ArrayList<>();
@@ -111,5 +125,26 @@ public class StatisticService {
         }
         return t/ls.size();
     }
+
+    @Transactional
+    public Integer getMaxNumGamesByNumPlayers(){
+        return getNumGamesByAllNumPlayers().stream().max(Comparator.naturalOrder()).get();
+    }
+
+    @Transactional
+    public Integer getMinNumGamesByNumPlayers(){
+        return getNumGamesByAllNumPlayers().stream().min(Comparator.naturalOrder()).get();
+    }
+
+    @Transactional
+    public Integer getAverageNumGamesByNumPlayers(){
+        int t = 0;
+        List<Integer> aux = getNumGamesByAllNumPlayers();
+        for (Integer u: aux) {
+            t += u;
+        }
+        return t/3;
+    }
+
     public List<User> listAllUsers() {return userRepository.findAll(); }
 }
