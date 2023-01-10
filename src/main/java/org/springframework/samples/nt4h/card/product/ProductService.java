@@ -3,11 +3,14 @@ package org.springframework.samples.nt4h.card.product;
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.action.BuyProduct;
+import org.springframework.samples.nt4h.capacity.Capacity;
+import org.springframework.samples.nt4h.capacity.StateCapacity;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.exceptions.CapacitiesRequiredException;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -34,8 +37,14 @@ public class ProductService {
     }
 
     @Transactional(rollbackFor = {NoMoneyException.class, NotInSaleException.class})
-    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException, NotInSaleException {
+    public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException, NotInSaleException, CapacitiesRequiredException {
         ProductInGame selectedProduct = getProductInGameById(productInGame.getId());
+        List<StateCapacity> stateCapacities = player.getHeroes().stream()
+            .flatMap(heroInGame -> heroInGame.getHero().getCapacities().stream().map(Capacity::getStateCapacity))
+            .collect(Collectors.toList());
+        List<StateCapacity> capacitiesNeeded = productInGame.getProduct().getCapacity().stream().map(Capacity::getStateCapacity).collect(Collectors.toList());
+        if (!capacitiesNeeded.containsAll(stateCapacities))
+            throw new CapacitiesRequiredException();
         if (Objects.requireNonNull(selectedProduct.getStateProduct()) == StateProduct.IN_SALE) {
             if (player.getStatistic().getGold() < selectedProduct.getProduct().getPrice())
                 throw new NoMoneyException();

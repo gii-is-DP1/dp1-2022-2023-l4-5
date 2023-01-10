@@ -65,7 +65,7 @@ public class TurnController {
         else if (phase.equals(Phase.ENEMY_ATTACK)) return PAGE_ENEMY_ATTACK;
         else if (phase.equals(Phase.MARKET)) return PAGE_MARKET;
         else if (phase.equals(Phase.REESTABLISHMENT)) return PAGE_RESUPPLY;
-        else if (phase.equals(Phase.END)) return PAGE_LOBBY + getGame().getId();
+        else if (phase.equals(Phase.END)) return PAGE_END;
         else return PAGE_LOBBY;
     }
 }

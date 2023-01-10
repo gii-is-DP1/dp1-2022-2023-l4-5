@@ -12,6 +12,7 @@ import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.statistic.Statistic;
+import org.springframework.samples.nt4h.turn.exceptions.CapacitiesRequiredException;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.NoMoneyException;
 import org.springframework.samples.nt4h.turn.exceptions.WithOutProductException;
@@ -94,7 +95,7 @@ public class MarketController {
     }
 
     @PostMapping
-    public String buyProduct(Turn turn) throws NoCurrentPlayer, NoMoneyException, NotInSaleException, WithOutProductException {
+    public String buyProduct(Turn turn) throws NoCurrentPlayer, NoMoneyException, NotInSaleException, WithOutProductException, CapacitiesRequiredException {
         Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         ProductInGame productInGame = turn.getCurrentProduct();
