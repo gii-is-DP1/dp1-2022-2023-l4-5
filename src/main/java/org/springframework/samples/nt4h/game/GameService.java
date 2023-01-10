@@ -27,9 +27,7 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -170,7 +168,7 @@ public class GameService {
             enemies.add(enemy);
             added.add(enemy);
             allOrcs.remove(1);
-        } else if (enemies.size() == 0) {
+        } else if (enemies.isEmpty()) {
             List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
             added.addAll(newEnemies);
             allOrcs.removeAll(newEnemies);

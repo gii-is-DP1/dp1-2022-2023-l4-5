@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.user;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

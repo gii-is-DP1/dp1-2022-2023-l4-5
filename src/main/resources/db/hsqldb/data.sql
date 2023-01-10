@@ -1,23 +1,23 @@
 -- Creación de usuarios.
-INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable)
+INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable, is_connected)
 VALUES ('alesanfe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I want a nap', 'DOKTOL', '2002-02-01', 1),
+        'I want a nap', 'DOKTOL', '2002-02-01', 1, 0),
        ('antonio', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 'USER', '1999-02-01', 1),
+        'I am a description', 'USER', '1999-02-01', 1, 0),
        ('laurolmer', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'awanabumbambam', 'DOKTOL', '2002-08-21', 1),
+        'awanabumbambam', 'DOKTOL', '2002-08-21', 1, 0),
        ('alvhidrod', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'drakorion', 'USER', '2002-02-23', 1),
+        'drakorion', 'USER', '2002-02-23', 1, 0),
        ('ismruijur', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'er jefe brrr', 'USER', '2002-10-27', 1),
+        'er jefe brrr', 'USER', '2002-10-27', 1, 0),
        ('ivasansan1', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'bético encubierto', 'DOKTOL', '2002-11-12', 1),
+        'bético encubierto', 'DOKTOL', '2002-11-12', 1, 0),
        ('pedruiagu', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'sácame del bolsillo', 'USER', '2002-10-01', 1),
+        'sácame del bolsillo', 'USER', '2002-10-01', 1, 0),
         ('lapaqui', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'vivo en una simulación', 'USER', '2003-05-11', 1),
+        'vivo en una simulación', 'USER', '2003-05-11', 1, 0),
         ('pepe', 'patata', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'pepito de carne mechá', 'USER', '2004-07-14', 1);
+        'pepito de carne mechá', 'USER', '2004-07-14', 1, 0);
 
 -- Creación de mensajes.
 INSERT INTO messages(content, time, receiver_id, sender_id, read, type)

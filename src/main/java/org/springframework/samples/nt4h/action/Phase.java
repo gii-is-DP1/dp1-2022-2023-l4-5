@@ -6,7 +6,8 @@ public enum Phase {
     HERO_ATTACK,
     ENEMY_ATTACK,
     MARKET,
-    REESTABLISHMENT;
+    REESTABLISHMENT,
+    END;
 
     @Override
     public String toString() {

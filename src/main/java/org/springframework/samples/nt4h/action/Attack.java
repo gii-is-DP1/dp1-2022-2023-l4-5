@@ -3,7 +3,6 @@ package org.springframework.samples.nt4h.action;
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.ability.AbilityEffect;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-
 import org.springframework.samples.nt4h.player.Player;
 
 import java.util.ArrayList;

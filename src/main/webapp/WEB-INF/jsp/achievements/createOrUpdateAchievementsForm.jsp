@@ -18,7 +18,6 @@
             <nt4h:inputField label="Threshold" name="threshold"/>
             <nt4h:selectField name="achievementType" label="Achievement Type" names="${achievementType}" size="8"/>
         </div>
-
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
