@@ -13,6 +13,7 @@ import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenExcepti
 import org.springframework.samples.nt4h.model.NamedEntity;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.samples.nt4h.user.User;
 
@@ -78,6 +79,9 @@ public class Game extends NamedEntity implements Jsonable {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<User> spectators;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Statistic statistic;
 
     public void addPlayer(Player player) throws FullGameException {
         if ((this.players.size()+1) > this.maxPlayers)
