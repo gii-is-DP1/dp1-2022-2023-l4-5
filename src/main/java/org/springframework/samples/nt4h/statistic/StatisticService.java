@@ -8,9 +8,8 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -68,6 +67,27 @@ public class StatisticService {
     public Integer getNumGamesByNumPlayers(int numP){
         return statisticRepository.numPlayerPerGame(numP);
     }
+
+    @Transactional
+    public Integer getNumGoldByNumPlayers(int userId) { return statisticRepository.NumGoldByPlayerId(userId);}
+
+    @Transactional
+    public Integer getNumGloryByNumPlayers(int userId) { return statisticRepository.NumGloryByPlayerId(userId);}
+
+    @Transactional
+    public Integer getNumOrcsByNumPlayers(int userId) { return statisticRepository.NumOrcsByPlayerId(userId);}
+
+    @Transactional
+    public Integer getNumWarLordByNumPlayers(int userId) { return statisticRepository.NumWarLordByPlayerId(userId);}
+
+    @Transactional
+    public Integer getDamageByNumPlayers(int userId) { return statisticRepository.NumDamageByPlayerId(userId);}
+
+    @Transactional
+    public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.NumWonGamesByPlayerId(userId);}
+
+
+    //---------------------------------------------------------------------------------
     @Transactional
     public Integer getMaxNumPlayedGames() {
         List<Integer> aux = new ArrayList<>();
@@ -146,5 +166,267 @@ public class StatisticService {
         return t/3;
     }
 
+    @Transactional
+    public Map<String,Integer> getMaxGoldByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumGoldByNumPlayers(user.getId());
+            if(t <= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+
+    @Transactional
+    public Map<String,Integer> getMinGoldByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumGoldByNumPlayers(user.getId());
+            if(t >= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+    @Transactional
+    public Integer getAverageGold() {
+        Integer t = 0;
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer a = getNumGoldByNumPlayers(user.getId());
+            t += a;
+        }
+        return t/ls.size();
+    }
+
+    @Transactional
+    public Map<String,Integer> getMaxGloryByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumGloryByNumPlayers(user.getId());
+            if(t <= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+
+    @Transactional
+    public Map<String,Integer> getMinGloryByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumGloryByNumPlayers(user.getId());
+            if(t >= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+    @Transactional
+    public Integer getAverageGlory() {
+        Integer t = 0;
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer a = getNumGloryByNumPlayers(user.getId());
+            t += a;
+        }
+        return t/ls.size();
+    }
+
+    @Transactional
+    public Map<String,Integer> getMaxOrcsByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumOrcsByNumPlayers(user.getId());
+            if(t <= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+
+    @Transactional
+    public Map<String,Integer> getMinOrcsByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumOrcsByNumPlayers(user.getId());
+            if(t >= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+    @Transactional
+    public Integer getAverageOrcs() {
+        Integer t = 0;
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer a = getNumOrcsByNumPlayers(user.getId());
+            t += a;
+        }
+        return t/ls.size();
+    }
+
+    @Transactional
+    public Map<String,Integer> getMaxWarLordByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumWarLordByNumPlayers(user.getId());
+            if(t <= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+    @Transactional
+    public Map<String,Integer> getMinWarLordByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getNumWarLordByNumPlayers(user.getId());
+            if(t >= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+    @Transactional
+    public Integer getAverageWarLord() {
+        Integer t = 0;
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer a = getNumWarLordByNumPlayers(user.getId());
+            t += a;
+        }
+        return t/ls.size();
+    }
+
+    @Transactional
+    public Map<String,Integer> getMaxDamageByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getDamageByNumPlayers(user.getId());
+            if(t <= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+
+    @Transactional
+    public Map<String,Integer> getMinDamageByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getDamageByNumPlayers(user.getId());
+            if(t >= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+    @Transactional
+    public Integer getAverageDamage() {
+        Integer t = 0;
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer a = getDamageByNumPlayers(user.getId());
+            t += a;
+        }
+        return t/ls.size();
+    }
+
+    @Transactional
+    public Map<String,Integer> getMaxWonGamesByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getWonGamesByNumPlayers(user.getId());
+            if(t <= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+
+    @Transactional
+    public Map<String,Integer> getMinWonGamesByPlayer() {
+        Integer t= 0;
+        String name = null;
+        Map<String,Integer> aux = new HashMap<>();
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer c = getWonGamesByNumPlayers(user.getId());
+            if(t >= c){
+                t = c;
+                name = user.getUsername();
+            }
+        }
+        aux.put(name,t);
+        return aux;
+    }
+    @Transactional
+    public Integer getAverageWonGames() {
+        Integer t = 0;
+        List<User> ls = listAllUsers();
+        for (User user: ls){
+            Integer a = getWonGamesByNumPlayers(user.getId());
+            t += a;
+        }
+        return t/ls.size();
+    }
     public List<User> listAllUsers() {return userRepository.findAll(); }
 }

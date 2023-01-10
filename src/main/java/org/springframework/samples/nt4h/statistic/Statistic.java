@@ -24,14 +24,11 @@ public class Statistic extends BaseEntity {
     @Min(0)
     private Integer glory;
 
-
     @Min(0)
     private Integer numOrcsKilled;
 
-
     @Min(0)
     private Integer numWarLordKilled;
-
 
     @Min(0)
     private Integer numWonGames;
@@ -48,14 +45,11 @@ public class Statistic extends BaseEntity {
     @Min(0)
     private Integer damageDealt;
 
-    @Min(0)
-    private Integer damageDealtToNightLords;
-
     @NotNull
     private TipoEnt tipoEnt;
 
     public static Statistic createStatistic() {
         return Statistic.builder().glory(0).gold(0).numWarLordKilled(0).numOrcsKilled(0)
-            .damageDealt(0).damageDealtToNightLords(0).numPlayedGames(0).numWonGames(0).build();
+            .damageDealt(0).numPlayedGames(0).numWonGames(0).build();
     }
 }
