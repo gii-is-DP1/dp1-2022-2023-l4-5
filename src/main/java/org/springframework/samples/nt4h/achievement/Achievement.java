@@ -31,4 +31,6 @@ public class Achievement extends NamedEntity {
 
     @URL
     private String image;
+
+    private AchievementType achievementType;
 }

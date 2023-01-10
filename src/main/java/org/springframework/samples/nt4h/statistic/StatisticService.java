@@ -5,6 +5,7 @@ import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.samples.nt4h.user.UserService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,22 +70,22 @@ public class StatisticService {
     }
 
     @Transactional
-    public Integer getNumGoldByNumPlayers(int userId) { return statisticRepository.NumGoldByPlayerId(userId);}
+    public Integer getNumGoldByNumPlayers(int userId) { return statisticRepository.numGoldByPlayerId(userId); }
 
     @Transactional
-    public Integer getNumGloryByNumPlayers(int userId) { return statisticRepository.NumGloryByPlayerId(userId);}
+    public Integer getNumGloryByNumPlayers(int userId) { return statisticRepository.numGloryByPlayerId(userId); }
 
     @Transactional
-    public Integer getNumOrcsByNumPlayers(int userId) { return statisticRepository.NumOrcsByPlayerId(userId);}
+    public Integer getNumOrcsByNumPlayers(int userId) { return statisticRepository.numOrcsByPlayerId(userId); }
 
     @Transactional
-    public Integer getNumWarLordByNumPlayers(int userId) { return statisticRepository.NumWarLordByPlayerId(userId);}
+    public Integer getNumWarLordByNumPlayers(int userId) { return statisticRepository.numWarLordByPlayerId(userId); }
 
     @Transactional
-    public Integer getDamageByNumPlayers(int userId) { return statisticRepository.NumDamageByPlayerId(userId);}
+    public Integer getDamageByNumPlayers(int userId) { return statisticRepository.numDamageByPlayerId(userId); }
 
     @Transactional
-    public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.NumWonGamesByPlayerId(userId);}
+    public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.numWonGamesByPlayerId(userId); }
 
 
     //---------------------------------------------------------------------------------
@@ -418,6 +419,7 @@ public class StatisticService {
         aux.put(name,t);
         return aux;
     }
+
     @Transactional
     public Integer getAverageWonGames() {
         Integer t = 0;
@@ -428,5 +430,9 @@ public class StatisticService {
         }
         return t/ls.size();
     }
+
     public List<User> listAllUsers() {return userRepository.findAll(); }
+
+
+
 }

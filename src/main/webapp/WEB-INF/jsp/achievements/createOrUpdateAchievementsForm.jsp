@@ -16,6 +16,7 @@
             <nt4h:inputField label="Description" name="description"/>
             <nt4h:inputField label="Image" name="image"/>
             <nt4h:inputField label="Threshold" name="threshold"/>
+            <nt4h:selectField name="achievementType" label="Achievement Type" names="${achievementType}" size="8"/>
         </div>
 
         <div class="form-group">

@@ -60,7 +60,6 @@ public class UserController {
         return this.userService.getLoggedUser();
     }
 
-
     // Obtener todos los usuarios.
     @GetMapping
     public String getUsers(@RequestParam(defaultValue = "0") int page, ModelMap model) {
