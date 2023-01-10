@@ -93,13 +93,13 @@ public class AbilityThiefController {
             // Gana uno de oro.
             Statistic statistic = currentPlayer.getStatistic();
             statistic.setGold(statistic.getGold() + 1);
-            // Pierde 1 carta.
-            Deck deck = currentPlayer.getDeck();
-            AbilityInGame abilityInGameToLose = deck.getInDeck().get(0);
-            deck.getInDeck().remove(abilityInGameToLose);
-            deck.getInDiscard().add(abilityInGameToLose);
-            playerService.savePlayer(currentPlayer);
         }
+        // Pierde 1 carta.
+        Deck deck = currentPlayer.getDeck();
+        AbilityInGame abilityInGameToLose = deck.getInDeck().get(0);
+        deck.getInDeck().remove(abilityInGameToLose);
+        deck.getInDiscard().add(abilityInGameToLose);
+        playerService.savePlayer(currentPlayer);
         return PAGE_HERO_ATTACK;
     }
 
@@ -119,12 +119,6 @@ public class AbilityThiefController {
             // Gana uno de oro.
             Statistic statistic = currentPlayer.getStatistic();
             statistic.setGold(statistic.getGold() + 1);
-            // Pierde 1 carta.
-            Deck deck = currentPlayer.getDeck();
-            AbilityInGame abilityInGameToLose = deck.getInDeck().get(0);
-            deck.getInDeck().remove(abilityInGameToLose);
-            deck.getInDiscard().add(abilityInGameToLose);
-            playerService.savePlayer(currentPlayer);
         }
         return PAGE_HERO_ATTACK;
     }
@@ -193,14 +187,13 @@ public class AbilityThiefController {
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
         // Roba una moneda a cada héroe.
-        List<Player> otherPlayers = getGame().getPlayers().stream().filter(p -> p != currentPlayer).collect(Collectors.toList());
         Statistic currentPlayerStatistic = currentPlayer.getStatistic();
-        for (Player otherPlayer : otherPlayers) {
-            Statistic statistic = otherPlayer.getStatistic();
-            if (statistic.getGold() > 0) {
+        for (Player player : getGame().getPlayers()) {
+            Statistic statistic = player.getStatistic();
+            if (statistic.getGold() > 0 && player != currentPlayer) {
                 statistic.setGold(statistic.getGold() - 1);
                 currentPlayerStatistic.setGold(currentPlayerStatistic.getGold() + 1);
-                playerService.savePlayer(otherPlayer);
+                playerService.savePlayer(player);
             }
         }
         playerService.savePlayer(currentPlayer);

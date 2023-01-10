@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;

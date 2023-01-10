@@ -5,7 +5,6 @@ import org.springframework.samples.nt4h.action.InflictWounds;
 import org.springframework.samples.nt4h.action.RemoveCardForEnemyAttack;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.stereotype.Service;

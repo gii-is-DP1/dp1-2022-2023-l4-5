@@ -1,5 +1,7 @@
 package org.springframework.samples.nt4h.card.product;
 
+import org.springframework.samples.nt4h.capacity.Capacity;
+import org.springframework.samples.nt4h.capacity.StateCapacity;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Las habilidades de los productos son:
@@ -87,7 +91,10 @@ public class AbilityProductController {
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
         // Pierde la carta si no tiene el héreo pericia.
-        session.setAttribute("deleteCard", true);
+        List<StateCapacity > stateCapacities = currentPlayer.getHeroes().stream().flatMap(hero -> hero.getHero()
+            .getCapacities().stream().map(Capacity::getStateCapacity)).collect(Collectors.toList());
+        if (!stateCapacities.contains(StateCapacity.EXPERTISE))
+            session.setAttribute("deleteCard", true);
         return PAGE_HERO_ATTACK;
     }
 
@@ -99,7 +106,8 @@ public class AbilityProductController {
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
         // Elimina una herida.
-        currentPlayer.setWounds(currentPlayer.getWounds() - 1);
+        if (currentPlayer.getWounds() > 0)
+            currentPlayer.setWounds(currentPlayer.getWounds() - 1);
         // Eliminamos la carta.
         session.setAttribute("deleteCard", true);
         return PAGE_HERO_ATTACK;

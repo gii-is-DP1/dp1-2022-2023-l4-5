@@ -17,7 +17,6 @@
             <nt4h:inputField label="Image" name="image"/>
             <nt4h:inputField label="Threshold" name="threshold"/>
         </div>
-
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>

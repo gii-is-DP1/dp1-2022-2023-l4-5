@@ -1,8 +1,6 @@
 package org.springframework.samples.nt4h.card.product;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.BuyProduct;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.capacity.StateCapacity;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;

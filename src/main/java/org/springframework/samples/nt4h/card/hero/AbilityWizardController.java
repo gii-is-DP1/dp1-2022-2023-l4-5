@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,7 +127,7 @@ public class AbilityWizardController {
 
     // Disparo gélido
     @GetMapping("/frostShot/{cardId}")
-    private String frostShot(@PathVariable("cardId") int cardId, HttpSession session, ModelMap modelMap) {
+    private String frostShot(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -179,9 +178,9 @@ public class AbilityWizardController {
         } else if (alreadyAttackedWithStaff.contains(attackedEnemy.getId())) {
             Integer attack = (Integer) session.getAttribute("attack");
             if (attack == null)
-                session.setAttribute("attack", 2);
+                session.setAttribute("attack", 1);
             else
-                session.setAttribute("attack", attack + 2);
+                session.setAttribute("attack", attack + 1);
         } else
             alreadyAttackedWithStaff.add(attackedEnemy.getId());
         return PAGE_HERO_ATTACK;
@@ -209,6 +208,20 @@ public class AbilityWizardController {
             currentPlayer.setWounds(wounds - 1);
         // Elimina la carta.
         session.setAttribute("deleteCard", true);
+        playerService.savePlayer(currentPlayer);
+        return PAGE_HERO_ATTACK;
+    }
+
+    // Proyectil ígneo
+    @GetMapping("/igneousProjectile/{cardId}")
+    private String igneousProjectile(@PathVariable("cardId") int cardId, HttpSession session) {
+        Player currentPlayer = getCurrentPlayer();
+        Player loggedPlayer = getLoggedPlayer();
+        if (currentPlayer != loggedPlayer)
+            return PAGE_HERO_ATTACK;
+        // Gana 1 ficha de gloria.
+        Statistic statistic = currentPlayer.getStatistic();
+        statistic.setGlory(statistic.getGlory() + 1);
         playerService.savePlayer(currentPlayer);
         return PAGE_HERO_ATTACK;
     }

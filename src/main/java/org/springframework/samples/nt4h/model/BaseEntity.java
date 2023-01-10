@@ -15,8 +15,6 @@
  */
 package org.springframework.samples.nt4h.model;
 
-import org.springframework.samples.nt4h.card.product.ProductInGame;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;

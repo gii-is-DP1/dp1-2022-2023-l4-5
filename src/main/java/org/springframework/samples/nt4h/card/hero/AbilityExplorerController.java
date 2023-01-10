@@ -1,6 +1,5 @@
 package org.springframework.samples.nt4h.card.hero;
 
-import org.hibernate.stat.Statistics;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
@@ -89,7 +88,6 @@ public class AbilityExplorerController {
             session.setAttribute("defend", 2);
         else
             session.setAttribute("defend", (int) session.getAttribute("defend") + 2);
-        //
         return PAGE_HERO_ATTACK;
     }
 
@@ -129,7 +127,7 @@ public class AbilityExplorerController {
             if (session.getAttribute("attack") == null)
                 session.setAttribute("attack", abilityInGame.getAttack());
             else
-                session.setAttribute("attack", (int) session.getAttribute("attack") + 2);
+                session.setAttribute("attack", (int) session.getAttribute("attack") + abilityInGame.getAttack());
             // Elimina la carta.
             deck.getInDeck().remove(abilityInGame);
             deck.getInDiscard().add(abilityInGame);
@@ -138,7 +136,7 @@ public class AbilityExplorerController {
         }
         // Coloco la carta al fondo del deck.
         deck.getInDeck().remove(abilityInGame);
-        deck.getInDeck().add(abilityInGame);
+        deck.getInDeck().add(abilityInGame); // TODO: COmprobar si lo añade al fondo.
         playerService.savePlayer(currentPlayer);
         return PAGE_HERO_ATTACK;
     }

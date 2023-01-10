@@ -7,7 +7,10 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.card.Card;
 import org.springframework.samples.nt4h.card.hero.Role;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 

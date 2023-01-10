@@ -1,24 +1,22 @@
 package org.springframework.samples.nt4h.card.hero;
 
-import com.google.common.collect.Lists;
-import org.hibernate.stat.Statistics;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -82,6 +80,12 @@ public class AbilityKnightController {
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
+        // Pierde una carta.
+        Deck deck = currentPlayer.getDeck();
+        AbilityInGame abilityInGame = deck.getInDeck().get(0);
+        deck.getInDeck().remove(abilityInGame);
+        deck.getInDiscard().add(abilityInGame);
+        playerService.savePlayer(currentPlayer);
         return VIEW_LOSE_CARD;
     }
 
@@ -117,7 +121,6 @@ public class AbilityKnightController {
         Deck deck = currentPlayer.getDeck();
         deck.discardCardOnHand(abilityInGame);
         playerService.savePlayer(currentPlayer);
-        //
         return PAGE_HERO_ATTACK;
     }
 
@@ -132,7 +135,7 @@ public class AbilityKnightController {
         // TODO: comprobar que tiene esa carta.
         // Termina el turno.
         session.setAttribute("nextUrl", PAGE_HERO_ATTACK + "/next");
-        model.put("name", "preventdamageFrom");
+        model.put("name", "preventDamageFrom");
         return VIEW_CHOSE_ENEMY;
     }
 
@@ -194,9 +197,9 @@ public class AbilityKnightController {
         playerService.savePlayer(currentPlayer);
         // Agrega ese daño a la carta.
         if (session.getAttribute("attack") == null)
-            session.setAttribute("attack", 2);
+            session.setAttribute("attack", abilityInGame.getAttack());
         else
-            session.setAttribute("attack", (int) session.getAttribute("attack") + 2);
+            session.setAttribute("attack", (int) session.getAttribute("attack") + abilityInGame.getAttack());
         //
         return PAGE_HERO_ATTACK;
     }
@@ -212,11 +215,13 @@ public class AbilityKnightController {
         List<Player> players = getGame().getPlayers();
         // cada jugador roba dos cartas.
         for (Player player : players) {
-            Deck deck = player.getDeck();
-            AbilityInGame abilityInGame = deck.getInDiscard().get(0);
-            deck.getInDiscard().remove(abilityInGame);
-            deck.getInHand().add(abilityInGame);
-            playerService.savePlayer(player);
+            for (int i = 0; i < 2; i++) {
+                Deck deck = player.getDeck();
+                AbilityInGame abilityInGame = deck.getInDiscard().get(0);
+                deck.getInDiscard().remove(abilityInGame);
+                deck.getInHand().add(abilityInGame);
+                playerService.savePlayer(player);
+            }
         }
         // Roba una carta y gana una ficha de gloria.
         Deck deck = currentPlayer.getDeck();
@@ -228,12 +233,4 @@ public class AbilityKnightController {
         playerService.savePlayer(currentPlayer);
         return PAGE_HERO_ATTACK;
     }
-
-    //////////////////////////////
-    // Probablemente se mueva a otro controlador.
-    //////////////////////////////
-
-
-
-
 }

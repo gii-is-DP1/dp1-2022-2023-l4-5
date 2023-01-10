@@ -5,7 +5,6 @@ import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.player.Player;
 
 import java.util.Collections;
-import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public class InflictWounds implements Action {

@@ -3,8 +3,6 @@ package org.springframework.samples.nt4h.card.enemy;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
@@ -72,19 +70,27 @@ public class AbilityNightLordController {
         return getLoggedUser().getPlayer();
     }
 
-    @GetMapping("/gurdrug")
-    public String gurdrug(HttpSession session) {
-        session.setAttribute("loseAnotherCard", 1);
-        return "enemy/gurdrug";
+    // Fase de ataque de héroe.
+    @GetMapping("/gurdrug/{cardId}")
+    public String gurdrug(@PathVariable("cardId") int cardId, HttpSession session) {
+        Deck deck = getCurrentPlayer().getDeck();
+        AbilityInGame abilityInGame = deck.getInDeck().get(0);
+        deck.getInDeck().remove(abilityInGame);
+        deck.getInDiscard().add(abilityInGame);
+        AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
+        return "/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
     }
 
-    @GetMapping("/roghkiller")
-    public String roghkiller(HttpSession session) {
+    // Fase de ataque de héroe.
+    @GetMapping("/roghkiller/{cardId}")
+    public String roghkiller(@PathVariable("cardId") int cardId, HttpSession session) {
         Game game = getGame();
         // Añade un punto de fortaleza a cada orco.
+        AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
+        String url = "redirect:/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
         List<EnemyInGame> enemies = game.getActualOrcs();
         if (session.getAttribute("alreadyAddedHealthOrc") != null)
-            return PAGE_ENEMY_ATTACK;
+            return url;
         for (var i = 0; i < enemies.size(); i++) {
             EnemyInGame enemy = enemies.get(i);
             if (!enemy.isNightLord()) {
@@ -92,7 +98,8 @@ public class AbilityNightLordController {
                 enemyService.saveEnemyInGame(enemy);
             }
         }
-        return PAGE_ENEMY_ATTACK;
+        session.setAttribute("alreadyAddedHealthOrc", true);
+        return url;
     }
 
     @GetMapping("/shriekknifer/{cardId}")

@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
@@ -33,10 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+            .antMatchers(HttpMethod.GET, "/", "/oups", "/welcome").permitAll()
             .antMatchers("/users/new", "/session/**", "/resources/**", "/webjars/**", "/h2-console/**", "/checkin", "/checkout").permitAll()
             .antMatchers("/admins/**", "/achievements/new", "/achievements/edit", "/achievements/delete", "/AuditoryUser/**").hasAnyAuthority("DOKTOL")
-            .antMatchers("/achievements/**", "/games/**", "/evasion/**", "/users/**", "/cards/**",
+            .antMatchers("/achievements/**", "/games/**", "/users/**", "/cards/**",
                 "/friends/**", "/turns/**", "/evasion/**", "/messages/**", "/market/**", "/reestablishment/**",
                 "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**").authenticated()
             .anyRequest().denyAll()

@@ -42,6 +42,5 @@
     </div>
 
     <br/> <!-- salto de linea/ meter un espacio en blanco entre texto -->
-    <form method="get" action="/cards/buttonsCards">
-        <button type="submit" style="height: 5rem; width: 20rem"  >Return</button></form>
+    <a href="/cards/buttonsCards" class="btn btn-primary btn-lg btn-block">Return</a>
 </nt4h:layout>
