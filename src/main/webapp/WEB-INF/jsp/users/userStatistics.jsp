@@ -49,7 +49,7 @@
     <spring:url value="/" var="goToLobby"></spring:url>
     <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Menu</a>
 
-    <spring:url value="/statistics/detailedStatistics" var="goToDetailedStatistics"></spring:url>
-    <a href="${fn:escapeXml(goToDetailedStatistics)}" class="btn btn-default">Detailed Statistics</a>
+    <spring:url value="/statistics/allStatistics" var="goToAllStatistics"></spring:url>
+    <a href="${fn:escapeXml(goToAllStatistics)}" class="btn btn-default">All Statistics</a>
 
 </nt4h:layout>

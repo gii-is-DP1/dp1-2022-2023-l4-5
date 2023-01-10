@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,7 +28,7 @@ public class AdminController {
     private static final String VIEW_USER_DETAILS = "users/userDetails";
     private static final String VIEW_ALLGAMES = "admins/allGames";
 
-
+    private static final String VIEW_USER_STATISTICS = "users/userStatistics";
     private static final String PAGE_USER_LIST = "redirect:/users";
 
 
@@ -113,5 +114,13 @@ public class AdminController {
         model.put("page", page);
         return "admins/games";
     }
+
+    @GetMapping("/statistics/{userId}")
+    public String showUserStatistics(@PathVariable("userId") int userId, ModelMap model) {
+        Statistic userStatistic = userService.getUserById(userId).getStatistic();
+        model.put("statistic", userStatistic);
+        return VIEW_USER_STATISTICS;
+    }
+
 
 }
