@@ -40,10 +40,11 @@ public class User extends BaseEntity implements Jsonable {
     private String username;
 
     @NotNull
-    @Size(min = 1, max = 20)
     private String password;
 
     private String enable;
+
+    private Boolean isConnected;
 
     @URL
     private String avatar;
@@ -52,7 +53,7 @@ public class User extends BaseEntity implements Jsonable {
     private Tier tier;
 
     @NotBlank
-    @Size(min = 0, max = 100)
+    @Size(max = 100)
     private String description;
 
     private String authority;
