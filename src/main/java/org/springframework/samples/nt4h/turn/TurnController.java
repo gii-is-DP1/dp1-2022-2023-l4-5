@@ -7,7 +7,9 @@ import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/turns")
@@ -23,6 +25,7 @@ public class TurnController {
     private final String PAGE_MARKET = "redirect:/market";
     private final String PAGE_RESUPPLY = "redirect:/reestablishment";
     private final String PAGE_LOBBY = "redirect:/games/";
+    private final String PAGE_END = "redirect:/end";
 
     @Autowired
     public TurnController(UserService userService) {
@@ -64,6 +67,7 @@ public class TurnController {
         else if (phase.equals(Phase.ENEMY_ATTACK)) return PAGE_ENEMY_ATTACK;
         else if (phase.equals(Phase.MARKET)) return PAGE_MARKET;
         else if (phase.equals(Phase.REESTABLISHMENT)) return PAGE_RESUPPLY;
+        else if (phase.equals(Phase.END)) return PAGE_END;
         else return PAGE_LOBBY;
     }
 }

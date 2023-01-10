@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.action;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.Action;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.player.Player;
 

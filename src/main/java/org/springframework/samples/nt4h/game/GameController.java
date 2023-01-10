@@ -138,7 +138,6 @@ public class GameController {
         model.put("isNext", gamePage.hasNext());
         model.put("games", gamePage.getContent());
         model.put("page", page);
-
         return VIEW_GAME_LIST;
     }
 
@@ -147,7 +146,6 @@ public class GameController {
     public String showCurrentGame(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
         advise.keepUrl(session, request);
-        System.out.println(game.getSpectators());
         return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
     }
 
@@ -208,6 +206,7 @@ public class GameController {
     // Comprobamos si la partida es correcta y la almacenamos.
     @PostMapping(value = "/new")
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
+        System.out.println(result.getAllErrors());
         if (result.hasErrors()) return VIEW_GAME_CREATE;
         User loggedUser = userService.getLoggedUser();
         gameService.createGame(loggedUser, game);

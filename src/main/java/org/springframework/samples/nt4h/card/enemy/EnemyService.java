@@ -5,7 +5,6 @@ import org.springframework.samples.nt4h.action.InflictWounds;
 import org.springframework.samples.nt4h.action.RemoveCardForEnemyAttack;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.stereotype.Service;
@@ -111,10 +110,12 @@ public class EnemyService {
             if (Objects.equals(currentPlayer.getWounds(), currentPlayer.getHealth())) {
                 game.getPlayers().remove(currentPlayer);  // de momento sales de la partida, mas adelante cambia a vista espectador
                 playerService.deletePlayer(currentPlayer);
+                return damage;
             }
         } else {
             new RemoveCardForEnemyAttack(currentPlayer, damage).executeAction(); //no recibe herida
         }
+        playerService.savePlayer(currentPlayer);
         return damage;
     }
 

@@ -6,8 +6,6 @@ import com.google.common.collect.Lists;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Ability;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
@@ -23,7 +21,6 @@ import javax.persistence.*;
 import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

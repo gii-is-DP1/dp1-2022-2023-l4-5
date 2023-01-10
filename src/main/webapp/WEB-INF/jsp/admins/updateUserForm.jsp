@@ -21,13 +21,11 @@
 
         <form:form modelAttribute="user" class="form-horizontal" id="add-user-form">
             <div class="form-group has-feedback">
-
                 <nt4h:inputField label="Username" name="username"/>
-                <nt4h:inputField label="Password" name="password"/>
+                <nt4h:password label="Password" name="password"/>
                 <nt4h:inputField label="Avatar" name="avatar"/>
                 <nt4h:inputField label="Birth Date" name="birthDate"/>
                 <nt4h:inputField label="Description" name="description"/>
-
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">

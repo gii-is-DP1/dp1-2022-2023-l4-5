@@ -1,6 +1,6 @@
 package org.springframework.samples.nt4h.achievement;
 
-import lombok.extern.slf4j.Slf4j;
+import com.google.common.collect.Lists;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +30,15 @@ public class AchievementController {
     @ModelAttribute("achievements")
     public List<Achievement> getAchievements() {
         return this.achievementService.getAllAchievements();
+    }
+
+    @ModelAttribute("achievementType")
+    public List<AchievementType> getAchievementType() {
+        return Lists.newArrayList(AchievementType.PLAYED_GAMES,
+            AchievementType.WON_GAMES, AchievementType.DURATION,
+            AchievementType.TOTAL_GOLD, AchievementType.TOTAL_GLORY,
+            AchievementType.DMG_TO_ORCS, AchievementType.KILLED_ORCS,
+            AchievementType.KILLED_WARLORDS);
     }
 
     @GetMapping

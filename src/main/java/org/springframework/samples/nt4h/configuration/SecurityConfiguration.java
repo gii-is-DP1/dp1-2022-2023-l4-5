@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
@@ -32,20 +32,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
-            .antMatchers("/users/new", "/session/**", "/resources/**", "/webjars/**", "/h2-console/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/", "/oups", "/welcome").permitAll()
+            .antMatchers("/users/new", "/session/**", "/resources/**", "/webjars/**", "/h2-console/**", "/checkin", "/checkout").permitAll()
             .antMatchers("/admins/**", "/achievements/new", "/achievements/edit", "/achievements/delete", "/AuditoryUser/**").hasAnyAuthority("DOKTOL")
-            .antMatchers("/achievements/**", "/games/**", "/evasion/**", "/users/**", "/cards/**",
+            .antMatchers("/achievements/**", "/games/**", "/users/**", "/cards/**",
                 "/friends/**", "/turns/**", "/evasion/**", "/messages/**", "/market/**", "/reestablishment/**",
-                "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**").authenticated()
+                "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**", "/statistics/**").authenticated()
             .anyRequest().denyAll()
             .and()
             .formLogin()
+            .defaultSuccessUrl("/checkin")
             /*.loginPage("/login")*/
             .failureUrl("/login-error")
             .and()
             .logout()
-            .logoutSuccessUrl("/");
+            .logoutSuccessUrl("/checkout");
                 // Configuración para que funcione la consola de administración
                 // de la BD H2 (deshabilitar las cabeceras de protección contra
                 // ataques de tipo csrf y habilitar los framesets si su contenido
@@ -71,9 +72,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
 	}
-
 }
 
 

@@ -1,9 +1,6 @@
 package org.springframework.samples.nt4h.user;
 
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.game.AuditoryGame;
-import org.springframework.samples.nt4h.game.AuditoryGameService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
