@@ -169,4 +169,23 @@ public class UserService {
         user.setGame(null);
         saveUser(user);
     }
+
+
+    @Transactional
+    void uppRank(Integer userId){
+        User user = userRepository.findById(userId).get();
+        Integer winnedG = user.getStatistic().getNumWonGames();
+        if( winnedG>= 3 && winnedG < 5){
+            user.setTier(Tier.BRONZE);
+        } else if (winnedG >= 5 && winnedG < 7) {
+            user.setTier(Tier.SILVER);
+        } else if(winnedG >= 7 && winnedG < 9){
+            user.setTier(Tier.GOLD);
+        } else if(winnedG >= 9 && winnedG < 1700){
+            user.setTier(Tier.PLATINUM);
+        } else if(winnedG >= 1700) {
+            user.setTier(Tier.LEYENDA_VIVA);
+        }
+    }
+
 }
