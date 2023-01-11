@@ -74,7 +74,7 @@ class EnemyServiceTest {
     }
     @Test
     void testAddOrcsToGame(){
-        List<EnemyInGame> orcs= enemyService.addOrcsToGame();
+        List<EnemyInGame> orcs= enemyService.addOrcsToGame(4);
         assertEquals(27,orcs.size());
         assertTrue(orcs.stream().noneMatch(x-> x.getEnemy().getIsNightLord()));
     }

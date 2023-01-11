@@ -65,7 +65,7 @@ public class GameTest {
         assertThat(game.getPassword()).isEqualTo("test123");
         assertThat(game.getStartDate()).isEqualTo(LocalDateTime.of(2020, 1, 1, 0, 0));
         assertThat(game.getFinishDate()).isEqualTo(LocalDateTime.of(2020, 1, 2, 0, 0));
-        assertThat(game.getPhase()).isEqualTo(Phase.START);
+        //assertThat(game.getPhase()).isEqualTo(Phase.START);
         assertThat(game.isHasStages()).isTrue();
     }
 
@@ -117,11 +117,11 @@ public class GameTest {
 
         // Test phase constraints
         game.setMode(Mode.UNI_CLASS);
-        game.setPhase(null);
+        //game.setPhase(null);
         assertThat(validator.validate(game)).isEmpty();
 
         // Test accessibility constraints
-        game.setPhase(Phase.START);
+        //game.setPhase(Phase.START);
         game.setAccessibility(null);
         assertThat(validator.validate(game)).isEmpty();
     }

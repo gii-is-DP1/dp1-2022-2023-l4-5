@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.IncorrectPasswordException;
 import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.stereotype.Service;
@@ -82,7 +83,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void addUserToGameTest() throws UserInAGameException, IncorrectPasswordException {
+    public void addUserToGameTest() throws UserInAGameException, IncorrectPasswordException, FullGameException {
         User user = this.userService.getUserById(1);
         Game game = new Game();
         game.setMaxPlayers(4);

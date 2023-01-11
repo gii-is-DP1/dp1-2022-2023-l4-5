@@ -34,7 +34,6 @@ public class StatisticTest {
         statistic.setNumWonGames(50);
         statistic.setNumPlayedGames(60);
         statistic.setDamageDealt(70);
-        statistic.setDamageDealtToNightLords(80);
     }
 
     @Test
@@ -46,7 +45,6 @@ public class StatisticTest {
         assertThat(statistic.getNumWonGames()).isEqualTo(50);
         assertThat(statistic.getNumPlayedGames()).isEqualTo(60);
         assertThat(statistic.getDamageDealt()).isEqualTo(70);
-        assertThat(statistic.getDamageDealtToNightLords()).isEqualTo(80);
     }
 
     @Test
@@ -91,12 +89,6 @@ public class StatisticTest {
         statistic.setDamageDealt(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setDamageDealt(100);
-        assertThat(validator.validate(statistic)).isEmpty();
-
-        // Test damageDealtToNightLords constraint
-        statistic.setDamageDealtToNightLords(-1);
-        assertThat(validator.validate(statistic)).isNotEmpty();
-        statistic.setDamageDealtToNightLords(100);
         assertThat(validator.validate(statistic)).isEmpty();
     }
 

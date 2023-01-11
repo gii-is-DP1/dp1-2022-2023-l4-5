@@ -34,7 +34,6 @@ public class UserTest {
     @BeforeEach
     void setUp() {
         Statistic statistic = new Statistic();
-        statistic.setDamageDealtToNightLords(0);
         statistic.setDamageDealt(0);
         statistic.setGold(0);
         statistic.setGlory(0);

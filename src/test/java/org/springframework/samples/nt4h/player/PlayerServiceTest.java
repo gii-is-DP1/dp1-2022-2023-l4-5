@@ -65,7 +65,7 @@ public class PlayerServiceTest {
         player = Player.createPlayer(user, game, true);
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        game.setPhase(Phase.START);
+        //game.setPhase(Phase.START);
         game.setHasStages(true);
         gameService.saveGame(game);
         game.addPlayerWithNewHero(player, heroInGame);

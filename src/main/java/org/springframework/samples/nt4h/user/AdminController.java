@@ -19,7 +19,6 @@ public class AdminController {
 
     private static final String VIEW_USER_DETAILS = "users/userDetails";
 
-
     private static final String PAGE_USER_LIST = "redirect:/users";
     // Servicios.
     private final UserService userService;
@@ -28,7 +27,6 @@ public class AdminController {
     public AdminController(UserService userService) {
         this.userService = userService;
     }
-
 
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {

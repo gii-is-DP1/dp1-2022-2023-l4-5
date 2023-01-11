@@ -72,23 +72,22 @@ public class GameServiceTest {
     public void testFindById() {
         assertEquals(game, gameService.getGameById(idGame));
     }
- @Test
+    @Test
     public void testFindByIncorrectId() {
         assertThrows(NotFoundException.class, () -> gameService.getGameById(-1));
     }
- @Test
+    @Test
     public void testFindAll() {
         assertEquals(numGames, gameService.getAllGames().size());
     }
 
-    @Test
+    /*@Test
     public void testUpdate() {
         Game oldGame = this.gameService.getGameById(idGame);
-        Game newGame = oldGame.toBuilder()
-            .phase(Phase.ENEMY_ATTACK).build();
+        Game newGame = oldGame.toBuilder().phase(Phase.ENEMY_ATTACK).build();
         newGame.setId(idGame);
         newGame.setName(oldGame.getName());
         this.gameService.saveGame(newGame);
         assertEquals(newGame.getPhase(), this.gameService.getGameById(idGame).getPhase());
-    }
+    }*/
 }

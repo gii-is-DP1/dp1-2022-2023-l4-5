@@ -35,7 +35,7 @@ public class StatisticServiceTest {
     public void findByIdTrue(){
         Statistic stat = statisticService.getStatisticById(idStatistic);
         assertNotNull(stat);
-        assertEquals(0, stat.getDamageDealtToNightLords());
+        assertEquals(0, stat.getDamageDealt());
     }
 
     @Test
