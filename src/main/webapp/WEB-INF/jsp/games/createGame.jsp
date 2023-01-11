@@ -23,8 +23,8 @@
             <div class="form-group has-feedback">
                 <nt4h:inputField label="Name <span style='color:red'>*</span>" name="name"/>
                 <nt4h:inputField label="Password <span style='color:red'>*</span>" name="password"/>
-                <nt4h:selectField name="Mode <span style='color:red'>*</span>" label="Mode" names="${mode}" size="2"/>
-                <nt4h:selectField name="MaxPlayers <span style='color:red'>*</span>" label="Max players" names="${[2,3,4]}" size="3"/>
+                <nt4h:selectField name="mode" label="Mode <span style='color:red'>*</span>" names="${mode}" size="2"/>
+                <nt4h:selectField name="maxPlayers" label="Max Players <span style='color:red'>*</span>" names="${[2,3,4]}" size="3"/>
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-default" type="submit">Create game</button>
                 </div>

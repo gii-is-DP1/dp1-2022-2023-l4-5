@@ -132,7 +132,6 @@ public class HeroAttackController {
 
     @GetMapping("/makeDamage")
     public String attackEnemy() {
-
         return PAGE_HERO_ATTACK;
     }
 

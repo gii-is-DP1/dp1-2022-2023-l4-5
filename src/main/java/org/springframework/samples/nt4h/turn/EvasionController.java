@@ -94,8 +94,6 @@ public class EvasionController {
         Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        if (turn.getPhase() == null)
-            throw new WithOutPhaseException();
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
         AbilityInGame currentAbility = turn.getCurrentAbility();
         oldTurn.addAbility(currentAbility);

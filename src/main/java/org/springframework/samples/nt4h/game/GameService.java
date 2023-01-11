@@ -17,11 +17,9 @@ import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.exceptions.*;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
-import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +30,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class GameService {
-    private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
     private final UserService userService;
     private final PlayerService playerService;
@@ -62,10 +59,16 @@ public class GameService {
     }
 
     @Transactional
+    public void deleteGame(Game game) {
+        game.onDeleteSetNull();
+        gameRepository.save(game);
+        gameRepository.delete(game);
+    }
+
+    @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
-        System.out.println("GameService.deleteGameById: " + game.getId());
-        gameRepository.delete(game);
+        deleteGame(game);
     }
 
     @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})
@@ -86,8 +89,6 @@ public class GameService {
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (Boolean.TRUE.equals(player.getReady()))
             throw new PlayerIsReadyException();
-        System.out.println("addHeroToPlayer " + player.getId());
-        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -104,15 +105,14 @@ public class GameService {
         Player newPlayer = Player.createPlayer(user, game, true);
         playerService.savePlayer(newPlayer);
         saveGame(game);
+        System.out.println("Game created: " + user.getPlayer());
         userService.saveUser(user);
-            List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
-            game.setAllOrcsInGame(orcsInGame);
-            game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
-            game.setActualOrcs(orcsInGame.subList(0, 3));
-
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
+        game.setAllOrcsInGame(orcsInGame.subList(4, orcsInGame.size()));
+        game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
+        game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
         advise.createGame(user, game);
-
     }
 
     @Transactional
