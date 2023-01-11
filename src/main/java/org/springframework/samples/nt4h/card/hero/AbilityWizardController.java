@@ -75,7 +75,7 @@ public class AbilityWizardController {
 
     // Aura protectora
     @GetMapping("/protectiveAura/{cardId}")
-    private String protectiveAura(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String protectiveAura(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -94,7 +94,7 @@ public class AbilityWizardController {
 
     // Bola de fuego
     @GetMapping("/fireball/{cardId}")
-    private String fireball(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String fireball(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -114,7 +114,7 @@ public class AbilityWizardController {
 
     // Disparo gélido
     @GetMapping("/frostShot/{cardId}")
-    private String frostShot(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String frostShot(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -128,7 +128,7 @@ public class AbilityWizardController {
 
     // Flecha corrosiva
     @GetMapping("/corrosiveArrow/{cardId}")
-    private String corrosiveArrow(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String corrosiveArrow(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -142,7 +142,7 @@ public class AbilityWizardController {
 
     // Golpe de bastón
     @GetMapping("/staffHit/{cardId}")
-    private String staffHit(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String staffHit(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -157,7 +157,7 @@ public class AbilityWizardController {
 
     // Orbe curativo.
     @GetMapping("/healingOrb/{cardId}")
-    private String healingOrb(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String healingOrb(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -177,7 +177,7 @@ public class AbilityWizardController {
 
     // Proyectil ígneo
     @GetMapping("/igneousProjectile/{cardId}")
-    private String igneousProjectile(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String igneousProjectile(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -189,7 +189,7 @@ public class AbilityWizardController {
 
     // Reconstitución.
     @GetMapping("/reconstitution/{cardId}")
-    private String reconstitution(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String reconstitution(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -205,7 +205,7 @@ public class AbilityWizardController {
 
     // Torrente de luz.
     @GetMapping("/lightTorrent/{cardId}")
-    private String lightTorrent(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String lightTorrent(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
