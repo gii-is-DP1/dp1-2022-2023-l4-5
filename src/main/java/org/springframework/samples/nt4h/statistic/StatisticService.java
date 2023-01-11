@@ -63,22 +63,22 @@ public class StatisticService {
     }
 
     @Transactional
-    public Integer getNumGoldByNumPlayers(int userId) { return statisticRepository.NumGoldByPlayerId(userId);}
+    public Integer getNumGoldByNumPlayers(int userId) { return statisticRepository.numGoldByPlayerId(userId);}
 
     @Transactional
-    public Integer getNumGloryByNumPlayers(int userId) { return statisticRepository.NumGloryByPlayerId(userId);}
+    public Integer getNumGloryByNumPlayers(int userId) { return statisticRepository.numGloryByPlayerId(userId);}
 
     @Transactional
-    public Integer getNumOrcsByNumPlayers(int userId) { return statisticRepository.NumOrcsByPlayerId(userId);}
+    public Integer getNumOrcsByNumPlayers(int userId) { return statisticRepository.numOrcsByPlayerId(userId);}
 
     @Transactional
-    public Integer getNumWarLordByNumPlayers(int userId) { return statisticRepository.NumWarLordByPlayerId(userId);}
+    public Integer getNumWarLordByNumPlayers(int userId) { return statisticRepository.numWarLordByPlayerId(userId);}
 
     @Transactional
-    public Integer getDamageByNumPlayers(int userId) { return statisticRepository.NumDamageByPlayerId(userId);}
+    public Integer getDamageByNumPlayers(int userId) { return statisticRepository.numDamageByPlayerId(userId);}
 
     @Transactional
-    public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.NumWonGamesByPlayerId(userId);}
+    public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.numWonGamesByPlayerId(userId);}
 
     @Transactional
     public List<User> listAllUsers() {return userRepository.findAll(); }
@@ -155,5 +155,29 @@ public class StatisticService {
         statistics.add(getStatisticNumDamage());
         statistics.add(getStatisticNumWonGames());
         return statistics;
+    }
+
+    @Transactional
+    public void gainGlory(Statistic statistic, Integer glory) {
+        statistic.setGlory(statistic.getGlory() + glory);
+        saveStatistic(statistic);
+    }
+
+    @Transactional
+    public void gainGold(Statistic statistic, Integer gold) {
+        statistic.setGold(statistic.getGold() + gold);
+        saveStatistic(statistic);
+    }
+
+    @Transactional
+    public void looseGold(Statistic statistic, Integer gold) {
+        statistic.setGold(Math.max(statistic.getGold() - gold, 0));
+        saveStatistic(statistic);
+    }
+
+    @Transactional
+    public void looseGlory(Statistic statistic, Integer glory) {
+        statistic.setGlory(Math.max(statistic.getGlory() - glory, 0));
+        saveStatistic(statistic);
     }
 }
