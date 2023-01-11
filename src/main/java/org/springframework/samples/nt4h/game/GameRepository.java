@@ -16,14 +16,11 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
 
     Page<Game> findAll(Pageable page);
 
-
     Optional<Game> findByName(String name);
 
     List<Game> findDistinctById(int id);
 
     @Query("SELECT p FROM Player p LEFT JOIN FETCH p.game g WHERE g.id = :gameId")
     List<Player> findPlayersByGame(int gameId);
-
-
 
 }
