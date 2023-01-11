@@ -39,7 +39,7 @@ public class GameController {
     private static final String VIEW_GAME_CREATE = "games/createGame";
     private static final String VIEW_GAME_LIST = "games/gamesList";
     private static final String VIEW_GAME_LOBBY = "games/gameLobby";
-    private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
+    private static final String PAGE_GAME_TO_LOBBY = "redirect:/games/{gameId}";
     private static final String VIEW_GAME_HERO_SELECT = "games/heroSelect";
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
@@ -236,9 +236,24 @@ public class GameController {
     @GetMapping("deletePlayer/{playerId}")
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
-        Player player = playerService.getPlayerById(playerId);
-        playerService.deletePlayerById(player.getId());
-        advise.getOutPlayer(player, game);
-        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
+        if(playerService.getPlayerById(playerId).getHost()) {
+            if(game.getCurrentPlayer()==null) {
+                gameService.deleteGameById(game.getId());
+            }
+            playerService.deletePlayerById(playerId);
+            userService.removeUserFromGame(userService.getLoggedUser());
+            return PAGE_GAMES;
+        }else{
+            userService.removeUserFromGame(userService.getUserByUsername(playerService.getPlayerById(playerId).getName()));
+            playerService.deletePlayerById(playerId);
+            return PAGE_GAME_TO_LOBBY.replace("{gameId}", game.getId().toString());
+        }
+    }
+
+    @GetMapping("deleteGame/{gameId}")
+    public String deleteGame(@PathVariable("gameId") int gameId) {
+       // Integer game = getGame().getId();
+        gameService.deleteGameById(gameId);
+        return PAGE_GAMES;
     }
 }
