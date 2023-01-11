@@ -127,6 +127,6 @@ public class EnemyService {
         enemy.setActualHealth(enemy.getActualHealth() + 1);
         saveEnemyInGame(enemy);
     }
-    
+
 
 }
