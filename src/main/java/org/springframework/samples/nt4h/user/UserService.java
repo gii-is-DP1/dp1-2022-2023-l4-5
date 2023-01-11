@@ -49,14 +49,25 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Transactional
-    public void saveUser(User user) throws DataAccessException {
+    /*
+    @Transactional(rollbackFor = Exception.class)
+    public void createUser(User user) {
         if (user.getEnable() == null) user.setEnable("1");
         if (user.getTier()== null) user.setTier(Tier.IRON);
         if (user.getAuthority()== null) user.setAuthority("USER");
         if (user.getIsConnected()== null) user.setIsConnected(true);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+     */
+
+    @Transactional(rollbackFor = Exception.class)
+    public void saveUser(User user) throws DataAccessException {
+        if (user.getEnable() == null) user.setEnable("1");
+        if (user.getTier()== null) user.setTier(Tier.IRON);
+        if (user.getAuthority()== null) user.setAuthority("USER");
+        if (user.getIsConnected()== null) user.setIsConnected(true);
         userRepository.save(user);
     }
 

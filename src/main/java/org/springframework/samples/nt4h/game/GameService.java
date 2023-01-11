@@ -112,6 +112,7 @@ public class GameService {
         List<EnemyInGame> actualOrcs = orcsInGame.subList(0, 3);
         game.setActualOrcs(actualOrcs);
         game.getAllOrcsInGame().removeAll(actualOrcs);
+        saveGame(game);
         productService.addProduct(game);
         advise.createGame(user, game);
 

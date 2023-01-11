@@ -118,7 +118,9 @@ public class ProductService {
     @Transactional
     public void addProduct(Game game) {
         List<Product> shuffledProducts = getAllProducts();
+        System.out.println("Shuffled products: " + shuffledProducts);
         Collections.shuffle(shuffledProducts);
+
         shuffledProducts.forEach(
             product -> IntStream.range(0, product.getQuantity()).forEach(i -> {
                     ProductInGame productInGame = ProductInGame.builder().product(product).game(game).stateProduct(StateProduct.IN_SALE).timesUsed(0).build();
