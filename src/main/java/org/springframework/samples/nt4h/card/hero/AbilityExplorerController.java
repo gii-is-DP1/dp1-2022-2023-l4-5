@@ -71,7 +71,7 @@ public class AbilityExplorerController {
 
     // Compañero lobo.
     @GetMapping("/fellowWolf/{cardId}")
-    private String fellowWolf(HttpSession session) {
+    public String fellowWolf(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -83,7 +83,7 @@ public class AbilityExplorerController {
 
     // Disparo certero.
     @GetMapping("/preciseShot/{cardId}")
-    private String preciseShot(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    public String preciseShot(@PathVariable("cardId") Integer cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -97,7 +97,7 @@ public class AbilityExplorerController {
 
     // Disparo rápido.
     @GetMapping("/rapidFire/{cardId}")
-    private String rapidFire(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    public String rapidFire(@PathVariable("cardId") Integer cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -122,7 +122,7 @@ public class AbilityExplorerController {
 
     // En la diana.
     @GetMapping("/target/{cardId}")
-    private String target(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    public String target(@PathVariable("cardId") Integer cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -138,7 +138,7 @@ public class AbilityExplorerController {
 
     // Lluvia de flechas.
     @GetMapping("/arrowRain/{cardId}")
-    private String arrowRain(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
+    public String arrowRain(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -150,7 +150,7 @@ public class AbilityExplorerController {
 
     // Recoger flechas.
     @GetMapping("/collectArrows/{cardId}")
-    private String collectArrows(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    public String collectArrows(@PathVariable("cardId") Integer cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -166,7 +166,7 @@ public class AbilityExplorerController {
 
     // Supervivencia
     @GetMapping("/survival/{cardId}")
-    private String survival(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
+    public String survival(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -176,6 +176,4 @@ public class AbilityExplorerController {
         model.put("name", "getOutEnemy");
         return VIEW_CHOSE_ENEMY;
     }
-
-
 }

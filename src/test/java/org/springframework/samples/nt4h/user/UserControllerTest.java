@@ -19,35 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Ability;
-import org.springframework.samples.nt4h.card.ability.AbilityCardType;
-import org.springframework.samples.nt4h.card.ability.AbilityEffect;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.ability.Deck;
-import org.springframework.samples.nt4h.card.ability.StateAbility;
-import org.springframework.samples.nt4h.card.enemy.Enemy;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.card.hero.Role;
-import org.springframework.samples.nt4h.card.product.Product;
-import org.springframework.samples.nt4h.card.product.ProductInGame;
-import org.springframework.samples.nt4h.card.product.StateProduct;
-import org.springframework.samples.nt4h.game.Accessibility;
-import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.samples.nt4h.statistic.TipoEnt;
-import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 
 @ContextConfiguration(classes = {UserController.class})
 @ExtendWith(SpringExtension.class)

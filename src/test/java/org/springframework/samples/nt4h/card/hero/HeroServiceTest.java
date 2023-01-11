@@ -1,18 +1,10 @@
 package org.springframework.samples.nt4h.card.hero;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Ability;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.hero.Hero;
-import org.springframework.samples.nt4h.card.hero.HeroInGame;
-import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
-import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;

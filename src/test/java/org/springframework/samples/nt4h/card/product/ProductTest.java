@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.nt4h.capacity.Capacity;
-import org.springframework.samples.nt4h.card.ability.AbilityEffect;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,6 @@ public class ProductTest {
         product.setAttack(2);
         product.setQuantity(3);
         product.setCapacity(Lists.newArrayList());
-        product.setAbilityEffect(AbilityEffect.ALABARDA_ORCA);
         product.setMaxUses(1);
     }
 
@@ -44,7 +42,6 @@ public class ProductTest {
         assertThat(product.getAttack()).isEqualTo(2);
         assertThat(product.getQuantity()).isEqualTo(3);
         assertThat(product.getCapacity()).isEqualTo(Lists.newArrayList());
-        assertThat(product.getAbilityEffect()).isEqualTo(AbilityEffect.ALABARDA_ORCA);
     }
 
     @Test
@@ -77,12 +74,6 @@ public class ProductTest {
         product.setCapacity(Lists.newArrayList());
         assertThat(validator.validate(product)).isEmpty();
         product.setCapacity(Lists.newArrayList(new Capacity()));
-        assertThat(validator.validate(product)).isEmpty();
-
-        // Test ability constraints
-        product.setAbilityEffect(null);
-        assertThat(validator.validate(product)).isEmpty();
-        product.setAbilityEffect(AbilityEffect.ALABARDA_ORCA);
         assertThat(validator.validate(product)).isEmpty();
 
         // Test name constraints

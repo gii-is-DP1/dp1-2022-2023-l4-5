@@ -35,7 +35,6 @@ public class AbilityTest {
         ability.setRole(Role.EXPLORER);
         ability.setAttack(3);
         ability.setQuantity(1);
-        ability.setAbilityEffect(AbilityEffect.TRAMPA);
         ability.setMaxUses(1);
     }
 
@@ -45,7 +44,6 @@ public class AbilityTest {
         assertThat(ability.getRole()).isEqualTo(Role.EXPLORER);
         assertThat(ability.getAttack()).isEqualTo(3);
         assertThat(ability.getQuantity()).isEqualTo(1);
-        assertThat(ability.getAbilityEffect()).isEqualTo(AbilityEffect.TRAMPA);
     }
 
     @Test

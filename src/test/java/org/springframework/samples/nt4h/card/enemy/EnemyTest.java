@@ -31,8 +31,8 @@ public class EnemyTest {
     public void setup() {
         enemy = new Enemy();
         enemy.setHealth(5);
-        enemy.setGlory(2);
-        enemy.setGold(1);
+        enemy.setHiddenGlory(2);
+        enemy.setHiddenGold(1);
         enemy.setHasCure(true);
         enemy.setLessDamageWizard(true);
         enemy.setIsNightLord(false);
@@ -62,23 +62,23 @@ public class EnemyTest {
         assertThat(validator.validate(enemy)).isEmpty();
 
         // Test glory constraints
-        enemy.setGlory(-1);
+        enemy.setHiddenGlory(-1);
         assertThat(validator.validate(enemy)).isNotEmpty();
-        enemy.setGlory(5);
+        enemy.setHiddenGlory(5);
         assertThat(validator.validate(enemy)).isNotEmpty();
-        enemy.setGlory(null);
+        enemy.setHiddenGlory(null);
         assertThat(validator.validate(enemy)).isEmpty();
-        enemy.setGlory(2);
+        enemy.setHiddenGlory(2);
         assertThat(validator.validate(enemy)).isEmpty();
 
         // Test gold constraints
-        enemy.setGold(-1);
+        enemy.setHiddenGold(-1);
         assertThat(validator.validate(enemy)).isNotEmpty();
-        enemy.setGold(3);
+        enemy.setHiddenGold(3);
         assertThat(validator.validate(enemy)).isNotEmpty();
-        enemy.setGold(null);
+        enemy.setHiddenGold(null);
         assertThat(validator.validate(enemy)).isEmpty();
-        enemy.setGold(1);
+        enemy.setHiddenGold(1);
         assertThat(validator.validate(enemy)).isEmpty();
 
         // Test hasCure constraint

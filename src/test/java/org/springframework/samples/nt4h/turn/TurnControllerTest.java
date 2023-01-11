@@ -1,13 +1,9 @@
 package org.springframework.samples.nt4h.turn;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,27 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Ability;
-import org.springframework.samples.nt4h.card.ability.AbilityCardType;
-import org.springframework.samples.nt4h.card.ability.AbilityEffect;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.ability.Deck;
-import org.springframework.samples.nt4h.card.ability.StateAbility;
-import org.springframework.samples.nt4h.card.enemy.Enemy;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.card.hero.Role;
-import org.springframework.samples.nt4h.card.product.Product;
-import org.springframework.samples.nt4h.card.product.ProductInGame;
-import org.springframework.samples.nt4h.card.product.StateProduct;
-import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.samples.nt4h.statistic.TipoEnt;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.test.context.ContextConfiguration;
