@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.javatuples.Triplet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.nt4h.message.CacheManager;
+import org.springframework.samples.nt4h.statistic.StatisticService;
 import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -24,6 +26,7 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,8 @@ public class GameService {
     private final HeroService heroService;
     private final ProductService productService;
     private final EnemyService enemyService;
+    private final CacheManager cacheManager;
+    private final StatisticService statisticService;
     private final Advise advise;
 
     @Transactional(readOnly = true)
@@ -158,19 +163,19 @@ public class GameService {
 
     @Transactional
     public List<EnemyInGame> addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) {
-        List<EnemyInGame> added = Lists.newArrayList();
+        List<EnemyInGame> addedEnemies = Lists.newArrayList();
         if (enemies.size() == 1 || enemies.size() == 2) {
             EnemyInGame enemy = allOrcs.get(1);
             enemies.add(enemy);
-            added.add(enemy);
+            addedEnemies.add(enemy);
             allOrcs.remove(1);
         } else if (enemies.isEmpty()) {
             List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
-            added.addAll(newEnemies);
+            addedEnemies.addAll(newEnemies);
             allOrcs.removeAll(newEnemies);
         }
         saveGame(game);
-        return added;
+        return addedEnemies;
     }
 
     @Transactional
@@ -178,6 +183,25 @@ public class GameService {
         for (EnemyInGame enemyInGame : enemies) {
             if (enemyInGame.getEnemy().getHasCure()) {
                 enemyService.increaseLife(enemyInGame);
+            }
+        }
+    }
+
+    @Transactional
+    public void deleteKilledEnemy(HttpSession session, List<EnemyInGame> attackedEnemies, Game game, Player player, Integer userId) {
+        for(int e=0; e < attackedEnemies.size(); e++) {
+            EnemyInGame enemy = attackedEnemies.get(e);
+            if (enemy.getActualHealth() <= 0) {
+                statisticService.killedOrcs(player);
+                statisticService.gainGold(player, enemy.getEnemy().getGold());
+                statisticService.gainGlory(player, enemy.getEnemy().getGlory());
+                statisticService.getDamageByNumPlayers(userId);
+                statisticService.getNumOrcsByNumPlayers(userId);
+                game.getActualOrcs().remove(enemy);
+                playerService.savePlayer(player);
+                saveGame(game);
+            } else {
+                playerService.savePlayer(player);
             }
         }
     }

@@ -2,6 +2,8 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.Deck;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
@@ -41,15 +43,17 @@ public class HeroAttackController {
     private final PlayerService playerService;
     private final Advise advise;
     private final CacheManager cacheManager;
+    private final DeckService deckService;
 
     @Autowired
-    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager) {
+    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager, DeckService deckService) {
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.advise = advise;
         this.cacheManager = cacheManager;
+        this.deckService = deckService;
     }
 
     @ModelAttribute("loggedUser")
@@ -91,35 +95,23 @@ public class HeroAttackController {
     }
 
     @PostMapping
-    public String modifyCardAttributes(Turn turn) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
+    public String modifyCardAttributes(Turn turn, HttpSession session) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
         Player player = getPlayer();
         Game game = getGame();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+        Deck deck = loggedPlayer.getDeck();
         AbilityInGame usedAbility = turn.getCurrentAbility();
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
-        /*
         if (usedAbility == null)
             throw new WithOutAbilityException();
         if (attackedEnemy == null)
             throw new WithOutEnemyException();
-        Integer enemyInitialHealth = attackedEnemy.getActualHealth();
-        attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
-        player.getDeck().getInHand().remove(usedAbility);
-        player.getDeck().getInDiscard().add(usedAbility);
 
-        if (attackedEnemy.getActualHealth() <= 0) {
-            player.getStatistic().setGlory(player.getStatistic().getGlory() + attackedEnemy.getEnemy().getGlory());
-            player.getStatistic().setGold(player.getStatistic().getGold() + attackedEnemy.getEnemy().getGold());
-            playerService.savePlayer(player);
-            game.getActualOrcs().remove(attackedEnemy);
-            gameService.saveGame(game);
+        deckService.attackEnemies(usedAbility, session, player, game, getLoggedUser().getId());
+        deckService.specificCardFromHandToDiscard(deck, usedAbility);
 
-        } else {
-            playerService.savePlayer(player);
-        }
-         */
         Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
         playerService.savePlayer(player);
         createdTurn.addEnemy(attackedEnemy);

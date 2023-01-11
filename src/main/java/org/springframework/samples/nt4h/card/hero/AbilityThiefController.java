@@ -91,7 +91,7 @@ public class AbilityThiefController {
             statisticService.gainGlory(currentPlayer, 1);
         }
         // Pierde 1 carta.
-        deckService.loseACard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer.getDeck());
         return PAGE_MAKE_DAMAGE;
     }
 

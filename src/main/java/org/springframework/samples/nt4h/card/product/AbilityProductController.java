@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class AbilityProductController {
 
-    private final String PAGE_MAKE_DAMGE = "redirect:/heroAttack/makeDamage";
+    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
     private final String VIEW_FIND_IN_DISCARD = "abilities/findInDiscard";
     private final UserService userService;
     private final PlayerService playerService;
@@ -82,13 +82,13 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMGE;
+            return PAGE_MAKE_DAMAGE;
         // Pierde la carta si no tiene el héreo pericia.
         List<StateCapacity > stateCapacities = currentPlayer.getHeroes().stream().flatMap(hero -> hero.getHero()
             .getCapacities().stream().map(Capacity::getStateCapacity)).collect(Collectors.toList());
         if (!stateCapacities.contains(StateCapacity.EXPERTISE))
             cacheManager.setHasToBeDeletedAbility(session);
-        return PAGE_MAKE_DAMGE;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Poción curativa
@@ -97,12 +97,12 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMGE;
+            return PAGE_MAKE_DAMAGE;
         // Elimina una herida.
         playerService.decreaseWounds(currentPlayer, 1);
         // Eliminamos la carta.
         cacheManager.setHasToBeDeletedAbility(session);
-        return PAGE_MAKE_DAMGE;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Piedra amolar
@@ -111,10 +111,10 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMGE;
+            return PAGE_MAKE_DAMAGE;
         // Añadimos el daño por piedra amolar.
         cacheManager.setSharpeningStone(session);
-        return PAGE_MAKE_DAMGE;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Vial de conjuración
@@ -123,7 +123,7 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMGE;
+            return PAGE_MAKE_DAMAGE;
         model.put("discard", currentPlayer.getDeck().getInDiscard());
         return VIEW_FIND_IN_DISCARD;
     }
@@ -134,12 +134,12 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMGE;
+            return PAGE_MAKE_DAMAGE;
         // Roba 3 cartas.
         Deck deck = currentPlayer.getDeck();
         for (var i = 0; i < 3; i++)
             deckService.saveDeck(deck);
-        return PAGE_MAKE_DAMGE;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Capa élfica
@@ -148,10 +148,10 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMGE;
+            return PAGE_MAKE_DAMAGE;
         // El enemigo seleccionado no causa daño este turno.
         cacheManager.addPreventDamageFromEnemies(session);
-        return PAGE_MAKE_DAMGE;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Armadura de placas.
@@ -160,23 +160,23 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMGE;
+            return PAGE_MAKE_DAMAGE;
         // Recupera 4 cartas.
         Deck deck = currentPlayer.getDeck();
         for (var i = 0; i < 4; i++)
-            deckService.retrievesACard(deck);
-        return PAGE_MAKE_DAMGE;
+            deckService.fromDiscardToDeck(deck);
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Alabarda orca
     @GetMapping("/orcaLance/{cardId}")
     private String orcLance(@PathVariable("cardId") int cardId, HttpSession session) {
-        return PAGE_MAKE_DAMGE;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Arco compuesto.
     @GetMapping("/compoundBow/{cardId}")
     private String compoundBound() {
-        return PAGE_MAKE_DAMGE;
+        return PAGE_MAKE_DAMAGE;
     }
 }

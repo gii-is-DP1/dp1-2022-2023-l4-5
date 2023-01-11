@@ -80,7 +80,7 @@ public class AbilityKnightController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
-        deckService.loseACard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer.getDeck());
         return VIEW_LOSE_CARD;
     }
 
@@ -104,7 +104,7 @@ public class AbilityKnightController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Elimina una carta de la mano.
-        deckService.loseACard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer.getDeck());
         return PAGE_MAKE_DAMAGE;
     }
 
@@ -132,7 +132,7 @@ public class AbilityKnightController {
         if (cacheManager.isFirstSlash(session)) {
             cacheManager.setFirstSlash(session);
             // Si lo es, roba una carta.
-            deckService.retrievesACard(currentPlayer.getDeck());
+            deckService.fromDiscardToDeck(currentPlayer.getDeck());
         }
         return PAGE_MAKE_DAMAGE;
     }
@@ -146,7 +146,7 @@ public class AbilityKnightController {
             return PAGE_MAKE_DAMAGE;
         // Roba dos cartas.
         for (int i = 0; i < 2; i++) {
-            deckService.retrievesACard(currentPlayer.getDeck());
+            deckService.fromDiscardToDeck(currentPlayer.getDeck());
         }
         return PAGE_MAKE_DAMAGE;
     }
@@ -162,7 +162,7 @@ public class AbilityKnightController {
         // Roba una carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
-        deckService.retrievesTheCard(deck, abilityInGame);
+        deckService.specificCardFromDiscardToDeck(deck, abilityInGame);
         // Agrega ese daño a la carta.
         cacheManager.addAttack(session, abilityInGame.getAttack());
         return PAGE_MAKE_DAMAGE;
@@ -178,11 +178,11 @@ public class AbilityKnightController {
         // cada jugador roba dos cartas.
         for (Player player : getGame().getPlayers()) {
             for (int i = 0; i < 2; i++) {
-                deckService.retrievesACard(player.getDeck());
+                deckService.fromDiscardToDeck(player.getDeck());
             }
         }
         // Roba una carta.
-        deckService.retrievesACard(currentPlayer.getDeck());
+        deckService.fromDiscardToDeck(currentPlayer.getDeck());
         // Gana una ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
