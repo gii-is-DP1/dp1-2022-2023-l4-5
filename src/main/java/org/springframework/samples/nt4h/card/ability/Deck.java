@@ -38,6 +38,4 @@ public class Deck extends BaseEntity {
         inHand.remove(abilityInGame);
         inDiscard.add(abilityInGame);
     }
-
-
 }

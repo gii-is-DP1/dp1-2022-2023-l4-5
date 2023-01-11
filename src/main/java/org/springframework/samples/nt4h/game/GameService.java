@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,16 +68,38 @@ public class GameService {
     }
 
     @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})
-    public void addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
-        if (game.getPlayers().contains(user.getPlayer()))
-            return;
+    public void addPlayerToGame(Game game, User user, String password) throws FullGameException, UserHasAlreadyAPlayerException, UserInAGameException, IncorrectPasswordException {
+        if (user.getGame() != null && !user.getGame().equals(game))
+            throw new UserInAGameException();
+        if (!(Objects.equals(game.getPassword(), password) || game.getAccessibility() == Accessibility.PUBLIC))
+            throw new IncorrectPasswordException();
+        if (game.getPlayers().size() >= game.getMaxPlayers())
+            throw new FullGameException();
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
+
         Player newPlayer = Player.createPlayer(user, game, false);
         playerService.createTurns(newPlayer);
-        user.setPlayer(newPlayer);
         saveGame(game);
+        user.setGame(game);
+        user.setPlayer(newPlayer);
+        userService.saveUser(user);
         advise.playerJoinGame(newPlayer, game);
+    }
+
+    @Transactional(rollbackFor = FullGameException.class)
+    public void createGame(User user, Game game) throws FullGameException {
+        game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
+        Player newPlayer = Player.createPlayer(user, game, true);
+        playerService.savePlayer(newPlayer);
+        saveGame(game);
+        userService.saveUser(user);
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
+        game.setAllOrcsInGame(orcsInGame.subList(4, orcsInGame.size()));
+        game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
+        game.setActualOrcs(orcsInGame.subList(0, 3));
+        productService.addProduct(game);
+        advise.createGame(user, game);
     }
 
 
@@ -94,23 +117,7 @@ public class GameService {
         advise.chosenHero(player, heroInGame, game);
     }
 
-    @Transactional(rollbackFor = FullGameException.class)
-    public void createGame(User user, Game game) throws FullGameException {
-        game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
-        Player newPlayer = Player.createPlayer(user, game, true);
-        playerService.savePlayer(newPlayer);
-        saveGame(game);
-        System.out.println("Game created: " + user.getPlayer());
-        userService.saveUser(user);
-        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
-        game.setAllOrcsInGame(orcsInGame.subList(4, orcsInGame.size()));
-        game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
-        game.setActualOrcs(orcsInGame.subList(0, 3));
-        productService.addProduct(game);
-        advise.createGame(user, game);
-    }
-
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void orderPlayer(List<Player> players, Game game) {
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
         // Calcula ataque de las dos primeras cartas en mano.
