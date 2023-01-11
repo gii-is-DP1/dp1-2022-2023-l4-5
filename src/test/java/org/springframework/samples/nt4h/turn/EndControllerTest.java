@@ -1,14 +1,15 @@
-package org.springframework.samples.nt4h.card.hero;
+package org.springframework.samples.nt4h.turn;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +17,42 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityCardType;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.AbilityInGameRepository;
+import org.springframework.samples.nt4h.card.ability.AbilityRepository;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
+import org.springframework.samples.nt4h.card.ability.DeckRepository;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGameRepository;
+import org.springframework.samples.nt4h.card.enemy.EnemyRepository;
+import org.springframework.samples.nt4h.card.enemy.EnemyService;
+import org.springframework.samples.nt4h.card.hero.HeroInGameRepository;
+import org.springframework.samples.nt4h.card.hero.HeroRepository;
+import org.springframework.samples.nt4h.card.hero.HeroService;
+import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
+import org.springframework.samples.nt4h.card.product.ProductInGameRepository;
+import org.springframework.samples.nt4h.card.product.ProductRepository;
+import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameRepository;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
-import org.springframework.samples.nt4h.message.CacheManager;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.MessageRepository;
+import org.springframework.samples.nt4h.message.MessageService;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.samples.nt4h.statistic.StatisticService;
-import org.springframework.samples.nt4h.turn.Phase;
-import org.springframework.samples.nt4h.turn.Turn;
-import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -45,30 +60,22 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.ui.ModelMap;
 
-@ContextConfiguration(classes = {AbilityWizardController.class})
+@ContextConfiguration(classes = {EndController.class})
 @ExtendWith(SpringExtension.class)
-class AbilityWizardControllerTest {
+class EndControllerTest {
     @MockBean
-    private AbilityService abilityService;
+    private Advise advise;
 
     @Autowired
-    private AbilityWizardController abilityWizardController;
-
-    @MockBean
-    private CacheManager cacheManager;
-
-    @MockBean
-    private DeckService deckService;
+    private EndController endController;
 
     @MockBean
     private GameService gameService;
 
     @MockBean
     private PlayerService playerService;
-
-    @MockBean
-    private StatisticService statisticService;
 
     @MockBean
     private TurnService turnService;
@@ -129,7 +136,6 @@ class AbilityWizardControllerTest {
         statistic.setNumWarLordKilled(10);
         statistic.setNumWonGames(10);
         statistic.setTimePlayed(1);
-
         game = new Game();
         game.setAccessibility(Accessibility.PUBLIC);
         game.setActualOrcs(new ArrayList<>());
@@ -145,10 +151,10 @@ class AbilityWizardControllerTest {
         game.setName("Juego Test");
         game.setPassiveOrcs(new ArrayList<>());
         game.setPassword("malo");
-        game.setPlayers(new ArrayList<>());
+        game.setPlayers(List.of(player,player));
         game.setSpectators(new ArrayList<>());
         game.setStartDate(LocalDateTime.of(1, 1, 1, 1, 1));
-
+        game.setStatistic(statistic);
 
         Ability ability = new Ability();
         ability.setAttack(1);
@@ -218,7 +224,7 @@ class AbilityWizardControllerTest {
         deck.setInDiscard(List.of(abilityInGame));
         deck.setInHand(List.of(abilityInGame));
         deck.setInDeck(List.of(abilityInGame));
-        game.setStatistic(statistic);
+        player.setGame(game);
         player.setStatistic(statistic);
         player.setDeck(deck);
         game.setCurrentPlayer(player);
@@ -245,147 +251,25 @@ class AbilityWizardControllerTest {
     }
 
     @Test
-    void testCorrosiveArrow() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/corrosiveArrow/{cardId}", 123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
+    void testFinishGame() {
+
+
     }
 
     @Test
-    void testFireball() throws Exception {
-
+    void testShowEnd() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/fireball/{cardId}",
-            123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/end");
+        MockMvcBuilders.standaloneSetup(endController)
             .build()
             .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
-    }
-
-    @Test
-    void testFrostShot() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/frostShot/{cardId}",
-            123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
-    }
-
-    @Test
-    void testHealingOrb() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/healingOrb/{cardId}",
-            123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
-    }
-
-    @Test
-    void testIgneousProjectile() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/igneousProjectile/{cardId}", 123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
-    }
-
-    @Test
-    void testLightTorrent() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/lightTorrent/{cardId}", 123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
-    }
-
-    @Test
-    void testProtectiveAura() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/protectiveAura/{cardId}", 123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
-    }
-
-    @Test
-    void testReconstitution() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/reconstitution/{cardId}", 123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
-    }
-
-    @Test
-    void testStaffHit() throws Exception {
-        when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/staffHit/{cardId}",
-            123);
-        MockMvcBuilders.standaloneSetup(abilityWizardController)
-            .build()
-            .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isFound())
-            .andExpect(MockMvcResultMatchers.model().size(4))
-            .andExpect(
-                MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.model().size(7))
+            .andExpect(MockMvcResultMatchers.model()
+                .attributeExists("chat", "currentPlayer", "game", "loggedPlayer", "loggedUser", "newTurn",
+                    "punctuations"))
+            .andExpect(MockMvcResultMatchers.view().name("turns/endPhase"))
+            .andExpect(MockMvcResultMatchers.forwardedUrl("turns/endPhase"));
     }
 }
 
