@@ -65,7 +65,7 @@ public class Game extends NamedEntity implements Jsonable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> actualOrcs;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> allOrcsInGame;
 
     @OneToMany(cascade = CascadeType.ALL)
