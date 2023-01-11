@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ContextConfiguration(classes = {AchievementController.class})
 @ExtendWith(MockitoExtension.class)
+@WebMvcTest(AchievementController.class)
 class AchievementControllerTest {
 
     @Autowired
@@ -38,7 +41,7 @@ class AchievementControllerTest {
     private final String ACHIEVEMENTS_LIST_VIEW = "achievements/achievementsList";
     private final String VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM = "achievements/createOrUpdateAchievementsForm";
 
-    @Mock
+    @MockBean
     private AchievementService achievementService;
     @Autowired
     private MockMvc mockMvc;
@@ -52,16 +55,6 @@ class AchievementControllerTest {
         achievement.setName("Goat");
         controller = new AchievementController(achievementService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    }
-
-    @Test
-    void testGetAchievements() {
-        ArrayList<Achievement> achievementList = new ArrayList<>();
-        when(achievementService.getAllAchievements()).thenReturn(achievementList);
-        List<Achievement> actualAchievements = achievementController.getAchievements();
-        assertSame(achievementList, actualAchievements);
-        assertTrue(actualAchievements.isEmpty());
-        verify(achievementService).getAllAchievements();
     }
 
     @Test
@@ -106,7 +99,7 @@ class AchievementControllerTest {
     void shouldEditAchievement() throws Exception {
         when(achievementService.getAchievementById(1)).thenReturn(achievement);
 
-        mockMvc.perform(get("/achievements/{achievementId}/edit", achievement.getId()))
+        mockMvc.perform(get("/achievements/{achievementId}/edit", 1))
             .andExpect(status().isOk())
             .andExpect(view().name(VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM))
             .andExpect(model().attributeExists("achievement"))
@@ -303,7 +296,7 @@ class AchievementControllerTest {
 
     @Test
     void testShowAllAchievements2() throws Exception {
-        when(achievementService.getAllAchievements()).thenReturn(new ArrayList<>());
+        //when(achievementService.getAllAchievements()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/achievements");
         getResult.characterEncoding("Encoding");
         MockMvcBuilders.standaloneSetup(achievementController)

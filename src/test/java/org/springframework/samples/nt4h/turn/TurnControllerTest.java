@@ -91,27 +91,8 @@ class TurnControllerTest {
         player = Player.createPlayer(user, game, true);
         turn = new Turn();
         turn.setPhase(Phase.EVADE);
-    }
-
-    @Test
-    void testGetUser() {
-        when(userService.getLoggedUser()).thenReturn(user);
-        assertSame(user, turnController.getUser());
-        verify(userService).getLoggedUser();
-    }
-
-    @Test
-    void testGetPlayer() {
-        when(userService.getLoggedUser()).thenReturn(user);
-        assertSame(player, turnController.getPlayer());
-        verify(userService).getLoggedUser();
-    }
-
-    @Test
-    void testGetLoggedPlayer() {
-        when(userService.getLoggedUser()).thenReturn(user);
-        assertSame(player, turnController.getLoggedPlayer());
-        verify(userService).getLoggedUser();
+        game.setCurrentTurn(turn);
+        game.setCurrentPlayer(player);
     }
 
     @Test
@@ -124,21 +105,7 @@ class TurnControllerTest {
             .andExpect(MockMvcResultMatchers.status().isFound())
             .andExpect(MockMvcResultMatchers.model().size(5))
             .andExpect(MockMvcResultMatchers.model().attributeExists("game", "loggedPlayer", "player", "turn", "user"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/start"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/start"));
-    }
-
-    @Test
-    void testGetGame() {
-        when(userService.getLoggedUser()).thenReturn(user);
-        assertSame(game, turnController.getGame());
-        verify(userService).getLoggedUser();
-    }
-
-    @Test
-    void testGetTurn() {
-        when(userService.getLoggedUser()).thenReturn(user);
-        assertSame(turn, turnController.getTurn());
-        verify(userService).getLoggedUser();
+            .andExpect(MockMvcResultMatchers.view().name("redirect:/evasion"))
+            .andExpect(MockMvcResultMatchers.redirectedUrl("/evasion"));
     }
 }

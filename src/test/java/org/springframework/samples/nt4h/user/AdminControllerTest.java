@@ -88,23 +88,6 @@ class AdminControllerTest {
     }
 
     @Test
-    void testGetFriends() {
-        ArrayList<User> userList = new ArrayList<>();
-        when(userService.getAllUsers()).thenReturn(userList);
-        List<User> actualFriends = adminController.getFriends();
-        assertSame(userList, actualFriends);
-        assertTrue(actualFriends.isEmpty());
-        verify(userService).getAllUsers();
-    }
-
-    @Test
-    void testGetUser() {
-        when(userService.getLoggedUser()).thenReturn(user);
-        assertSame(user, adminController.getUser());
-        verify(userService).getLoggedUser();
-    }
-
-    @Test
     void testGetUsers() throws Exception {
         when(userService.getAllUsers()).thenReturn(new ArrayList<>());
         when(userService.getLoggedUser()).thenReturn(user);

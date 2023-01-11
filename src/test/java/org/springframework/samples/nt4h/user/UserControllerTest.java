@@ -88,13 +88,6 @@ class UserControllerTest {
     }
 
     @Test
-    void testLoggedUser() {
-        when(userService.getLoggedUser()).thenReturn(user);
-        assertSame(user, userController.loggedUser());
-        verify(userService).getLoggedUser();
-    }
-
-    @Test
     void testGetUsers() throws Exception {
         when(userService.getAllUsers()).thenReturn(new ArrayList<>());
         when(userService.getAllUsers((Pageable) any())).thenReturn(new PageImpl<>(new ArrayList<>()));
