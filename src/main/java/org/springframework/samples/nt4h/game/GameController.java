@@ -39,7 +39,7 @@ public class GameController {
     private static final String VIEW_GAME_CREATE = "games/createGame";
     private static final String VIEW_GAME_LIST = "games/gamesList";
     private static final String VIEW_GAME_LOBBY = "games/gameLobby";
-    private static final String PAGE_GAME_LOBBY = "redirect:/games/{gameId}";
+    private static final String PAGE_GAME_LOBBY2 = "redirect:/games/{gameId}";
     private static final String VIEW_GAME_HERO_SELECT = "games/heroSelect";
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
@@ -216,9 +216,10 @@ public class GameController {
     }
 
     @GetMapping("/selectOrder")
-    public String orderPlayers(HttpSession session, HttpServletRequest request) {
+    public String orderPlayers(HttpSession session, HttpServletRequest request)  {
         User loggedUser = getUser();
         Game game = getGame();
+
         advise.keepUrl(session, request);
         return VIEW_GAME_PREORDER;
     }
@@ -226,11 +227,12 @@ public class GameController {
 
     // Tiene que recibir las cartas de habilidad que desea utilizar el jugador, por tanto, se va a modificar entero.
     @PostMapping("/selectOrder")
-    public String processOrderPlayers(HttpSession session, HttpServletRequest request) {
+    public String processOrderPlayers(HttpSession session, HttpServletRequest request) throws FullGameException {
         List<Player> players = getPlayers();
         Game game = getGame();
         if (players.stream().anyMatch(player -> player.getSequence() == -1))
             gameService.orderPlayer(players, game);
+     //   gameService.addActualOrcs(game);
         advise.keepUrl(session, request);
         return VIEW_GAME_ORDER;
     }
@@ -239,12 +241,26 @@ public class GameController {
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
         if(playerService.getPlayerById(playerId).getHost()) {
-            if(game.getCurrentPlayer()==null) gameService.deleteGame(game);
-            playerService.deletePlayerById(playerId);
+            if(game.getCurrentPlayer()==null) {
+                gameService.deleteGameById(game.getId());}
+                playerService.deletePlayerById(playerId);
             return PAGE_GAMES;
         }else{
             playerService.deletePlayerById(playerId);
-            return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
+            return PAGE_GAME_LOBBY2.replace("{gameId}", game.getId().toString());
         }
+    }
+
+    @GetMapping("deleteGame/{gameId}")
+    public String deleteGame(@PathVariable("gameId") int gameId) {
+       // Integer game = getGame().getId();
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println(gameService.getGameById(gameId));
+        gameService.deleteGameById(gameId);
+        System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        System.out.println(gameService.getGameById(gameId));
+        return PAGE_GAMES;
+
+
     }
 }

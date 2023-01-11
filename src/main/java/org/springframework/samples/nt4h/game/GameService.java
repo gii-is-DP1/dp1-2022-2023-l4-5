@@ -20,9 +20,11 @@ import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.exceptions.*;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
+import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class GameService {
+    private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
     private final UserService userService;
     private final PlayerService playerService;
@@ -66,14 +69,18 @@ public class GameService {
 
     @Transactional
     public void deleteGame(Game game) {
-        game.onDeleteSetNull();
-        for(Player player : game.getPlayers()) {
+     //   game.onDeleteSetNull();
+
+           /*for(Player player : game.getPlayers()) {
             User user = userService.getAllUsers().stream().filter(x->x.getBirthDate()==player.getBirthDate()).collect(Collectors.toList()).get(0);
             user.setGame(null);
             userService.saveUser(user);
-        }
-        game.setActualOrcs(null);
-        gameRepository.save(game);
+        }*/
+      //  game.setId(null);
+
+      //  gameRepository.save(getGameById(game.getId()));
+
+        userService.removeUserFromGame(userService.getLoggedUser());
         gameRepository.delete(game);
     }
 
@@ -122,15 +129,23 @@ public class GameService {
         playerService.savePlayer(newPlayer);
         saveGame(game);
         userService.saveUser(user);
-        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
-        game.setAllOrcsInGame(orcsInGame);
-        game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
-        game.setActualOrcs(orcsInGame.subList(0, 3));
+            List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
+            game.setAllOrcsInGame(orcsInGame);
+            game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
+            game.setActualOrcs(orcsInGame.subList(0, 3));
+
         productService.addProduct(game);
         advise.createGame(user, game);
 
     }
-    //
+  /*  @Transactional(rollbackFor = FullGameException.class)
+    public void addActualOrcs(Game game) throws FullGameException {
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
+        game.setAllOrcsInGame(orcsInGame);
+        game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
+        game.setActualOrcs(orcsInGame.subList(0, 3));
+        saveGame(game);
+    }*/
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
