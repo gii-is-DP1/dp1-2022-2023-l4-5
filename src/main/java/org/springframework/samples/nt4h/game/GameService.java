@@ -5,11 +5,8 @@ import lombok.AllArgsConstructor;
 import org.javatuples.Triplet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.samples.nt4h.action.Action;
-import org.springframework.samples.nt4h.action.HealEnemy;
-import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -27,9 +24,7 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,9 +72,9 @@ public class GameService {
     }
 
     @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})
-    public Player addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
+    public void addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
         if (game.getPlayers().contains(user.getPlayer()))
-            return user.getPlayer();
+            return;
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
         Player newPlayer = Player.createPlayer(user, game, false);
@@ -87,13 +82,12 @@ public class GameService {
         user.setPlayer(newPlayer);
         saveGame(game);
         advise.playerJoinGame(newPlayer, game);
-        return newPlayer;
     }
 
 
     @Transactional(rollbackFor = {PlayerIsReadyException.class, RoleAlreadyChosenException.class, HeroAlreadyChosenException.class})
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
-        if (player.getReady())
+        if (Boolean.TRUE.equals(player.getReady()))
             throw new PlayerIsReadyException();
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
@@ -102,20 +96,22 @@ public class GameService {
         playerService.addDeckFromRole(player, game.getMode());
         playerService.createTurns(player);
         saveGame(game);
-        advise.choosenHero(player, heroInGame, game);
+        advise.chosenHero(player, heroInGame, game);
     }
 
     @Transactional(rollbackFor = FullGameException.class)
     public void createGame(User user, Game game) throws FullGameException {
         game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
-        Player newPlayer = Player.createPlayer(user, game, true);;
+        Player newPlayer = Player.createPlayer(user, game, true);
         playerService.savePlayer(newPlayer);
         saveGame(game);
         userService.saveUser(user);
         List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
         game.setAllOrcsInGame(orcsInGame);
-        game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
-        game.setActualOrcs(orcsInGame.subList(0, 3));
+        game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
+        List<EnemyInGame> actualOrcs = orcsInGame.subList(0, 3);
+        game.setActualOrcs(actualOrcs);
+        game.getAllOrcsInGame().removeAll(actualOrcs);
         productService.addProduct(game);
         advise.createGame(user, game);
 
@@ -170,7 +166,7 @@ public class GameService {
             enemies.add(enemy);
             added.add(enemy);
             allOrcs.remove(1);
-        } else if (enemies.size() == 0) {
+        } else if (enemies.isEmpty()) {
             List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
             added.addAll(newEnemies);
             allOrcs.removeAll(newEnemies);
@@ -182,10 +178,8 @@ public class GameService {
     @Transactional
     public void restoreEnemyLife(List<EnemyInGame> enemies) {
         for (EnemyInGame enemyInGame : enemies) {
-            Enemy enemy = enemyInGame.getEnemy();
-            if (enemy.getHasCure()) {
-                Action recoverEnemyLife = new HealEnemy(enemyInGame);
-                recoverEnemyLife.executeAction();
+            if (enemyInGame.getEnemy().getHasCure()) {
+                enemyService.increaseLife(enemyInGame);
             }
         }
     }

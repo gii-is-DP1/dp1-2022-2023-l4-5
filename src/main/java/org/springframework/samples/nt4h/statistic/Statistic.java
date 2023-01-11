@@ -7,7 +7,6 @@ import org.springframework.samples.nt4h.model.BaseEntity;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 // TODO: darle un prop?sito a esta clase.
 @Getter
@@ -44,9 +43,6 @@ public class Statistic extends BaseEntity {
 
     @Min(0)
     private Integer damageDealt;
-
-    @NotNull
-    private TipoEnt tipoEnt;
 
     public static Statistic createStatistic() {
         return Statistic.builder().glory(0).gold(0).numWarLordKilled(0).numOrcsKilled(0)

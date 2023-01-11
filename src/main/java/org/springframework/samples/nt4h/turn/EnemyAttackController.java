@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
@@ -29,7 +28,7 @@ public class EnemyAttackController {
     private final TurnService turnService;
     private final GameService gameService;
 
-    private final EnemyService enemyService; //este debe cambiar por Service Enemey supongo
+    private final EnemyService enemyService;
     public final String VIEW_ATTACK = "turns/attackPhase";
     public final String NEXT_TURN = "redirect:/turns";
     private final Advise advise;

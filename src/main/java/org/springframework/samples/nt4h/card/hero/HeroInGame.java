@@ -6,7 +6,10 @@ import lombok.*;
 import org.springframework.samples.nt4h.model.BaseEntity;
 import org.springframework.samples.nt4h.player.Player;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import java.io.IOException;
 import java.io.Writer;
@@ -21,9 +24,7 @@ import java.io.Writer;
 public class HeroInGame extends BaseEntity implements Jsonable {
 
     @Max(3)
-    private Integer actualHealth; // TODO: quitar en algún momento.
-
-    private Integer effectUsed;
+    private Integer health;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Hero hero;
@@ -32,8 +33,7 @@ public class HeroInGame extends BaseEntity implements Jsonable {
     private Player player;
 
     public static HeroInGame createHeroInGame(Hero hero, Player player) {
-        return HeroInGame.builder().hero(hero).player(player).actualHealth(hero.getHealth())
-            .effectUsed(hero.maxUses == -1 ? -1: 0).build();
+        return HeroInGame.builder().hero(hero).player(player).health(hero.getHealth()).build();
     }
 
     public void onDeleteSetNull() {
@@ -49,7 +49,7 @@ public class HeroInGame extends BaseEntity implements Jsonable {
     }
 
     @Override
-    public void toJson(Writer writer) throws IOException {
+    public void toJson(Writer writer) {
         try {
             writer.write(toJson());
         } catch (IOException e) {

@@ -18,10 +18,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class AbilityInGame extends BaseEntity {
 
-
-    @Enumerated
-    private StateAbility stateAbility;
-
     @Min(0)
     private Integer timesUsed;
 

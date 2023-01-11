@@ -21,11 +21,10 @@
 
         <form:form modelAttribute="game" class="form-horizontal" id="add-game-form">
             <div class="form-group has-feedback">
-                <nt4h:inputField label="Name" name="name"/>
-                <nt4h:inputField label="Password" name="password"/>
-                <nt4h:selectField name="Mode" label="Mode" names="${mode}" size="2"/>
-                <nt4h:selectField name="MaxPlayers" label="Max players" names="${[2,3,4]}" size="3"/>
-                <form:checkbox path="hasStages" label="Play with stages"/>
+                <nt4h:inputField label="Name <span style='color:red'>*</span>" name="name"/>
+                <nt4h:inputField label="Password <span style='color:red'>*</span>" name="password"/>
+                <nt4h:selectField name="Mode <span style='color:red'>*</span>" label="Mode" names="${mode}" size="2"/>
+                <nt4h:selectField name="MaxPlayers <span style='color:red'>*</span>" label="Max players" names="${[2,3,4]}" size="3"/>
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-default" type="submit">Create game</button>
                 </div>

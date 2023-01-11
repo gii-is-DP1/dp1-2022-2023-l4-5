@@ -13,7 +13,7 @@ public class AbilityInGameFormatter implements Formatter<AbilityInGame> {
 
     private AbilityService abilityService;
     @Override
-    public AbilityInGame parse(String s, Locale locale) throws ParseException {
+    public AbilityInGame parse(String s, Locale locale) {
         return abilityService.getAbilityInGameById(Integer.parseInt(s));
     }
 

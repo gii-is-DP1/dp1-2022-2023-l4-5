@@ -1,12 +1,20 @@
 package org.springframework.samples.nt4h.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -18,15 +26,24 @@ public class AdminController {
     private static final String VIEW_USER_CREATE_OR_UPDATE_FORM = "admins/updateUserForm";
 
     private static final String VIEW_USER_DETAILS = "users/userDetails";
+    private static final String VIEW_ALLGAMES = "admins/allGames";
 
+    private static final String VIEW_USER_STATISTICS = "users/userStatistics";
     private static final String PAGE_USER_LIST = "redirect:/users";
+
+
     // Servicios.
     private final UserService userService;
+    private final GameService gameService;
+    private final Advise advise;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, GameService gameService, Advise advise) {
         this.userService = userService;
+        this.gameService = gameService;
+        this.advise = advise;
     }
+
 
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
@@ -79,4 +96,31 @@ public class AdminController {
         userService.deleteUserById(userId);
         return PAGE_USER_LIST;
     }
+
+    @GetMapping("/games")
+    public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model, HttpSession session) {
+        page = page < 0 ? 0 : page;
+        Pageable pageable = PageRequest.of(page, 5);
+        List<Game> games = gameService.getAllGames();
+        Page<Game> gamePage = gameService.getAllGames(pageable);
+        if (!games.isEmpty() && gamePage.isEmpty()) {
+            page = games.size() / 5;
+            pageable = PageRequest.of(page, 5);
+            gamePage = gameService.getAllGames(pageable);
+        }
+        advise.getMessage(session, model);
+        model.put("isNext", gamePage.hasNext());
+        model.put("games", gamePage.getContent());
+        model.put("page", page);
+        return "admins/games";
+    }
+
+    @GetMapping("/statistics/{userId}")
+    public String showUserStatistics(@PathVariable("userId") int userId, ModelMap model) {
+        Statistic userStatistic = userService.getUserById(userId).getStatistic();
+        model.put("statistic", userStatistic);
+        return VIEW_USER_STATISTICS;
+    }
+
+
 }
