@@ -122,7 +122,7 @@ public class UserService {
     @Transactional
     public Page<User> getFriendsPaged(Pageable page) {
         int limit = (int) page.getOffset() + page.getPageSize();
-        limit = limit > getFriends().size() ? getFriends().size() : limit;
+        limit = Math.min(limit, getFriends().size());
         return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), limit), page, getLoggedUser().getFriends().size());
     }
 

@@ -22,7 +22,7 @@ import java.util.Objects;
 @RequestMapping("/ability")
 public class AbilityController {
 
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
+    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
 
     private final UserService userService;
     private final GameService gameService;
@@ -53,13 +53,18 @@ public class AbilityController {
         return getGame().getCurrentPlayer();
     }
 
+    @ModelAttribute("loggedPlayer")
+    public Player getLoggedPlayer() {
+        return getLoggedUser().getPlayer();
+    }
+
     @PostMapping("/loseCard")
     private String loseCard(Turn turn) {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
         deck.discardCardOnHand(abilityInGame); // Esto debe de ser un efecto
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     @PostMapping("/chooseEnemy")
@@ -84,7 +89,7 @@ public class AbilityController {
                 enemies.add(enemyInGame.getId()); // TODO: comprobar, si no funciona, añadir como string separados por comas.
         }
 
-        return nextUrl == null ? PAGE_HERO_ATTACK: nextUrl;
+        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
     }
 
     @GetMapping("/findInDiscard")
@@ -97,7 +102,7 @@ public class AbilityController {
         deck.getInDiscard().remove(abilityInGame);
         deck.getInHand().add(abilityInGame);
         playerService.savePlayer(currentPlayer);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     @PostMapping("/chooseAbilityFromDeck")
@@ -105,7 +110,7 @@ public class AbilityController {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inDeck", abilityInGame.getId());
         String nextUrl = session.getAttribute("nextUrl").toString();
-        return nextUrl == null ? PAGE_HERO_ATTACK: nextUrl;
+        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
     }
 
     @PostMapping("/exchangeCards")
@@ -118,7 +123,7 @@ public class AbilityController {
         deck.getInDeck().remove(inDeck);
         deck.getInDeck().add(inHand);
         playerService.savePlayer(getCurrentPlayer());
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     @PostMapping("/chooseProductFromMarket")
@@ -126,7 +131,7 @@ public class AbilityController {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inMarket", abilityInGame.getId());
         String nextUrl = session.getAttribute("nextUrl").toString();
-        return nextUrl == null ? PAGE_HERO_ATTACK: nextUrl;
+        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
     }
 
     @PostMapping("/exchangeProducts")
@@ -138,6 +143,16 @@ public class AbilityController {
         inMarket.setId(id);
         productService.saveProductInGame(inSale);
         productService.saveProductInGame(inMarket);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
+    }
+
+    @GetMapping("/{cardId}")
+    private String findEffect(@PathVariable("cardId") Integer cardId) {
+        Player currentPlayer = getCurrentPlayer();
+        Player loggedPlayer = getLoggedPlayer();
+        if (currentPlayer != loggedPlayer)
+            return PAGE_MAKE_DAMAGE;
+        AbilityInGame abilityInGame = abilityService.getAbilityInGameById(cardId);
+        return "/abilities/" + abilityInGame.getAbility().getPathName();
     }
 }

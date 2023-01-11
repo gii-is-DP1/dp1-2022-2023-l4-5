@@ -166,10 +166,10 @@ public class GameController {
         User loggedUser = getUser();
 
         userService.addUserToGame(loggedUser, newGame, password);
-        gameService.addPlayerToGame(newGame, loggedUser); // Esto estaba antes en un post.
+        gameService.addPlayerToGame(newGame, loggedUser);
         advise.keepUrl(session, request);
         advise.getMessage(session, model);
-        model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
+        model.put("numHeroes", newGame.isUniClass());
         return PAGE_CURRENT_GAME;
     }
 
@@ -187,7 +187,7 @@ public class GameController {
 
     // Analizamos la elección del héroe.
     @PostMapping(value = "/heroSelect")
-    public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
+    public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         Player loggedPlayer = getPlayer();
         Game game = getGame();
         gameService.addHeroToPlayer(loggedPlayer, heroInGame, game);
@@ -198,7 +198,7 @@ public class GameController {
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
     public String initCreationForm() throws UserInAGameException {
-        if (!getGame().isNew())
+        if (getGame().isNew())
             throw new UserInAGameException();
         return VIEW_GAME_CREATE;
     }

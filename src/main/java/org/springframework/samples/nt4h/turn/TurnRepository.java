@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.turn;
 
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

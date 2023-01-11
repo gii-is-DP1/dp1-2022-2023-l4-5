@@ -3,8 +3,10 @@ package org.springframework.samples.nt4h.card.enemy;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.TurnService;
@@ -40,14 +42,18 @@ public class AbilityNightLordController {
     private final TurnService turnService;
     private final GameService gameService;
     private final EnemyService enemyService;
+    private final DeckService deckService;
+    private final CacheManager cacheManager;
 
-    public AbilityNightLordController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService) {
+    public AbilityNightLordController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService, DeckService deckService, CacheManager cacheManager) {
         this.userService = userService;
         this.abilityService = abilityService;
         this.playerService = playerService;
         this.turnService = turnService;
         this.gameService = gameService;
         this.enemyService = enemyService;
+        this.deckService = deckService;
+        this.cacheManager = cacheManager;
     }
 
     @ModelAttribute("loggedUser")
@@ -65,7 +71,7 @@ public class AbilityNightLordController {
         return getGame().getCurrentPlayer();
     }
 
-    @ModelAttribute("logggedPlayer")
+    @ModelAttribute("loggedPlayer")
     public Player getLoggedPlayer() {
         return getLoggedUser().getPlayer();
     }
@@ -74,11 +80,9 @@ public class AbilityNightLordController {
     @GetMapping("/gurdrug/{cardId}")
     public String gurdrug(@PathVariable("cardId") int cardId, HttpSession session) {
         Deck deck = getCurrentPlayer().getDeck();
-        AbilityInGame abilityInGame = deck.getInDeck().get(0);
-        deck.getInDeck().remove(abilityInGame);
-        deck.getInDiscard().add(abilityInGame);
-        AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
-        return "/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
+        deckService.loseACard(deck);
+        AbilityInGame currentAbility = abilityService.getAbilityInGameById(cardId);
+        return "/abilities/" + currentAbility.getAbility().getRole() + "/" + currentAbility.getId();
     }
 
     // Fase de ataque de héroe.
@@ -89,16 +93,19 @@ public class AbilityNightLordController {
         AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
         String url = "redirect:/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
         List<EnemyInGame> enemies = game.getActualOrcs();
-        if (session.getAttribute("alreadyAddedHealthOrc") != null)
-            return url;
-        for (var i = 0; i < enemies.size(); i++) {
-            EnemyInGame enemy = enemies.get(i);
-            if (!enemy.isNightLord()) {
-                enemy.setActualHealth(enemy.getActualHealth() + 1);
-                enemyService.saveEnemyInGame(enemy);
+        if (!cacheManager.hasAddedLifeToOrcs(session)) {
+            for (var i = 0; i < enemies.size(); i++) {
+                EnemyInGame enemy = enemies.get(i);
+                if (!enemy.isNightLord()) {
+                    enemy.setActualHealth(enemy.getActualHealth() + 1);
+                    enemyService.saveEnemyInGame(enemy);
+                }
             }
+            cacheManager.setHasAddedLifeToOrcs(session);
         }
-        session.setAttribute("alreadyAddedHealthOrc", true);
+
+
+
         return url;
     }
 
@@ -110,13 +117,8 @@ public class AbilityNightLordController {
             return PAGE_HERO_ATTACK;
         AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
         // Recupera una carta si el ataque es 1.
-        if (ability.getAttack() == 1) {
-            Deck deck = currentPlayer.getDeck();
-            AbilityInGame card = deck.getInDeck().get(0);
-            deck.getInDeck().remove(card);
-            deck.getInHand().add(card);
-            playerService.savePlayer(currentPlayer);
-        }
+        if (ability.getAttack() == 1)
+            deckService.retrievesACard(currentPlayer.getDeck());
         // TODO: mejorar URL.
         return "/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
     }

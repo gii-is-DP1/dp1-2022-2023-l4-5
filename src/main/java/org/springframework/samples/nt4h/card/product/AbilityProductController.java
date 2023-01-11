@@ -2,13 +2,13 @@ package org.springframework.samples.nt4h.card.product;
 
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.capacity.StateCapacity;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.TurnService;
@@ -41,26 +41,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class AbilityProductController {
 
-    private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_LOSE_CARD = "redirect:/loseCard";
-    private final String VIEW_LOSE_CARD = "abilities/loseCard";
-    private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final String PAGE_MAKE_DAMGE = "redirect:/heroAttack/makeDamage";
     private final String VIEW_FIND_IN_DISCARD = "abilities/findInDiscard";
     private final UserService userService;
-    private final AbilityService abilityService;
     private final PlayerService playerService;
-    private final TurnService turnService;
-    private final GameService gameService;
-    private final EnemyService enemyService;
+    private final CacheManager cacheManager;
+    private final DeckService deckService;
 
-    public AbilityProductController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService) {
+
+    public AbilityProductController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService, CacheManager cacheManager, DeckService deckService) {
         this.userService = userService;
-        this.abilityService = abilityService;
         this.playerService = playerService;
-        this.turnService = turnService;
-        this.gameService = gameService;
-        this.enemyService = enemyService;
+        this.cacheManager = cacheManager;
+        this.deckService = deckService;
     }
 
     @ModelAttribute("loggedUser")
@@ -89,13 +82,13 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMGE;
         // Pierde la carta si no tiene el héreo pericia.
         List<StateCapacity > stateCapacities = currentPlayer.getHeroes().stream().flatMap(hero -> hero.getHero()
             .getCapacities().stream().map(Capacity::getStateCapacity)).collect(Collectors.toList());
         if (!stateCapacities.contains(StateCapacity.EXPERTISE))
-            session.setAttribute("deleteCard", true);
-        return PAGE_HERO_ATTACK;
+            cacheManager.setHasToBeDeletedAbility(session);
+        return PAGE_MAKE_DAMGE;
     }
 
     // Poción curativa
@@ -104,13 +97,12 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMGE;
         // Elimina una herida.
-        if (currentPlayer.getWounds() > 0)
-            currentPlayer.setWounds(currentPlayer.getWounds() - 1);
+        playerService.decreaseWounds(currentPlayer, 1);
         // Eliminamos la carta.
-        session.setAttribute("deleteCard", true);
-        return PAGE_HERO_ATTACK;
+        cacheManager.setHasToBeDeletedAbility(session);
+        return PAGE_MAKE_DAMGE;
     }
 
     // Piedra amolar
@@ -119,10 +111,10 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMGE;
         // Añadimos el daño por piedra amolar.
-        session.setAttribute("sharpeningStone", 1);
-        return PAGE_HERO_ATTACK;
+        cacheManager.setSharpeningStone(session);
+        return PAGE_MAKE_DAMGE;
     }
 
     // Vial de conjuración
@@ -131,7 +123,7 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMGE;
         model.put("discard", currentPlayer.getDeck().getInDiscard());
         return VIEW_FIND_IN_DISCARD;
     }
@@ -142,16 +134,12 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMGE;
         // Roba 3 cartas.
         Deck deck = currentPlayer.getDeck();
-        for (var i = 0; i < 3; i++) {
-            AbilityInGame abilityInGame = deck.getInDeck().get(0);
-            deck.getInDeck().remove(abilityInGame);
-            deck.getInHand().add(abilityInGame);
-        }
-        playerService.savePlayer(currentPlayer);
-        return PAGE_HERO_ATTACK;
+        for (var i = 0; i < 3; i++)
+            deckService.saveDeck(deck);
+        return PAGE_MAKE_DAMGE;
     }
 
     // Capa élfica
@@ -160,12 +148,10 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
-        EnemyInGame enemyInGame = (EnemyInGame) session.getAttribute("attackedEnemy");
-        enemyInGame.setNoAttackThisTurn(true);
-        enemyService.saveEnemyInGame(enemyInGame);
-        // El enemigo selecionado no causa daño este turno.
-        return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMGE;
+        // El enemigo seleccionado no causa daño este turno.
+        cacheManager.addPreventDamageFromEnemies(session);
+        return PAGE_MAKE_DAMGE;
     }
 
     // Armadura de placas.
@@ -174,27 +160,23 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMGE;
         // Recupera 4 cartas.
         Deck deck = currentPlayer.getDeck();
-        for (var i = 0; i < 4; i++) {
-            AbilityInGame abilityInGame = deck.getInDiscard().get(0);
-            deck.getInDiscard().remove(abilityInGame);
-            deck.getInHand().add(abilityInGame);
-        }
-        playerService.savePlayer(currentPlayer);
-        return PAGE_HERO_ATTACK;
+        for (var i = 0; i < 4; i++)
+            deckService.retrievesACard(deck);
+        return PAGE_MAKE_DAMGE;
     }
 
     // Alabarda orca
     @GetMapping("/orcaLance/{cardId}")
     private String orcLance(@PathVariable("cardId") int cardId, HttpSession session) {
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMGE;
     }
 
     // Arco compuesto.
     @GetMapping("/compoundBow/{cardId}")
     private String compoundBound() {
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMGE;
     }
 }

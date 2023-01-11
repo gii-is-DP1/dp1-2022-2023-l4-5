@@ -14,7 +14,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/achievements")
-// TODO: @Slf4j
 public class AchievementController {
 
     private final String ACHIEVEMENTS_LIST_VIEW ="achievements/achievementsList";

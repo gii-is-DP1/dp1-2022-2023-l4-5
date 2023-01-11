@@ -17,7 +17,6 @@ import javax.validation.constraints.Size;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-// TODO: @EntityListeners()
 public class Achievement extends NamedEntity {
 
     @NotNull
