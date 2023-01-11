@@ -6,6 +6,7 @@ import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
@@ -32,21 +33,24 @@ public class HeroAttackController {
     private final String NEXT_TURN = "redirect:/turns";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
     private final String VIEW_HERO_ATTACK = "turns/attackPhase";
+    private final String PAGE_ABILITY = "redirect:/abilities";
 
     private final UserService userService;
     private final TurnService turnService;
     private final GameService gameService;
     private final PlayerService playerService;
     private final Advise advise;
+    private final CacheManager cacheManager;
 
 
     @Autowired
-    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise) {
+    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager) {
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.advise = advise;
+        this.cacheManager = cacheManager;
     }
 
     @ModelAttribute("loggedUser")
@@ -87,6 +91,7 @@ public class HeroAttackController {
         return VIEW_HERO_ATTACK;
     }
 
+    @GetMapping("")
 
     @PostMapping
     public String modifyCardAttributes(Turn turn) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
@@ -95,8 +100,10 @@ public class HeroAttackController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+
         AbilityInGame usedAbility = turn.getCurrentAbility();
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
+        /*
         if (usedAbility == null)
             throw new WithOutAbilityException();
         if (attackedEnemy == null)
@@ -115,12 +122,19 @@ public class HeroAttackController {
         } else {
             playerService.savePlayer(player);
         }
+         */
         Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
         playerService.savePlayer(player);
         createdTurn.addEnemy(attackedEnemy);
         createdTurn.addAbility(usedAbility);
         turnService.saveTurn(createdTurn);
         advise.heroAttack(usedAbility, attackedEnemy, game);
+        return PAGE_ABILITY;
+    }
+
+    @GetMapping("/makeDamage")
+    public String attackEnemy() {
+
         return PAGE_HERO_ATTACK;
     }
 

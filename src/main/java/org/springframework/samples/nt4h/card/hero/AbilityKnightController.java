@@ -36,25 +36,17 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/abilities/knight")
 public class AbilityKnightController {
 
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_LOSE_CARD = "redirect:/loseCard";
+    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+
     private final String VIEW_LOSE_CARD = "abilities/loseCard";
     private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
     private final UserService userService;
-    private final AbilityService abilityService;
-    private final PlayerService playerService;
-    private final TurnService turnService;
-    private final GameService gameService;
     private final DeckService deckService;
     private final CacheManager cacheManager;
     private final StatisticService statisticService;
 
     public AbilityKnightController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, DeckService deckService, CacheManager cacheManager, StatisticService statisticService) {
         this.userService = userService;
-        this.abilityService = abilityService;
-        this.playerService = playerService;
-        this.turnService = turnService;
-        this.gameService = gameService;
         this.deckService = deckService;
         this.cacheManager = cacheManager;
         this.statisticService = statisticService;
@@ -86,7 +78,7 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
         deckService.loseACard(currentPlayer.getDeck());
         return VIEW_LOSE_CARD;
@@ -98,10 +90,10 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Aumenta el valor de la defensa en dos.
         cacheManager.setDefend(session, 2);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Doble espadazo.
@@ -110,10 +102,10 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Elimina una carta de la mano.
         deckService.loseACard(currentPlayer.getDeck());
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Escudo.
@@ -122,9 +114,9 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Termina el turno.
-        cacheManager.setNextUrl(session, PAGE_HERO_ATTACK + "/next");
+        cacheManager.setNextUrl(session, PAGE_MAKE_DAMAGE + "/next");
         model.put("name", "preventDamageFrom");
         return VIEW_CHOSE_ENEMY;
     }
@@ -135,14 +127,14 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Comprueba si es el primer slash.
         if (cacheManager.isFirstSlash(session)) {
             cacheManager.setFirstSlash(session);
             // Si lo es, roba una carta.
             deckService.retrievesACard(currentPlayer.getDeck());
         }
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Paso atrás.
@@ -151,12 +143,12 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Roba dos cartas.
         for (int i = 0; i < 2; i++) {
             deckService.retrievesACard(currentPlayer.getDeck());
         }
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Todo o nada.
@@ -165,7 +157,7 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Debería de ser un efecto
         // Roba una carta.
         Deck deck = currentPlayer.getDeck();
@@ -173,7 +165,7 @@ public class AbilityKnightController {
         deckService.retrievesTheCard(deck, abilityInGame);
         // Agrega ese daño a la carta.
         cacheManager.addAttack(session, abilityInGame.getAttack());
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Voz de aliento
@@ -182,7 +174,7 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // cada jugador roba dos cartas.
         for (Player player : getGame().getPlayers()) {
             for (int i = 0; i < 2; i++) {
@@ -193,6 +185,6 @@ public class AbilityKnightController {
         deckService.retrievesACard(currentPlayer.getDeck());
         // Gana una ficha de gloria.
         statisticService.gainGlory(currentPlayer.getStatistic(), 1);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 }

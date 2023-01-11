@@ -38,25 +38,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/abilities/wizard")
 public class AbilityWizardController {
 
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_LOSE_CARD = "redirect:/loseCard";
-    private final String VIEW_LOSE_CARD = "abilities/loseCard";
-    private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
     private final UserService userService;
-    private final AbilityService abilityService;
     private final PlayerService playerService;
-    private final TurnService turnService;
-    private final GameService gameService;
     private final StatisticService statisticService;
     private final CacheManager cacheManager;
     private final DeckService deckService;
 
     public AbilityWizardController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, StatisticService statisticService, CacheManager cacheManager, DeckService deckService) {
         this.userService = userService;
-        this.abilityService = abilityService;
         this.playerService = playerService;
-        this.turnService = turnService;
-        this.gameService = gameService;
         this.statisticService = statisticService;
         this.cacheManager = cacheManager;
         this.deckService = deckService;
@@ -88,7 +79,7 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Deberían de ser efectos.
         // Anula el daño.
         cacheManager.hasPreventDamageFromEnemies(session);
@@ -98,7 +89,7 @@ public class AbilityWizardController {
             deckService.loseACard(deck);
         }
         playerService.savePlayer(currentPlayer);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Bola de fuego
@@ -107,7 +98,7 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         Game game = getGame();
         // Atacamos a todos los enemigos
         cacheManager.addAllEnemiesAlsoAttacked(session, currentPlayer.getGame());
@@ -118,7 +109,7 @@ public class AbilityWizardController {
                 deckService.loseACard(player.getDeck());
             }
         }
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Disparo gélido
@@ -127,12 +118,12 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Roba una carta.
         deckService.retrievesACard(currentPlayer.getDeck());
         // Elegimos el enemigo que no va a realizar daño.
         cacheManager.addPreventDamageFromEnemies(session);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Flecha corrosiva
@@ -141,12 +132,12 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
         deckService.loseACard(currentPlayer.getDeck());
         // Aumenta en 1 el daño hacia ese enemigo.
         cacheManager.addEnemiesThatReceiveMoreDamage(session);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Golpe de bastón
@@ -155,13 +146,13 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // SI ya ha sido atacado con golpe de bastón, realiza más daño.
         if (cacheManager.hasAlreadyAttackedWithStaff(session))
             cacheManager.addAttack(session, 1);
         else
             cacheManager.addAlreadyAttackedWithStaff(session);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Orbe curativo.
@@ -170,7 +161,7 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Todos los héroes recuperan dos cartas.
         for (var i = 0; i < getGame().getPlayers().size(); i++) {
             for (var j = 0; j < 2; j++) {
@@ -181,7 +172,7 @@ public class AbilityWizardController {
         playerService.decreaseWounds(currentPlayer, 1);
         // Elimina la carta.
         cacheManager.setHasToBeDeletedAbility(session);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Proyectil ígneo
@@ -190,10 +181,10 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Gana 1 ficha de gloria.
         statisticService.gainGlory(currentPlayer.getStatistic(), 1);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Reconstitución.
@@ -202,14 +193,14 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         Deck deck = currentPlayer.getDeck();
         // Roba 1 carta.
         deckService.retrievesACard(deck);
         // Recupera 2 cartas.
         for (var i = 0; i < 2; i++)
             deckService.retrievesACard(deck);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Torrente de luz.
@@ -218,7 +209,7 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // El resto de héroes recuperan las cartas.
         List<Player> otherPlayers = getGame().getPlayers().stream().filter(p -> p != currentPlayer).collect(Collectors.toList());
         for (var i = 0; i < otherPlayers.size(); i++) {
@@ -227,6 +218,6 @@ public class AbilityWizardController {
         }
         // Gana 1 ficha de gloria.
         statisticService.gainGlory(currentPlayer.getStatistic(), 1);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 }

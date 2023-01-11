@@ -39,16 +39,9 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/abilityies/thief")
 public class AbilityThiefController {
 
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_LOSE_CARD = "redirect:/loseCard";
-    private final String VIEW_LOSE_CARD = "abilities/loseCard";
-    private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
     private final UserService userService;
     private final AbilityService abilityService;
-    private final PlayerService playerService;
-    private final TurnService turnService;
-    private final GameService gameService;
-    private final EnemyService enemyService;
     private final CacheManager cacheManager;
     private final StatisticService statisticService;
     private final DeckService deckService;
@@ -56,10 +49,6 @@ public class AbilityThiefController {
     public AbilityThiefController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService, CacheManager cacheManager, StatisticService statisticService, DeckService deckService) {
         this.userService = userService;
         this.abilityService = abilityService;
-        this.playerService = playerService;
-        this.turnService = turnService;
-        this.gameService = gameService;
-        this.enemyService = enemyService;
         this.cacheManager = cacheManager;
         this.statisticService = statisticService;
         this.deckService = deckService;
@@ -91,7 +80,7 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Comprobamos si podemos cargarnos al enemigo.
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
         Integer attack = cacheManager.getAttack(session);
@@ -103,7 +92,7 @@ public class AbilityThiefController {
         }
         // Pierde 1 carta.
         deckService.loseACard(currentPlayer.getDeck());
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Ataque furtivo.
@@ -112,7 +101,7 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Comprobamos si podemos cargarnos al enemigo.
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
         Integer attack = cacheManager.getAttack(session);
@@ -122,7 +111,7 @@ public class AbilityThiefController {
             // Gana uno de oro.
             statisticService.gainGold(currentPlayer.getStatistic(), 1);
         }
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Ballesta precisa.
@@ -131,13 +120,13 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // SI ya ha sido atacado con golpe de bastón, realiza más daño.
         if (cacheManager.hasAlreadyAttackedWithPreciseBow(session))
             cacheManager.addAttack(session,  1);
         else
             cacheManager.addAlreadyAttackedWithPreciseBow(session);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // En las sombras.
@@ -146,10 +135,10 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Previene dos puntos de daño.
         cacheManager.setDefend(session, 2);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Engañar
@@ -158,14 +147,14 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Elegimos el enemigo que no va a realizar daño.
         Statistic statistic = currentPlayer.getStatistic();
         if (statistic.getGold() >= 2) {
             statisticService.looseGold(statistic, 2);
             cacheManager.addPreventDamageFromEnemies(session);
         }
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Robar bolsillos.
@@ -174,7 +163,7 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Roba una moneda a cada héroe.
         Statistic currentPlayerStatistic = currentPlayer.getStatistic();
         for (Player player : getGame().getPlayers()) {
@@ -184,7 +173,7 @@ public class AbilityThiefController {
                 statisticService.gainGold(currentPlayerStatistic, 1);
             }
         }
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Saqueo1
@@ -193,10 +182,10 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Ganas dos monedas por cada enemigo vivo.
         statisticService.gainGold(currentPlayer.getStatistic(), 2 * getGame().getActualOrcs().size());
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Saqueo2
@@ -205,12 +194,12 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // Ganas una moneda por cada enemigo vivo.
         statisticService.gainGold(currentPlayer.getStatistic(), getGame().getActualOrcs().size());
         // Gana un punto de gloria.
         statisticService.gainGlory(currentPlayer.getStatistic(), 1);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Trampa
@@ -219,9 +208,9 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
-            return PAGE_HERO_ATTACK;
+            return PAGE_MAKE_DAMAGE;
         // El enemigo seleccionado morirá al terminar la fase de ataque.
         cacheManager.addCapturedEnemies(session);
-        return PAGE_HERO_ATTACK;
+        return PAGE_MAKE_DAMAGE;
     }
 }
