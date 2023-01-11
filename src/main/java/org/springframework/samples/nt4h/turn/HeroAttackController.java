@@ -91,8 +91,6 @@ public class HeroAttackController {
         return VIEW_HERO_ATTACK;
     }
 
-    @GetMapping("")
-
     @PostMapping
     public String modifyCardAttributes(Turn turn) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
         Player player = getPlayer();
