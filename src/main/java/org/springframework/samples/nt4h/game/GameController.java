@@ -44,6 +44,7 @@ public class GameController {
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
     private static final String VIEW_GAME_PREORDER = "games/preSelectOrder";
+    private static final String GAMES_IN_PROGRES= "admins/gameInProgres";
     private static final String PAGE_CURRENT_GAME = "redirect:/games/current";
 
     // Servicios
@@ -61,6 +62,11 @@ public class GameController {
         this.userService = userService;
         this.playerService = playerService;
         this.advise = advise;
+    }
+
+    @GetMapping("/gameInProgres")
+    public String getGamesInProgres() {
+        return GAMES_IN_PROGRES;
     }
 
     @InitBinder
