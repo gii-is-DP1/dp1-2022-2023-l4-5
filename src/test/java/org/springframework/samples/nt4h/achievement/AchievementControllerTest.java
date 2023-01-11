@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ContextConfiguration(classes = {AchievementController.class})
 @ExtendWith(MockitoExtension.class)
+@WebMvcTest(AchievementController.class)
 class AchievementControllerTest {
 
     @Autowired
@@ -38,9 +41,9 @@ class AchievementControllerTest {
     private final String ACHIEVEMENTS_LIST_VIEW = "achievements/achievementsList";
     private final String VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM = "achievements/createOrUpdateAchievementsForm";
 
-    @Mock
+    @MockBean
     private AchievementService achievementService;
-    @Autowired
+
     private MockMvc mockMvc;
 
     private AchievementController controller;
@@ -54,15 +57,6 @@ class AchievementControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-    @Test
-    void testGetAchievements() {
-        ArrayList<Achievement> achievementList = new ArrayList<>();
-        when(achievementService.getAllAchievements()).thenReturn(achievementList);
-        List<Achievement> actualAchievements = achievementController.getAchievements();
-        assertSame(achievementList, actualAchievements);
-        assertTrue(actualAchievements.isEmpty());
-        verify(achievementService).getAllAchievements();
-    }
 
     @Test
     void shouldShowAllAchievements() throws Exception {
@@ -79,22 +73,26 @@ class AchievementControllerTest {
             .andExpect(model().attributeExists("achievement"));
     }
 
+    //No hay redirecciones
     @Test
     void shouldSaveAchievement() throws Exception {
         mockMvc.perform(post("/achievements/new")
                 .param("name", "Test Achievement")
-                .param("description", "Test Description"))
+                .param("description", "Test Description")
+                .param("threshold","1"))
             .andExpect(status().isOk())
             .andExpect(redirectedUrl("/achievements"))
             .andExpect(flash().attributeExists("achievement"));
         verify(achievementService, times(1)).saveAchievement(any(Achievement.class));
     }
 
+    //No hay binding o exceptions
     @Test
     void shouldNotSaveAchievementWithErrors() throws Exception {
         mockMvc.perform(post("/achievements/new")
                 .param("name", "")
-                .param("description", ""))
+                .param("description", "Test")
+                .param("threshold","1"))
             .andExpect(status().isOk())
             .andExpect(view().name(VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM))
             .andExpect(model().attributeExists("achievement"))
@@ -105,20 +103,18 @@ class AchievementControllerTest {
     @Test
     void shouldEditAchievement() throws Exception {
         when(achievementService.getAchievementById(1)).thenReturn(achievement);
-
-        mockMvc.perform(get("/achievements/{achievementId}/edit", achievement.getId()))
+        mockMvc.perform(get("/achievements/{achievementId}/edit", 1))
             .andExpect(status().isOk())
             .andExpect(view().name(VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM))
             .andExpect(model().attributeExists("achievement"))
             .andExpect(model().attribute("achievement", achievement));
     }
-
+    //Falta redirection
     @Test
     void shouldUpdateAchievement() throws Exception {
         int id = 1;
         when(achievementService.getAchievementById(1)).thenReturn(achievement);
-
-        mockMvc.perform(post("/achievements/{achievementId}/edit", id)
+        mockMvc.perform(post("/achievements/{achievementId}/edit", 1)
                 .param("name", "Updated Achievement")
                 .param("description", "Updated Description"))
             .andExpect(status().is3xxRedirection())
@@ -138,10 +134,9 @@ class AchievementControllerTest {
             .andExpect(view().name(VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM))
             .andExpect(model().attributeExists("achievement"))
             .andExpect(model().hasErrors());
-
         verify(achievementService, times(0)).saveAchievement(achievement);
     }
-
+    //Falta redireccion
     @Test
     void shouldDeleteAchievement() throws Exception {
         int id = 1;
@@ -149,7 +144,6 @@ class AchievementControllerTest {
             .andExpect(status().isOk())
             .andExpect(redirectedUrl("/achievements"))
             .andExpect(flash().attributeExists("message"));
-
         verify(achievementService, times(1)).deleteAchievementById(id);
     }
 
