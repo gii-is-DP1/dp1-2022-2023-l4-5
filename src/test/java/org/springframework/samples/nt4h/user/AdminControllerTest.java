@@ -1,17 +1,7 @@
 package org.springframework.samples.nt4h.user;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.samples.nt4h.game.GameRepository;
+import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.MessageRepository;
+import org.springframework.samples.nt4h.message.MessageService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
@@ -28,6 +26,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.ui.ModelMap;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {AdminController.class})
 @ExtendWith(SpringExtension.class)
@@ -37,6 +39,9 @@ class AdminControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private GameService gameService;
 
     private User user;
 
@@ -156,5 +161,41 @@ class AdminControllerTest {
             .andExpect(MockMvcResultMatchers.model().attributeExists("loggedUser", "selections"))
             .andExpect(MockMvcResultMatchers.view().name("users/userDetails"))
             .andExpect(MockMvcResultMatchers.forwardedUrl("users/userDetails"));
+    }
+
+    @Test
+    void testShowUserStatistics() throws Exception {
+        User user1 = new User();
+        user1.setBirthDate(LocalDate.ofEpochDay(1L));
+        user1.setDescription("The characteristics of someone or something");
+        user1.setPassword("iloveyou");
+        user1.setUsername("janedoe");
+
+        when(userService.getAllUsers()).thenReturn(new ArrayList<>());
+        when(userService.getLoggedUser()).thenReturn(user);
+        when(userService.getUserById(anyInt())).thenReturn(user1);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/admins/statistics/{userId}", 123);
+        MockMvcBuilders.standaloneSetup(adminController)
+            .build()
+            .perform(requestBuilder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.model().size(3))
+            .andExpect(MockMvcResultMatchers.model().attributeExists("loggedUser", "selections", "statistic"))
+            .andExpect(MockMvcResultMatchers.view().name("users/userStatistics"))
+            .andExpect(MockMvcResultMatchers.forwardedUrl("users/userStatistics"));
+    }
+
+    @Test
+    void testShowGames() {
+        GameRepository gameRepository = mock(GameRepository.class);
+        when(gameRepository.findAll()).thenReturn(new ArrayList<>());
+        when(gameRepository.findAll((Pageable) any())).thenReturn(new PageImpl<>(new ArrayList<>()));
+        UserService userService1 = new UserService(mock(UserRepository.class));
+        AdminController adminController = new AdminController(userService1, gameService,
+            new Advise(new MessageService(mock(MessageRepository.class))));
+        ModelMap model = new ModelMap();
+        assertEquals("admins/games", adminController.showGames(1, model, new MockHttpSession()));
+        verify(gameRepository).findAll();
+        verify(gameRepository).findAll((Pageable) any());
     }
 }
