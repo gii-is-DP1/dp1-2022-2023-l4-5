@@ -121,6 +121,7 @@ public class ProductService {
         Collections.shuffle(shuffledProducts);
         shuffledProducts.forEach(
             product -> IntStream.range(0, product.getQuantity()).forEach(i -> {
+                System.out.println("Product: " + product);
                     ProductInGame productInGame = ProductInGame.builder().product(product).game(game).stateProduct(StateProduct.IN_SALE).timesUsed(0).build();
                     productInGame.setName(product.getName());
                     saveProductInGame(productInGame);

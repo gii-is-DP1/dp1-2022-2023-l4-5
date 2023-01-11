@@ -184,7 +184,7 @@ public class AbilityKnightController {
         // Roba una carta.
         deckService.retrievesACard(currentPlayer.getDeck());
         // Gana una ficha de gloria.
-        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+        statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.samples.nt4h.turn.exceptions.TooManyAbilitiesExceptio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -98,9 +99,9 @@ public class DeckService {
     public List<AbilityInGame> moveCardsFromDeckToHand(Deck deck) throws TooManyAbilitiesException {
         if (deck.getInHand().size() > 4)
             throw new TooManyAbilitiesException();
-        List<AbilityInGame> added = deck.getInDeck().subList(0, 5-deck.getInHand().size());
+        List<AbilityInGame> added = new ArrayList<>(deck.getInDeck().subList(0, 5-deck.getInHand().size()));
+        deck.getInDeck().subList(2, 5).clear();
         deck.getInHand().addAll(added);
-        deck.getInDeck().removeAll(added);
         saveDeck(deck);
         return added;
     }

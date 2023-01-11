@@ -17,22 +17,20 @@ import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.exceptions.*;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
-import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class GameService {
-    private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
     private final UserService userService;
     private final PlayerService playerService;
@@ -62,23 +60,51 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGameById(int id) {
-        Game game = getGameById(id);
-        System.out.println("GameService.deleteGameById: " + game.getId());
+    public void deleteGame(Game game) {
+        game.onDeleteSetNull();
+        gameRepository.save(game);
         gameRepository.delete(game);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteGameById(int id) {
+        Game game = getGameById(id);
+        deleteGame(game);
+    }
+
     @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})
-    public void addPlayerToGame(Game game, User user) throws FullGameException, UserHasAlreadyAPlayerException {
-        if (game.getPlayers().contains(user.getPlayer()))
-            return;
+    public void addPlayerToGame(Game game, User user, String password) throws FullGameException, UserHasAlreadyAPlayerException, UserInAGameException, IncorrectPasswordException {
+        if (user.getGame() != null && !user.getGame().equals(game))
+            throw new UserInAGameException();
+        if (!(Objects.equals(game.getPassword(), password) || game.getAccessibility() == Accessibility.PUBLIC))
+            throw new IncorrectPasswordException();
+        if (game.getPlayers().size() >= game.getMaxPlayers())
+            throw new FullGameException();
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
+
         Player newPlayer = Player.createPlayer(user, game, false);
         playerService.createTurns(newPlayer);
-        user.setPlayer(newPlayer);
         saveGame(game);
+        user.setGame(game);
+        user.setPlayer(newPlayer);
+        userService.saveUser(user);
         advise.playerJoinGame(newPlayer, game);
+    }
+
+    @Transactional(rollbackFor = FullGameException.class)
+    public void createGame(User user, Game game) throws FullGameException {
+        game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
+        Player newPlayer = Player.createPlayer(user, game, true);
+        playerService.savePlayer(newPlayer);
+        saveGame(game);
+        userService.saveUser(user);
+        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
+        game.setAllOrcsInGame(orcsInGame.subList(4, orcsInGame.size()));
+        game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
+        game.setActualOrcs(orcsInGame.subList(0, 3));
+        productService.addProduct(game);
+        advise.createGame(user, game);
     }
 
 
@@ -86,8 +112,6 @@ public class GameService {
     public void addHeroToPlayer(Player player, HeroInGame heroInGame, Game game) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         if (Boolean.TRUE.equals(player.getReady()))
             throw new PlayerIsReadyException();
-        System.out.println("addHeroToPlayer " + player.getId());
-        System.out.println("addHeroToPlayer " + heroInGame);
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
@@ -98,24 +122,7 @@ public class GameService {
         advise.chosenHero(player, heroInGame, game);
     }
 
-    @Transactional(rollbackFor = FullGameException.class)
-    public void createGame(User user, Game game) throws FullGameException {
-        game = Game.createGame(game.getName(), game.getMode(),  game.getMaxPlayers(), game.getPassword());
-        Player newPlayer = Player.createPlayer(user, game, true);
-        playerService.savePlayer(newPlayer);
-        saveGame(game);
-        userService.saveUser(user);
-            List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
-            game.setAllOrcsInGame(orcsInGame);
-            game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
-            game.setActualOrcs(orcsInGame.subList(0, 3));
-
-        productService.addProduct(game);
-        advise.createGame(user, game);
-
-    }
-
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void orderPlayer(List<Player> players, Game game) {
         List<Triplet<Integer, Player, Integer>> datos = Lists.newArrayList();
         // Calcula ataque de las dos primeras cartas en mano.

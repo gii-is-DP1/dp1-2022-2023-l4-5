@@ -1,6 +1,5 @@
 package org.springframework.samples.nt4h.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.model.Person;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;

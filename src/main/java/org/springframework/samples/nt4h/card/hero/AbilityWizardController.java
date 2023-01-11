@@ -183,7 +183,7 @@ public class AbilityWizardController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Gana 1 ficha de gloria.
-        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+        statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 
@@ -217,7 +217,7 @@ public class AbilityWizardController {
             deckService.retrievesACard(player.getDeck());
         }
         // Gana 1 ficha de gloria.
-        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+        statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 }

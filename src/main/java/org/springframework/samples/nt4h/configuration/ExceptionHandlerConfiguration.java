@@ -38,6 +38,8 @@ public class ExceptionHandlerConfiguration
     private static final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
 
+    private final String PAGE_START = "redirect:/start";
+
     public ExceptionHandlerConfiguration(UserService userService) {
         this.userService = userService;
     }
@@ -145,7 +147,7 @@ public class ExceptionHandlerConfiguration
     public String handleWithOutPhaseException(HttpSession session) {
         session.setAttribute("message", "You must choose a phase: EVADE or ATTACK.");
         session.setAttribute("messageType", "danger");
-        return PAGE_GAME_LOBBY;
+        return PAGE_START;
     }
 
     @ExceptionHandler(WithOutAbilityException.class)
