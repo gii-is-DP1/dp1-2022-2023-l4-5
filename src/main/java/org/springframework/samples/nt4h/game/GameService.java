@@ -107,12 +107,9 @@ public class GameService {
         saveGame(game);
         userService.saveUser(user);
         List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
-        game.setAllOrcsInGame(orcsInGame);
+        game.setAllOrcsInGame(orcsInGame.subList(4, orcsInGame.size()));
         game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
-        List<EnemyInGame> actualOrcs = orcsInGame.subList(0, 3);
-        game.setActualOrcs(actualOrcs);
-        game.getAllOrcsInGame().removeAll(actualOrcs);
-        saveGame(game);
+        game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
         advise.createGame(user, game);
 
