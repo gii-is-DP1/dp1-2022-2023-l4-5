@@ -24,7 +24,7 @@
                 <nt4h:inputField label="Name <span style='color:red'>*</span>" name="name"/>
                 <nt4h:inputField label="Password <span style='color:red'>*</span>" name="password"/>
                 <nt4h:selectField name="mode" label="Mode <span style='color:red'>*</span>" names="${mode}" size="2"/>
-                <nt4h:selectField name="maxPlayers" label="Max players <span style='color:red'>*</span>" names="${[2,3,4]}" size="3"/>
+                <nt4h:selectField name="maxPlayers" label="Max Players <span style='color:red'>*</span>" names="${[2,3,4]}" size="3"/>
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-default" type="submit">Create game</button>
                 </div>
