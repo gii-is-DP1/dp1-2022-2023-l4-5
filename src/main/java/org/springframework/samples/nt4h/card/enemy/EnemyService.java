@@ -85,6 +85,7 @@ public class EnemyService {
         List<EnemyInGame> orcs = getAllNotNightLords().stream().map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
         Collections.shuffle(orcs);
         List<EnemyInGame> limitedOrcs = orcs.subList(0, limitEnemies);
+        saveEnemyInGame(limitedOrcs.get(0));
         limitedOrcs.forEach(this::saveEnemyInGame);
         return limitedOrcs;
     }
