@@ -4,14 +4,13 @@ import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.javatuples.Quartet;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserRepository;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
 import java.util.function.ToIntFunction;
 
 @Service
@@ -19,7 +18,7 @@ import java.util.function.ToIntFunction;
 public class StatisticService {
 
     private final StatisticRepository statisticRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public Statistic getStatisticById(int id) {
@@ -81,7 +80,7 @@ public class StatisticService {
     public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.numWonGamesByPlayerId(userId);}
 
     @Transactional
-    public List<User> listAllUsers() {return userRepository.findAll(); }
+    public List<User> listAllUsers() {return userService.getAllUsers(); }
 
     @Transactional
     public int getMin(ToIntFunction< User> function) {
