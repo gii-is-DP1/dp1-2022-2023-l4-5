@@ -66,29 +66,11 @@ public class GameService {
         gameRepository.save(game);
     }
 
-
-    @Transactional
-    public void deleteGame(Game game) {
-     //   game.onDeleteSetNull();
-
-           /*for(Player player : game.getPlayers()) {
-            User user = userService.getAllUsers().stream().filter(x->x.getBirthDate()==player.getBirthDate()).collect(Collectors.toList()).get(0);
-            user.setGame(null);
-            userService.saveUser(user);
-        }*/
-      //  game.setId(null);
-
-      //  gameRepository.save(getGameById(game.getId()));
-
-        userService.removeUserFromGame(userService.getLoggedUser());
-        gameRepository.delete(game);
-    }
-
     @Transactional
     public void deleteGameById(int id) {
         Game game = getGameById(id);
-        System.out.println("GameService.deleteGameById: " + game);
-        deleteGame(game);
+        System.out.println("GameService.deleteGameById: " + game.getId());
+        gameRepository.delete(game);
     }
 
     @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})
@@ -138,14 +120,6 @@ public class GameService {
         advise.createGame(user, game);
 
     }
-  /*  @Transactional(rollbackFor = FullGameException.class)
-    public void addActualOrcs(Game game) throws FullGameException {
-        List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
-        game.setAllOrcsInGame(orcsInGame);
-        game.getAllOrcsInGame().add(enemyService.addNightLordToGame());
-        game.setActualOrcs(orcsInGame.subList(0, 3));
-        saveGame(game);
-    }*/
 
     @Transactional
     public void orderPlayer(List<Player> players, Game game) {
