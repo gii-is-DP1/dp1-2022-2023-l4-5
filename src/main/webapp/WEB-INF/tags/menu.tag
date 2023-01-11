@@ -42,6 +42,13 @@
                         <span>Cards</span>
                     </nt4h:menuItem>
                 </sec:authorize>
+                <sec:authorize access="isAuthenticated()">
+                    <nt4h:menuItem active="${name eq 'All Games'}" url="/allgames"
+                                   title="All games">
+                        <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+                        <span>All Games</span>
+                    </nt4h:menuItem>
+                </sec:authorize>
             </ul>
 
 
