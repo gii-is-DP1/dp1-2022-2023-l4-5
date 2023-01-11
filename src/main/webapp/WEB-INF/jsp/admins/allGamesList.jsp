@@ -21,7 +21,6 @@
         </thead>
         <tbody>
         <c:forEach items="${games}" var="game">
-            <c:if test="${game.getPlayers().size() != 0}">
                 <tr>
                     <td>
                         <c:out value="${game.name}"/>
@@ -52,7 +51,6 @@
                         <c:out value="${game.mode}"/>
                     </td>
                 </tr>
-            </c:if>
         </c:forEach>
         </tbody>
     </table>
