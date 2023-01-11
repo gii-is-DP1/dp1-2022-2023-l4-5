@@ -192,7 +192,6 @@ public class GameController {
         Game game = getGame();
         gameService.addHeroToPlayer(loggedPlayer, heroInGame, game);
         return PAGE_CURRENT_GAME;
-
     }
 
     // Llamamos al formulario para crear la partida.
@@ -220,7 +219,6 @@ public class GameController {
         advise.keepUrl(session, request);
         return VIEW_GAME_PREORDER;
     }
-
 
     // Tiene que recibir las cartas de habilidad que desea utilizar el jugador, por tanto, se va a modificar entero.
     @PostMapping("/selectOrder")
