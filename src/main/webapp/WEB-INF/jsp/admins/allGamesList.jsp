@@ -40,11 +40,13 @@
                         </c:forEach>
                     </td>
                     <td>
+                        <ul>
                         <c:forEach items="${game.players}" var="player">
                             <c:if test="${player.host == false}">
-                                <c:out value="${player}"/>
+                                <li><c:out value="${player}"/></li>
                             </c:if>
                         </c:forEach>
+                                </ul>
                     </td>
                     <td>
                         <c:out value="${game.mode}"/>
