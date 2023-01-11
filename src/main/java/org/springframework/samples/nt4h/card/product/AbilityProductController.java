@@ -78,7 +78,7 @@ public class AbilityProductController {
 
     //  Daga élfica
     @GetMapping("/elfDagger/{cardId}")
-    private String elfDagger(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String elfDagger(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -93,7 +93,7 @@ public class AbilityProductController {
 
     // Poción curativa
     @GetMapping("/healingPotion/{cardId}")
-    private String healingPotion(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String healingPotion(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -107,7 +107,7 @@ public class AbilityProductController {
 
     // Piedra amolar
     @GetMapping("/sharpeningStone/{cardId}")
-    private String sharpeningStone(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String sharpeningStone(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -119,7 +119,7 @@ public class AbilityProductController {
 
     // Vial de conjuración
     @GetMapping("/conjureVial/{cardId}")
-    private String conjureVial(@PathVariable("cardid") int cardId, HttpSession session, ModelMap model) {
+    public String conjureVial(@PathVariable("cardid") int cardId, HttpSession session, ModelMap model) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -130,7 +130,7 @@ public class AbilityProductController {
 
     // Elixir de concentración.
     @GetMapping("/concentrationElixir/{cardId}")
-    private String concentrationVial(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String concentrationVial(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -144,7 +144,7 @@ public class AbilityProductController {
 
     // Capa élfica
     @GetMapping("/elfCloak/{cardId}")
-    private String elfCloak(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String elfCloak(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -156,7 +156,7 @@ public class AbilityProductController {
 
     // Armadura de placas.
     @GetMapping("/plateArmor/{cardId}")
-    private String plateArmor(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String plateArmor(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
