@@ -17,11 +17,14 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
 public class Advise {
 
-    @Autowired
     private final MessageService messageService;
+
+    @Autowired
+    public Advise(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     public void getMessage(HttpSession session, ModelMap model) {
         Object message = session.getAttribute("message");
@@ -46,7 +49,7 @@ public class Advise {
         messageService.createNotification(game, loggedUser.getUsername() + " is choosing a hero.");
     }
 
-    public void choosenHero(Player loggedPlayer, HeroInGame heroInGame, Game game) {
+    public void chosenHero(Player loggedPlayer, HeroInGame heroInGame, Game game) {
         messageService.createNotification(game, loggedPlayer.getName() + " has choosen " + heroInGame.getHero().getName() + ".");
     }
 

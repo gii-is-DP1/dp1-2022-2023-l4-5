@@ -2,13 +2,13 @@ package org.springframework.samples.nt4h.card.product;
 
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.capacity.StateCapacity;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.TurnService;
@@ -53,14 +53,19 @@ public class AbilityProductController {
     private final TurnService turnService;
     private final GameService gameService;
     private final EnemyService enemyService;
+    private final CacheManager cacheManager;
+    private final DeckService deckService;
 
-    public AbilityProductController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService) {
+
+    public AbilityProductController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService, CacheManager cacheManager, DeckService deckService) {
         this.userService = userService;
         this.abilityService = abilityService;
         this.playerService = playerService;
         this.turnService = turnService;
         this.gameService = gameService;
         this.enemyService = enemyService;
+        this.cacheManager = cacheManager;
+        this.deckService = deckService;
     }
 
     @ModelAttribute("loggedUser")
@@ -94,7 +99,7 @@ public class AbilityProductController {
         List<StateCapacity > stateCapacities = currentPlayer.getHeroes().stream().flatMap(hero -> hero.getHero()
             .getCapacities().stream().map(Capacity::getStateCapacity)).collect(Collectors.toList());
         if (!stateCapacities.contains(StateCapacity.EXPERTISE))
-            session.setAttribute("deleteCard", true);
+            cacheManager.setHasToBeDeletedAbility(session);
         return PAGE_HERO_ATTACK;
     }
 
@@ -106,10 +111,9 @@ public class AbilityProductController {
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
         // Elimina una herida.
-        if (currentPlayer.getWounds() > 0)
-            currentPlayer.setWounds(currentPlayer.getWounds() - 1);
+        playerService.decreaseWounds(currentPlayer, 1);
         // Eliminamos la carta.
-        session.setAttribute("deleteCard", true);
+        cacheManager.setHasToBeDeletedAbility(session);
         return PAGE_HERO_ATTACK;
     }
 
@@ -121,7 +125,7 @@ public class AbilityProductController {
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
         // Añadimos el daño por piedra amolar.
-        session.setAttribute("sharpeningStone", 1);
+        cacheManager.setSharpeningStone(session);
         return PAGE_HERO_ATTACK;
     }
 
@@ -145,12 +149,8 @@ public class AbilityProductController {
             return PAGE_HERO_ATTACK;
         // Roba 3 cartas.
         Deck deck = currentPlayer.getDeck();
-        for (var i = 0; i < 3; i++) {
-            AbilityInGame abilityInGame = deck.getInDeck().get(0);
-            deck.getInDeck().remove(abilityInGame);
-            deck.getInHand().add(abilityInGame);
-        }
-        playerService.savePlayer(currentPlayer);
+        for (var i = 0; i < 3; i++)
+            deckService.saveDeck(deck);
         return PAGE_HERO_ATTACK;
     }
 
@@ -161,10 +161,8 @@ public class AbilityProductController {
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
-        EnemyInGame enemyInGame = (EnemyInGame) session.getAttribute("attackedEnemy");
-        enemyInGame.setNoAttackThisTurn(true);
-        enemyService.saveEnemyInGame(enemyInGame);
-        // El enemigo selecionado no causa daño este turno.
+        // El enemigo seleccionado no causa daño este turno.
+        cacheManager.addPreventDamageFromEnemies(session);
         return PAGE_HERO_ATTACK;
     }
 
@@ -177,12 +175,8 @@ public class AbilityProductController {
             return PAGE_HERO_ATTACK;
         // Recupera 4 cartas.
         Deck deck = currentPlayer.getDeck();
-        for (var i = 0; i < 4; i++) {
-            AbilityInGame abilityInGame = deck.getInDiscard().get(0);
-            deck.getInDiscard().remove(abilityInGame);
-            deck.getInHand().add(abilityInGame);
-        }
-        playerService.savePlayer(currentPlayer);
+        for (var i = 0; i < 4; i++)
+            deckService.retrievesACard(deck);
         return PAGE_HERO_ATTACK;
     }
 

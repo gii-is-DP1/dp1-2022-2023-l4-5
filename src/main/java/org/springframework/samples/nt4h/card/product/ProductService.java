@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class ProductService {
             .flatMap(heroInGame -> heroInGame.getHero().getCapacities().stream().map(Capacity::getStateCapacity))
             .collect(Collectors.toList());
         List<StateCapacity> capacitiesNeeded = productInGame.getProduct().getCapacity().stream().map(Capacity::getStateCapacity).collect(Collectors.toList());
-        if (!capacitiesNeeded.containsAll(stateCapacities))
+        if (!new HashSet<>(capacitiesNeeded).containsAll(stateCapacities))
             throw new CapacitiesRequiredException();
         if (Objects.requireNonNull(selectedProduct.getStateProduct()) == StateProduct.IN_SALE) {
             if (player.getStatistic().getGold() < selectedProduct.getProduct().getPrice())
@@ -126,5 +127,4 @@ public class ProductService {
                 }
             ));
     }
-
 }

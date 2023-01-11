@@ -1,8 +1,7 @@
 package org.springframework.samples.nt4h.card.enemy;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.action.InflictWounds;
-import org.springframework.samples.nt4h.action.RemoveCardForEnemyAttack;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.player.Player;
@@ -21,11 +20,12 @@ public class EnemyService {
     private final EnemyInGameRepository enemyInGameRepository;
     private final EnemyRepository enemyRepository;
     private final PlayerService playerService;
+    private final DeckService deckService;
 
     // EnemyInGame
-    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
+    @Transactional(readOnly = true)
     public EnemyInGame getEnemyInGameById(int id) {
-        return enemyInGameRepository.findById(id).orElseThrow(() -> new NotFoundException("EnemyInGame not found"));
+        return enemyInGameRepository.findById(id).orElse(new EnemyInGame());
     }
 
     @Transactional(readOnly = true)
@@ -78,7 +78,7 @@ public class EnemyService {
 
     @Transactional
     public List<EnemyInGame> addOrcsToGame(Integer numPlayers) {
-        Integer limitEnemies = 19;
+        int limitEnemies = 19;
         if(numPlayers == 2) limitEnemies = 19;
         else if(numPlayers == 3) limitEnemies = 23;
         else if(numPlayers == 4) limitEnemies = 27;
@@ -106,22 +106,26 @@ public class EnemyService {
         int numCardsInDeck = currentPlayer.getDeck().getInDeck().size();
         int damage = game.getActualOrcs().stream().mapToInt(EnemyInGame::getActualHealth).sum();
         if (numCardsInDeck <= damage) { //si el daño es mayor o igual a la cantidad de cartass quue tengo pues recibo la herida
-            new InflictWounds(currentPlayer).executeAction();  //Recibe herida
+            playerService.inflictWounds(currentPlayer, damage - numCardsInDeck, game);
             if (Objects.equals(currentPlayer.getWounds(), currentPlayer.getHealth())) {
                 game.getPlayers().remove(currentPlayer);  // de momento sales de la partida, mas adelante cambia a vista espectador
                 playerService.deletePlayer(currentPlayer);
                 return damage;
             }
-        } else {
-            new RemoveCardForEnemyAttack(currentPlayer, damage).executeAction(); //no recibe herida
-        }
-        playerService.savePlayer(currentPlayer);
+        } else
+            deckService.retrievesCards(currentPlayer.getDeck(), damage);
         return damage;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Enemy getEnemyById(int id) {
         return enemyRepository.findById(id).orElseThrow(() -> new NotFoundException("Enemy not found"));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void increaseLife(EnemyInGame enemy) {
+        enemy.setActualHealth(enemy.getActualHealth() + 1);
+        saveEnemyInGame(enemy);
     }
 
 }

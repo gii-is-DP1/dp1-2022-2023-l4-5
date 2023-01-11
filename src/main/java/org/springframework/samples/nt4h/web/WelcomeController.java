@@ -15,8 +15,11 @@ import java.util.Map;
 @Controller
 public class WelcomeController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public WelcomeController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping({"/", "/welcome"})
     public String welcome(Map<String, Object> model) {

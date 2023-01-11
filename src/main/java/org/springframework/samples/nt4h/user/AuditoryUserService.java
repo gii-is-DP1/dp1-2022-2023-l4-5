@@ -23,9 +23,4 @@ public class AuditoryUserService {
         return userRepository.findAll();
     }
 
- //   @Transactional(readOnly = true)
-   // public AuditoryUser getUserByUsername(String username) {
-    //    return auditoryUserRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
-    //}
-
 }

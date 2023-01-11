@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityRepository;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/reestablishment")
@@ -92,7 +90,7 @@ public class ReestablishmentController {
 
 
     @GetMapping
-    public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) throws NoCurrentPlayer {
+    public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         advise.keepUrl(session, request);
@@ -108,7 +106,7 @@ public class ReestablishmentController {
     }
 
     @PostMapping
-    public String discardAbility(Turn turn) throws NoCurrentPlayer, TooManyAbilitiesException {
+    public String discardAbility(Turn turn) throws NoCurrentPlayer {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         if (getLoggedPlayer() != currentPlayer)
@@ -117,7 +115,7 @@ public class ReestablishmentController {
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId());
         oldTurn.addAbility(currentAbility);
         turnService.saveTurn(oldTurn);
-        deckService.removeAbilityCards(currentAbility.getId(), currentPlayer);
+        deckService.loseTheCard(currentPlayer.getDeck(), currentAbility);
         advise.discardAbilityInHand(currentAbility, game);
         return PAGE_REESTABLISHMENT;
     }
@@ -128,14 +126,8 @@ public class ReestablishmentController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer == currentPlayer) {
-            if (currentPlayer.getDeck().getInHand().size() > 4)
-                throw new TooManyAbilitiesException();
-            List<Player> players = game.getPlayers();
-
-            advise.addAbilityInHand(deckService.takeNewCard(currentPlayer), game);
-            int totalPlayers = players.size();
-            Integer nextSequence = (currentPlayer.getSequence()+1) % totalPlayers;
-            Player nextPlayer = players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).findFirst().get();
+            advise.addAbilityInHand(deckService.moveCardsFromDeckToHand(currentPlayer.getDeck()), game);
+            Player nextPlayer = game.getNextPlayer();
             game.setCurrentPlayer(nextPlayer);
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));
             gameService.saveGame(game);

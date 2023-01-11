@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-// TODO: @Slf4j
 public interface AchievementRepository extends CrudRepository<Achievement, Integer> {
 
     // TODO: @Cacheable permite guardar info.

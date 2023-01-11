@@ -26,12 +26,10 @@ import javax.servlet.http.HttpSession;
 @ControllerAdvice
 public class ExceptionHandlerConfiguration
 {
-	@Autowired
 	private BasicErrorController errorController;
     // add any exceptions/validations/binding problems
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String PAGE_GAME_LOBBY = "redirect:/games/current";
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/heroSelect";
@@ -39,6 +37,16 @@ public class ExceptionHandlerConfiguration
     private static final String PAGE_MARKET = "redirect:/market";
     private static final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
+
+    public ExceptionHandlerConfiguration(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public ExceptionHandlerConfiguration(BasicErrorController errorController, UserService userService) {
+        this.errorController = errorController;
+        this.userService = userService;
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException() {

@@ -3,11 +3,13 @@ package org.springframework.samples.nt4h.card.hero;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
-import org.springframework.samples.nt4h.statistic.Statistic;
+import org.springframework.samples.nt4h.statistic.StatisticService;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import java.util.Optional;
 
 /**
  * Las habilidades de explorador son:
@@ -45,13 +45,19 @@ public class AbilityExplorerController {
     private final PlayerService playerService;
     private final TurnService turnService;
     private final GameService gameService;
+    private final CacheManager cacheManager;
+    private final DeckService deckService;
+    private final StatisticService statisticService;
 
-    public AbilityExplorerController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService) {
+    public AbilityExplorerController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, CacheManager cacheManager, DeckService deckService, StatisticService statisticService) {
         this.userService = userService;
         this.abilityService = abilityService;
         this.playerService = playerService;
         this.turnService = turnService;
         this.gameService = gameService;
+        this.cacheManager = cacheManager;
+        this.deckService = deckService;
+        this.statisticService = statisticService;
     }
 
     @ModelAttribute("loggedUser")
@@ -69,25 +75,20 @@ public class AbilityExplorerController {
         return getGame().getCurrentPlayer();
     }
 
-    @ModelAttribute("logggedPlayer")
+    @ModelAttribute("loggedPlayer")
     public Player getLoggedPlayer() {
         return getLoggedUser().getPlayer();
     }
 
     // Compañero lobo.
     @GetMapping("/fellowWolf/{cardId}")
-    private String fellowWolf(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    private String fellowWolf(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
-        // Debería de ser un efecto
-        // TODO: comprobar que el id es correcto.
         // Aumenta el valor de la defensa en dos.
-        if (session.getAttribute("defend") == null)
-            session.setAttribute("defend", 2);
-        else
-            session.setAttribute("defend", (int) session.getAttribute("defend") + 2);
+        cacheManager.setDefend(session, 2);
         return PAGE_HERO_ATTACK;
     }
 
@@ -100,10 +101,7 @@ public class AbilityExplorerController {
             return PAGE_HERO_ATTACK;
         // Debería de ser un efecto
         // Pierde una carta.
-        AbilityInGame abilityInGame = abilityService.getAbilityInGameById(cardId);
-        Deck deck = currentPlayer.getDeck();
-        deck.discardCardOnHand(abilityInGame);
-        playerService.savePlayer(currentPlayer);
+        deckService.loseACard(currentPlayer.getDeck());
         // Finaliza el ataque.
         return PAGE_HERO_ATTACK + "/next";
     }
@@ -119,24 +117,16 @@ public class AbilityExplorerController {
         // Tomo una primera carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
-        //deck.getInDeck().remove(abilityInGame);
-        //deck.getInHand().add(abilityInGame);
-        // Mientras la carta sea disparo rápido.
         while (abilityInGame.getAbility().getName().equals("Disparo rápido")) {
             // Añade el daño.
-            if (session.getAttribute("attack") == null)
-                session.setAttribute("attack", abilityInGame.getAttack());
-            else
-                session.setAttribute("attack", (int) session.getAttribute("attack") + abilityInGame.getAttack());
+            cacheManager.addAttack(session, abilityInGame.getAbility().getAttack());
             // Elimina la carta.
-            deck.getInDeck().remove(abilityInGame);
-            deck.getInDiscard().add(abilityInGame);
+            deckService.loseTheCard(deck, abilityInGame);
             // Tomo una nueva carta.
             abilityInGame = deck.getInDeck().get(0);
         }
         // Coloco la carta al fondo del deck.
-        deck.getInDeck().remove(abilityInGame);
-        deck.getInDeck().add(abilityInGame); // TODO: COmprobar si lo añade al fondo.
+        deckService.putFirstCardAtBottomOfDeck(deck);
         playerService.savePlayer(currentPlayer);
         return PAGE_HERO_ATTACK;
     }
@@ -150,13 +140,9 @@ public class AbilityExplorerController {
             return PAGE_HERO_ATTACK;
         // Debería de ser un efecto
         // Gana una ficha de gloria.
-        Statistic statistics = currentPlayer.getStatistic();
-        statistics.setGlory(statistics.getGlory() + 1);
+        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
         // Pierde una carta.
-        Deck deck = currentPlayer.getDeck();
-        AbilityInGame abilityInGame = deck.getInDeck().get(0);
-        deck.getInDeck().remove(abilityInGame);
-        deck.getInDiscard().add(abilityInGame);
+        deckService.loseACard(currentPlayer.getDeck());
         playerService.savePlayer(currentPlayer);
         return PAGE_HERO_ATTACK;
     }
@@ -181,20 +167,11 @@ public class AbilityExplorerController {
         if (currentPlayer != loggedPlayer)
             return PAGE_HERO_ATTACK;
         // Debería de ser un efecto
-        // Recupera una carta de diparo rápido de la pila de descarte.
+        // Recupera una carta de disparo rápido de la pila de descarte.
         Deck deck = currentPlayer.getDeck();
-        Optional<AbilityInGame> abilityInGame = deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo rápido")).findFirst();
-        if (abilityInGame.isPresent()) {
-            deck.getInDiscard().remove(abilityInGame.get());
-            deck.getInDeck().add(abilityInGame.get());
-            // Baraja.
-            Collections.shuffle(deck.getInDeck());
-
-        }
+        deck.getInDiscard().stream().anyMatch(a -> a.getAbility().getName().equals("Disparo rápido"));
         // Gana una moneda.
-        Statistic statistics = currentPlayer.getStatistic();
-        statistics.setGold(statistics.getGold() + 1);
-        playerService.savePlayer(currentPlayer);
+        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
         return PAGE_HERO_ATTACK;
     }
 

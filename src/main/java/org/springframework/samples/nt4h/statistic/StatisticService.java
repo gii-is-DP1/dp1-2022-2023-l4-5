@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.statistic;
 
-import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
+import org.javatuples.Quartet;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserRepository;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.ToIntFunction;
 
 @Service
 @AllArgsConstructor
@@ -54,11 +55,6 @@ public class StatisticService {
     public Integer getNumMinutesPlayedByUser(int userId) { return statisticRepository.numMinutesPlayedByUserId(userId); }
 
     @Transactional
-    public List<Integer> getNumGamesByAllNumPlayers() {
-        return Lists.newArrayList(2,3,4);
-    }
-
-    @Transactional
     public Integer getNumGamesByNumPlayers(int numP){
         return statisticRepository.numPlayerPerGame(numP);
     }
@@ -81,132 +77,113 @@ public class StatisticService {
     @Transactional
     public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.NumWonGamesByPlayerId(userId);}
 
-
-    //---------------------------------------------------------------------------------
     @Transactional
-    public Integer getMaxNumPlayedGames() {
-        return listAllUsers().stream().mapToInt(user -> getNumGamesByUser(user.getId())).max().orElse(0);
-    }
-
-    @Transactional
-    public Integer getMinNumPlayedGames() {
-        return listAllUsers().stream().mapToInt(user -> getNumGamesByUser(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-
-    @Transactional
-    public double getAverageNumPlayedGames() {
-        return listAllUsers().stream().mapToInt(user ->  getNumGamesByUser(user.getId())).average().orElse(0);
-    }
-
-    @Transactional
-    public Integer getMaxNumMinutesPlayed() {
-        return listAllUsers().stream().mapToInt(user -> getNumMinutesPlayedByUser(user.getId())).max().orElse(0);
-    }
-    @Transactional
-    public Integer getMinNumMinutesPlayed() {
-        return listAllUsers().stream().mapToInt(user -> getNumMinutesPlayedByUser(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-    @Transactional
-    public double getAverageNumMinutesPlayed() {
-        return listAllUsers().stream().mapToInt(user -> getNumMinutesPlayedByUser(user.getId())).average().orElse(0);
-    }
-
-    @Transactional
-    public Integer getMaxNumGamesByNumPlayers(){
-        return Collections.max(getNumGamesByAllNumPlayers());
-    }
-
-    @Transactional
-    public Integer getMinNumGamesByNumPlayers(){
-        return getNumGamesByAllNumPlayers().stream().filter(i -> i > 0).min(Comparator.naturalOrder()).orElse(0);
-    }
-
-    @Transactional
-    public double getAverageNumGamesByNumPlayers(){
-        return getNumGamesByAllNumPlayers().stream().mapToInt(i -> i).average().orElse(0);
-    }
-
-    @Transactional
-    public int getMaxGoldByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumGoldByNumPlayers(user.getId())).max().orElse(0);
-    }
-
-    @Transactional
-    public int getMinGoldByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumGoldByNumPlayers(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-    @Transactional
-    public double getAverageGoldByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumGoldByNumPlayers(user.getId())).average().orElse(0);
-    }
-
-    @Transactional
-    public int getMaxGloryByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumGloryByNumPlayers(user.getId())).max().orElse(0);
-    }
-
-    @Transactional
-    public int getMinGloryByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumGloryByNumPlayers(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-    @Transactional
-    public double getAverageGloryByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumGloryByNumPlayers(user.getId())).average().orElse(0);
-    }
-
-    @Transactional
-    public int getMaxOrcsByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumOrcsByNumPlayers(user.getId())).max().orElse(0);
-    }
-
-    @Transactional
-    public int getMinOrcsByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumOrcsByNumPlayers(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-    @Transactional
-    public double getAverageOrcsByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumOrcsByNumPlayers(user.getId())).average().orElse(0);
-    }
-
-    @Transactional
-    public int getMaxWarLordByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumWarLordByNumPlayers(user.getId())).max().orElse(0);
-    }
-    @Transactional
-    public int getMinWarLordByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumWarLordByNumPlayers(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-    @Transactional
-    public double getAverageWarLordByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getNumWarLordByNumPlayers(user.getId())).average().orElse(0);
-    }
-
-    @Transactional
-    public int getMaxDamageByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getDamageByNumPlayers(user.getId())).max().orElse(0);
-    }
-
-    @Transactional
-    public int getMinDamageByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getDamageByNumPlayers(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-    @Transactional
-    public double getAverageDamage() {
-        return listAllUsers().stream().mapToInt(user -> getDamageByNumPlayers(user.getId())).average().orElse(0);
-    }
-
-    @Transactional
-    public int getMaxWonGamesByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getWonGamesByNumPlayers(user.getId())).max().orElse(0);
-    }
-
-    @Transactional
-    public int getMinWonGamesByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getWonGamesByNumPlayers(user.getId())).filter(i -> i > 0).min().orElse(0);
-    }
-    @Transactional
-    public double getAverageWonGamesByPlayer() {
-        return listAllUsers().stream().mapToInt(user -> getWonGamesByNumPlayers(user.getId())).average().orElse(0);
-    }
     public List<User> listAllUsers() {return userRepository.findAll(); }
+
+    // Nuevo
+
+    @Transactional
+    public int getMin(ToIntFunction< User> function) {
+        return listAllUsers().stream().mapToInt(function).filter(i -> i > 0).min().orElse(0);
+    }
+
+    @Transactional
+    public int getMax(ToIntFunction< User> function) {
+        return listAllUsers().stream().mapToInt(function).max().orElse(0);
+    }
+
+    @Transactional
+    public double getAverage(ToIntFunction<User> function) {
+        return listAllUsers().stream().mapToInt(function).average().orElse(0);
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumPlayedGame() {
+        ToIntFunction<User> function = user -> getNumGamesByNumPlayers(user.getId());
+        return new Quartet<>("Most Played Game",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumMinutesPlayed() {
+        ToIntFunction<User> function = user -> getNumMinutesPlayedByUser(user.getId());
+        return new Quartet<>("Most Played Game",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumGold() {
+        ToIntFunction<User> function = user -> getNumGoldByNumPlayers(user.getId());
+        return new Quartet<>("Most Gold",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumGlory() {
+        ToIntFunction<User> function = user -> getNumGloryByNumPlayers(user.getId());
+        return new Quartet<>("Most Glory",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumOrcs() {
+        ToIntFunction<User> function = user -> getNumOrcsByNumPlayers(user.getId());
+        return new Quartet<>("Most Orcs",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumWarLord() {
+        ToIntFunction<User> function = user -> getNumWarLordByNumPlayers(user.getId());
+        return new Quartet<>("Most WarLord",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumDamage() {
+        ToIntFunction<User> function = user -> getDamageByNumPlayers(user.getId());
+        return new Quartet<>("Most Damage",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public Quartet<String, Double, Integer, Integer> getStatisticNumWonGames() {
+        ToIntFunction<User> function = user -> getWonGamesByNumPlayers(user.getId());
+        return new Quartet<>("Most Won Games",getAverage(function), getMin(function), getMax(function));
+    }
+
+    @Transactional
+    public List<Quartet<String, Double, Integer, Integer>> getStatistics() {
+        List<Quartet<String, Double, Integer, Integer>> statistics = new ArrayList<>();
+        statistics.add(getStatisticNumPlayedGame());
+        statistics.add(getStatisticNumMinutesPlayed());
+        statistics.add(getStatisticNumGold());
+        statistics.add(getStatisticNumGlory());
+        statistics.add(getStatisticNumOrcs());
+        statistics.add(getStatisticNumWarLord());
+        statistics.add(getStatisticNumDamage());
+        statistics.add(getStatisticNumWonGames());
+        return statistics;
+    }
+
+    @Transactional
+    public void gainGlory(Statistic statistic, Integer glory) {
+        statistic.setGlory(statistic.getGlory() + glory);
+        saveStatistic(statistic);
+    }
+
+    @Transactional
+    public void gainGold(Statistic statistic, Integer gold) {
+        statistic.setGold(statistic.getGold() + gold);
+        saveStatistic(statistic);
+    }
+
+    @Transactional
+    public void looseGold(Statistic statistic, Integer gold) {
+        statistic.setGold(Math.max(statistic.getGold() - gold, 0));
+        saveStatistic(statistic);
+    }
+
+    @Transactional
+    public void looseGlory(Statistic statistic, Integer glory) {
+        statistic.setGlory(Math.max(statistic.getGlory() - glory, 0));
+        saveStatistic(statistic);
+    }
+
+
+
+
 }

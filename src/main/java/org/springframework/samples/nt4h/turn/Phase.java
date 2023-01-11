@@ -1,4 +1,4 @@
-package org.springframework.samples.nt4h.action;
+package org.springframework.samples.nt4h.turn;
 
 public enum Phase {
     START,

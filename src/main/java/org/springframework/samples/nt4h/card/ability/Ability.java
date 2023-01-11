@@ -31,6 +31,6 @@ public class Ability extends Card {
     @Min(1)
     private Integer quantity;
 
-    @Enumerated(EnumType.STRING)
-    private AbilityEffect abilityEffect;
+    @NotNull
+    private String pathName;
 }

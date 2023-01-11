@@ -12,10 +12,14 @@ import java.time.LocalDateTime;
 public class AuditoryGameController {
 
 
+    private final AuditoryGameService auditoryGameService;
+    private final UserService userService;
+
     @Autowired
-    AuditoryGameService auditoryGameService;
-    @Autowired
-    UserService userService;
+    public AuditoryGameController(AuditoryGameService auditoryGameService, UserService userService) {
+        this.auditoryGameService = auditoryGameService;
+        this.userService = userService;
+    }
 
     @GetMapping("AuditoryGame/get")
     public @ResponseBody AuditoryGame createAuditoryGame(){

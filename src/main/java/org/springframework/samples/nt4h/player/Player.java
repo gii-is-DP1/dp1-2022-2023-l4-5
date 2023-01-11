@@ -5,7 +5,7 @@ import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.nt4h.action.Phase;
+import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.Role;
@@ -50,6 +50,8 @@ public class Player extends NamedEntity implements Jsonable {
 
     private Integer damageProtect;
 
+    private Boolean alive;
+
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
 
@@ -70,6 +72,7 @@ public class Player extends NamedEntity implements Jsonable {
                 .birthDate(user.getBirthDate())
                 .host(host)
                 .game(game)
+                .alive(true)
                 .build();
         player.defaultPlayer();
         player.setName(user.getUsername());

@@ -81,10 +81,10 @@ public class EndController {
             Integer glory = player.getStatistic().getGlory();
             Integer kills = player.getStatistic().getNumOrcsKilled() + player.getStatistic().getNumWarLordKilled();
             Integer total = gold + glory + kills;
-            pairs.add(new Pair(player, total));
+            pairs.add(new Pair<>(player, total));
         }
         pairs.sort((o1, o2) -> o2.getValue1().compareTo(o1.getValue1()));
-        model.addAttribute("puntuations", pairs);
+        model.addAttribute("punctuations", pairs);
         return VIEW_END;
     }
 

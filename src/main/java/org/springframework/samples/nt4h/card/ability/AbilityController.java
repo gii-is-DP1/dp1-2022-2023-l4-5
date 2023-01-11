@@ -53,6 +53,11 @@ public class AbilityController {
         return getGame().getCurrentPlayer();
     }
 
+    @ModelAttribute("loggedPlayer")
+    public Player getLoggedPlayer() {
+        return getLoggedUser().getPlayer();
+    }
+
     @PostMapping("/loseCard")
     private String loseCard(Turn turn) {
         Player currentPlayer = getCurrentPlayer();
@@ -139,5 +144,15 @@ public class AbilityController {
         productService.saveProductInGame(inSale);
         productService.saveProductInGame(inMarket);
         return PAGE_HERO_ATTACK;
+    }
+
+    @GetMapping("/{cardId}")
+    private String findEffect(@PathVariable("cardId") Integer cardId) {
+        Player currentPlayer = getCurrentPlayer();
+        Player loggedPlayer = getLoggedPlayer();
+        if (currentPlayer != loggedPlayer)
+            return PAGE_HERO_ATTACK;
+        AbilityInGame abilityInGame = abilityService.getAbilityInGameById(cardId);
+        return "/abilities/" + abilityInGame.getAbility().getPathName();
     }
 }
