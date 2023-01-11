@@ -90,8 +90,9 @@ public class PlayerService {
         List<Ability> totalAbilities = Lists.newArrayList();
         Deck deck = player.getDeck();
         for (var ability : abilities)
-            for (int i = 0; i < ability.getQuantity(); i++)
+            for (int i = 0; i < ability.getQuantity(); i++) {
                 totalAbilities.add(ability);
+            }
         Collections.shuffle(totalAbilities);
         for (int i = 0;(limit == null || i < limit) && i < totalAbilities.size(); i++) {
             Ability ability = totalAbilities.get(i);
