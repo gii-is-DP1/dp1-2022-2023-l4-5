@@ -7,8 +7,6 @@
 <nt4h:layout pageName="users">
 
     <h2>User Information</h2>
-
-
     <table class="table table-striped">
         <tr>
             <th>UserName</th>
@@ -36,15 +34,12 @@
         </tr>
     </table>
 
-    <spring:url value="/users/edit" var="editUrl">
-
-    </spring:url>
+    <spring:url value="/users/edit" var="editUrl"></spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit User</a>
-    <spring:url value="/" var="goToLobby">
-    </spring:url>
-    <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Menu</a>
-    <spring:url value="/statistics" var="Statistics">
 
-    </spring:url>
+    <spring:url value="/" var="goToLobby"></spring:url>
+    <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Menu</a>
+
+    <spring:url value="/statistics" var="Statistics"></spring:url>
     <a href="${fn:escapeXml(Statistics)}" class="btn btn-default">Go to Statistics</a>
 </nt4h:layout>

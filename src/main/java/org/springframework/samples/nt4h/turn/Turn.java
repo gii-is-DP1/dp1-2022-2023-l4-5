@@ -4,7 +4,6 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
@@ -93,7 +92,7 @@ public class Turn extends BaseEntity implements Jsonable {
     }
 
     @Override
-    public void toJson(Writer writer) throws IOException {
+    public void toJson(Writer writer) {
         try {
             writer.write(toJson());
         } catch (IOException e) {

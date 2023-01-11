@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.turn;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.message.Message;

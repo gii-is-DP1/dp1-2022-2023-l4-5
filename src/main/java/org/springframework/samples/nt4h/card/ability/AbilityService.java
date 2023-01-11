@@ -3,7 +3,6 @@ package org.springframework.samples.nt4h.card.ability;
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
-import org.springframework.samples.nt4h.player.Player;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,11 +68,6 @@ public class AbilityService {
     public void deleteAbilityInGameById(Integer id) {
         AbilityInGame abilityInGame = getAbilityInGameById(id);
         deleteAbilityInGame(abilityInGame);
-    }
-
-    @Transactional
-    public void deleteAllAbilityInGameByPlayer(Player player) {
-        abilityInGameRepository.deleteAllByPlayer(player);
     }
 
     @Transactional

@@ -4,7 +4,6 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 import com.google.common.collect.Lists;
 import lombok.*;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
@@ -23,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -125,10 +125,14 @@ public class Game extends NamedEntity implements Jsonable {
     }
 
     public void onDeleteSetNull() {
-        System.out.println("num players: " + players.size());
-        players.forEach(player -> System.out.println(player.getGame()));
         players.forEach(Player::onDeleteSetNull);
         allOrcsInGame.forEach(EnemyInGame::onDeleteSetNull);
+    }
+
+    public Player getNextPlayer() {
+        int totalPlayers = players.size();
+        Integer nextSequence = (currentPlayer.getSequence()+1) % totalPlayers;
+        return players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).findFirst().get();
     }
 
     @Override

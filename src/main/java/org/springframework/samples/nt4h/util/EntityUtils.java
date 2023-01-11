@@ -16,10 +16,10 @@
 
 package org.springframework.samples.nt4h.util;
 
-import java.util.Collection;
-
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.nt4h.model.BaseEntity;
+
+import java.util.Collection;
 
 /**
  * Utility methods for handling entities. Separate from the BaseEntity class mainly

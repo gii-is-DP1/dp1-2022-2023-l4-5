@@ -7,7 +7,10 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.card.Card;
 import org.springframework.samples.nt4h.card.hero.Role;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -28,6 +31,6 @@ public class Ability extends Card {
     @Min(1)
     private Integer quantity;
 
-    @Enumerated(EnumType.STRING)
-    private AbilityEffect abilityEffect;
+    @NotNull
+    private String pathName;
 }

@@ -1,8 +1,8 @@
 package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.action.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.AbilityRepository;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/reestablishment")
@@ -44,10 +43,12 @@ public class ReestablishmentController {
     private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String NEXT_TURN = "redirect:/turns";
     private boolean hasAddedEnemies = false;
+    private final AbilityRepository abilityRepository;
 
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise, AbilityService abilityService) {
+    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise, AbilityService abilityService,
+                                     AbilityRepository abilityRepository) {
         this.playerService = playerService;
         this.userService = userService;
         this.deckService = deckService;
@@ -55,6 +56,7 @@ public class ReestablishmentController {
         this.turnService = turnService;
         this.advise = advise;
         this.abilityService = abilityService;
+        this.abilityRepository = abilityRepository;
     }
 
     @ModelAttribute("loggedUser")
@@ -73,7 +75,7 @@ public class ReestablishmentController {
         return getGame().getCurrentPlayer();
     }
 
-    @ModelAttribute("turn")
+    @ModelAttribute("newTurn")
     public Turn getTurn() { return new Turn(); }
 
     @ModelAttribute("game")
@@ -88,7 +90,7 @@ public class ReestablishmentController {
 
 
     @GetMapping
-    public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) throws NoCurrentPlayer {
+    public String reestablishmentAddCards(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
         Player currentPlayer = getCurrentPlayer();
         advise.keepUrl(session, request);
@@ -98,6 +100,7 @@ public class ReestablishmentController {
             List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game);
             advise.addEnemies(added, game);
             hasAddedEnemies = true;
+            playerService.savePlayer(currentPlayer);
         }
         return VIEW_REESTABLISHMENT;
     }
@@ -112,7 +115,7 @@ public class ReestablishmentController {
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId());
         oldTurn.addAbility(currentAbility);
         turnService.saveTurn(oldTurn);
-        deckService.removeAbilityCards(currentAbility.getId(), currentPlayer);
+        deckService.loseTheCard(currentPlayer.getDeck(), currentAbility);
         advise.discardAbilityInHand(currentAbility, game);
         return PAGE_REESTABLISHMENT;
     }
@@ -123,14 +126,8 @@ public class ReestablishmentController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer == currentPlayer) {
-            if (currentPlayer.getDeck().getInHand().size() > 4)
-                throw new TooManyAbilitiesException();
-            List<Player> players = game.getPlayers();
-
-            advise.addAbilityInHand(deckService.takeNewCard(currentPlayer), game);
-            int totalPlayers = players.size();
-            Integer nextSequence = (currentPlayer.getSequence()+1) % totalPlayers;
-            Player nextPlayer = players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).findFirst().get();
+            advise.addAbilityInHand(deckService.moveCardsFromDeckToHand(currentPlayer.getDeck()), game);
+            Player nextPlayer = game.getNextPlayer();
             game.setCurrentPlayer(nextPlayer);
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));
             gameService.saveGame(game);
