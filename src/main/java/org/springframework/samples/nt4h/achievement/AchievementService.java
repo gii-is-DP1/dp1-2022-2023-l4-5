@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-// TODO: @Slf4j
 public class AchievementService {
     private final AchievementRepository achievementRepository;
 

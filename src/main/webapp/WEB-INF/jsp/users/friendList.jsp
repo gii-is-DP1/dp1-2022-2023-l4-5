@@ -32,14 +32,9 @@
                     <spring:url value="/user/{userId}" var="userUrl">
                         <spring:param name="userId" value="${localUser.id}"/>
                     </spring:url>
-                    <c:if test="${unread == 0}">
-                        <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username}"/></a>
-                    </c:if>
-                    <c:if test="${unread != 0}">
-                        <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username} "/><span class="badge">${unread}</span></a>
-                    </c:if>
-
-
+                    <c:set var="connected" value="${localUser.isConnected ? 'green' : 'red'}"/>
+                    <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username} "/><span class="badge"
+                                                                                                    style="color: ${connected};">${unread}</span></a>
                 </td>
                 <td>
                     <img src="${localUser.avatar}" alt="No image found" height="50rem" width="50rem"/>

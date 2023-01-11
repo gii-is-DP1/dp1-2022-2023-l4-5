@@ -138,7 +138,6 @@ public class GameController {
         model.put("isNext", gamePage.hasNext());
         model.put("games", gamePage.getContent());
         model.put("page", page);
-
         return VIEW_GAME_LIST;
     }
 
@@ -147,7 +146,6 @@ public class GameController {
     public String showCurrentGame(HttpSession session, HttpServletRequest request) {
         Game game = getGame();
         advise.keepUrl(session, request);
-        System.out.println(game.getSpectators());
         return game == null ? PAGE_GAMES : VIEW_GAME_LOBBY;
     }
 
@@ -168,11 +166,10 @@ public class GameController {
         User loggedUser = getUser();
 
         userService.addUserToGame(loggedUser, newGame, password);
-        gameService.addPlayerToGame(newGame, loggedUser); // Esto estaba antes en un post.
+        gameService.addPlayerToGame(newGame, loggedUser);
         advise.keepUrl(session, request);
         advise.getMessage(session, model);
-        model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
-        System.out.println("El jugador todavía no se ha unido, CUIODADO.");
+        model.put("numHeroes", newGame.isUniClass());
         return PAGE_CURRENT_GAME;
     }
 
@@ -190,7 +187,7 @@ public class GameController {
 
     // Analizamos la elección del héroe.
     @PostMapping(value = "/heroSelect")
-    public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
+    public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         Player loggedPlayer = getPlayer();
         Game game = getGame();
         gameService.addHeroToPlayer(loggedPlayer, heroInGame, game);
@@ -201,7 +198,7 @@ public class GameController {
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
     public String initCreationForm() throws UserInAGameException {
-        if (!getGame().isNew())
+        if (getGame().isNew())
             throw new UserInAGameException();
         return VIEW_GAME_CREATE;
     }
@@ -209,6 +206,7 @@ public class GameController {
     // Comprobamos si la partida es correcta y la almacenamos.
     @PostMapping(value = "/new")
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
+        System.out.println(result.getAllErrors());
         if (result.hasErrors()) return VIEW_GAME_CREATE;
         User loggedUser = userService.getLoggedUser();
         gameService.createGame(loggedUser, game);
@@ -216,7 +214,7 @@ public class GameController {
     }
 
     @GetMapping("/selectOrder")
-    public String orderPlayers(HttpSession session, HttpServletRequest request)  {
+    public String orderPlayers(HttpSession session, HttpServletRequest request) {
         User loggedUser = getUser();
         Game game = getGame();
         advise.keepUrl(session, request);
@@ -226,12 +224,11 @@ public class GameController {
 
     // Tiene que recibir las cartas de habilidad que desea utilizar el jugador, por tanto, se va a modificar entero.
     @PostMapping("/selectOrder")
-    public String processOrderPlayers(HttpSession session, HttpServletRequest request) throws FullGameException {
+    public String processOrderPlayers(HttpSession session, HttpServletRequest request) {
         List<Player> players = getPlayers();
         Game game = getGame();
         if (players.stream().anyMatch(player -> player.getSequence() == -1))
             gameService.orderPlayer(players, game);
-     //   gameService.addActualOrcs(game);
         advise.keepUrl(session, request);
         return VIEW_GAME_ORDER;
     }
@@ -249,7 +246,6 @@ public class GameController {
         }else{
             userService.removeUserFromGame(userService.getUserByUsername(playerService.getPlayerById(playerId).getName()));
             playerService.deletePlayerById(playerId);
-          //  return PAGE_GAMES;
             return PAGE_GAME_TO_LOBBY.replace("{gameId}", game.getId().toString());
         }
     }

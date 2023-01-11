@@ -1,9 +1,6 @@
 package org.springframework.samples.nt4h.user;
 
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.nt4h.game.AuditoryGame;
-import org.springframework.samples.nt4h.game.AuditoryGameService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,13 +13,17 @@ import java.util.List;
 @Controller
 public class AuditoryUserController {
 
-    @Autowired
-   AuditoryUserRepository auditoryUserRepository;
-    @Autowired
-    UserService userService;
-    AuditoryUserService auditoryUserService;
+    private final AuditoryUserRepository auditoryUserRepository;
+    final UserService userService;
 
-    List<AuditoryUser> users= new ArrayList<>();
+    final List<AuditoryUser> users= new ArrayList<>();
+
+    @Autowired
+    public AuditoryUserController(AuditoryUserRepository auditoryUserRepository, UserService userService) {
+        this.auditoryUserRepository = auditoryUserRepository;
+        this.userService = userService;
+    }
+
     @GetMapping("AuditoryUser/mod/{Id}")
     public @ResponseBody AuditoryUser modAuditoryUser(@PathVariable Integer Id) {
         if(!users.contains(userService.getUserById(Id).getId())){
@@ -33,7 +34,7 @@ public class AuditoryUserController {
             AU.setUserMod(userService.getUserById(Id));
             users.add(AU);
         }
-        AuditoryUser AU = users.stream().filter(u -> u.getUserMod().getId()==Id).findFirst().get();
+        AuditoryUser AU = users.stream().filter(u -> u.getUserMod().getId().equals(Id)).findFirst().get();
         AU.setNewCreator(userService.getLoggedUser().getUsername());
         AU.setModDate(LocalDateTime.now());
         AU.setUser(userService.getLoggedUser());

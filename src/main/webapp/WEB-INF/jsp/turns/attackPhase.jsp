@@ -6,7 +6,7 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="Hero Attack Action">
-    <h1>Turno del jugador ${game.currentPlayer}</h1>
+    <h1>${game.currentPlayer}`s Turn</h1>
     <style>
         .card-img-top {
             width: 100%;
@@ -48,6 +48,7 @@
                     <div class="pointer">
                         <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
                             <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
+
                             <div class="col-sm-2">
                                 <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}"
                                                   frontImage="${abilityInGame.ability.frontImage}" i="${i}1"

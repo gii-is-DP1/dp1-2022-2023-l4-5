@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,6 +41,7 @@ public class UserController {
     private static final String VIEW_USER_DETAILS = "users/userDetails";
     private static final String PAGE_WELCOME = "redirect:/welcome";
     private static final String PAGE_USER_DETAILS = "redirect:/users/details";
+    private static final String VIEW_USER_STATISTICS = "users/userStatistics";
 
     // Servicios.
     private final UserService userService;
@@ -56,10 +58,9 @@ public class UserController {
     }
 
     @ModelAttribute("loggedUser")
-    public User loggedUser() {
+    public User getLoggedUser() {
         return this.userService.getLoggedUser();
     }
-
 
     // Obtener todos los usuarios.
     @GetMapping
@@ -113,7 +114,7 @@ public class UserController {
             User newUser = user.toBuilder().enable(oldUser.getEnable()).tier(oldUser.getTier()).authority(oldUser.getAuthority()).build();
             newUser.setId(oldUser.getId());
             userService.saveUser(newUser);
-            return PAGE_USER_DETAILS.replace("{userId}", String.valueOf(user.getId()));
+            return PAGE_USER_DETAILS;
         }
     }
 
@@ -123,6 +124,13 @@ public class UserController {
         SecurityContextHolder.clearContext();
         this.userService.deleteUser(loggedUser);
         return PAGE_WELCOME;
+    }
+
+    @GetMapping("/statistics")
+    public String showUserStatistics(ModelMap model) {
+        Statistic userStatistic = getLoggedUser().getStatistic();
+        model.put("statistic", userStatistic);
+        return VIEW_USER_STATISTICS;
     }
 
 }
