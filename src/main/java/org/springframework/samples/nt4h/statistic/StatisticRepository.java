@@ -23,21 +23,21 @@ public interface StatisticRepository extends CrudRepository<Statistic, Integer> 
     Integer numPlayerPerGame(int numP);
 
     @Query("SELECT st.gold FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer NumGoldByPlayerId(int userId);
+    Integer numGoldByPlayerId(int userId);
 
     @Query("SELECT st.glory FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer NumGloryByPlayerId(int userId);
+    Integer numGloryByPlayerId(int userId);
 
     @Query("SELECT st.numOrcsKilled FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer NumOrcsByPlayerId(int userId);
+    Integer numOrcsByPlayerId(int userId);
 
     @Query("SELECT st.numWarLordKilled FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer NumWarLordByPlayerId(int userId);
+    Integer numWarLordByPlayerId(int userId);
 
     @Query("SELECT st.damageDealt FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer NumDamageByPlayerId(int userId);
+    Integer numDamageByPlayerId(int userId);
 
     @Query("SELECT st.numWonGames FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer NumWonGamesByPlayerId(int userId);
+    Integer numWonGamesByPlayerId(int userId);
 
 }

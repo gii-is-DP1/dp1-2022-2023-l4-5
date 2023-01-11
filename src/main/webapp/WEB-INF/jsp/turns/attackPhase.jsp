@@ -6,7 +6,7 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="Hero Attack Action">
-    <h1>Turno del jugador ${game.currentPlayer}</h1>
+    <h1>${game.currentPlayer}`s Turn</h1>
     <style>
         .card-img-top {
             width: 100%;

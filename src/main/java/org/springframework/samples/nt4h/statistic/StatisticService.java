@@ -1,5 +1,6 @@
 package org.springframework.samples.nt4h.statistic;
 
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.javatuples.Quartet;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.function.ToIntFunction;
 
 @Service
@@ -80,8 +83,6 @@ public class StatisticService {
     @Transactional
     public List<User> listAllUsers() {return userRepository.findAll(); }
 
-    // Nuevo
-
     @Transactional
     public int getMin(ToIntFunction< User> function) {
         return listAllUsers().stream().mapToInt(function).filter(i -> i > 0).min().orElse(0);
@@ -96,13 +97,11 @@ public class StatisticService {
     public double getAverage(ToIntFunction<User> function) {
         return listAllUsers().stream().mapToInt(function).average().orElse(0);
     }
-
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumPlayedGame() {
         ToIntFunction<User> function = user -> getNumGamesByNumPlayers(user.getId());
         return new Quartet<>("Most Played Game",getAverage(function), getMin(function), getMax(function));
     }
-
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumMinutesPlayed() {
         ToIntFunction<User> function = user -> getNumMinutesPlayedByUser(user.getId());
@@ -138,7 +137,6 @@ public class StatisticService {
         ToIntFunction<User> function = user -> getDamageByNumPlayers(user.getId());
         return new Quartet<>("Most Damage",getAverage(function), getMin(function), getMax(function));
     }
-
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumWonGames() {
         ToIntFunction<User> function = user -> getWonGamesByNumPlayers(user.getId());
@@ -158,32 +156,4 @@ public class StatisticService {
         statistics.add(getStatisticNumWonGames());
         return statistics;
     }
-
-    @Transactional
-    public void gainGlory(Statistic statistic, Integer glory) {
-        statistic.setGlory(statistic.getGlory() + glory);
-        saveStatistic(statistic);
-    }
-
-    @Transactional
-    public void gainGold(Statistic statistic, Integer gold) {
-        statistic.setGold(statistic.getGold() + gold);
-        saveStatistic(statistic);
-    }
-
-    @Transactional
-    public void looseGold(Statistic statistic, Integer gold) {
-        statistic.setGold(Math.max(statistic.getGold() - gold, 0));
-        saveStatistic(statistic);
-    }
-
-    @Transactional
-    public void looseGlory(Statistic statistic, Integer glory) {
-        statistic.setGlory(Math.max(statistic.getGlory() - glory, 0));
-        saveStatistic(statistic);
-    }
-
-
-
-
 }

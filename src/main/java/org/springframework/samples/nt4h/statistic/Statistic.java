@@ -42,13 +42,13 @@ public class Statistic extends BaseEntity {
     private Integer numPlayers;
 
     @Min(0)
-    private Integer damageDealt;
+    private Integer dealtDamage;
 
     @NotNull
     private TipoEnt tipoEnt;
 
     public static Statistic createStatistic() {
         return Statistic.builder().glory(0).gold(0).numWarLordKilled(0).numOrcsKilled(0)
-            .damageDealt(0).numPlayedGames(0).numWonGames(0).build();
+            .dealtDamage(0).numPlayedGames(0).numWonGames(0).build();
     }
 }
