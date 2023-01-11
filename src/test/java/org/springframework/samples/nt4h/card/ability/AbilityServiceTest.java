@@ -232,18 +232,6 @@ class AbilityServiceTest {
         verifyNoMoreInteractions(abilityInGameRepository);
     }
 
-    @Test
-    void deleteAllAbilityInGameByPlayer_deletesAllAbilityInGameByPlayer() {
-        // given
-        Player player = new Player();
-
-        // when
-        abilityService.deleteAllAbilityInGameByPlayer(player);
-
-        // then
-        verify(abilityInGameRepository).deleteAllByPlayer(player);
-        verifyNoMoreInteractions(abilityInGameRepository);
-    }
 
     @Test
     void deleteAllAbilityInGame_deletesAllAbilityInGame() {
