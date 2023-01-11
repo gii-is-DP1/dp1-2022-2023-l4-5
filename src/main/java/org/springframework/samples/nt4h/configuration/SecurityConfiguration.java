@@ -39,10 +39,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers(HttpMethod.GET, "/", "/oups", "/welcome").permitAll()
             .antMatchers("/users/new", "/session/**", "/resources/**", "/webjars/**", "/h2-console/**", "/checkin", "/checkout").permitAll()
-            .antMatchers("/admins/**", "/achievements/new", "/achievements/edit", "/achievements/delete", "/AuditoryUser/**").hasAnyAuthority("DOKTOL")
+            .antMatchers("/achievements/new", "/achievements/edit", "/achievements/delete", "/AuditoryUser/**").hasAnyAuthority("DOKTOL")
             .antMatchers("/achievements/**", "/games/**", "/users/**", "/cards/**",
                 "/friends/**", "/turns/**", "/evasion/**", "/messages/**", "/market/**", "/reestablishment/**",
-                "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**", "deletePlayer/**", "deleteGame/**", "/statistics/**","/allgames/**").authenticated()
+                "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**", "deletePlayer/**", "deleteGame/**", "/statistics/**","/admins/**").authenticated()
             .anyRequest().denyAll()
             .and()
             .formLogin()

@@ -43,7 +43,7 @@
                     </nt4h:menuItem>
                 </sec:authorize>
                 <sec:authorize access="isAuthenticated()">
-                    <nt4h:menuItem active="${name eq 'All Games'}" url="/allgames"
+                    <nt4h:menuItem active="${name eq 'All'}" url="/admins/all"
                                    title="All games">
                         <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
                         <span>All Games</span>

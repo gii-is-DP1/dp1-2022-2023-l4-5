@@ -6,7 +6,7 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 
-<nt4h:layout pageName="allgames">
+<nt4h:layout pageName="all">
     <h2>Games</h2>
     <table id="games" class="table table-striped">
         <thead>
@@ -33,15 +33,15 @@
                         <c:out value="${game.finishDate}"/>
                     </td>
                     <td>
-                        <c:forEach items="${game.players}" var="game">
-                        <c:if test="${game.players.host == true}">
+                        <c:forEach items="${game.players}" var="player">
+                        <c:if test="${player.host == true}">
                             <c:out value="${player}"/>
                         </c:if>
                         </c:forEach>
                     </td>
                     <td>
                         <c:forEach items="${game.players}" var="player">
-                            <c:if test="${game.players.host == false}">
+                            <c:if test="${player.host == false}">
                                 <c:out value="${player}"/>
                             </c:if>
                         </c:forEach>
