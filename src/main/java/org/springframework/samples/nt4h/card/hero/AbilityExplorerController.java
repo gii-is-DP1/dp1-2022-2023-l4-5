@@ -90,7 +90,7 @@ public class AbilityExplorerController {
             return PAGE_MAKE_DAMAGE;
         // Debería de ser un efecto
         // Pierde una carta.
-        deckService.loseACard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer.getDeck());
         // Finaliza el ataque.
         return PAGE_MAKE_DAMAGE + "/next";
     }
@@ -110,7 +110,7 @@ public class AbilityExplorerController {
             // Añade el daño.
             cacheManager.addAttack(session, abilityInGame.getAbility().getAttack());
             // Elimina la carta.
-            deckService.loseTheCard(deck, abilityInGame);
+            deckService.specificCardFromDeckToDiscard(deck, abilityInGame);
             // Tomo una nueva carta.
             abilityInGame = deck.getInDeck().get(0);
         }
@@ -131,7 +131,7 @@ public class AbilityExplorerController {
         // Gana una ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);
         // Pierde una carta.
-        deckService.loseACard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer.getDeck());
         playerService.savePlayer(currentPlayer);
         return PAGE_MAKE_DAMAGE;
     }

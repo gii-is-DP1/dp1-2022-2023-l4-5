@@ -80,7 +80,7 @@ public class AbilityNightLordController {
     @GetMapping("/gurdrug/{cardId}")
     public String gurdrug(@PathVariable("cardId") int cardId, HttpSession session) {
         Deck deck = getCurrentPlayer().getDeck();
-        deckService.loseACard(deck);
+        deckService.fromDeckToDiscard(deck);
         AbilityInGame currentAbility = abilityService.getAbilityInGameById(cardId);
         return "/abilities/" + currentAbility.getAbility().getRole() + "/" + currentAbility.getId();
     }
@@ -118,7 +118,7 @@ public class AbilityNightLordController {
         AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
         // Recupera una carta si el ataque es 1.
         if (ability.getAttack() == 1)
-            deckService.retrievesACard(currentPlayer.getDeck());
+            deckService.fromDiscardToDeck(currentPlayer.getDeck());
         // TODO: mejorar URL.
         return "/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
     }

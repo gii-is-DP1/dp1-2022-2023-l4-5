@@ -86,7 +86,7 @@ public class AbilityWizardController {
         // Pierde una carta por cada enemigo.
         Deck deck = currentPlayer.getDeck();
         for (var i = 0; i < getGame().getActualOrcs().size(); i++) {
-            deckService.loseACard(deck);
+            deckService.fromDeckToDiscard(deck);
         }
         playerService.savePlayer(currentPlayer);
         return PAGE_MAKE_DAMAGE;
@@ -106,7 +106,7 @@ public class AbilityWizardController {
         for (var i = 0; i < game.getPlayers().size(); i++) {
             Player player = game.getPlayers().get(i);
             if (player != currentPlayer) {
-                deckService.loseACard(player.getDeck());
+                deckService.fromDeckToDiscard(player.getDeck());
             }
         }
         return PAGE_MAKE_DAMAGE;
@@ -120,7 +120,7 @@ public class AbilityWizardController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Roba una carta.
-        deckService.retrievesACard(currentPlayer.getDeck());
+        deckService.fromDiscardToDeck(currentPlayer.getDeck());
         // Elegimos el enemigo que no va a realizar daño.
         cacheManager.addPreventDamageFromEnemies(session);
         return PAGE_MAKE_DAMAGE;
@@ -134,7 +134,7 @@ public class AbilityWizardController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
-        deckService.loseACard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer.getDeck());
         // Aumenta en 1 el daño hacia ese enemigo.
         cacheManager.addEnemiesThatReceiveMoreDamage(session);
         return PAGE_MAKE_DAMAGE;
@@ -165,7 +165,7 @@ public class AbilityWizardController {
         // Todos los héroes recuperan dos cartas.
         for (var i = 0; i < getGame().getPlayers().size(); i++) {
             for (var j = 0; j < 2; j++) {
-                deckService.retrievesACard(getGame().getPlayers().get(i).getDeck());
+                deckService.fromDiscardToDeck(getGame().getPlayers().get(i).getDeck());
             }
         }
         // Elimina 1 herida del héroe.
@@ -196,10 +196,10 @@ public class AbilityWizardController {
             return PAGE_MAKE_DAMAGE;
         Deck deck = currentPlayer.getDeck();
         // Roba 1 carta.
-        deckService.retrievesACard(deck);
+        deckService.fromDiscardToDeck(deck);
         // Recupera 2 cartas.
         for (var i = 0; i < 2; i++)
-            deckService.retrievesACard(deck);
+            deckService.fromDiscardToDeck(deck);
         return PAGE_MAKE_DAMAGE;
     }
 
@@ -214,7 +214,7 @@ public class AbilityWizardController {
         List<Player> otherPlayers = getGame().getPlayers().stream().filter(p -> p != currentPlayer).collect(Collectors.toList());
         for (var i = 0; i < otherPlayers.size(); i++) {
             Player player = otherPlayers.get(i);
-            deckService.retrievesACard(player.getDeck());
+            deckService.fromDiscardToDeck(player.getDeck());
         }
         // Gana 1 ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);

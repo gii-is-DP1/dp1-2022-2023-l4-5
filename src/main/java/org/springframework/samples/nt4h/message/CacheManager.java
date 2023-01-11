@@ -32,13 +32,10 @@ public class CacheManager extends BaseCacheManager {
     private final EnemyService enemyService;
 
 
-
     @Autowired
     public CacheManager(EnemyService enemyService) {
         this.enemyService = enemyService;
     }
-
-
 
 
     // Defensa.
