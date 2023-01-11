@@ -129,7 +129,7 @@ public class AbilityExplorerController {
             return PAGE_MAKE_DAMAGE;
         // Debería de ser un efecto
         // Gana una ficha de gloria.
-        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+        statisticService.gainGlory(currentPlayer, 1);
         // Pierde una carta.
         deckService.loseACard(currentPlayer.getDeck());
         playerService.savePlayer(currentPlayer);
@@ -160,7 +160,7 @@ public class AbilityExplorerController {
         Deck deck = currentPlayer.getDeck();
         deck.getInDiscard().stream().anyMatch(a -> a.getAbility().getName().equals("Disparo rápido"));
         // Gana una moneda.
-        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+        statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 

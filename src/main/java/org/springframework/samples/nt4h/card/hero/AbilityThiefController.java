@@ -88,7 +88,7 @@ public class AbilityThiefController {
         if (abilityInGame.getAttack() + attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHearth(session)) {
             cacheManager.setFirstToTheHearth(session);
             // Gana uno de oro.
-            statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+            statisticService.gainGlory(currentPlayer, 1);
         }
         // Pierde 1 carta.
         deckService.loseACard(currentPlayer.getDeck());
@@ -109,7 +109,7 @@ public class AbilityThiefController {
         if (abilityInGame.getAttack() + attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstStealthAttack(session)) {
             cacheManager.isFirstStealthAttack(session);
             // Gana uno de oro.
-            statisticService.gainGold(currentPlayer.getStatistic(), 1);
+            statisticService.gainGold(currentPlayer, 1);
         }
         return PAGE_MAKE_DAMAGE;
     }
@@ -170,7 +170,7 @@ public class AbilityThiefController {
             Statistic statistic = player.getStatistic();
             if (statistic.getGold() > 0 && player != currentPlayer) {
                 statisticService.loseGold(statistic, 1);
-                statisticService.gainGold(currentPlayerStatistic, 1);
+                statisticService.gainGold(currentPlayer, 1);
             }
         }
         return PAGE_MAKE_DAMAGE;
@@ -184,7 +184,7 @@ public class AbilityThiefController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Ganas dos monedas por cada enemigo vivo.
-        statisticService.gainGold(currentPlayer.getStatistic(), 2 * getGame().getActualOrcs().size());
+        statisticService.gainGold(currentPlayer, 2 * getGame().getActualOrcs().size());
         return PAGE_MAKE_DAMAGE;
     }
 
@@ -196,9 +196,9 @@ public class AbilityThiefController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Ganas una moneda por cada enemigo vivo.
-        statisticService.gainGold(currentPlayer.getStatistic(), getGame().getActualOrcs().size());
+        statisticService.gainGold(currentPlayer, getGame().getActualOrcs().size());
         // Gana un punto de gloria.
-        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+        statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 
