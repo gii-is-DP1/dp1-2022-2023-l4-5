@@ -26,7 +26,7 @@ public class AdminController {
     private static final String VIEW_USER_CREATE_OR_UPDATE_FORM = "admins/updateUserForm";
 
     private static final String VIEW_USER_DETAILS = "users/userDetails";
-    private static final String VIEW_ALLGAMES = "admins/allGames";
+    private static final String VIEW_ALLGAMES = "admins/allGamesList";
 
     private static final String VIEW_USER_STATISTICS = "users/userStatistics";
     private static final String PAGE_USER_LIST = "redirect:/users";
@@ -115,6 +115,23 @@ public class AdminController {
         return "admins/games";
     }
 
+    @GetMapping("/all")
+    public String showAllGames(@RequestParam(defaultValue = "0") int page, ModelMap model, HttpSession session) {
+        page = page < 0 ? 0 : page;
+        Pageable pageable = PageRequest.of(page, 5);
+        List<Game> games = gameService.getAllGames();
+        Page<Game> gamePage = gameService.getAllGames(pageable);
+        if (!games.isEmpty() && gamePage.isEmpty()) {
+            page = games.size() / 5;
+            pageable = PageRequest.of(page, 5);
+            gamePage = gameService.getAllGames(pageable);
+        }
+        advise.getMessage(session, model);
+        model.put("isNext", gamePage.hasNext());
+        model.put("games", gamePage.getContent());
+        model.put("page", page);
+        return VIEW_ALLGAMES;
+    }
     @GetMapping("/statistics/{userId}")
     public String showUserStatistics(@PathVariable("userId") int userId, ModelMap model) {
         Statistic userStatistic = userService.getUserById(userId).getStatistic();

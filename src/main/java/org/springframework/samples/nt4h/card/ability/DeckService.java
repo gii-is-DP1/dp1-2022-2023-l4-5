@@ -14,6 +14,7 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
@@ -122,7 +123,6 @@ public class DeckService {
             throw new TooManyAbilitiesException();
         List<AbilityInGame> added = deck.getInDeck().subList(0, 5-deck.getInHand().size());
         deck.getInHand().addAll(added);
-        deck.getInDeck().removeAll(added);
         saveDeck(deck);
         return added;
     }

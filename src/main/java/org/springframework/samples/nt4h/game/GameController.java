@@ -44,6 +44,7 @@ public class GameController {
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String VIEW_GAME_ORDER = "games/selectOrder";
     private static final String VIEW_GAME_PREORDER = "games/preSelectOrder";
+    private static final String GAMES_IN_PROGRES= "admins/gameInProgres";
     private static final String PAGE_CURRENT_GAME = "redirect:/games/current";
 
     // Servicios
@@ -61,6 +62,11 @@ public class GameController {
         this.userService = userService;
         this.playerService = playerService;
         this.advise = advise;
+    }
+
+    @GetMapping("/gameInProgres")
+    public String getGamesInProgres() {
+        return GAMES_IN_PROGRES;
     }
 
     @InitBinder
@@ -91,16 +97,7 @@ public class GameController {
 
     @ModelAttribute("loggedPlayer")
     public Player getPlayer() {
-        User loggedUser = getUser();
-        System.out.println("Logged user: " + loggedUser.getUsername());
-
-        // System.out.println("Logged player id: " + loggedUser.getPlayer().getId());
-        System.out.println("Game " + loggedUser.getGame());
-        if (loggedUser.getPlayer() != null) {
-            System.out.println("Es nuevo? " + loggedUser.getPlayer().isNew());
-            System.out.println("Logged player: " + loggedUser.getPlayer());
-        }
-        System.out.println("----");
+        User loggedUser = getLoggedUser();
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
@@ -112,7 +109,7 @@ public class GameController {
 
     @ModelAttribute("game")
     public Game getGame() {
-        Game loggedGame = getUser().getGame();
+        Game loggedGame = getLoggedUser().getGame();
         return loggedGame != null ? loggedGame : new Game();
     }
 
@@ -122,7 +119,7 @@ public class GameController {
     }
 
     @ModelAttribute("loggedUser")
-    public User getUser() {
+    public User getLoggedUser() {
         return userService.getLoggedUser();
     }
 
@@ -164,18 +161,17 @@ public class GameController {
         Game game = gameService.getGameById(gameId);
         // advise.keapUrl(session, request);
         model.put("game", game);
-        gameService.addSpectatorToGame(game, getUser());
+        gameService.addSpectatorToGame(game, getLoggedUser());
         return VIEW_GAME_LOBBY;
     }
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session, HttpServletRequest request) throws UserInAGameException, IncorrectPasswordException, UserHasAlreadyAPlayerException, FullGameException {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session, HttpServletRequest request) throws Exception {
         Game newGame = gameService.getGameById(gameId);
-        User loggedUser = getUser();
-
-        userService.addUserToGame(loggedUser, newGame, password);
-        gameService.addPlayerToGame(newGame, loggedUser);
+        User loggedUser = getLoggedUser();
+        if (!newGame.getPlayers().contains(loggedUser.getPlayer()))
+            gameService.addPlayerToGame(newGame, loggedUser, password);
         advise.keepUrl(session, request);
         advise.getMessage(session, model);
         model.put("numHeroes", newGame.isUniClass());
@@ -186,7 +182,7 @@ public class GameController {
     @GetMapping(value = "/heroSelect")
     public String initHeroSelectForm(HttpSession session, ModelMap model, HttpServletRequest request) {
         // Los datos para el formulario.
-        User loggedUser = getUser();
+        User loggedUser = getLoggedUser();
         Game game = getGame();
         advise.getMessage(session, model);
         advise.keepUrl(session, request);
@@ -222,7 +218,7 @@ public class GameController {
 
     @GetMapping("/selectOrder")
     public String orderPlayers(HttpSession session, HttpServletRequest request) {
-        User loggedUser = getUser();
+        User loggedUser = getLoggedUser();
         Game game = getGame();
         advise.keepUrl(session, request);
         return VIEW_GAME_PREORDER;
