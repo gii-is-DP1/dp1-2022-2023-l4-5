@@ -108,10 +108,6 @@ public class HeroAttackController {
             throw new WithOutAbilityException();
         if (attackedEnemy == null)
             throw new WithOutEnemyException();
-
-        deckService.attackEnemies(usedAbility, session, player, game, getLoggedUser().getId());
-        deckService.specificCardFromHandToDiscard(deck, usedAbility);
-
         Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
         playerService.savePlayer(player);
         createdTurn.addEnemy(attackedEnemy);
@@ -122,7 +118,21 @@ public class HeroAttackController {
     }
 
     @GetMapping("/makeDamage")
-    public String attackEnemy() {
+    public String attackEnemy(Turn turn, HttpSession session) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
+        Player player = getPlayer();
+        Game game = getGame();
+        Player loggedPlayer = getLoggedPlayer();
+        if (loggedPlayer != player)
+            throw new NoCurrentPlayer();
+        Deck deck = loggedPlayer.getDeck();
+        AbilityInGame usedAbility = turn.getCurrentAbility();
+        EnemyInGame attackedEnemy = turn.getCurrentEnemy();
+        if (usedAbility == null)
+            throw new WithOutAbilityException();
+        if (attackedEnemy == null)
+            throw new WithOutEnemyException();
+        deckService.attackEnemies(usedAbility, session, player, game, getLoggedUser().getId());
+        deckService.specificCardFromHandToDiscard(deck, usedAbility);
         return PAGE_HERO_ATTACK;
     }
 
