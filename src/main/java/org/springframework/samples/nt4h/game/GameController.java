@@ -92,6 +92,15 @@ public class GameController {
     @ModelAttribute("loggedPlayer")
     public Player getPlayer() {
         User loggedUser = getUser();
+        System.out.println("Logged user: " + loggedUser.getUsername());
+
+        // System.out.println("Logged player id: " + loggedUser.getPlayer().getId());
+        System.out.println("Game " + loggedUser.getGame());
+        if (loggedUser.getPlayer() != null) {
+            System.out.println("Es nuevo? " + loggedUser.getPlayer().isNew());
+            System.out.println("Logged player: " + loggedUser.getPlayer());
+        }
+        System.out.println("----");
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
@@ -198,7 +207,7 @@ public class GameController {
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
     public String initCreationForm() throws UserInAGameException {
-        if (getGame().isNew())
+        if (!getGame().isNew())
             throw new UserInAGameException();
         return VIEW_GAME_CREATE;
     }
@@ -206,7 +215,6 @@ public class GameController {
     // Comprobamos si la partida es correcta y la almacenamos.
     @PostMapping(value = "/new")
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
-        System.out.println(result.getAllErrors());
         if (result.hasErrors()) return VIEW_GAME_CREATE;
         User loggedUser = userService.getLoggedUser();
         gameService.createGame(loggedUser, game);

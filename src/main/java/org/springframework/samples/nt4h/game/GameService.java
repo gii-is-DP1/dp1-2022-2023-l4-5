@@ -105,6 +105,7 @@ public class GameService {
         Player newPlayer = Player.createPlayer(user, game, true);
         playerService.savePlayer(newPlayer);
         saveGame(game);
+        System.out.println("Game created: " + user.getPlayer());
         userService.saveUser(user);
         List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
         game.setAllOrcsInGame(orcsInGame.subList(4, orcsInGame.size()));
@@ -112,7 +113,6 @@ public class GameService {
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
         advise.createGame(user, game);
-
     }
 
     @Transactional
