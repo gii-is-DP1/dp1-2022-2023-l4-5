@@ -151,7 +151,7 @@ public class AbilityThiefController {
         // Elegimos el enemigo que no va a realizar daño.
         Statistic statistic = currentPlayer.getStatistic();
         if (statistic.getGold() >= 2) {
-            statisticService.looseGold(statistic, 2);
+            statisticService.loseGold(statistic, 2);
             cacheManager.addPreventDamageFromEnemies(session);
         }
         return PAGE_MAKE_DAMAGE;
@@ -169,7 +169,7 @@ public class AbilityThiefController {
         for (Player player : getGame().getPlayers()) {
             Statistic statistic = player.getStatistic();
             if (statistic.getGold() > 0 && player != currentPlayer) {
-                statisticService.looseGold(statistic, 1);
+                statisticService.loseGold(statistic, 1);
                 statisticService.gainGold(currentPlayerStatistic, 1);
             }
         }

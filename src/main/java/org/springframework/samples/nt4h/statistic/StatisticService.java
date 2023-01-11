@@ -1,17 +1,15 @@
 package org.springframework.samples.nt4h.statistic;
 
-import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.javatuples.Quartet;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserRepository;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
 import java.util.function.ToIntFunction;
 
 @Service
@@ -19,7 +17,7 @@ import java.util.function.ToIntFunction;
 public class StatisticService {
 
     private final StatisticRepository statisticRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public Statistic getStatisticById(int id) {
@@ -81,7 +79,7 @@ public class StatisticService {
     public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.numWonGamesByPlayerId(userId);}
 
     @Transactional
-    public List<User> listAllUsers() {return userRepository.findAll(); }
+    public List<User> listAllUsers() {return userService.getAllUsers(); }
 
     @Transactional
     public int getMin(ToIntFunction< User> function) {
@@ -160,6 +158,7 @@ public class StatisticService {
     @Transactional
     public void gainGlory(Statistic statistic, Integer glory) {
         statistic.setGlory(statistic.getGlory() + glory);
+
         saveStatistic(statistic);
     }
 
@@ -170,13 +169,13 @@ public class StatisticService {
     }
 
     @Transactional
-    public void looseGold(Statistic statistic, Integer gold) {
+    public void loseGold(Statistic statistic, Integer gold) {
         statistic.setGold(Math.max(statistic.getGold() - gold, 0));
         saveStatistic(statistic);
     }
 
     @Transactional
-    public void looseGlory(Statistic statistic, Integer glory) {
+    public void loseGlory(Statistic statistic, Integer glory) {
         statistic.setGlory(Math.max(statistic.getGlory() - glory, 0));
         saveStatistic(statistic);
     }

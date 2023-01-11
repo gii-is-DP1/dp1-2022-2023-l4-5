@@ -42,7 +42,6 @@ public class HeroAttackController {
     private final Advise advise;
     private final CacheManager cacheManager;
 
-
     @Autowired
     public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager) {
         this.userService = userService;
@@ -98,7 +97,6 @@ public class HeroAttackController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-
         AbilityInGame usedAbility = turn.getCurrentAbility();
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
         /*
@@ -110,13 +108,14 @@ public class HeroAttackController {
         attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
         player.getDeck().getInHand().remove(usedAbility);
         player.getDeck().getInDiscard().add(usedAbility);
-        //
+
         if (attackedEnemy.getActualHealth() <= 0) {
             player.getStatistic().setGlory(player.getStatistic().getGlory() + attackedEnemy.getEnemy().getGlory());
             player.getStatistic().setGold(player.getStatistic().getGold() + attackedEnemy.getEnemy().getGold());
             playerService.savePlayer(player);
             game.getActualOrcs().remove(attackedEnemy);
             gameService.saveGame(game);
+
         } else {
             playerService.savePlayer(player);
         }
