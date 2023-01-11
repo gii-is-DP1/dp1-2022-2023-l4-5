@@ -147,7 +147,7 @@ public class DeckService {
 
                 otherAffectedEnemies.add(attackedEnemy);
                 gameService.deleteKilledEnemy(session, otherAffectedEnemies, game, player, userId);
-            }
+            } 
         }
     }
 
