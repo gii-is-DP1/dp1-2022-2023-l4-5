@@ -59,16 +59,11 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGame(Game game) {
+    public void deleteGameById(int id) {
+        Game game = getGameById(id);
         game.onDeleteSetNull();
         gameRepository.save(game);
         gameRepository.delete(game);
-    }
-
-    @Transactional
-    public void deleteGameById(int id) {
-        Game game = getGameById(id);
-        deleteGame(game);
     }
 
     @Transactional(rollbackFor = {FullGameException.class, UserHasAlreadyAPlayerException.class})

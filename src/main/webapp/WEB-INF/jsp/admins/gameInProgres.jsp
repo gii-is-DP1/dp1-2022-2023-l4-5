@@ -6,8 +6,8 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 
-<nt4h:layout pageName="games">
-    <h2>Games</h2>
+<nt4h:layout pageName="GameInProgres">
+    <h2>Games in progress</h2>
     <table id="games" class="table table-striped">
         <thead>
         <tr>
@@ -20,42 +20,32 @@
         </thead>
         <tbody>
         <c:forEach items="${games}" var="game">
-            <c:if test="${game.getPlayers().size() != 0 || game.getFinishDate()!=null }">
-            <tr>
-                <td>
-                    <c:out value="${game.name}"/>
-                </td>
-                <td>
-                    <c:out value="${game.startDate}"/>
-                </td>
-                <td>
-                    <c:forEach items="${players}" var="player">
-                        <c:if test="${ player.getHost()==true}">
-                            <c:out value="${player}"></c:out>
-                        </c:if>
-                    </c:forEach>
-                </td>
-                <td>
-                    <c:forEach items="${players}" var="player">
-                        <c:if test="${player.getHost()!=true}">
-                            <c:out value="${player}"></c:out>
-                        </c:if>
-                    </c:forEach>
-                </td>
-                <td>
-                    <c:out value="${game.mode}"/>
-                </td>
-                <td>
-                    <a href="/games/view/${game.id}" class="btn btn-primary">
-                        <c:if test="${game.spectators == null}">
-                            <c:out value="0 View"/>
-                        </c:if>
-                        <c:if test="${game.spectators != null}">
-                            <c:out value="${fn:length(game.spectators)}  View"/>
-                        </c:if>
-                    </a>
-                </td>
-            </tr>
+            <c:if test="${game.getPlayers().size() != 0}">
+                <tr>
+                    <td>
+                        <c:out value="${game.name}"/>
+                    </td>
+                    <td>
+                        <c:out value="${game.startDate}"/>
+                    </td>
+                    <td>
+                        <c:forEach items="${players}" var="player">
+                            <c:if test="${ player.getHost()==true}">
+                                <c:out value="${player}"></c:out>
+                            </c:if>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        <c:forEach items="${players}" var="player">
+                            <c:if test="${player.getHost()!=true}">
+                                <c:out value="${player}"></c:out>
+                            </c:if>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        <c:out value="${game.mode}"/>
+                    </td>
+                </tr>
             </c:if>
         </c:forEach>
         </tbody>
