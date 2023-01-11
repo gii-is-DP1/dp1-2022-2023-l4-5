@@ -76,7 +76,7 @@ public class AbilityThiefController {
 
     // Al corazón.
     @GetMapping("/toTheHearth/{cardId}")
-    private String toTheHearth(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String toTheHearth(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -97,7 +97,7 @@ public class AbilityThiefController {
 
     // Ataque furtivo.
     @GetMapping("/stealthAttack/{cardId}")
-    private String stealthAttack(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String stealthAttack(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -116,7 +116,7 @@ public class AbilityThiefController {
 
     // Ballesta precisa.
     @GetMapping("/preciseBow/{cardId}")
-    private String preciseBow(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String preciseBow(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -131,7 +131,7 @@ public class AbilityThiefController {
 
     // En las sombras.
     @GetMapping("/inTheShadows/{cardId}")
-    private String inTheShadows(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String inTheShadows(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -143,7 +143,7 @@ public class AbilityThiefController {
 
     // Engañar
     @GetMapping("/deceive/{cardId}")
-    private String deceive(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String deceive(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -159,7 +159,7 @@ public class AbilityThiefController {
 
     // Robar bolsillos.
     @GetMapping("/stealPockets/{cardId}")
-    private String stealPockets(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String stealPockets(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -178,7 +178,7 @@ public class AbilityThiefController {
 
     // Saqueo1
     @GetMapping("/loot1/{cardId}")
-    private String loot1(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String loot1(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -190,7 +190,7 @@ public class AbilityThiefController {
 
     // Saqueo2
     @GetMapping("/loot2/{cardId}")
-    private String loot2(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String loot2(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -204,7 +204,7 @@ public class AbilityThiefController {
 
     // Trampa
     @GetMapping("/trap/{cardId}")
-    private String trap(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String trap(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)

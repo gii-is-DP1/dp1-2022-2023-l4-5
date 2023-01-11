@@ -74,7 +74,7 @@ public class AbilityKnightController {
 
     // Ataque brutal
     @GetMapping("/brutalAttack/{cardId}")
-    private String brutalAttack(@PathVariable("cardId") int cardId) {
+    public String brutalAttack(@PathVariable("cardId") int cardId) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -86,7 +86,7 @@ public class AbilityKnightController {
 
     // Carga con escudo.
     @GetMapping("/shieldCharge/{cardId}")
-    private String shieldCharge(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String shieldCharge(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -98,7 +98,7 @@ public class AbilityKnightController {
 
     // Doble espadazo.
     @GetMapping("/doubleSlash/{cardId}")
-    private String doubleSlash(@PathVariable("cardId") int cardId) {
+    public String doubleSlash(@PathVariable("cardId") int cardId) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -110,7 +110,7 @@ public class AbilityKnightController {
 
     // Escudo.
     @GetMapping("/shield/{cardId}")
-    private String shield(@PathVariable("cardId") int cardId, HttpSession session, ModelMap model) {
+    public String shield(@PathVariable("cardId") int cardId, HttpSession session, ModelMap model) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -123,7 +123,7 @@ public class AbilityKnightController {
 
     // Espadazo.
     @GetMapping("/slash/{cardId}")
-    private String slash(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String slash(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -139,7 +139,7 @@ public class AbilityKnightController {
 
     // Paso atrás.
     @GetMapping("/stepBack/{cardId}")
-    private String stepBack(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String stepBack(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -153,7 +153,7 @@ public class AbilityKnightController {
 
     // Todo o nada.
     @GetMapping("/allOrNothing/{cardId}")
-    private String allOrNothing(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String allOrNothing(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -170,7 +170,7 @@ public class AbilityKnightController {
 
     // Voz de aliento
     @GetMapping("/voiceOfEncouragement/{cardId}")
-    private String voiceOfEncouragement(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String voiceOfEncouragement(@PathVariable("cardId") int cardId, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
