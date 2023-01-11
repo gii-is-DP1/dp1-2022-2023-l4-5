@@ -8,6 +8,7 @@ import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
+import org.springframework.samples.nt4h.turn.exceptions.WithOutPhaseException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -88,12 +89,14 @@ public class StartController {
     }
 
     @PostMapping
-    public String selectEvasion(Turn turn,  HttpSession session) throws NoCurrentPlayer {
+    public String selectEvasion(Turn turn,  HttpSession session) throws NoCurrentPlayer, WithOutPhaseException {
         Player player = getPlayer();
         Player loggedPlayer = getLoggedPlayer();
         Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+        if (turn.getPhase() == null)
+            throw new WithOutPhaseException();
         isChosen = false;
         turnService.chooseAttackOrEvasion(player, turn.getPhase(), game);
         advise.passPhase(game);
