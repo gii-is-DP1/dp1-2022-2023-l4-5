@@ -7,8 +7,6 @@ import com.google.common.collect.Lists;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.nt4h.action.Phase;
-import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.model.BaseEntity;
@@ -40,10 +38,11 @@ public class User extends BaseEntity implements Jsonable {
     private String username;
 
     @NotNull
-    @Size(min = 1, max = 20)
     private String password;
 
     private String enable;
+
+    private Boolean isConnected;
 
     @URL
     private String avatar;
@@ -52,7 +51,7 @@ public class User extends BaseEntity implements Jsonable {
     private Tier tier;
 
     @NotBlank
-    @Size(min = 0, max = 100)
+    @Size(max = 100)
     private String description;
 
     private String authority;

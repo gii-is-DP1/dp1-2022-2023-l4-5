@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.card.Card;
-import org.springframework.samples.nt4h.card.ability.AbilityEffect;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -34,6 +33,6 @@ public class Product extends Card {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Capacity> capacity;
 
-    @Enumerated(EnumType.STRING)
-    private AbilityEffect abilityEffect;
+    @NotNull
+    private String pathName;
 }

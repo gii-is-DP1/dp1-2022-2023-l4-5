@@ -29,6 +29,7 @@ import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +54,9 @@ public class UserService {
         if (user.getEnable() == null) user.setEnable("1");
         if (user.getTier()== null) user.setTier(Tier.IRON);
         if (user.getAuthority()== null) user.setAuthority("USER");
+        if (user.getIsConnected()== null) user.setIsConnected(true);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -118,7 +122,7 @@ public class UserService {
     @Transactional
     public Page<User> getFriendsPaged(Pageable page) {
         int limit = (int) page.getOffset() + page.getPageSize();
-        limit = limit > getFriends().size() ? getFriends().size() : limit;
+        limit = Math.min(limit, getFriends().size());
         return new PageImpl<>(getLoggedUser().getFriends().subList((int) page.getOffset(), limit), page, getLoggedUser().getFriends().size());
     }
 
@@ -165,4 +169,23 @@ public class UserService {
         user.setGame(null);
         saveUser(user);
     }
+
+
+    @Transactional
+    void uppRank(Integer userId){
+        User user = userRepository.findById(userId).get();
+        Integer winnedG = user.getStatistic().getNumWonGames();
+        if( winnedG>= 3 && winnedG < 5){
+            user.setTier(Tier.BRONZE);
+        } else if (winnedG >= 5 && winnedG < 7) {
+            user.setTier(Tier.SILVER);
+        } else if(winnedG >= 7 && winnedG < 9){
+            user.setTier(Tier.GOLD);
+        } else if(winnedG >= 9 && winnedG < 1700){
+            user.setTier(Tier.PLATINUM);
+        } else if(winnedG >= 1700) {
+            user.setTier(Tier.LEYENDA_VIVA);
+        }
+    }
+
 }

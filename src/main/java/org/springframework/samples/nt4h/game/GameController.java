@@ -168,11 +168,10 @@ public class GameController {
         User loggedUser = getUser();
 
         userService.addUserToGame(loggedUser, newGame, password);
-        gameService.addPlayerToGame(newGame, loggedUser); // Esto estaba antes en un post.
+        gameService.addPlayerToGame(newGame, loggedUser);
         advise.keepUrl(session, request);
         advise.getMessage(session, model);
-        model.put("numHeroes", newGame.isUniClass()); // El jugador todavía no se ha unido, CUIODADO.
-        System.out.println("El jugador todavía no se ha unido, CUIODADO.");
+        model.put("numHeroes", newGame.isUniClass());
         return PAGE_CURRENT_GAME;
     }
 
@@ -190,7 +189,7 @@ public class GameController {
 
     // Analizamos la elección del héroe.
     @PostMapping(value = "/heroSelect")
-    public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, FullGameException, PlayerIsReadyException {
+    public String processHeroSelectForm(HeroInGame heroInGame) throws RoleAlreadyChosenException, HeroAlreadyChosenException, PlayerIsReadyException {
         Player loggedPlayer = getPlayer();
         Game game = getGame();
         gameService.addHeroToPlayer(loggedPlayer, heroInGame, game);
@@ -201,7 +200,7 @@ public class GameController {
     // Llamamos al formulario para crear la partida.
     @GetMapping(value = "/new")
     public String initCreationForm() throws UserInAGameException {
-        if (!getGame().isNew())
+        if (getGame().isNew())
             throw new UserInAGameException();
         return VIEW_GAME_CREATE;
     }
@@ -209,6 +208,7 @@ public class GameController {
     // Comprobamos si la partida es correcta y la almacenamos.
     @PostMapping(value = "/new")
     public String processCreationForm(@Valid Game game, BindingResult result) throws FullGameException {
+        System.out.println(result.getAllErrors());
         if (result.hasErrors()) return VIEW_GAME_CREATE;
         User loggedUser = userService.getLoggedUser();
         gameService.createGame(loggedUser, game);
@@ -238,13 +238,9 @@ public class GameController {
     @GetMapping("deletePlayer/{playerId}")
     public String deletePlayer(@PathVariable("playerId") int playerId) {
         Game game = getGame();
-        if(playerService.getPlayerById(playerId).getHost()) {
-            if(game.getCurrentPlayer()==null) gameService.deleteGame(game);
-            playerService.deletePlayerById(playerId);
-            return PAGE_GAMES;
-        }else{
-            playerService.deletePlayerById(playerId);
-            return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
-        }
+        Player player = playerService.getPlayerById(playerId);
+        playerService.deletePlayerById(player.getId());
+        advise.getOutPlayer(player, game);
+        return PAGE_GAME_LOBBY.replace("{gameId}", game.getId().toString());
     }
 }

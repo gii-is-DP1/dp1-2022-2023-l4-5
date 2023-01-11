@@ -6,17 +6,8 @@
 <%@ taglib prefix="nt4h" tagdir="/WEB-INF/tags" %>
 
 <nt4h:layout pageName="ButtonCards">
-
-    <form method="get" action="/cards/warriorCards">
-        <button type="submit">Warrior Cards</button></form>
-    <form method="get" action="/cards/explorerCards">
-        <button type="submit">Explorer Cards</button></form>
-    <form method="get" action="/cards/wizardCards">
-        <button type="submit">Wizard Cards</button></form>
-    <form method="get" action="/cards/rogueCards">
-        <button type="submit">Rogue Cards</button></form>
-    <form method="get" action="/cards/stagesCards">
-        <button type="submit">Stages Cards</button></form>
-
-
+    <a href="/cards/warriorCards" class="btn btn-primary btn-lg btn-block" role="button">Warrior Cards</a>
+    <a href="/cards/explorerCards" class="btn btn-primary btn-lg btn-block" role="button">Rogue Cards</a>
+    <a href="/cards/wizardCards" class="btn btn-primary btn-lg btn-block" role="button">Priest Cards</a>
+    <a href="/cards/rogueCards" class="btn btn-primary btn-lg btn-block" role="button">Mage Cards</a>
 </nt4h:layout>

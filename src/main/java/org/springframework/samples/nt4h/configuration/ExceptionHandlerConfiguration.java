@@ -2,6 +2,8 @@ package org.springframework.samples.nt4h.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
+import org.springframework.samples.nt4h.card.ability.exceptions.LessThan4AbilitiesException;
+import org.springframework.samples.nt4h.card.hero.exceptions.MaxUsesExcededException;
 import org.springframework.samples.nt4h.card.product.exceptions.NotInSaleException;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
@@ -24,18 +26,27 @@ import javax.servlet.http.HttpSession;
 @ControllerAdvice
 public class ExceptionHandlerConfiguration
 {
-	@Autowired
 	private BasicErrorController errorController;
     // add any exceptions/validations/binding problems
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
     private static final String PAGE_GAMES = "redirect:/games";
     private static final String PAGE_GAME_LOBBY = "redirect:/games/current";
     private static final String PAGE_GAME_HERO_SELECT = "redirect:/games/heroSelect";
     private static final String PAGE_EVASION = "redirect:/evasion";
     private static final String PAGE_MARKET = "redirect:/market";
     private static final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
+    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
+
+    public ExceptionHandlerConfiguration(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public ExceptionHandlerConfiguration(BasicErrorController errorController, UserService userService) {
+        this.errorController = errorController;
+        this.userService = userService;
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException() {
@@ -156,5 +167,26 @@ public class ExceptionHandlerConfiguration
         session.setAttribute("message", "You can't have more than 4 abilities.");
         session.setAttribute("messageType", "danger");
         return PAGE_REESTABLISHMENT;
+    }
+
+    @ExceptionHandler(LessThan4AbilitiesException.class)
+    public String handleLessThan4AbilitiesException(HttpSession session) {
+        session.setAttribute("message", "You must have at least 4 abilities.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_REESTABLISHMENT;
+    }
+
+    @ExceptionHandler(CapacitiesRequiredException.class)
+    public String handleCapacitiesRequiredException(HttpSession session) {
+        session.setAttribute("message", "You don't have the requirements needed.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_MARKET;
+    }
+
+    @ExceptionHandler(MaxUsesExcededException.class)
+    public String handleMaxUsesExcededException(HttpSession session) {
+        session.setAttribute("message", "You can't use this ability anymore.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_HERO_ATTACK;
     }
 }

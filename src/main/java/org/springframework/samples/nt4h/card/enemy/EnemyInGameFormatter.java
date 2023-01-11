@@ -14,7 +14,7 @@ public class EnemyInGameFormatter implements Formatter<EnemyInGame> {
     private EnemyService enemyService;
 
     @Override
-    public EnemyInGame parse(String s, Locale locale) throws ParseException {
+    public EnemyInGame parse(String s, Locale locale) {
         return enemyService.getEnemyInGameById(Integer.parseInt(s));
     }
 

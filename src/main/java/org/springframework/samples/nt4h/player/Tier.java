@@ -5,6 +5,7 @@ public enum Tier {
     BRONZE,
     SILVER,
     GOLD,
-    PLATINUM
+    PLATINUM,
+    LEYENDA_VIVA
 
 }

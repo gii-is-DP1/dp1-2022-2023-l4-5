@@ -2,7 +2,8 @@ package org.springframework.samples.nt4h.card.hero;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.card.Card;
 import org.springframework.samples.nt4h.card.ability.Ability;

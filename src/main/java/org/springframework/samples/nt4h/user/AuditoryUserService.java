@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.user;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +22,5 @@ public class AuditoryUserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
- //   @Transactional(readOnly = true)
-   // public AuditoryUser getUserByUsername(String username) {
-    //    return auditoryUserRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
-    //}
 
 }
