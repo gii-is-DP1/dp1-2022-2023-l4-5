@@ -3,6 +3,7 @@ package org.springframework.samples.nt4h.card.hero;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.ability.DeckService;
+import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Las habilidades de explorador son:
@@ -74,7 +76,7 @@ public class AbilityExplorerController {
     // Compañero lobo.
     @GetMapping("/fellowWolf")
     private String fellowWolf(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
+
         // Aumenta el valor de la defensa en dos.
         cacheManager.setDefend(session, 2);
         return PAGE_MAKE_DAMAGE;
@@ -132,6 +134,9 @@ public class AbilityExplorerController {
     @GetMapping("/arrowRain")
     private String arrowRain(ModelMap model) {
         // Debería de ser un efecto.
+        List<EnemyInGame> enemies = getGame().getAllOrcsInGame();
+        if (enemies.size() == 0)
+            return PAGE_MAKE_DAMAGE;
         model.put("name", "enemyAlsoAttacked");
         model.put("enemies", getGame().getActualOrcs());
         model.put("newTurn", new Turn());
@@ -155,8 +160,17 @@ public class AbilityExplorerController {
     @GetMapping("/survival")
     private String survival(ModelMap model) {
         // Gana una carta de supervivencia.
+
+        List<EnemyInGame> enemies = getGame().getAllOrcsInGame();
+        if (enemies.size() == 0)
+            return PAGE_MAKE_DAMAGE;
         model.put("name", "getOutEnemy");
+        model.put("enemies", enemies);
+        model.put("newTurn", new Turn());
         return VIEW_CHOSE_ENEMY;
+
+
+
     }
 
 
