@@ -118,7 +118,7 @@ VALUES ('Compañero Lobo', '/resources/images/abilities/wolf_abilities_front.png
        ('Torrente de luz', '/resources/images/abilities/torrentedeluz_ability_front.png',
         '/resources/images/abilities/ability_back.png', -1, 'WIZARD', 2, 1, 'lightTorrent'),
        ('Al corazón', '/resources/images/abilities/alcorazon_ability_front.png',
-        '/resources/images/abilities/ability_back.png', -1, 'THIEF', 4, 2, 'toTheHearth'),
+        '/resources/images/abilities/ability_back.png', -1, 'THIEF', 4, 2, 'toTheHeart'),
        ('Ataque furtivo', '/resources/images/abilities/ataquefurtivo_ability_front.png',
         '/resources/images/abilities/ability_back.png', -1, 'THIEF', 2, 3, 'stealthAttack'),
        ('Ballesta precisa', '/resources/images/abilities/ballestaprecisa_ability_front.png',

@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.card.hero;
 
 import org.springframework.samples.nt4h.card.ability.Ability;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -19,7 +18,6 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -37,7 +35,7 @@ import javax.servlet.http.HttpSession;
  * - Trampa.
  */
 @Controller
-@RequestMapping("/abilityies")
+@RequestMapping("/abilities")
 public class AbilityThiefController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
@@ -76,8 +74,8 @@ public class AbilityThiefController {
     }
 
     // Al corazón.
-    @GetMapping("/toTheHearth")
-    private String toTheHearth(HttpSession session) {
+    @GetMapping("/toTheHeart")
+    private String toTheHeart(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         // Comprobamos si podemos cargarnos al enemigo.
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);

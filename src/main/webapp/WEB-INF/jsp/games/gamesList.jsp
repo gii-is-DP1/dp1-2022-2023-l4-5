@@ -16,7 +16,7 @@
             <th style="width: 200px;">Players</th>
             <th style="width: 200px">Mode</th>
             <th style="width: 200px;">Accessibility</th>
-            <th style="width: 200px;">Unirse</th>
+            <th style="width: 200px;">Join</th>
         </tr>
         </thead>
         <tbody>
