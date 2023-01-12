@@ -37,6 +37,7 @@ public class CacheManager extends BaseCacheManager {
         removeAttackedEnemy(session);
         removeEnemiesAlsoAttacked(session);
         removeHasToBeDeletedAbility(session);
+        removeNextUrl(session);
     }
 
     public void deleteEndAttackEnemy(HttpSession session) {
@@ -111,7 +112,7 @@ public class CacheManager extends BaseCacheManager {
     }
 
     public Boolean isFirstSlash(HttpSession session) {
-        return getBoolean(session, FIRST_SLASH);
+        return !getBoolean(session, FIRST_SLASH);
     }
 
     public void removeFirstSlash(HttpSession session) {
@@ -137,7 +138,7 @@ public class CacheManager extends BaseCacheManager {
     }
 
     public Boolean isFirstToTheHearth(HttpSession session) {
-        return session.getAttribute(FIRST_TO_THE_HEARTH) != null;
+        return !getBoolean(session, FIRST_TO_THE_HEARTH);
     }
 
     public void removeFirstToTheHearth(HttpSession session) {
@@ -150,7 +151,7 @@ public class CacheManager extends BaseCacheManager {
     }
 
     public Boolean isFirstStealthAttack(HttpSession session) {
-        return getBoolean(session, FIRST_STEALTH_ATTACK);
+        return !getBoolean(session, FIRST_STEALTH_ATTACK);
     }
 
     public void removeFirstStealthAttack(HttpSession session) {
