@@ -7,6 +7,7 @@ import org.springframework.samples.nt4h.model.BaseEntity;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -63,9 +64,9 @@ public class BaseCacheManager {
         return session.getAttribute("nextUrl") != null;
     }
 
-    protected String getString(HttpSession session) {
+    protected Optional<String> getString(HttpSession session) {
         Object value = session.getAttribute("nextUrl");
-        return value == null ? null :value.toString();
+        return value == null ? Optional.empty() :Optional.of(value.toString());
     }
 
     protected boolean getBoolean(HttpSession session, String name) {

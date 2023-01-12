@@ -151,8 +151,9 @@ public class HeroAttackController {
         else
             deckService.specificCardFromHandToDiscard(deck, usedAbility);
         cacheManager.deleteEndAttackHero(session);
-        return PAGE_HERO_ATTACK;
-    } 
+        Optional<String> nextUrl = cacheManager.getNextUrl(session);
+        return nextUrl.orElse(PAGE_HERO_ATTACK);
+    }
 
     @GetMapping("/next")
     public String next() {
