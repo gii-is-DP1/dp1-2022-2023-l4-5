@@ -86,7 +86,7 @@ public class AbilityWizardController {
         // Pierde una carta por cada enemigo.
         Deck deck = currentPlayer.getDeck();
         for (var i = 0; i < getGame().getActualOrcs().size(); i++) {
-            deckService.fromDeckToDiscard(deck);
+            deckService.fromDeckToDiscard(currentPlayer, deck);
         }
         playerService.savePlayer(currentPlayer);
         return PAGE_MAKE_DAMAGE;
@@ -106,7 +106,7 @@ public class AbilityWizardController {
         for (var i = 0; i < game.getPlayers().size(); i++) {
             Player player = game.getPlayers().get(i);
             if (player != currentPlayer) {
-                deckService.fromDeckToDiscard(player.getDeck());
+                deckService.fromDeckToDiscard(currentPlayer, player.getDeck());
             }
         }
         return PAGE_MAKE_DAMAGE;
@@ -134,7 +134,7 @@ public class AbilityWizardController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         // Aumenta en 1 el daño hacia ese enemigo.
         cacheManager.addEnemiesThatReceiveMoreDamage(session);
         return PAGE_MAKE_DAMAGE;

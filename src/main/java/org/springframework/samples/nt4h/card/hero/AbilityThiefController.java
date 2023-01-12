@@ -91,7 +91,7 @@ public class AbilityThiefController {
             statisticService.gainGlory(currentPlayer, 1);
         }
         // Pierde 1 carta.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         return PAGE_MAKE_DAMAGE;
     }
 
@@ -107,7 +107,7 @@ public class AbilityThiefController {
         Integer attack = cacheManager.getAttack(session);
         AbilityInGame abilityInGame = abilityService.getAbilityInGameById(cardId);
         if (abilityInGame.getAttack() + attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstStealthAttack(session)) {
-            cacheManager.isFirstStealthAttack(session);
+            cacheManager.setFirstStealthAttack(session);
             // Gana uno de oro.
             statisticService.gainGold(currentPlayer, 1);
         }

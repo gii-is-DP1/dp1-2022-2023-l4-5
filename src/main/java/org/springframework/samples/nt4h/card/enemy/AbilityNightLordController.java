@@ -79,8 +79,8 @@ public class AbilityNightLordController {
     // Fase de ataque de héroe.
     @GetMapping("/gurdrug/{cardId}")
     public String gurdrug(@PathVariable("cardId") int cardId, HttpSession session) {
-        Deck deck = getCurrentPlayer().getDeck();
-        deckService.fromDeckToDiscard(deck);
+        Player currentPlayer = getCurrentPlayer();
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         AbilityInGame currentAbility = abilityService.getAbilityInGameById(cardId);
         return "/abilities/" + currentAbility.getAbility().getRole() + "/" + currentAbility.getId();
     }

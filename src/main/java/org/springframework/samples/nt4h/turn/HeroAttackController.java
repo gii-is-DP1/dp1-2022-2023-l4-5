@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/heroAttack")
@@ -101,7 +102,6 @@ public class HeroAttackController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        Deck deck = loggedPlayer.getDeck();
         AbilityInGame usedAbility = turn.getCurrentAbility();
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
         if (usedAbility == null)
@@ -111,27 +111,35 @@ public class HeroAttackController {
         Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
         playerService.savePlayer(player);
         createdTurn.addEnemy(attackedEnemy);
+        createdTurn.setCurrentEnemy(attackedEnemy);
         createdTurn.addAbility(usedAbility);
+        createdTurn.setCurrentAbility(usedAbility);
         turnService.saveTurn(createdTurn);
         advise.heroAttack(usedAbility, attackedEnemy, game);
         return PAGE_ABILITY;
     }
 
     @GetMapping("/makeDamage")
-    public String attackEnemy(Turn turn, HttpSession session) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
+    public String attackEnemy(HttpSession session) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
         Player player = getPlayer();
         Game game = getGame();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
+        Turn turn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
         Deck deck = loggedPlayer.getDeck();
         AbilityInGame usedAbility = turn.getCurrentAbility();
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
         if (usedAbility == null)
             throw new WithOutAbilityException();
-        if (attackedEnemy == null)
-            throw new WithOutEnemyException();
-        deckService.attackEnemies(usedAbility, session, player, game, getLoggedUser().getId());
+        Integer effectDamage = cacheManager.getSharpeningStone(session) + cacheManager.getAttack(session);
+        List<EnemyInGame> enemies = cacheManager.getEnemiesAlsoAttacked(session);
+        List<EnemyInGame> enemiesMoreDamage = cacheManager.getEnemiesThatReceiveMoreDamage(session);
+        if (attackedEnemy != null) {
+            enemies.add(attackedEnemy);
+            cacheManager.setAttackedEnemy(session, attackedEnemy.getId());
+        }
+        gameService.attackEnemies(usedAbility, effectDamage, enemies, enemiesMoreDamage, player, game, getLoggedUser().getId());
         deckService.specificCardFromHandToDiscard(deck, usedAbility);
         return PAGE_HERO_ATTACK;
     }

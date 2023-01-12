@@ -90,7 +90,7 @@ public class AbilityExplorerController {
             return PAGE_MAKE_DAMAGE;
         // Debería de ser un efecto
         // Pierde una carta.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         // Finaliza el ataque.
         return PAGE_MAKE_DAMAGE + "/next";
     }
@@ -110,9 +110,12 @@ public class AbilityExplorerController {
             // Añade el daño.
             cacheManager.addAttack(session, abilityInGame.getAbility().getAttack());
             // Elimina la carta.
-            deckService.specificCardFromDeckToDiscard(deck, abilityInGame);
+            deckService.specificCardFromDeckToDiscard(currentPlayer, deck, abilityInGame);
+            if (deck.getInDeck().isEmpty())
+                deckService.moveAllCardsFromDiscardToDeck(currentPlayer, deck);
             // Tomo una nueva carta.
             abilityInGame = deck.getInDeck().get(0);
+
         }
         // Coloco la carta al fondo del deck.
         deckService.putFirstCardAtBottomOfDeck(deck);
@@ -131,7 +134,7 @@ public class AbilityExplorerController {
         // Gana una ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);
         // Pierde una carta.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         playerService.savePlayer(currentPlayer);
         return PAGE_MAKE_DAMAGE;
     }
@@ -158,7 +161,8 @@ public class AbilityExplorerController {
         // Debería de ser un efecto
         // Recupera una carta de disparo rápido de la pila de descarte.
         Deck deck = currentPlayer.getDeck();
-        deck.getInDiscard().stream().anyMatch(a -> a.getAbility().getName().equals("Disparo rápido"));
+        deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo rápido")).findFirst()
+            .ifPresent(card -> deckService.specificCardFromDiscardToDeck(deck, card));
         // Gana una moneda.
         statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;

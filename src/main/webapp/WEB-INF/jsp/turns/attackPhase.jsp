@@ -19,9 +19,15 @@
             justify-content: center;
         }
     </style>
-    <h1>Gold: ${currentPlayer.statistic.glory},
-        Glory: ${currentPlayer.statistic.gold},
-        Wounds: ${currentPlayer.wounds}</h1>
+    <div class="container">
+        <c:forEach var="i" begin="0" end="${currentPlayer.health}">
+            <img src="/resources/images/heart_hero.gif" width="50" height="50">
+        </c:forEach>
+        <p style="font-size:5rem">
+            <img src="/resources/images/gloria.gif" width="50" height="50"> ${currentPlayer.statistic.glory}
+            <img src="/resources/images/coin.gif" width="50" height="50"> ${currentPlayer.statistic.gold}
+        </p>
+    </div>
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
             <div class="container">
@@ -29,6 +35,14 @@
                     <div class="pointer">
                         <c:forEach var="i" begin="0" end="${game.actualOrcs.size()-1}">
                             <c:set var="enemyInGame" value="${game.actualOrcs[i]}" scope="page"/>
+                            <div class="row">
+                                <div class="col-8">
+                                    <p style="font-size:2rem">
+                                        <img src="/resources/images/heart_orc.gif" width="50"
+                                             height="50"> ${enemyInGame.actualHealth}
+                                    </p>
+                                </div>
+                            </div>
                             <div class="col-sm-2">
                                 <nt4h:radioButtom name="currentEnemy" element="${enemyInGame.id}"
                                                   frontImage="${enemyInGame.enemy.frontImage}" i="${i}0"
@@ -70,6 +84,31 @@
     </c:if>
     <c:if test="${logggedPlayer.isNew() }">
         <div class="container">
+            <div class="display: flex; justify-content: center;">
+                <c:if test="${game.actualOrcs.size()!=0}">
+                    <c:forEach var="i" begin="0" end="${game.actualOrcs.size()-1}">
+                        <c:set var="enemyInGame" value="${game.actualOrcs[i]}" scope="page"/>
+                        <div class="row">
+                            <div class="col-8">
+                                <p style="font-size:2rem">
+                                    <img src="/resources/images/heart_orc.gif" width="50"
+                                         height="50"> ${enemyInGame.actualHealth}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <img src="${enemyInGame.enemy.frontImage}">
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${game.actualOrcs.size()==0}">
+                    <div class="display: flex; justify-content: center;">
+                        <c:out value="There are no enemies in the battle."/>
+                    </div>
+                </c:if>
+            </div>
+        </div>
+        <div class="container">
             <div style="display: flex; justify-content: center;">
                 <c:if test="${currentPlayer.deck.inHand.size()!=0}">
                     <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
@@ -86,26 +125,10 @@
                 </c:if>
             </div>
         </div>
-
-    <div class="container">
-        <div class="display: flex; justify-content: center;">
-            <c:if test="${game.actualOrcs.size()!=0}">
-                <c:forEach var="i" begin="0" end="${game.actualOrcs.size()-1}">
-                    <c:set var="enemyInGame" value="${game.actualOrcs[i]}" scope="page"/>
-                    <div class="col-sm-2">
-                        <img src="${enemyInGame.enemy.frontImage}">
-                    </div>
-                </c:forEach>
-            </c:if>
-            <c:if test="${game.actualOrcs.size()==0}">
-                <div class="display: flex; justify-content: center;">
-                    <c:out value="There are no enemies in the battle."/>
-                </div>
-            </c:if>
-        </div>
-    </div>
     </c:if>
+    <hr>
     <div class="row">
+        <h2>Chatea</h2>
         <div class="chatGroup"></div>
         <c:if test="${!loggedPlayer.isNew()}">
             <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">

@@ -80,7 +80,7 @@ public class AbilityKnightController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         return VIEW_LOSE_CARD;
     }
 
@@ -104,7 +104,7 @@ public class AbilityKnightController {
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
         // Elimina una carta de la mano.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         return PAGE_MAKE_DAMAGE;
     }
 
