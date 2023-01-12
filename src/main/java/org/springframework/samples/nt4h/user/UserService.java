@@ -27,6 +27,7 @@ import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.IncorrectPasswordException;
 import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.samples.nt4h.player.Tier;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -68,6 +69,7 @@ public class UserService {
         if (user.getTier()== null) user.setTier(Tier.IRON);
         if (user.getAuthority()== null) user.setAuthority("USER");
         if (user.getIsConnected()== null) user.setIsConnected(true);
+        if (user.getStatistic() == null) user.setStatistic(Statistic.createStatistic());
         userRepository.save(user);
     }
 

@@ -152,7 +152,7 @@ public class HeroAttackController {
             deckService.specificCardFromHandToDiscard(deck, usedAbility);
         cacheManager.deleteEndAttackHero(session);
         return PAGE_HERO_ATTACK;
-    } 
+    }
 
     @GetMapping("/next")
     public String next() {
