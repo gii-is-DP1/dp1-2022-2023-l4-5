@@ -134,7 +134,6 @@ public class AbilityExplorerController {
     // Lluvia de flechas.
     @GetMapping("/arrowRain")
     private String arrowRain(ModelMap model) {
-        // Debería de ser un efecto.
         List<EnemyInGame> enemies = getGame().getAllOrcsInGame();
         if (enemies.size() == 0)
             return PAGE_MAKE_DAMAGE;
@@ -151,7 +150,7 @@ public class AbilityExplorerController {
         Player currentPlayer = getCurrentPlayer();
         // Recupera una carta de disparo rápido de la pila de descarte.
         Deck deck = currentPlayer.getDeck();
-        deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo rápido")).findFirst()
+        deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo Rápido")).findFirst()
             .ifPresent(card -> deckService.specificCardFromDiscardToHand(deck, card));
         // Gana una moneda.
         statisticService.gainGlory(currentPlayer, 1);
