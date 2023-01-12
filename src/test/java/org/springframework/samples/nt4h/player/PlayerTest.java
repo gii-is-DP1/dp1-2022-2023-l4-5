@@ -84,7 +84,7 @@ public class PlayerTest {
     public void testPlayerProperties() {
         // Se comprueba que el objeto Player se ha creado correctamente
         assertThat(player.getName()).isEqualTo("alesanfe");
-        assertThat(player.getBirthDate()).isEqualTo(LocalDate.of(2002, 2, 1));
+        assertThat(player.getBirthDate()).isEqualTo(LocalDate.of(1999, 2, 1));
         assertThat(player.getHasEvasion()).isEqualTo(true);
         assertThat(player.getSequence()).isEqualTo(-1);
         assertThat(player.getNextPhase()).isEqualTo(Phase.START);
