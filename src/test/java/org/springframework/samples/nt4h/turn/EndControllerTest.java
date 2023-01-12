@@ -1,8 +1,5 @@
 package org.springframework.samples.nt4h.turn;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,6 +41,7 @@ import org.springframework.samples.nt4h.game.GameRepository;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.message.MessageRepository;
 import org.springframework.samples.nt4h.message.MessageService;
 import org.springframework.samples.nt4h.player.Player;
@@ -62,6 +60,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
 
+import static org.mockito.Mockito.*;
+
 @ContextConfiguration(classes = {EndController.class})
 @ExtendWith(SpringExtension.class)
 class EndControllerTest {
@@ -79,6 +79,9 @@ class EndControllerTest {
 
     @MockBean
     private TurnService turnService;
+
+    @MockBean
+    private Message message;
 
     @MockBean
     private UserService userService;
@@ -255,6 +258,8 @@ class EndControllerTest {
 
 
     }
+
+    //EL sender del mensaje se vuelve null
 
     @Test
     void testShowEnd() throws Exception {
