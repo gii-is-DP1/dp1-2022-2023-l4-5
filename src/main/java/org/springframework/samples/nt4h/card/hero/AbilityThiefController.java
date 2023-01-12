@@ -86,7 +86,7 @@ public class AbilityThiefController {
 
         Integer sharpeningStone = cacheManager.getSharpeningStone(session);
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
-        Ability ability = abilityService.getAbilityByName("Al Corazón");
+        Ability ability = abilityService.getAbilityByName("Al corazón");
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHearth(session)) {
             cacheManager.setFirstToTheHearth(session);
@@ -106,7 +106,7 @@ public class AbilityThiefController {
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
         Integer sharpeningStone = cacheManager.getSharpeningStone(session);
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
-        Ability ability = abilityService.getAbilityByName("Ataque Furtivo");
+        Ability ability = abilityService.getAbilityByName("Ataque furtivo");
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstStealthAttack(session)) {
             cacheManager.setFirstStealthAttack(session);
