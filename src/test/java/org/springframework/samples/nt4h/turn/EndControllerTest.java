@@ -60,6 +60,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {EndController.class})
@@ -254,7 +255,9 @@ class EndControllerTest {
 
     @Test
     void testFinishGame() {
-
+        when(userService.getLoggedUser()).thenReturn(user);
+        doNothing().when(gameService).deleteGameById(1);
+        assertEquals("redirect:/",endController.finishGame());
 
     }
 
@@ -263,6 +266,7 @@ class EndControllerTest {
     @Test
     void testShowEnd() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
+        doNothing().when(message).toString();
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/end");
         MockMvcBuilders.standaloneSetup(endController)
             .build()
