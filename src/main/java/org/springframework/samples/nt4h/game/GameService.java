@@ -231,7 +231,9 @@ public class GameService {
         int damage = game.getActualOrcs().stream()
             .filter(hasPreventedDamage)
             .mapToInt(EnemyInGame::getActualHealth).sum();
+        System.out.println("Damage: " + damage);
         int finalDamage = (damage >= defendedDmg) ? (damage - defendedDmg):damage;
+        System.out.println("Final Damage: " + finalDamage);
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), damage);
         for (int i = 0; i < enemiesInATrap.size(); i++) {
             EnemyInGame enemyInGame = enemiesInATrap.get(i);

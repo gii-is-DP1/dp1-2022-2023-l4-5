@@ -104,6 +104,7 @@ public class AbilityKnightController {
         System.out.println("Escudo" + cacheManager.getPreventDamageFromEnemies(session));
         // Termina el turno.
         cacheManager.setNextUrl(session, PAGE_END_ATTACK);
+        System.out.println("Escudo" + cacheManager.getNextUrl(session));
         return PAGE_MAKE_DAMAGE;
     }
 
