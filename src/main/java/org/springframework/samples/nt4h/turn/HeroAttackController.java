@@ -98,6 +98,7 @@ public class HeroAttackController {
     public String showHeroAttackBoard(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
         advise.keepUrl(session, request);
+        cacheManager.deleteEndAttackHero(session);
         return VIEW_HERO_ATTACK;
     }
 
@@ -149,7 +150,6 @@ public class HeroAttackController {
             abilityService.deleteAbilityInGameById(usedAbility.getId());
         else
             deckService.specificCardFromHandToDiscard(deck, usedAbility);
-        cacheManager.deleteEndAttackHero(session);
         Optional<String> nextUrl = cacheManager.getNextUrl(session);
         return nextUrl.orElse(PAGE_HERO_ATTACK);
     }
