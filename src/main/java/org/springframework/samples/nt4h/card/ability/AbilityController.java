@@ -91,7 +91,7 @@ public class AbilityController {
             else if (enemies == null)
                 session.setAttribute(name, Lists.newArrayList(enemyInGame.getId()));
             else
-                enemies.add(enemyInGame.getId()); // TODO: comprobar, si no funciona, añadir como string separados por comas.
+                enemies.add(enemyInGame.getId());
         }
 
         return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;

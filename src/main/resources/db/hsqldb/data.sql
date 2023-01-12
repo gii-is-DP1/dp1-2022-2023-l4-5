@@ -235,9 +235,9 @@ VALUES ('Primera partida', 'Se le otorga un logro al usuario cuando completa su 
        ('Asesino', 'Se le otorga un logro al usuario cuando mata a 500 orcos. ', 'awanakimkum', '500'),
        ('Mataorcos', 'Se le otorga un logro al usuario cuando mata a 1000 orcos. ', 'awanakimkum', '1000'),
        ('Primeros pasos', 'Se le otorga un logro al usuario cuando compra su primer producto. ', 'awanakimkum', '1'),
-       ('Comprador', 'Se le otorga un logro al usuario cuando compra 10 productos. ', 'awanakimkum', '10'),
-       ('Comprador experto', 'Se le otorga un logro al usuario cuando compra 50 productos. ', 'awanakimkum', '50'),
-       ('Comprador maestro', 'Se le otorga un logro al usuario cuando compra 100 productos. ', 'awanakimkum', '100'),
+       ('Héroe', 'Se le otorga un logro al usuario cuando vence su primer señor de la guerra. ', 'awanakimkum', '1'),
+       ('Campeón', 'Se le otorga un logro al usuario cuando vence a 5 señores de la guerra. ', 'awanakimkum', '5'),
+       ('Comisario Yarrick', 'Se le otorga un logro al usuario cuando vence a 10 señores de la guerra. ', 'awanakimkum', '10'),
        ('Touch Some Grass', 'Se le otorga un logro al usuario cuando juega 20 partidas.', 'awanakimkum', '20'),
        ('Un poco de todo', 'Se le otorga un logro al usuario cuando completa su primera partida en modo multiclase.',
         'awanakimkum', '1');

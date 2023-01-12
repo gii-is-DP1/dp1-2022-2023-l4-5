@@ -113,7 +113,7 @@ public class GameService {
         if (Boolean.TRUE.equals(player.getReady()))
             throw new PlayerIsReadyException();
         Hero hero = heroService.getHeroById(heroInGame.getHero().getId());
-        HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
+        HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player);
         game.addPlayerWithNewHero(player, updatedHeroInGame);
         player.setReady(player.getHeroes().size() == game.getMode().getNumHeroes());
         deckService.addDeckFromRole(player, game.getMode());

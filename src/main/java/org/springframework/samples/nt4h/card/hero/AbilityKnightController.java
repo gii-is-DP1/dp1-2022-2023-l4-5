@@ -29,7 +29,7 @@ import javax.servlet.http.HttpSession;
  * - Doble espadazo.
  * - Escudo.
  * - Paso atrás.
- * - Todo o nada.
+ * - Todoo o nada.
  * - Voz de aliento.
  */
 @Controller
@@ -127,7 +127,7 @@ public class AbilityKnightController {
         return PAGE_MAKE_DAMAGE;
     }
 
-    // Todo o nada.
+    // Todoo o nada.
     @GetMapping("/allOrNothing")
     private String allOrNothing(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
