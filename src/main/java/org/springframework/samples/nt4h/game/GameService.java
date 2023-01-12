@@ -83,7 +83,6 @@ public class GameService {
             throw new FullGameException();
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
-
         Player newPlayer = Player.createPlayer(user, game, false);
         playerService.createTurns(newPlayer);
         saveGame(game);
@@ -181,7 +180,7 @@ public class GameService {
         return addedEnemies;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void restoreEnemyLife(List<EnemyInGame> enemies) {
         for (EnemyInGame enemyInGame : enemies) {
             if (enemyInGame.getEnemy().getHasCure()) {
@@ -190,6 +189,7 @@ public class GameService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteKilledEnemy(List<EnemyInGame> attackedEnemies, Game game, Player player, Integer userId) {
         for(int e=0; e < attackedEnemies.size(); e++) {
             EnemyInGame enemy = attackedEnemies.get(e);
@@ -210,7 +210,7 @@ public class GameService {
 
     @Transactional(rollbackFor = Exception.class)
     public void attackEnemies(AbilityInGame usedAbility, Integer effectDamage, List<EnemyInGame> enemies, List<Integer> enemiesMoreDamage, Player player, Game game, Integer userId) {
-        if (!(usedAbility.getAttack() == 0))
+        if (usedAbility.getAttack() == 0)
             return;
         Integer damageToEnemy = usedAbility.getAttack() + effectDamage;
         for (int e = 0; enemies.size() > e; e++) {

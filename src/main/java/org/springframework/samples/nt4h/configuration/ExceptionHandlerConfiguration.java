@@ -105,7 +105,7 @@ public class ExceptionHandlerConfiguration
         return PAGE_GAME_HERO_SELECT;
     }
 
-    @ExceptionHandler(EnoughCardsException.class)
+    @ExceptionHandler(NoEnoughCardsException.class)
     public String handleEnoughCardsException() {
         return "exception";
     }
@@ -190,5 +190,12 @@ public class ExceptionHandlerConfiguration
         session.setAttribute("message", "You can't use this ability anymore.");
         session.setAttribute("messageType", "danger");
         return PAGE_HERO_ATTACK;
+    }
+
+    @ExceptionHandler(NoHeroSelectedException.class)
+    public String handleNoHeroSelectedException(HttpSession session) {
+        session.setAttribute("message", "You must select a hero.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAME_HERO_SELECT;
     }
 }

@@ -157,9 +157,8 @@ public class GameController {
 
     // Visualizar una partida.
     @GetMapping("/view/{gameId}")
-    public String showGame(@PathVariable("gameId") int gameId, ModelMap model, HttpSession session, HttpServletRequest request) throws UserInAGameException {
+    public String showGame(@PathVariable("gameId") int gameId, ModelMap model) throws UserInAGameException {
         Game game = gameService.getGameById(gameId);
-        // advise.keapUrl(session, request);
         model.put("game", game);
         gameService.addSpectatorToGame(game, getLoggedUser());
         return VIEW_GAME_LOBBY;
@@ -167,7 +166,7 @@ public class GameController {
 
     /// Unirse a una partida.
     @GetMapping("/{gameId}")
-    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session, HttpServletRequest request) throws Exception {
+    public String joinGame(@PathVariable("gameId") int gameId, @RequestParam(defaultValue = "null") String password, ModelMap model, HttpSession session, HttpServletRequest request) throws IncorrectPasswordException, UserHasAlreadyAPlayerException, UserInAGameException, FullGameException {
         Game newGame = gameService.getGameById(gameId);
         User loggedUser = getLoggedUser();
         if (!newGame.getPlayers().contains(loggedUser.getPlayer()))
@@ -254,7 +253,6 @@ public class GameController {
 
     @GetMapping("deleteGame/{gameId}")
     public String deleteGame(@PathVariable("gameId") int gameId) {
-       // Integer game = getGame().getId();
         gameService.deleteGameById(gameId);
         return PAGE_GAMES;
     }

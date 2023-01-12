@@ -37,9 +37,7 @@ import javax.servlet.http.HttpSession;
 public class AbilityKnightController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
-
-    private final String VIEW_LOSE_CARD = "abilities/loseCard";
-    private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final String PAGE_END_ATTACK = "redirect:/heroAttack/next";
     private final UserService userService;
     private final DeckService deckService;
     private final CacheManager cacheManager;
@@ -78,13 +76,12 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         // Pierde una carta.
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
-        return VIEW_LOSE_CARD;
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Carga con escudo.
     @GetMapping("/shieldCharge")
     private String shieldCharge(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
         // Aumenta el valor de la defensa en dos.
         cacheManager.setDefend(session, 2);
         return PAGE_MAKE_DAMAGE;
@@ -101,12 +98,11 @@ public class AbilityKnightController {
 
     // Escudo.
     @GetMapping("/shield")
-    private String shield(HttpSession session, ModelMap model) {
-        Player currentPlayer = getCurrentPlayer();
+    private String shield(HttpSession session) {
+        // El enemigo seleccionado no podrá hacer daño.
+        cacheManager.addPreventDamageFromEnemies(session);
         // Termina el turno.
-        cacheManager.setNextUrl(session, PAGE_MAKE_DAMAGE + "/next");
-        model.put("name", "preventDamageFrom");
-        return VIEW_CHOSE_ENEMY;
+        return PAGE_END_ATTACK;
     }
 
     // Espadazo.

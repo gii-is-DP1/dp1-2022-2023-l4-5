@@ -8,6 +8,7 @@ import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.StatisticService;
+import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -128,9 +129,10 @@ public class AbilityExplorerController {
     // Lluvia de flechas.
     @GetMapping("/arrowRain")
     private String arrowRain(ModelMap model) {
-        Player currentPlayer = getCurrentPlayer();
         // Debería de ser un efecto.
         model.put("name", "enemyAlsoAttacked");
+        model.put("enemies", getGame().getActualOrcs());
+        model.put("newTurn", new Turn());
         return VIEW_CHOSE_ENEMY;
     }
 

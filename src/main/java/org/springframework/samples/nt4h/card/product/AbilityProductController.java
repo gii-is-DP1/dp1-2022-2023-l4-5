@@ -11,6 +11,7 @@ import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -119,6 +120,7 @@ public class AbilityProductController {
     private String conjureVial(ModelMap model) {
         Player currentPlayer = getCurrentPlayer();
         model.put("discard", currentPlayer.getDeck().getInDiscard());
+        model.put("newTurn", new Turn());
         return VIEW_FIND_IN_DISCARD;
     }
 
