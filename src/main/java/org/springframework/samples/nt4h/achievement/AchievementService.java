@@ -24,6 +24,9 @@ public class AchievementService {
 
 
     @Transactional
+    public List<Achievement> getAllAchievementsByType(AchievementType type){return achievementRepository.findAchievementByType(type);}
+
+    @Transactional
     public void deleteAchievementById(int id) {
         achievementRepository.deleteById(id);
     }
