@@ -33,6 +33,7 @@ public class ProductTest {
         product.setQuantity(3);
         product.setCapacity(Lists.newArrayList());
         product.setMaxUses(1);
+        product.setPathName("nerd");
     }
 
     @Test
