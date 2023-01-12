@@ -49,7 +49,7 @@ public class AbilityProductController {
     private final DeckService deckService;
 
 
-    public AbilityProductController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService, CacheManager cacheManager, DeckService deckService) {
+    public AbilityProductController(UserService userService, PlayerService playerService, EnemyService enemyService, CacheManager cacheManager, DeckService deckService) {
         this.userService = userService;
         this.playerService = playerService;
         this.cacheManager = cacheManager;
@@ -77,12 +77,9 @@ public class AbilityProductController {
     }
 
     //  Daga élfica
-    @GetMapping("/elfDagger/{cardId}")
-    private String elfDagger(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/elfDagger")
+    private String elfDagger(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Pierde la carta si no tiene el héreo pericia.
         List<StateCapacity > stateCapacities = currentPlayer.getHeroes().stream().flatMap(hero -> hero.getHero()
             .getCapacities().stream().map(Capacity::getStateCapacity)).collect(Collectors.toList());
@@ -92,8 +89,8 @@ public class AbilityProductController {
     }
 
     // Poción curativa
-    @GetMapping("/healingPotion/{cardId}")
-    private String healingPotion(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/healingPotion")
+    private String healingPotion(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -106,8 +103,8 @@ public class AbilityProductController {
     }
 
     // Piedra amolar
-    @GetMapping("/sharpeningStone/{cardId}")
-    private String sharpeningStone(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/sharpeningStone")
+    private String sharpeningStone(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -118,23 +115,17 @@ public class AbilityProductController {
     }
 
     // Vial de conjuración
-    @GetMapping("/conjureVial/{cardId}")
-    private String conjureVial(@PathVariable("cardid") int cardId, HttpSession session, ModelMap model) {
+    @GetMapping("/conjureVial")
+    private String conjureVial(ModelMap model) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         model.put("discard", currentPlayer.getDeck().getInDiscard());
         return VIEW_FIND_IN_DISCARD;
     }
 
     // Elixir de concentración.
-    @GetMapping("/concentrationElixir/{cardId}")
-    private String concentrationVial(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/concentrationElixir")
+    private String concentrationVial() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Roba 3 cartas.
         Deck deck = currentPlayer.getDeck();
         for (var i = 0; i < 3; i++)
@@ -143,8 +134,8 @@ public class AbilityProductController {
     }
 
     // Capa élfica
-    @GetMapping("/elfCloak/{cardId}")
-    private String elfCloak(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/elfCloak")
+    private String elfCloak(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -155,8 +146,8 @@ public class AbilityProductController {
     }
 
     // Armadura de placas.
-    @GetMapping("/plateArmor/{cardId}")
-    private String plateArmor(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/plateArmor")
+    private String plateArmor() {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -169,13 +160,13 @@ public class AbilityProductController {
     }
 
     // Alabarda orca
-    @GetMapping("/orcaLance/{cardId}")
-    private String orcLance(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/orcaLance")
+    private String orcLance() {
         return PAGE_MAKE_DAMAGE;
     }
 
     // Arco compuesto.
-    @GetMapping("/compoundBow/{cardId}")
+    @GetMapping("/compoundBow")
     private String compoundBound() {
         return PAGE_MAKE_DAMAGE;
     }

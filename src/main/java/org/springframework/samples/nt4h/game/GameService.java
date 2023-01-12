@@ -209,13 +209,13 @@ public class GameService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void attackEnemies(AbilityInGame usedAbility, Integer effectDamage, List<EnemyInGame> enemies, List<EnemyInGame> enemiesMoreDamage, Player player, Game game, Integer userId) {
+    public void attackEnemies(AbilityInGame usedAbility, Integer effectDamage, List<EnemyInGame> enemies, List<Integer> enemiesMoreDamage, Player player, Game game, Integer userId) {
         if (!(usedAbility.getAttack() == 0))
             return;
         Integer damageToEnemy = usedAbility.getAttack() + effectDamage;
         for (int e = 0; enemies.size() > e; e++) {
             EnemyInGame affectedEnemy = enemies.get(e);
-            Integer extraDamage = (enemiesMoreDamage.contains(affectedEnemy)) ? 1 : 0;
+            Integer extraDamage = enemiesMoreDamage.get(e);
             Integer initialEnemyHealth = affectedEnemy.getActualHealth();
             affectedEnemy.setActualHealth(initialEnemyHealth - (damageToEnemy + extraDamage));
             statisticService.damageDealt(player, (damageToEnemy + extraDamage));

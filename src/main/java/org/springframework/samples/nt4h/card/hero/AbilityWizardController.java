@@ -45,7 +45,7 @@ public class AbilityWizardController {
     private final CacheManager cacheManager;
     private final DeckService deckService;
 
-    public AbilityWizardController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, StatisticService statisticService, CacheManager cacheManager, DeckService deckService) {
+    public AbilityWizardController(UserService userService, PlayerService playerService, StatisticService statisticService, CacheManager cacheManager, DeckService deckService) {
         this.userService = userService;
         this.playerService = playerService;
         this.statisticService = statisticService;
@@ -74,12 +74,9 @@ public class AbilityWizardController {
     }
 
     // Aura protectora
-    @GetMapping("/protectiveAura/{cardId}")
-    private String protectiveAura(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/protectiveAura")
+    private String protectiveAura(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Deberían de ser efectos.
         // Anula el daño.
         cacheManager.hasPreventDamageFromEnemies(session);
@@ -93,12 +90,9 @@ public class AbilityWizardController {
     }
 
     // Bola de fuego
-    @GetMapping("/fireball/{cardId}")
-    private String fireball(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/fireball")
+    private String fireball(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         Game game = getGame();
         // Atacamos a todos los enemigos
         cacheManager.addAllEnemiesAlsoAttacked(session, currentPlayer.getGame());
@@ -113,12 +107,9 @@ public class AbilityWizardController {
     }
 
     // Disparo gélido
-    @GetMapping("/frostShot/{cardId}")
-    private String frostShot(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/frostShot")
+    private String frostShot(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Roba una carta.
         deckService.fromDiscardToDeck(currentPlayer.getDeck());
         // Elegimos el enemigo que no va a realizar daño.
@@ -127,12 +118,9 @@ public class AbilityWizardController {
     }
 
     // Flecha corrosiva
-    @GetMapping("/corrosiveArrow/{cardId}")
-    private String corrosiveArrow(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/corrosiveArrow")
+    private String corrosiveArrow(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         // Aumenta en 1 el daño hacia ese enemigo.
@@ -142,11 +130,8 @@ public class AbilityWizardController {
 
     // Golpe de bastón
     @GetMapping("/staffHit/{cardId}")
-    private String staffHit(@PathVariable("cardId") int cardId, HttpSession session) {
+    private String staffHit(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // SI ya ha sido atacado con golpe de bastón, realiza más daño.
         if (cacheManager.hasAlreadyAttackedWithStaff(session))
             cacheManager.addAttack(session, 1);
@@ -156,18 +141,13 @@ public class AbilityWizardController {
     }
 
     // Orbe curativo.
-    @GetMapping("/healingOrb/{cardId}")
-    private String healingOrb(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/healingOrb")
+    private String healingOrb(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
+        List<Player> players = getGame().getPlayers();
         // Todos los héroes recuperan dos cartas.
-        for (var i = 0; i < getGame().getPlayers().size(); i++) {
-            for (var j = 0; j < 2; j++) {
-                deckService.fromDiscardToDeck(getGame().getPlayers().get(i).getDeck());
-            }
-        }
+        for (var i = 0; i < players.size(); i++)
+            deckService.fromDiscardToDeck(players.get(i).getDeck());
         // Elimina 1 herida del héroe.
         playerService.decreaseWounds(currentPlayer, 1);
         // Elimina la carta.
@@ -176,40 +156,30 @@ public class AbilityWizardController {
     }
 
     // Proyectil ígneo
-    @GetMapping("/igneousProjectile/{cardId}")
-    private String igneousProjectile(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/igneousProjectile")
+    private String igneousProjectile() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Gana 1 ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Reconstitución.
-    @GetMapping("/reconstitution/{cardId}")
-    private String reconstitution(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/reconstitution")
+    private String reconstitution() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         Deck deck = currentPlayer.getDeck();
         // Roba 1 carta.
         deckService.fromDiscardToDeck(deck);
         // Recupera 2 cartas.
-        for (var i = 0; i < 2; i++)
-            deckService.fromDiscardToDeck(deck);
+        deckService.fromDiscardToDeck(deck, 2);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Torrente de luz.
-    @GetMapping("/lightTorrent/{cardId}")
-    private String lightTorrent(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/lightTorrent")
+    private String lightTorrent() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // El resto de héroes recuperan las cartas.
         List<Player> otherPlayers = getGame().getPlayers().stream().filter(p -> p != currentPlayer).collect(Collectors.toList());
         for (var i = 0; i < otherPlayers.size(); i++) {

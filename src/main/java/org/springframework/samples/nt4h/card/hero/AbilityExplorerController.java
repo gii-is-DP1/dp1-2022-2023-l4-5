@@ -70,25 +70,18 @@ public class AbilityExplorerController {
     }
 
     // Compañero lobo.
-    @GetMapping("/fellowWolf/{cardId}")
+    @GetMapping("/fellowWolf")
     private String fellowWolf(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Aumenta el valor de la defensa en dos.
         cacheManager.setDefend(session, 2);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Disparo certero.
-    @GetMapping("/preciseShot/{cardId}")
-    private String preciseShot(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/preciseShot")
+    private String preciseShot() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Pierde una carta.
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         // Finaliza el ataque.
@@ -96,13 +89,9 @@ public class AbilityExplorerController {
     }
 
     // Disparo rápido.
-    @GetMapping("/rapidFire/{cardId}")
-    private String rapidFire(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/rapidFire")
+    private String rapidFire(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Tomo una primera carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
@@ -111,6 +100,7 @@ public class AbilityExplorerController {
             cacheManager.addAttack(session, abilityInGame.getAbility().getAttack());
             // Elimina la carta.
             deckService.specificCardFromDeckToDiscard(currentPlayer, deck, abilityInGame);
+            // Comprobamos si no quedan cartas en el mazo.
             if (deck.getInDeck().isEmpty())
                 deckService.moveAllCardsFromDiscardToDeck(currentPlayer, deck);
             // Tomo una nueva carta.
@@ -124,13 +114,9 @@ public class AbilityExplorerController {
     }
 
     // En la diana.
-    @GetMapping("/target/{cardId}")
-    private String target(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/target")
+    private String target() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Gana una ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);
         // Pierde una carta.
@@ -140,25 +126,18 @@ public class AbilityExplorerController {
     }
 
     // Lluvia de flechas.
-    @GetMapping("/arrowRain/{cardId}")
-    private String arrowRain(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
+    @GetMapping("/arrowRain")
+    private String arrowRain(ModelMap model) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Debería de ser un efecto.
         model.put("name", "enemyAlsoAttacked");
         return VIEW_CHOSE_ENEMY;
     }
 
     // Recoger flechas.
-    @GetMapping("/collectArrows/{cardId}")
-    private String collectArrows(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/collectArrow")
+    private String collectArrows() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Recupera una carta de disparo rápido de la pila de descarte.
         Deck deck = currentPlayer.getDeck();
         deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo rápido")).findFirst()
@@ -169,13 +148,8 @@ public class AbilityExplorerController {
     }
 
     // Supervivencia
-    @GetMapping("/survival/{cardId}")
-    private String survival(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
-        Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
+    @GetMapping("/survival")
+    private String survival(ModelMap model) {
         // Gana una carta de supervivencia.
         model.put("name", "getOutEnemy");
         return VIEW_CHOSE_ENEMY;
