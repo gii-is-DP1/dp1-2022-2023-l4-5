@@ -93,5 +93,5 @@
     <div class="nextTurn"></div>
     <script src="/resources/js/chatGroup.js" type="module"></script>
     <script src="/resources/js/currentTurn.js" type="module"></script>
-    <script src="/resources/js/radioButtom.js" type="module">
+    <script src="/resources/js/radioButtom.js" type="module"></script>
 </nt4h:layout>

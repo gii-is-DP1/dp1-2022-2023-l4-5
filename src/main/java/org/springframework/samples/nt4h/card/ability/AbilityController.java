@@ -75,7 +75,7 @@ public class AbilityController {
     @PostMapping("/chooseEnemy")
     private String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
         EnemyInGame enemyInGame = turn.getCurrentEnemy();
-        String nextUrl = session.getAttribute("nextUrl").toString();
+        Object nextUrl = session.getAttribute("nextUrl");
         if (name != null) {
             String action = session.getAttribute("name").toString();
             List<Integer> enemies = (List<Integer>) session.getAttribute(action);
@@ -94,7 +94,7 @@ public class AbilityController {
                 enemies.add(enemyInGame.getId());
         }
 
-        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
+        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl.toString();
     }
 
     @GetMapping("/findInDiscard")

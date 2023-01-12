@@ -121,7 +121,7 @@ public class Advise {
     public void addAbilityInHand(List<AbilityInGame> takeNewCard, Game game) {
         Player currentPlayer = game.getCurrentPlayer();
         StringBuilder abilities = new StringBuilder();
-        for (AbilityInGame ability : takeNewCard) {
+        for(AbilityInGame ability : takeNewCard) {
             abilities.append(ability.getAbility().getName()).append(", ");
         }
         messageService.createNotification(game, currentPlayer.getName() + " has taken " + abilities + "from the deck.");

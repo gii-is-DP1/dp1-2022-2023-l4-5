@@ -81,7 +81,6 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         // Comprobamos si podemos cargarnos al enemigo.
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
-
         Integer sharpeningStone = cacheManager.getSharpeningStone(session);
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
         Ability ability = abilityService.getAbilityByName("Al Corazón");
