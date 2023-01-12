@@ -169,7 +169,7 @@ public class UserService {
 
 
     @Transactional
-    void uppRank(Integer userId){
+    public void uppRank(Integer userId){
         User user = userRepository.findById(userId).get();
         Integer winnedG = user.getStatistic().getNumWonGames();
         if( winnedG>= 3 && winnedG < 5){
