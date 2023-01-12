@@ -85,8 +85,8 @@ public class AbilityThiefController {
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
         Ability ability = abilityService.getAbilityByName("Al corazón");
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
-        if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHearth(session)) {
-            cacheManager.setFirstToTheHearth(session);
+        if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHeart(session)) {
+            cacheManager.setFirstToTheHeart(session);
             // Gana uno de oro.
             statisticService.gainGlory(currentPlayer, 1);
         }

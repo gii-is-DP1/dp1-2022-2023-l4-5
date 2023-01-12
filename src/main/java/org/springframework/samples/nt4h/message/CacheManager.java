@@ -19,7 +19,7 @@ public class CacheManager extends BaseCacheManager {
     private final String NEXT_URL = "nextUrl"; // Siguiente url a la que se redirige.
     private final String FIRST_SLASH = "firstSlash"; // Nos permite saber si es la primera vez que se ha utilizado espadazo.
     private final String ATTACKED_ENEMY = "attackedEnemy"; // El enemigo que ha sido seleccionado.
-    private final String FIRST_TO_THE_HEARTH = "firstToTheHearth"; // Nos permite saber si es la primera vez que se ha utilizado el ataque al corazón.
+    private final String FIRST_TO_THE_HEART = "firstToTheHeart"; // Nos permite saber si es la primera vez que se ha utilizado el ataque al corazón.
     private final String FIRST_STEALTH_ATTACK = "firstStealthAttack"; // Nos permite saber si es la primera vez que se ha utilizado el ataque furtivo.
     private final String ALREADY_ATTACKED_WITH_PRECISE_BOW = "alreadyAttackedWithPreciseBow"; // Nos permite saber si ya se ha atacado con el arco preciso.
     private final String PREVENT_DAMAGE_FROM_ENEMIES = "preventDamageFromEnemies"; // Permite anular el ataque de varios enemigos.
@@ -42,7 +42,7 @@ public class CacheManager extends BaseCacheManager {
 
     public void deleteEndAttackEnemy(HttpSession session) {
         removeFirstSlash(session);
-        removeFirstToTheHearth(session);
+        removeFirstToTheHeart(session);
         removeFirstStealthAttack(session);
         removeAlreadyAttackedWithPreciseBow(session);
         removeEnemiesThatReceiveMoreDamage(session);
@@ -133,16 +133,16 @@ public class CacheManager extends BaseCacheManager {
     }
 
     // Primer ataque al corazón?
-    public void setFirstToTheHearth(HttpSession session) {
-        session.setAttribute(FIRST_TO_THE_HEARTH, true);
+    public void setFirstToTheHeart(HttpSession session) {
+        session.setAttribute(FIRST_TO_THE_HEART, true);
     }
 
-    public Boolean isFirstToTheHearth(HttpSession session) {
-        return !getBoolean(session, FIRST_TO_THE_HEARTH);
+    public Boolean isFirstToTheHeart(HttpSession session) {
+        return !getBoolean(session, FIRST_TO_THE_HEART);
     }
 
-    public void removeFirstToTheHearth(HttpSession session) {
-        session.removeAttribute(FIRST_TO_THE_HEARTH);
+    public void removeFirstToTheHeart(HttpSession session) {
+        session.removeAttribute(FIRST_TO_THE_HEART);
     }
 
     // Primer ataque furtivo?
