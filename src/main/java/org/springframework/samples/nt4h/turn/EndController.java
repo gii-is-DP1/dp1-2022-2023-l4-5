@@ -87,7 +87,7 @@ public class EndController {
         User winner =userService.getUserByUsername(pairs.get(0).getValue0().getName());
         Integer wonned = winner.getStatistic().getNumWonGames();
         winner.getStatistic().setNumWonGames(wonned+1);
-        userService.uppRank(winner.getId());
+        userService.upRank(winner.getId());
         model.addAttribute("punctuations", pairs);
         return VIEW_END;
     }

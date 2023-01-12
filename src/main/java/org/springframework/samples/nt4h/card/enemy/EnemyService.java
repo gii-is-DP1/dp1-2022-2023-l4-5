@@ -101,7 +101,7 @@ public class EnemyService {
         return nightLordInGame;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Integer attackEnemyToActualPlayer(Game game, HttpSession session, Predicate<EnemyInGame> hasPreventedDamage, int defendedDmg, List<EnemyInGame> enemiesInATrap) {
         Player currentPlayer = game.getCurrentPlayer();
         if (game.getActualOrcs().isEmpty()) return 0;

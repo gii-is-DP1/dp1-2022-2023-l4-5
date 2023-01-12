@@ -203,6 +203,10 @@ public class CacheManager extends BaseCacheManager {
         addEnemies(session, CAPTURED_ENEMIES, getAttackedEnemy(session), enemy -> hasCapturedEnemies(session));
     }
 
+    public void addCapturedEnemies(HttpSession session, EnemyInGame enemy) {
+        addEnemies(session, CAPTURED_ENEMIES, enemy, enemyInGame -> hasCapturedEnemies(session, enemyInGame));
+    }
+
     public List<EnemyInGame> getCapturedEnemies(HttpSession session) {
         return parseEnemies(session, CAPTURED_ENEMIES, enemyId -> enemyService.getEnemyInGameById(Integer.parseInt(enemyId)));
     }
