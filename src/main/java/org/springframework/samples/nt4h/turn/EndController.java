@@ -84,6 +84,10 @@ public class EndController {
             pairs.add(new Pair<>(player, total));
         }
         pairs.sort((o1, o2) -> o2.getValue1().compareTo(o1.getValue1()));
+        User winner =userService.getUserByUsername(pairs.get(0).getValue0().getName());
+        Integer wonned = winner.getStatistic().getNumWonGames();
+        winner.getStatistic().setNumWonGames(wonned+1);
+        userService.uppRank(winner.getId());
         model.addAttribute("punctuations", pairs);
         return VIEW_END;
     }

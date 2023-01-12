@@ -30,7 +30,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
-// TODO: Cambiar nombre y enlaces.
 @Controller
 @RequestMapping("/games")
 public class GameController {
