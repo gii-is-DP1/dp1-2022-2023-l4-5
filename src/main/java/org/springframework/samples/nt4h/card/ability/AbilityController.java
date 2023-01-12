@@ -98,7 +98,7 @@ public class AbilityController {
     }
 
     @GetMapping("/findInDiscard")
-    private String findInDiscard(Turn turn, HttpSession session) {
+    private String findInDiscard(Turn turn) {
         // Cogemos la carta elegida de la pila de descarte.
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         // La colocamos en la mano.

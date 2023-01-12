@@ -194,7 +194,8 @@ public class GameService {
         for(int e=0; e < attackedEnemies.size(); e++) {
             EnemyInGame enemy = attackedEnemies.get(e);
             if (enemy.getActualHealth() <= 0) {
-                statisticService.killedOrcs(player);
+                System.out.println("Enemy " + enemy.getEnemy().getName() + " killed");
+                // statisticService.killedOrcs(player);
                 statisticService.gainGold(player, enemy.getEnemy().getGold());
                 statisticService.gainGlory(player, enemy.getEnemy().getGlory());
                 statisticService.getNumDamageByUser(userId);

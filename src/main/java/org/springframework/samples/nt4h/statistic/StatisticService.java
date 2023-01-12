@@ -156,6 +156,7 @@ public class StatisticService {
 
     @Transactional(rollbackFor = Exception.class)
     public void gainGlory(Player player, Integer glory) {
+        System.out.println("gainGlory");
         Statistic playerStatistic = player.getStatistic();
         User user = userService.getUserByUsername(player.getName());
         Statistic userStatistic = user.getStatistic();
@@ -195,17 +196,6 @@ public class StatisticService {
         Statistic userStatistic = user.getStatistic();
         userStatistic.setGlory(userStatistic.getDamageDealt() + damage);
         playerStatistic.setGlory(playerStatistic.getDamageDealt() + damage);
-        saveStatistic(userStatistic);
-        saveStatistic(playerStatistic);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public void killedOrcs(Player player) {
-        Statistic playerStatistic = player.getStatistic();
-        User user = userService.getUserByUsername(player.getName());
-        Statistic userStatistic = user.getStatistic();
-        userStatistic.setGlory(userStatistic.getNumOrcsKilled() + 1);
-        playerStatistic.setGlory(playerStatistic.getNumOrcsKilled() + 1);
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
     }

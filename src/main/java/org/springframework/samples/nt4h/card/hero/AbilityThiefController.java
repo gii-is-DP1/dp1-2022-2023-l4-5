@@ -39,7 +39,7 @@ import java.util.Optional;
  * - Trampa.
  */
 @Controller
-@RequestMapping("/abilityies")
+@RequestMapping("/abilities")
 public class AbilityThiefController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
@@ -86,7 +86,14 @@ public class AbilityThiefController {
 
         Integer sharpeningStone = cacheManager.getSharpeningStone(session);
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
+        System.out.println("Sharpening stone: " + sharpeningStone);
+        abilityService.getAllAbilities().forEach(ability -> {
+            if (ability.getName().contains("Al")) {
+               System.out.println("Al corazón: " + ability.getName());
+            }
+        });
         Ability ability = abilityService.getAbilityByName("Al corazón");
+        System.out.println("Al corazón: " + ability.getId());
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHearth(session)) {
             cacheManager.setFirstToTheHearth(session);
@@ -164,7 +171,7 @@ public class AbilityThiefController {
     }
 
     // Saqueo1
-    @GetMapping("/loot1/{cardId}")
+    @GetMapping("/loot1")
     private String loot1() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas dos monedas por cada enemigo vivo.
