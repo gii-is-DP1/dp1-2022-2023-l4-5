@@ -102,7 +102,8 @@ public class AbilityKnightController {
         // El enemigo seleccionado no podrá hacer daño.
         cacheManager.addPreventDamageFromEnemies(session);
         // Termina el turno.
-        return PAGE_END_ATTACK;
+        cacheManager.setNextUrl(session, PAGE_END_ATTACK);
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Espadazo.

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -96,7 +97,7 @@ public class CacheManager extends BaseCacheManager {
     public Boolean hasNextUrl(HttpSession session) {
         return hasAttribute(session);
     }
-    public String getNextUrl(HttpSession session) {
+    public Optional<String> getNextUrl(HttpSession session) {
         return getString(session);
     }
 
