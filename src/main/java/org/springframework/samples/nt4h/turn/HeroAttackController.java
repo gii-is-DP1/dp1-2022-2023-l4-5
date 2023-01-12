@@ -121,6 +121,7 @@ public class HeroAttackController {
         turnService.saveTurn(oldTurn);
         advise.heroAttack(usedAbility, attackedEnemy, game);
         Optional<Enemy> nighLord = game.getActualOrcs().stream().map(EnemyInGame::getEnemy).filter(enemy -> enemy.getName().equals("Nigh Lord")).findFirst();
+        cacheManager.setAttackedEnemy(session, attackedEnemy.getId());
         return nighLord.map(enemy -> PAGE_ABILITY + "/" + enemy.getName().toLowerCase() + "/" + usedAbility.getId()).orElse(PAGE_ABILITY);
     }
 
@@ -140,10 +141,8 @@ public class HeroAttackController {
         Integer effectDamage = cacheManager.getSharpeningStone(session) + cacheManager.getAttack(session);
         List<EnemyInGame> enemies = cacheManager.getEnemiesAlsoAttacked(session);
 
-        if (attackedEnemy != null) {
+        if (attackedEnemy != null)
             enemies.add(attackedEnemy);
-            cacheManager.setAttackedEnemy(session, attackedEnemy.getId());
-        }
         List<Integer> enemiesMoreDamage = enemies.stream().map(enemy -> cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, enemy)).collect(Collectors.toList());
         gameService.attackEnemies(usedAbility, effectDamage, enemies, enemiesMoreDamage, player, game, getLoggedUser().getId());
         if (cacheManager.hasToBeDeletedAbility(session))
