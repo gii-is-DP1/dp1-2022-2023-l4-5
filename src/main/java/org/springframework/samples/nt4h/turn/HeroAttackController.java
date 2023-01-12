@@ -64,33 +64,33 @@ public class HeroAttackController {
     }
 
     @ModelAttribute("loggedUser")
-    public User getLoggedUser() {
+    private User getLoggedUser() {
         return userService.getLoggedUser();
     }
 
     @ModelAttribute("currentPlayer")
-    public Player getPlayer() {
+    private Player getPlayer() {
         return getLoggedUser().getGame().getCurrentPlayer();
     }
 
     @ModelAttribute("game")
-    public Game getGame() {
+    private Game getGame() {
         return getPlayer().getGame();
     }
 
     @ModelAttribute("newTurn")
-    public Turn getNewTurn() {
+    private Turn getNewTurn() {
         return new Turn();
     }
 
     @ModelAttribute("loggedPlayer")
-    public Player getLoggedPlayer() {
+    private Player getLoggedPlayer() {
         User loggedUser = getLoggedUser();
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
     @ModelAttribute("chat")
-    public Message getChat() {
+    private Message getChat() {
         return new Message();
     }
 
