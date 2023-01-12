@@ -85,6 +85,7 @@ public class EnemyService {
         List<EnemyInGame> orcs = getAllNotNightLords().stream().map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
         Collections.shuffle(orcs);
         List<EnemyInGame> limitedOrcs = orcs.subList(0, limitEnemies);
+        saveEnemyInGame(limitedOrcs.get(0));
         limitedOrcs.forEach(this::saveEnemyInGame);
         return limitedOrcs;
     }
@@ -103,17 +104,8 @@ public class EnemyService {
     public Integer attackEnemyToActualPlayer(Game game) {
         Player currentPlayer = game.getCurrentPlayer();
         if (game.getActualOrcs().isEmpty()) return 0;
-        int numCardsInDeck = currentPlayer.getDeck().getInDeck().size();
         int damage = game.getActualOrcs().stream().mapToInt(EnemyInGame::getActualHealth).sum();
-        if (numCardsInDeck <= damage) { //si el daño es mayor o igual a la cantidad de cartass quue tengo pues recibo la herida
-            playerService.inflictWounds(currentPlayer, damage - numCardsInDeck, game);
-            if (Objects.equals(currentPlayer.getWounds(), currentPlayer.getHealth())) {
-                game.getPlayers().remove(currentPlayer);  // de momento sales de la partida, mas adelante cambia a vista espectador
-                playerService.deletePlayer(currentPlayer);
-                return damage;
-            }
-        } else
-            deckService.retrievesCards(currentPlayer.getDeck(), damage);
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), damage);
         return damage;
     }
 
@@ -127,5 +119,6 @@ public class EnemyService {
         enemy.setActualHealth(enemy.getActualHealth() + 1);
         saveEnemyInGame(enemy);
     }
+
 
 }

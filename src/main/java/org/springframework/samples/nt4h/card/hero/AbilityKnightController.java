@@ -33,19 +33,17 @@ import javax.servlet.http.HttpSession;
  * - Voz de aliento.
  */
 @Controller
-@RequestMapping("/abilities/knight")
+@RequestMapping("/abilities")
 public class AbilityKnightController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
-
-    private final String VIEW_LOSE_CARD = "abilities/loseCard";
-    private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final String PAGE_END_ATTACK = "redirect:/heroAttack/next";
     private final UserService userService;
     private final DeckService deckService;
     private final CacheManager cacheManager;
     private final StatisticService statisticService;
 
-    public AbilityKnightController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, DeckService deckService, CacheManager cacheManager, StatisticService statisticService) {
+    public AbilityKnightController(UserService userService, DeckService deckService, CacheManager cacheManager, StatisticService statisticService) {
         this.userService = userService;
         this.deckService = deckService;
         this.cacheManager = cacheManager;
@@ -73,118 +71,87 @@ public class AbilityKnightController {
     }
 
     // Ataque brutal
-    @GetMapping("/brutalAttack/{cardId}")
-    private String brutalAttack(@PathVariable("cardId") int cardId) {
+    @GetMapping("/brutalAttack")
+    private String brutalAttack() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Pierde una carta.
-        deckService.loseACard(currentPlayer.getDeck());
-        return VIEW_LOSE_CARD;
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Carga con escudo.
-    @GetMapping("/shieldCharge/{cardId}")
-    private String shieldCharge(@PathVariable("cardId") int cardId, HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
+    @GetMapping("/shieldCharge")
+    private String shieldCharge(HttpSession session) {
         // Aumenta el valor de la defensa en dos.
         cacheManager.setDefend(session, 2);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Doble espadazo.
-    @GetMapping("/doubleSlash/{cardId}")
-    private String doubleSlash(@PathVariable("cardId") int cardId) {
+    @GetMapping("/doubleSlash")
+    private String doubleSlash() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Elimina una carta de la mano.
-        deckService.loseACard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         return PAGE_MAKE_DAMAGE;
     }
 
     // Escudo.
-    @GetMapping("/shield/{cardId}")
-    private String shield(@PathVariable("cardId") int cardId, HttpSession session, ModelMap model) {
-        Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
+    @GetMapping("/shield")
+    private String shield(HttpSession session) {
+        // El enemigo seleccionado no podrá hacer daño.
+        cacheManager.addPreventDamageFromEnemies(session);
         // Termina el turno.
-        cacheManager.setNextUrl(session, PAGE_MAKE_DAMAGE + "/next");
-        model.put("name", "preventDamageFrom");
-        return VIEW_CHOSE_ENEMY;
+        return PAGE_END_ATTACK;
     }
 
     // Espadazo.
-    @GetMapping("/slash/{cardId}")
-    private String slash(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/slash")
+    private String slash(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Comprueba si es el primer slash.
         if (cacheManager.isFirstSlash(session)) {
             cacheManager.setFirstSlash(session);
             // Si lo es, roba una carta.
-            deckService.retrievesACard(currentPlayer.getDeck());
+            deckService.fromDiscardToDeck(currentPlayer.getDeck());
         }
         return PAGE_MAKE_DAMAGE;
     }
 
     // Paso atrás.
-    @GetMapping("/stepBack/{cardId}")
-    private String stepBack(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/stepBack")
+    private String stepBack() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Roba dos cartas.
-        for (int i = 0; i < 2; i++) {
-            deckService.retrievesACard(currentPlayer.getDeck());
-        }
+        deckService.fromDiscardToDeck(currentPlayer.getDeck(), 2);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Todo o nada.
-    @GetMapping("/allOrNothing/{cardId}")
-    private String allOrNothing(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/allOrNothing")
+    private String allOrNothing(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Roba una carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
-        deckService.retrievesTheCard(deck, abilityInGame);
+        deckService.specificCardFromDiscardToDeck(deck, abilityInGame);
         // Agrega ese daño a la carta.
         cacheManager.addAttack(session, abilityInGame.getAttack());
         return PAGE_MAKE_DAMAGE;
     }
 
     // Voz de aliento
-    @GetMapping("/voiceOfEncouragement/{cardId}")
-    private String voiceOfEncouragement(@PathVariable("cardId") int cardId, HttpSession session) {
+    @GetMapping("/voiceOfEncouragement")
+    private String voiceOfEncouragement() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // cada jugador roba dos cartas.
         for (Player player : getGame().getPlayers()) {
-            for (int i = 0; i < 2; i++) {
-                deckService.retrievesACard(player.getDeck());
-            }
+            deckService.fromDiscardToDeck(player.getDeck(), 2);
         }
         // Roba una carta.
-        deckService.retrievesACard(currentPlayer.getDeck());
+        deckService.fromDiscardToDeck(currentPlayer.getDeck());
         // Gana una ficha de gloria.
-        statisticService.gainGlory(currentPlayer.getStatistic(), 1);
+        statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 }

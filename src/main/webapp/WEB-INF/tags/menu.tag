@@ -42,6 +42,13 @@
                         <span>Cards</span>
                     </nt4h:menuItem>
                 </sec:authorize>
+                <sec:authorize access="isAuthenticated()">
+                    <nt4h:menuItem active="${name eq 'All'}" url="/admins/all"
+                                   title="All games">
+                        <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+                        <span>All Games</span>
+                    </nt4h:menuItem>
+                </sec:authorize>
             </ul>
 
 
@@ -74,7 +81,7 @@
 												<strong><sec:authentication property="name" /></strong>
 											</p>
 											<p class="text-left">
-												<a href="<c:url value="/checkout" />"
+												<a href="<c:url value="/logout" />"
 												   class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
 											<p class="text-left">

@@ -35,9 +35,10 @@
     <a href="/turns">
         <button type="button" class="btn btn-primary">Next</button>
     </a>
+    <hr>
     <div class="row">
+        <h2>Chatea</h2>
         <div class="chatGroup"></div>
-
         <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
             <nt4h:inputField label="Content" name="content"/>
         </form:form>

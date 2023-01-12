@@ -16,6 +16,15 @@
     <h1>Action decision</h1>
     <h1>${currentPlayer}`s Turn</h1>
     <h2>Buy a product</h2>
+    <div class="container">
+        <c:forEach var="i" begin="0" end="${currentPlayer.health}">
+            <img src="/resources/images/heart_hero.gif" width="50" height="50">
+        </c:forEach>
+        <p style="font-size:5rem">
+            <img src="/resources/images/gloria.gif" width="50" height="50"> ${currentPlayer.statistic.glory}
+            <img src="/resources/images/coin.gif" width="50" height="50"> ${currentPlayer.statistic.gold}
+        </p>
+    </div>
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="newTurn" class="form-horizontal" id="product-selection-form">
             <div class="container">
@@ -62,8 +71,9 @@
         </div>
     </c:if>
 
-
+    <hr>
     <div class="row">
+        <h2>Chatea</h2>
         <div class="chatGroup"></div>
         <c:if test="${!loggedPlayer.isNew()}">
             <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">

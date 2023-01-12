@@ -38,6 +38,8 @@ public class ExceptionHandlerConfiguration
     private static final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
 
+    private final String PAGE_START = "redirect:/start";
+
     public ExceptionHandlerConfiguration(UserService userService) {
         this.userService = userService;
     }
@@ -103,7 +105,7 @@ public class ExceptionHandlerConfiguration
         return PAGE_GAME_HERO_SELECT;
     }
 
-    @ExceptionHandler(EnoughCardsException.class)
+    @ExceptionHandler(NoEnoughCardsException.class)
     public String handleEnoughCardsException() {
         return "exception";
     }
@@ -145,7 +147,7 @@ public class ExceptionHandlerConfiguration
     public String handleWithOutPhaseException(HttpSession session) {
         session.setAttribute("message", "You must choose a phase: EVADE or ATTACK.");
         session.setAttribute("messageType", "danger");
-        return PAGE_GAME_LOBBY;
+        return PAGE_START;
     }
 
     @ExceptionHandler(WithOutAbilityException.class)
@@ -188,5 +190,12 @@ public class ExceptionHandlerConfiguration
         session.setAttribute("message", "You can't use this ability anymore.");
         session.setAttribute("messageType", "danger");
         return PAGE_HERO_ATTACK;
+    }
+
+    @ExceptionHandler(NoHeroSelectedException.class)
+    public String handleNoHeroSelectedException(HttpSession session) {
+        session.setAttribute("message", "You must select a hero.");
+        session.setAttribute("messageType", "danger");
+        return PAGE_GAME_HERO_SELECT;
     }
 }

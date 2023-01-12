@@ -1,6 +1,5 @@
 package org.springframework.samples.nt4h.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.model.Person;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -53,22 +52,6 @@ public class WelcomeController {
         model.put("title", "No Time For Heroes");
 
         return "welcome";
-    }
-
-    @GetMapping("/checkin")
-    public String checkin() {
-        User user = userService.getLoggedUser();
-        user.setIsConnected(true);
-        userService.saveUser(user);
-        return "redirect:/";
-    }
-
-    @GetMapping("/checkout")
-    public String checkout() {
-        User user = userService.getLoggedUser();
-        user.setIsConnected(false);
-        userService.saveUser(user);
-        return "redirect:/logout";
     }
 
 }

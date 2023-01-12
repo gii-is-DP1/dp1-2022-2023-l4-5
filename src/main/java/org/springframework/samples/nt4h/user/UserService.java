@@ -49,14 +49,25 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Transactional
-    public void saveUser(User user) throws DataAccessException {
+    /*
+    @Transactional(rollbackFor = Exception.class)
+    public void createUser(User user) {
         if (user.getEnable() == null) user.setEnable("1");
         if (user.getTier()== null) user.setTier(Tier.IRON);
         if (user.getAuthority()== null) user.setAuthority("USER");
         if (user.getIsConnected()== null) user.setIsConnected(true);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+     */
+
+    @Transactional(rollbackFor = Exception.class)
+    public void saveUser(User user) throws DataAccessException {
+        if (user.getEnable() == null) user.setEnable("1");
+        if (user.getTier()== null) user.setTier(Tier.IRON);
+        if (user.getAuthority()== null) user.setAuthority("USER");
+        if (user.getIsConnected()== null) user.setIsConnected(true);
         userRepository.save(user);
     }
 
@@ -138,7 +149,7 @@ public class UserService {
         saveUser(user);
     }
 
-    @Transactional
+    @Transactional()
     public void removeFriend(int friendId) {
         User user = getLoggedUser();
         User friend = getUserById(friendId);
@@ -147,20 +158,6 @@ public class UserService {
             friend.getFriends().remove(user);
             saveUser(user);
             saveUser(friend);
-        }
-    }
-
-    @Transactional(rollbackFor = {IncorrectPasswordException.class, FullGameException.class, UserInAGameException.class})
-    public void addUserToGame(User user, Game game, String password) throws UserInAGameException, IncorrectPasswordException, FullGameException {
-        if (user.getGame() != null && !user.getGame().equals(game))
-            throw new UserInAGameException();
-        if (!(Objects.equals(game.getPassword(), password) || game.getAccessibility() == Accessibility.PUBLIC))
-            throw new IncorrectPasswordException();
-        if ((game.getPlayers().size()+1) < game.getMaxPlayers())
-            throw new FullGameException();
-        if (user.getGame() == null) {
-            user.setGame(game);
-            saveUser(user);
         }
     }
 

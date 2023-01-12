@@ -15,7 +15,9 @@
         <form:form modelAttribute="game" class="form-horizontal" >
             <button id="waiting" hidden="hidden" type="submit">Start game</button>
         </form:form>
+        <hr>
         <div class="row">
+            <h2>Chatea</h2>
             <div class="chatGroup"></div>
             <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
                 <nt4h:inputField label="Content" name="content"/>

@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-// TODO: darle un prop?sito a esta clase.
 @Getter
 @Setter
 @Entity
