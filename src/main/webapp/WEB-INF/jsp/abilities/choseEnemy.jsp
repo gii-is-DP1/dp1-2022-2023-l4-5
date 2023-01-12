@@ -28,10 +28,10 @@
             <img src="/resources/images/coin.gif" width="50" height="50"> ${currentPlayer.statistic.gold}
         </p>
     </div>
-    <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form" action="/abilities/${name}">
+    <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form" action="/abilities/chooseEnemy?name=${name}">
         <div class="container">
             <c:if test="${enemies.size()!=0}">
-                <div class="pointer">
+                <div style="display: flex; justify-content: center;">
                     <c:forEach var="i" begin="0" end="${enemies.size()-1}">
                         <c:set var="enemyInGame" value="${enemies[i]}" scope="page"/>
                         <div class="row">
@@ -43,9 +43,7 @@
                             </div>
                         </div>
                         <div class="col-sm-2">
-                            <nt4h:radioButtom name="currentEnemy" element="${enemyInGame.id}"
-                                              frontImage="${enemyInGame.enemy.frontImage}" i="${i}0"
-                                              image="/resources/images/muszka.png"/>
+                            <:radioButton value="${enemyInGame.name}" path="enemyName" label="${enemyInGame.name}"/>
                         </div>
                     </c:forEach>
                 </div>
@@ -69,5 +67,4 @@
         </form:form>
     </div>
     <script src="/resources/js/chatGroup.js" type="module"></script>
-    <script src="/resources/js/radioButtom.js" type="module"></script>
 </nt4h:layout>

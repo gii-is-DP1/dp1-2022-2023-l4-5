@@ -6,6 +6,7 @@ import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.CacheManager;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.StatisticService;
@@ -140,6 +141,7 @@ public class AbilityExplorerController {
         model.put("name", "enemyAlsoAttacked");
         model.put("enemies", getGame().getActualOrcs());
         model.put("newTurn", new Turn());
+        model.put("message", new Message());
         return VIEW_CHOSE_ENEMY;
     }
 
@@ -167,6 +169,7 @@ public class AbilityExplorerController {
         model.put("name", "getOutEnemy");
         model.put("enemies", enemies);
         model.put("newTurn", new Turn());
+        model.put("chat", new Message());
         return VIEW_CHOSE_ENEMY;
 
 
