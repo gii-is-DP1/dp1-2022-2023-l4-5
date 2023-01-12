@@ -146,7 +146,7 @@ public class AbilityExplorerController {
     }
 
     // Recoger flechas.
-    @GetMapping("/collectArrow")
+    @GetMapping("/collectArrows")
     private String collectArrows() {
         Player currentPlayer = getCurrentPlayer();
         // Recupera una carta de disparo rápido de la pila de descarte.

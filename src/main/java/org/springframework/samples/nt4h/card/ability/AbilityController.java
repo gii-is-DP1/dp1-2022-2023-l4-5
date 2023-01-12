@@ -68,7 +68,7 @@ public class AbilityController {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
-        deck.discardCardOnHand(abilityInGame); // Esto debe de ser un efecto
+        deck.discardCardOnHand(abilityInGame);
         return PAGE_MAKE_DAMAGE;
     }
 

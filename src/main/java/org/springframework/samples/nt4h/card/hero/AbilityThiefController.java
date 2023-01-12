@@ -162,7 +162,7 @@ public class AbilityThiefController {
     }
 
     // Saqueo1
-    @GetMapping("/loot1/{cardId}")
+    @GetMapping("/loot1")
     private String loot1() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas dos monedas por cada enemigo vivo.

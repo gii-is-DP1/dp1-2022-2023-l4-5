@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="col-sm-2">
-                            <:radioButton value="${enemyInGame.name}" path="enemyName" label="${enemyInGame.name}"/>
+                            <form:radiobutton value="${enemyInGame}" path="currentEnemy" label="${enemyInGame.enemy.name}"/>
                         </div>
                     </c:forEach>
                 </div>
