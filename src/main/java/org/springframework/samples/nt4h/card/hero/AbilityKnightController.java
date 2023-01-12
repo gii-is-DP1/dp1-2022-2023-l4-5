@@ -101,6 +101,7 @@ public class AbilityKnightController {
     private String shield(HttpSession session) {
         // El enemigo seleccionado no podrá hacer daño.
         cacheManager.addPreventDamageFromEnemies(session);
+        System.out.println("Escudo" + cacheManager.getPreventDamageFromEnemies(session));
         // Termina el turno.
         cacheManager.setNextUrl(session, PAGE_END_ATTACK);
         return PAGE_MAKE_DAMAGE;

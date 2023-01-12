@@ -97,12 +97,17 @@ public class DeckService {
     // De descarte a mano
     @Transactional(rollbackFor = Exception.class)
     public void fromDiscardToHand(Deck deck) {
-        AbilityInGame inDiscard = deck.getInDiscard().get(0);
-        specificCardFromDiscardToHand(deck, inDiscard);
+        System.out.println("fromDiscardToHand");
+        if (!deck.getInDiscard().isEmpty()) {
+            System.out.println("in fromDiscardToHand");
+            AbilityInGame inDiscard = deck.getInDiscard().get(0);
+            specificCardFromDiscardToHand(deck, inDiscard);
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void specificCardFromDiscardToHand(Deck deck, AbilityInGame inDiscard) {
+        System.out.println("specificCardFromDiscardToHand");
         abilityService.saveAbilityInGame(inDiscard);
         deck.getInDiscard().remove(inDiscard);
         deck.getInHand().add(inDiscard);
@@ -118,7 +123,7 @@ public class DeckService {
 
     // De mano a descarte.
     @Transactional(rollbackFor = Exception.class)
-    public void fromHandToDiscard(Player player, Deck deck) {
+    public void fromHandToDiscard(Deck deck) {
         AbilityInGame inHand = deck.getInHand().get(0);
         specificCardFromHandToDiscard(deck, inHand);
     }
@@ -133,9 +138,9 @@ public class DeckService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void fromHandToDiscard(Player player, Deck deck, Integer times) {
+    public void fromHandToDiscard(Deck deck, Integer times) {
         for (int i = 0; i < times; i++) {
-            fromHandToDiscard(player, deck);
+            fromHandToDiscard(deck);
         }
     }
 
