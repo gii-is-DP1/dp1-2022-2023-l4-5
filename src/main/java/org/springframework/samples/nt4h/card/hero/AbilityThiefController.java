@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.Comparator;
+import java.util.Optional;
 
 /**
  * Las habilidades del ladrón son:
@@ -115,8 +117,7 @@ public class AbilityThiefController {
     // Ballesta precisa.
     @GetMapping("/preciseBow")
     private String preciseBow(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
-        // SI ya ha sido atacado con golpe de bastón, realiza más daño.
+        // Si ya ha sido atacado con golpe de bastón, realiza más daño.
         if (cacheManager.hasAlreadyAttackedWithPreciseBow(session))
             cacheManager.addAttack(session,  1);
         else
@@ -127,7 +128,6 @@ public class AbilityThiefController {
     // En las sombras.
     @GetMapping("/inTheShadows")
     private String inTheShadows(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
         // Previene dos puntos de daño.
         cacheManager.setDefend(session, 2);
         return PAGE_MAKE_DAMAGE;
@@ -186,8 +186,10 @@ public class AbilityThiefController {
     public String trap(HttpSession session) {
         // El enemigo seleccionado morirá al terminar la fase de ataque.
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
-        if (attackedEnemy == null)
-            cacheManager.addCapturedEnemies(session, attackedEnemy);
+        if (attackedEnemy == null) {
+            Optional<EnemyInGame> enemy = getGame().getActualOrcs().stream().max(Comparator.comparing(EnemyInGame::getActualHealth));
+            enemy.ifPresent(enemyInGame -> cacheManager.addCapturedEnemies(session, enemyInGame));
+        }
         else
             cacheManager.addCapturedEnemies(session);
         return PAGE_MAKE_DAMAGE;
