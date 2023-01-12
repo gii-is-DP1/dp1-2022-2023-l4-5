@@ -129,7 +129,7 @@ public class AbilityWizardController {
     }
 
     // Golpe de bastón
-    @GetMapping("/staffHit/{cardId}")
+    @GetMapping("/staffHit")
     private String staffHit(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         // SI ya ha sido atacado con golpe de bastón, realiza más daño.

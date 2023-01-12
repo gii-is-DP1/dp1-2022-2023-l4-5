@@ -247,7 +247,7 @@ class AbilityWizardControllerTest {
     void testCorrosiveArrow() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/corrosiveArrow/{cardId}", 123);
+            .get("/abilities/corrosiveArrow");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)
@@ -262,8 +262,7 @@ class AbilityWizardControllerTest {
     void testFireball() throws Exception {
 
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/fireball/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/fireball");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)
@@ -278,8 +277,7 @@ class AbilityWizardControllerTest {
     @Test
     void testFrostShot() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/frostShot/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/frostShot");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)
@@ -294,7 +292,7 @@ class AbilityWizardControllerTest {
     @Test
     void testHealingOrb() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/healingOrb/{cardId}",
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/healingOrb",
             123);
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
@@ -311,7 +309,7 @@ class AbilityWizardControllerTest {
     void testIgneousProjectile() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/igneousProjectile/{cardId}", 123);
+            .get("/abilities/igneousProjectile");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)
@@ -327,7 +325,7 @@ class AbilityWizardControllerTest {
     void testLightTorrent() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/lightTorrent/{cardId}", 123);
+            .get("/abilities/lightTorrent");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)
@@ -343,7 +341,7 @@ class AbilityWizardControllerTest {
     void testProtectiveAura() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/protectiveAura/{cardId}", 123);
+            .get("/abilities/protectiveAura");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)
@@ -359,7 +357,7 @@ class AbilityWizardControllerTest {
     void testReconstitution() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/wizard/reconstitution/{cardId}", 123);
+            .get("/abilities/reconstitution");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)
@@ -374,8 +372,7 @@ class AbilityWizardControllerTest {
     @Test
     void testStaffHit() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/wizard/staffHit/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/staffHit");
         MockMvcBuilders.standaloneSetup(abilityWizardController)
             .build()
             .perform(requestBuilder)

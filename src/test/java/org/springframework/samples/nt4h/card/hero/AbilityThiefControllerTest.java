@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.card.hero;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -88,6 +87,7 @@ class AbilityThiefControllerTest {
     private User user;
     private Turn turn;
     private AbilityInGame abilityInGame;
+    private Ability ability;
     private EnemyInGame enemyInGame;
 
     @BeforeEach
@@ -155,7 +155,7 @@ class AbilityThiefControllerTest {
         game.setStartDate(LocalDateTime.of(1, 1, 1, 1, 1));
         game.setStatistic(statistic);
 
-        Ability ability = new Ability();
+        ability = new Ability();
         ability.setAttack(1);
         ability.setBackImage("Back Image");
         ability.setFrontImage("Front Image");
@@ -251,8 +251,7 @@ class AbilityThiefControllerTest {
     @Test
     void testDeceive() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilityies/thief/deceive/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/deceive");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -267,7 +266,7 @@ class AbilityThiefControllerTest {
     void testInTheShadows() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilityies/thief/inTheShadows/{cardId}", 123);
+            .get("/abilities/inTheShadows");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -282,8 +281,7 @@ class AbilityThiefControllerTest {
     @Test
     void testLoot1() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilityies/thief/loot1/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/loot1");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -298,8 +296,7 @@ class AbilityThiefControllerTest {
     @Test
     void testLoot2() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilityies/thief/loot2/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/loot2");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -314,8 +311,7 @@ class AbilityThiefControllerTest {
     @Test
     void testPreciseBow() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilityies/thief/preciseBow/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/preciseBow");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -331,7 +327,7 @@ class AbilityThiefControllerTest {
     void testStealPockets() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilityies/thief/stealPockets/{cardId}", 123);
+            .get("/abilities/stealPockets");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -350,9 +346,9 @@ class AbilityThiefControllerTest {
         when(cacheManager.getAttackedEnemy(any())).thenReturn(enemyInGame);
         when(cacheManager.getAttack(any())).thenReturn(4);
         when(cacheManager.isFirstStealthAttack(any())).thenReturn(true);
-        when(abilityService.getAbilityInGameById(anyInt())).thenReturn(abilityInGame);
+        when(abilityService.getAbilityByName(anyString())).thenReturn(ability);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilityies/thief/stealthAttack/{cardId}", 123);
+            .get("/abilities/stealthAttack");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -370,10 +366,10 @@ class AbilityThiefControllerTest {
         when(cacheManager.getAttackedEnemy(any())).thenReturn(enemyInGame);
         when(cacheManager.getAttack(any())).thenReturn(4);
         when(cacheManager.isFirstToTheHearth(any())).thenReturn(true);
-        when(abilityService.getAbilityInGameById(anyInt())).thenReturn(abilityInGame);
+        when(abilityService.getAbilityByName(anyString())).thenReturn(ability);
         doNothing().when(cacheManager).setFirstToTheHearth(any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilityies/thief/toTheHearth/{cardId}", 123);
+            .get("/abilities/toTheHearth");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
@@ -387,7 +383,7 @@ class AbilityThiefControllerTest {
     @Test
     void testTrap() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilityies/thief/trap/{cardId}", 123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/trap");
         MockMvcBuilders.standaloneSetup(abilityThiefController)
             .build()
             .perform(requestBuilder)
