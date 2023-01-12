@@ -14,30 +14,30 @@ public interface StatisticRepository extends CrudRepository<Statistic, Integer> 
     List<Statistic> findAll();
 
     @Query("SELECT st.numPlayedGames FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numPlayedGamesByUserId(int userId);
+    Integer findNumPlayedGamesByUser(int userId);
 
     @Query("SELECT st.timePlayed FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numMinutesPlayedByUserId(int userId);
+    Integer findNumMinutesPlayedByUser(int userId);
 
     @Query("SELECT count(g) FROM Game g WHERE g.statistic.numPlayers = ?1")
-    Integer numPlayerPerGame(int numP);
+    Integer findnumGamesByNumPlayers(int numP);
 
-    @Query("SELECT st.gold FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numGoldByPlayerId(int userId);
+    @Query("SELECT u.statistic.gold FROM User u WHERE u.id = ?1")
+    Integer findNumGoldByUser(int userId);
 
-    @Query("SELECT st.glory FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numGloryByPlayerId(int userId);
+    @Query("SELECT u.statistic.glory FROM User u WHERE u.id = ?1")
+    Integer findNumGloryByUser(int userId);
 
-    @Query("SELECT st.numOrcsKilled FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numOrcsByPlayerId(int userId);
+    @Query("SELECT u.statistic.numOrcsKilled FROM User u WHERE u.id = ?1")
+    Integer findNumOrcsByUser(int userId);
 
-    @Query("SELECT st.numWarLordKilled FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numWarLordByPlayerId(int userId);
+    @Query("SELECT u.statistic.numWarLordKilled FROM User u WHERE u.id = ?1")
+    Integer findNumWarLordByUser(int userId);
 
-    @Query("SELECT st.damageDealt FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numDamageByPlayerId(int userId);
+    @Query("SELECT u.statistic.damageDealt FROM User u WHERE u.id = ?1")
+    Integer findNumDamageByUser(int userId);
 
-    @Query("SELECT st.numWonGames FROM Statistic st JOIN User u WHERE u.id = ?1")
-    Integer numWonGamesByPlayerId(int userId);
+    @Query("SELECT u.statistic.numWonGames FROM User u WHERE u.id = ?1")
+    Integer findNumWonGamesByUser(int userId);
 
 }

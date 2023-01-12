@@ -174,7 +174,7 @@ public class AbilityThiefController {
 
     // Saqueo2
     @GetMapping("/loot2")
-    private String loot2() {
+    public String loot2() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas una moneda por cada enemigo vivo.
         statisticService.gainGold(currentPlayer, getGame().getActualOrcs().size());
@@ -185,10 +185,13 @@ public class AbilityThiefController {
 
     // Trampa
     @GetMapping("/trap")
-    private String trap(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
+    public String trap(HttpSession session) {
         // El enemigo seleccionado morirá al terminar la fase de ataque.
-        cacheManager.addCapturedEnemies(session);
+        EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
+        if (attackedEnemy == null)
+            cacheManager.addCapturedEnemies(session, attackedEnemy);
+        else
+            cacheManager.addCapturedEnemies(session);
         return PAGE_MAKE_DAMAGE;
     }
 }
