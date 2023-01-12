@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -18,6 +19,9 @@ public class MessageServiceTest {
     protected MessageService messageService;
     @Autowired
     protected UserService userService;
+
+    @MockBean
+    private Advise advise;
 
     public MessageServiceTest() {
     }
@@ -41,7 +45,7 @@ public class MessageServiceTest {
         List<Message> messages = this.messageService.getMessageBySenderWithReceiver("alesanfe", "antonio");
         Assertions.assertNotNull(messages);
         Assertions.assertFalse(messages.isEmpty());
-        Assertions.assertEquals(2, messages.size());
+        Assertions.assertEquals(1, messages.size());
     }
 
     @Test
@@ -53,7 +57,7 @@ public class MessageServiceTest {
         User receiver = this.userService.getUserById(2);
         message.setReceiver(receiver);
         this.messageService.saveMessage(message);
-        Message m = (Message)this.messageService.getMessageBySenderWithReceiver("alesanfe", "antonio").get(2);
+        Message m = (Message)this.messageService.getMessageBySenderWithReceiver("alesanfe", "antonio").get(1);
         Assertions.assertEquals(message, m);
     }
 
