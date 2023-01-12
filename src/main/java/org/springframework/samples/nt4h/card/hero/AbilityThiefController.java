@@ -18,6 +18,7 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -83,7 +84,14 @@ public class AbilityThiefController {
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
         Integer sharpeningStone = cacheManager.getSharpeningStone(session);
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
-        Ability ability = abilityService.getAbilityByName("Al corazon");
+        System.out.println("Sharpening stone: " + sharpeningStone);
+        abilityService.getAllAbilities().forEach(ability -> {
+            if (ability.getName().contains("Al")) {
+               System.out.println("Al corazón: " + ability.getName());
+            }
+        });
+        Ability ability = abilityService.getAbilityByName("Al corazón");
+        System.out.println("Al corazón: " + ability.getId());
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHeart(session)) {
             cacheManager.setFirstToTheHeart(session);
