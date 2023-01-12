@@ -266,7 +266,6 @@ class EndControllerTest {
     @Test
     void testShowEnd() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        doNothing().when(message).toString();
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/end");
         MockMvcBuilders.standaloneSetup(endController)
             .build()
@@ -278,6 +277,13 @@ class EndControllerTest {
                     "punctuations"))
             .andExpect(MockMvcResultMatchers.view().name("turns/endPhase"))
             .andExpect(MockMvcResultMatchers.forwardedUrl("turns/endPhase"));
+    }
+    @Test
+    void testShowEnd2() throws Exception {
+        when(userService.getLoggedUser()).thenReturn(user);
+        ModelMap model = new ModelMap();
+        assertEquals("turns/endPhase",endController.showEnd(model));
+
     }
 }
 

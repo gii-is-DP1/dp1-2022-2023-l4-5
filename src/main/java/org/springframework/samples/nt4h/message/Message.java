@@ -42,11 +42,6 @@ public class Message extends BaseEntity implements Jsonable {
     @Enumerated(EnumType.STRING)
     private MessageType type;
 
-    @Override
-    public String toString() {
-        return sender.getUsername() + ": " + content;
-    }
-
     public void onDeleteSetNull() {
         sender = null;
         receiver = null;
