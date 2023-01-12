@@ -72,7 +72,6 @@ class TurnControllerTest {
         game = Game.createGame( "Test Game",   Mode.MULTI_CLASS, 2, "test123");
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
-        game.setHasStages(true);
         player = Player.createPlayer(user, game, true);
         turn = new Turn();
         turn.setPhase(Phase.EVADE);

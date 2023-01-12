@@ -138,7 +138,6 @@ class AbilityKnightControllerTest {
         game.setCurrentPlayer(player);
         game.setCurrentTurn(turn);
         game.setFinishDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        game.setHasStages(true);
         game.setId(1);
         game.setMaxPlayers(3);
         game.setMode(Mode.UNI_CLASS);
@@ -245,8 +244,7 @@ class AbilityKnightControllerTest {
     @Test
     void testAllOrNothing() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/knight/allOrNothing/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/allOrNothing");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)
@@ -261,22 +259,22 @@ class AbilityKnightControllerTest {
     void testBrutalAttack() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/knight/brutalAttack/{cardId}", 123);
+            .get("/abilities/brutalAttack");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.status().isFound())
             .andExpect(MockMvcResultMatchers.model().size(4))
             .andExpect(
                 MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("abilities/loseCard"));
+            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"));
     }
 
     @Test
     void testDoubleSlash() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/knight/doubleSlash/{cardId}", 123);
+            .get("/abilities/doubleSlash");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)
@@ -292,23 +290,22 @@ class AbilityKnightControllerTest {
     void testShield() throws Exception {
 
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/knight/shield/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/shield");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.model().size(5))
+            .andExpect(MockMvcResultMatchers.status().isFound())
+            .andExpect(MockMvcResultMatchers.model().size(4))
             .andExpect(
                 MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("abilities/choseEnemy"));
+            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/next"));
     }
 
     @Test
     void testShieldCharge() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/knight/shieldCharge/{cardId}", 123);
+            .get("/abilities/shieldCharge");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)
@@ -323,8 +320,7 @@ class AbilityKnightControllerTest {
     @Test
     void testSlash() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/knight/slash/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/slash");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)
@@ -339,8 +335,7 @@ class AbilityKnightControllerTest {
     @Test
     void testStepBack() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/knight/stepBack/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/stepBack");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)
@@ -356,7 +351,7 @@ class AbilityKnightControllerTest {
     void testVoiceOfEncouragement() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/knight/voiceOfEncouragement/{cardId}", 123);
+            .get("/abilities/voiceOfEncouragement");
         MockMvcBuilders.standaloneSetup(abilityKnightController)
             .build()
             .perform(requestBuilder)

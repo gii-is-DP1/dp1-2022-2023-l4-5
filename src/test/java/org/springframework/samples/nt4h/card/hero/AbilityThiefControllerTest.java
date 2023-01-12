@@ -144,7 +144,6 @@ class AbilityThiefControllerTest {
         game.setCurrentPlayer(player);
         game.setCurrentTurn(turn);
         game.setFinishDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        game.setHasStages(true);
         game.setId(1);
         game.setMaxPlayers(3);
         game.setMode(Mode.UNI_CLASS);

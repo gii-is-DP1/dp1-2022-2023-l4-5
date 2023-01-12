@@ -1,6 +1,8 @@
 package org.springframework.samples.nt4h.card.ability;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -83,6 +85,8 @@ class AbilityControllerTest {
 
     @MockBean
     private UserService userService;
+    @MockBean
+    private TurnService turnService;
 
     private Player player;
     private Game game;
@@ -144,7 +148,6 @@ class AbilityControllerTest {
         game.setCurrentPlayer(player);
         game.setCurrentTurn(turn);
         game.setFinishDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        game.setHasStages(true);
         game.setId(1);
         game.setMaxPlayers(3);
         game.setMode(Mode.UNI_CLASS);
@@ -222,7 +225,7 @@ class AbilityControllerTest {
         product.setQuantity(1);
 
         deck.setInDiscard(List.of(abilityInGame));
-        deck.setInHand(List.of(abilityInGame));
+        deck.setInHand(List.of(abilityInGame,abilityInGame));
         deck.setInDeck(List.of(abilityInGame));
         player.setDeck(deck);
         game.setCurrentPlayer(player);
@@ -254,7 +257,8 @@ class AbilityControllerTest {
     void testFindEffect() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         when(abilityService.getAbilityInGameById(1)).thenReturn(abilityInGame);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/ability/{cardId}", 1);
+        when(turnService.getTurnsByPhaseAndPlayerId(any(),anyInt())).thenReturn(turn);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities");
         MockMvcBuilders.standaloneSetup(abilityController)
             .build()
             .perform(requestBuilder)
@@ -262,14 +266,14 @@ class AbilityControllerTest {
             .andExpect(MockMvcResultMatchers.model().size(4))
             .andExpect(
                 MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
+            .andExpect(MockMvcResultMatchers.view().name("redirect:/abilities/Path Name"))
+            .andExpect(MockMvcResultMatchers.redirectedUrl("/abilities/Path Name"));
     }
 
     @Test
     void testLoseCard() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/ability/loseCard");
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/abilities/loseCard");
         MockMvcBuilders.standaloneSetup(abilityController)
             .build()
             .perform(requestBuilder)

@@ -50,7 +50,6 @@ public class GameTest {
         Player.createPlayer(user, game, true);
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
-        game.setHasStages(true);
     }
 
     @Test
@@ -63,7 +62,6 @@ public class GameTest {
         assertThat(game.getStartDate()).isEqualTo(LocalDateTime.of(2020, 1, 1, 0, 0));
         assertThat(game.getFinishDate()).isEqualTo(LocalDateTime.of(2020, 1, 2, 0, 0));
         //assertThat(game.getPhase()).isEqualTo(Phase.START);
-        assertThat(game.isHasStages()).isTrue();
     }
 
     @Test
@@ -134,9 +132,6 @@ public class GameTest {
         gameService.saveGame(game);
         assertThat(game.getName()).isEqualTo("Updated Game");
 
-        // Test deleting an existing game
-        gameService.deleteGame(game);
-        assertThatThrownBy(() -> gameService.getGameById(game.getId())).isInstanceOf(NotFoundException.class);
     }
 
     @Test

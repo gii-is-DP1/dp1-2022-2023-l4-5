@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
@@ -47,6 +48,8 @@ public class PlayerServiceTest {
     protected HeroService heroService;
     @Autowired
     protected UserService userService;
+    @Autowired
+    protected DeckService deckService;
     private int idPlayer;
     private int idGame;
     private String namePlayer;
@@ -64,8 +67,6 @@ public class PlayerServiceTest {
         player = Player.createPlayer(user, game, true);
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        //game.setPhase(Phase.START);
-        game.setHasStages(true);
         gameService.saveGame(game);
         game.addPlayerWithNewHero(player, heroInGame);
         idPlayer = player.getId();
@@ -140,7 +141,7 @@ public class PlayerServiceTest {
         HeroInGame heroInGame = player.getHeroes().get(0);
         Role correctResult = heroInGame.getHero().getRole();
         Game game = this.gameService.getGameById(idGame);
-        this.playerService.addDeckFromRole(player, game.getMode());
+        this.deckService.addDeckFromRole(player, game.getMode());
         List<Integer> idAbilities = player.getDeck().getInDeck().stream().map(a -> a.getAbility().getId()).collect(Collectors.toList());
         assertTrue(correctResult.getAbilities().containsAll(idAbilities));
     }

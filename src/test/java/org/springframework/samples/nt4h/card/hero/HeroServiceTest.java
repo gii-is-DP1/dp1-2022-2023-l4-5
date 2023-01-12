@@ -44,7 +44,6 @@ class HeroServiceTest {
         Player player = Player.createPlayer(user, game, true);
         System.out.println("numPlayers: " + game.getPlayers().size());
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        game.setHasStages(true);
         Hero hero = heroService.getHeroById(idHero);
         HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
         player.addHero(heroInGame);
