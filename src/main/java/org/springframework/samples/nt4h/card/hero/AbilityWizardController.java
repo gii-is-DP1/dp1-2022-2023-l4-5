@@ -77,9 +77,8 @@ public class AbilityWizardController {
     @GetMapping("/protectiveAura")
     private String protectiveAura(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        // Deberían de ser efectos.
         // Anula el daño.
-        cacheManager.hasPreventDamageFromEnemies(session);
+        cacheManager.addAllInBattlePreventDamageFromEnemies(session, getGame());
         // Pierde una carta por cada enemigo.
         Deck deck = currentPlayer.getDeck();
         for (var i = 0; i < getGame().getActualOrcs().size(); i++) {
@@ -111,7 +110,7 @@ public class AbilityWizardController {
     private String frostShot(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         // Roba una carta.
-        deckService.fromDiscardToDeck(currentPlayer.getDeck());
+        deckService.fromDeckToHand(currentPlayer, currentPlayer.getDeck());
         // Elegimos el enemigo que no va a realizar daño.
         cacheManager.addPreventDamageFromEnemies(session);
         return PAGE_MAKE_DAMAGE;
@@ -147,7 +146,7 @@ public class AbilityWizardController {
         List<Player> players = getGame().getPlayers();
         // Todos los héroes recuperan dos cartas.
         for (var i = 0; i < players.size(); i++)
-            deckService.fromDiscardToDeck(players.get(i).getDeck());
+            deckService.fromDiscardToHand(players.get(i).getDeck());
         // Elimina 1 herida del héroe.
         playerService.decreaseWounds(currentPlayer, 1);
         // Elimina la carta.
@@ -170,7 +169,7 @@ public class AbilityWizardController {
         Player currentPlayer = getCurrentPlayer();
         Deck deck = currentPlayer.getDeck();
         // Roba 1 carta.
-        deckService.fromDiscardToDeck(deck);
+        deckService.fromDeckToHand(currentPlayer, deck);
         // Recupera 2 cartas.
         deckService.fromDiscardToDeck(deck, 2);
         return PAGE_MAKE_DAMAGE;
@@ -184,7 +183,7 @@ public class AbilityWizardController {
         List<Player> otherPlayers = getGame().getPlayers().stream().filter(p -> p != currentPlayer).collect(Collectors.toList());
         for (var i = 0; i < otherPlayers.size(); i++) {
             Player player = otherPlayers.get(i);
-            deckService.fromDiscardToDeck(player.getDeck());
+            deckService.fromDiscardToHand(player.getDeck());
         }
         // Gana 1 ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);

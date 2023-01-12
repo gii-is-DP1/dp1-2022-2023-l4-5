@@ -36,6 +36,7 @@ public class AbilityExplorerController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
     private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final String PAGE_END_ATTACK = "redirect:/heroAttack/next";
     private final UserService userService;
     private final PlayerService playerService;
     private final CacheManager cacheManager;
@@ -81,12 +82,13 @@ public class AbilityExplorerController {
 
     // Disparo certero.
     @GetMapping("/preciseShot")
-    private String preciseShot() {
+    private String preciseShot(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         // Pierde una carta.
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         // Finaliza el ataque.
-        return PAGE_MAKE_DAMAGE + "/next";
+        cacheManager.setNextUrl(session, PAGE_END_ATTACK);
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Disparo rápido.
@@ -143,7 +145,7 @@ public class AbilityExplorerController {
         // Recupera una carta de disparo rápido de la pila de descarte.
         Deck deck = currentPlayer.getDeck();
         deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo rápido")).findFirst()
-            .ifPresent(card -> deckService.specificCardFromDiscardToDeck(deck, card));
+            .ifPresent(card -> deckService.specificCardFromDiscardToHand(deck, card));
         // Gana una moneda.
         statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
