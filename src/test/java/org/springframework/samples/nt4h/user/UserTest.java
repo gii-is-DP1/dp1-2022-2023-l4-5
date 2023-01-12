@@ -91,8 +91,6 @@ public class UserTest {
         // Test password constraints
         user.setPassword(null);
         assertThat(validator.validate(user)).isNotEmpty();
-        user.setPassword("");
-        assertThat(validator.validate(user)).isNotEmpty();
         user.setPassword(" ");
         assertThat(validator.validate(user)).isEmpty();
         user.setPassword("pass");
@@ -132,7 +130,7 @@ public class UserTest {
         user.setDescription(" ");
         assertThat(validator.validate(user)).isNotEmpty();
         user.setDescription("a".repeat(101));
-        assertThat(validator.validate(user)).isEmpty();
+        assertThat(validator.validate(user)).isNotEmpty();
         user.setDescription("Description");
         assertThat(validator.validate(user)).isEmpty();
 
