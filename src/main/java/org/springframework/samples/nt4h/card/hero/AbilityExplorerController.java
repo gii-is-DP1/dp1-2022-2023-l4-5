@@ -8,6 +8,7 @@ import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.StatisticService;
+import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ import javax.servlet.http.HttpSession;
  * - Supervivencia.
  */
 @Controller
-@RequestMapping("/abilities/explorer")
+@RequestMapping("/abilities")
 public class AbilityExplorerController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
@@ -70,39 +71,28 @@ public class AbilityExplorerController {
     }
 
     // Compañero lobo.
-    @GetMapping("/fellowWolf/{cardId}")
+    @GetMapping("/fellowWolf")
     private String fellowWolf(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
         // Aumenta el valor de la defensa en dos.
         cacheManager.setDefend(session, 2);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Disparo certero.
-    @GetMapping("/preciseShot/{cardId}")
-    private String preciseShot(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/preciseShot")
+    private String preciseShot() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Pierde una carta.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         // Finaliza el ataque.
         return PAGE_MAKE_DAMAGE + "/next";
     }
 
     // Disparo rápido.
-    @GetMapping("/rapidFire/{cardId}")
-    private String rapidFire(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/rapidFire")
+    private String rapidFire(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Tomo una primera carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
@@ -110,9 +100,13 @@ public class AbilityExplorerController {
             // Añade el daño.
             cacheManager.addAttack(session, abilityInGame.getAbility().getAttack());
             // Elimina la carta.
-            deckService.specificCardFromDeckToDiscard(deck, abilityInGame);
+            deckService.specificCardFromDeckToDiscard(currentPlayer, deck, abilityInGame);
+            // Comprobamos si no quedan cartas en el mazo.
+            if (deck.getInDeck().isEmpty())
+                deckService.moveAllCardsFromDiscardToDeck(currentPlayer, deck);
             // Tomo una nueva carta.
             abilityInGame = deck.getInDeck().get(0);
+
         }
         // Coloco la carta al fondo del deck.
         deckService.putFirstCardAtBottomOfDeck(deck);
@@ -121,57 +115,43 @@ public class AbilityExplorerController {
     }
 
     // En la diana.
-    @GetMapping("/target/{cardId}")
-    private String target(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/target")
+    private String target() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Gana una ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);
         // Pierde una carta.
-        deckService.fromDeckToDiscard(currentPlayer.getDeck());
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         playerService.savePlayer(currentPlayer);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Lluvia de flechas.
-    @GetMapping("/arrowRain/{cardId}")
-    private String arrowRain(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
-        Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
+    @GetMapping("/arrowRain")
+    private String arrowRain(ModelMap model) {
         // Debería de ser un efecto.
         model.put("name", "enemyAlsoAttacked");
+        model.put("enemies", getGame().getActualOrcs());
+        model.put("newTurn", new Turn());
         return VIEW_CHOSE_ENEMY;
     }
 
     // Recoger flechas.
-    @GetMapping("/collectArrows/{cardId}")
-    private String collectArrows(@PathVariable("cardId") Integer cardId, HttpSession session) {
+    @GetMapping("/collectArrow")
+    private String collectArrows() {
         Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
         // Recupera una carta de disparo rápido de la pila de descarte.
         Deck deck = currentPlayer.getDeck();
-        deck.getInDiscard().stream().anyMatch(a -> a.getAbility().getName().equals("Disparo rápido"));
+        deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo rápido")).findFirst()
+            .ifPresent(card -> deckService.specificCardFromDiscardToDeck(deck, card));
         // Gana una moneda.
         statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 
     // Supervivencia
-    @GetMapping("/survival/{cardId}")
-    private String survival(@PathVariable("cardId") Integer cardId, HttpSession session, ModelMap model) {
-        Player currentPlayer = getCurrentPlayer();
-        Player loggedPlayer = getLoggedPlayer();
-        if (currentPlayer != loggedPlayer)
-            return PAGE_MAKE_DAMAGE;
-        // Debería de ser un efecto
+    @GetMapping("/survival")
+    private String survival(ModelMap model) {
         // Gana una carta de supervivencia.
         model.put("name", "getOutEnemy");
         return VIEW_CHOSE_ENEMY;
