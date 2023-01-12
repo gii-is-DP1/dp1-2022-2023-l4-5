@@ -243,8 +243,7 @@ class AbilityProductControllerTest {
     @Test
     void testConcentrationVial() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/product/concentrationElixir/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/concentrationElixir");
         MockMvcBuilders.standaloneSetup(abilityProductController)
             .build()
             .perform(requestBuilder)
@@ -259,17 +258,17 @@ class AbilityProductControllerTest {
     @Test
     void testConjureVial() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/product/conjureVial/{cardId}", 123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/conjureVial");
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(abilityProductController)
             .build()
             .perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(500));
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(200));
     }
 
     @Test
     void testElfCloak() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/product/elfDagger/{cardId}", 123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/elfDagger");
         MockMvcBuilders.standaloneSetup(abilityProductController)
             .build()
             .perform(requestBuilder)
@@ -284,7 +283,7 @@ class AbilityProductControllerTest {
     @Test
     void testHealingPotion() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/product/healingPotion/{cardId}", 123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/healingPotion");
         MockMvcBuilders.standaloneSetup(abilityProductController)
             .build()
             .perform(requestBuilder)
@@ -299,8 +298,7 @@ class AbilityProductControllerTest {
     @Test
     void testPlateArmor() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/product/sharpeningStone/{cardId}",
-            123);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/sharpeningStone");
         MockMvcBuilders.standaloneSetup(abilityProductController)
             .build()
             .perform(requestBuilder)
