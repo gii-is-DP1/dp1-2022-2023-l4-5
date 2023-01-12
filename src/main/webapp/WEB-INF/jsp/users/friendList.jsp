@@ -33,8 +33,12 @@
                         <spring:param name="userId" value="${localUser.id}"/>
                     </spring:url>
                     <c:set var="connected" value="${localUser.isConnected ? 'green' : 'red'}"/>
-                    <a href="${fn:escapeXml(userUrl)}"><c:out value="${localUser.username} "/><span class="badge"
-                                                                                                    style="color: ${connected};">${unread}</span></a>
+                    <a href="${fn:escapeXml(userUrl)}">
+                        <c:out value="${localUser.username} "/>
+                    </a>
+                    <div style="width: 2rem;height: 2rem;border-radius: 50%;background-color: ${connected};display: flex;align-items: center;justify-content: center;">
+                        <span style="color: white;font-size: 20px;">${unread}</span>
+                    </div>
                 </td>
                 <td>
                     <img src="${localUser.avatar}" alt="No image found" height="50rem" width="50rem"/>
@@ -59,19 +63,22 @@
                     <spring:url value="/messages/{username}" var="chatWith">
                         <spring:param name="username" value="${localUser.username}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(chatWith)}" class="btn">Chat</a>
-                    <c:if test="${localUser.game != null}">
-                        <spring:url value="/games/{gameId}" var="game">
-                            <spring:param name="gameId" value="${game.id}"/>
-                        </spring:url>
-                        <a href="${fn:escapeXml(game)}" class="btn">Join</a>
+                    <c:if test="${localUser.isConnected}">
+                        <a href="${fn:escapeXml(chatWith)}" class="btn">Chat</a>
+                        <c:if test="${localUser.game != null}">
+                            <spring:url value="/games/{gameId}" var="game">
+                                <spring:param name="gameId" value="${game.id}"/>
+                            </spring:url>
+                            <a href="${fn:escapeXml(game)}" class="btn">Join</a>
+                        </c:if>
+                        <c:if test="${localUser.game == null}">
+                            <spring:url value="/messages/{username}/invite" var="invite">
+                                <spring:param name="username" value="${localUser.username}"/>
+                            </spring:url>
+                            <a href="${fn:escapeXml(invite)}" class="btn">Invite</a>
+                        </c:if>
                     </c:if>
-                    <c:if test="${localUser.game == null}">
-                        <spring:url value="/messages/{username}/invite" var="invite">
-                            <spring:param name="username" value="${localUser.username}"/>
-                        </spring:url>
-                        <a href="${fn:escapeXml(invite)}" class="btn">Invite</a>
-                    </c:if>
+                </td>
                 </td>
             </tr>
         </c:forEach>

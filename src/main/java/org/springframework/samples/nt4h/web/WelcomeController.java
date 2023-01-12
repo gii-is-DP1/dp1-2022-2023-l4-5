@@ -54,23 +54,4 @@ public class WelcomeController {
         return "welcome";
     }
 
-    @GetMapping("/checkin")
-    public String checkin() {
-        User user = userService.getLoggedUser();
-        user.setIsConnected(true);
-        userService.saveUser(user);
-        return "redirect:/";
-    }
-
-    @GetMapping("/checkout")
-    public String checkout() {
-        User user = userService.getLoggedUser();
-        if (user.getId() != null) {
-            user.setIsConnected(false);
-            userService.saveUser(user);
-        }
-
-        return "redirect:/logout";
-    }
-
 }

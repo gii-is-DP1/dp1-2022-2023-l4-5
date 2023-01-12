@@ -71,10 +71,6 @@
                                     <spring:param name="userId" value="${localUser.id}"/>
                                 </spring:url>
                                 <a href="${fn:escapeXml(removeFriend)}" class="btn">Remove </a>
-                                <spring:url value="/messages/{username}" var="chatWith">
-                                    <spring:param name="username" value="${localUser.username}"/>
-                                </spring:url>
-                                <a href="${fn:escapeXml(chatWith)}" class="btn">Chat</a>
                                 <c:if test="${localUser.game != null}">
                                     <spring:url value="/games/{gameId}" var="game">
                                         <spring:param name="gameId" value="${game.id}"/>
