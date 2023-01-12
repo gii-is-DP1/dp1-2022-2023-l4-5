@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +23,7 @@ public class EnemyService {
     private final EnemyRepository enemyRepository;
     private final PlayerService playerService;
     private final DeckService deckService;
+    private final CacheManager cacheManager;
 
     // EnemyInGame
     @Transactional(readOnly = true)
@@ -101,12 +104,21 @@ public class EnemyService {
     // TODO: comprobar.
 
     @Transactional
-    public Integer attackEnemyToActualPlayer(Game game) {
+    public Integer attackEnemyToActualPlayer(Game game, HttpSession session) {
         Player currentPlayer = game.getCurrentPlayer();
         if (game.getActualOrcs().isEmpty()) return 0;
-        int damage = game.getActualOrcs().stream().mapToInt(EnemyInGame::getActualHealth).sum();
+        int damage = game.getActualOrcs().stream()
+            .filter(enemy -> !(cacheManager.hasPreventDamageFromEnemies(session, enemy)))
+            .mapToInt(EnemyInGame::getActualHealth).sum();
+        int defendedDmg = cacheManager.getDefend(session);
+        int finalDamage = (damage >= defendedDmg) ? (damage - defendedDmg):damage;
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), damage);
-        return damage;
+        List<EnemyInGame> enemiesInATrap = cacheManager.getCapturedEnemies(session);
+        for (int e = 0; e <= enemiesInATrap.size(); e++) {
+            enemiesInATrap.get(e).setActualHealth(0);
+            game.getActualOrcs().remove(enemiesInATrap.get(e));
+        }
+        return finalDamage;
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -186,8 +186,6 @@ public class CacheManager extends BaseCacheManager {
         return parseEnemies(session, PREVENT_DAMAGE_FROM_ENEMIES, enemyId -> enemyService.getEnemyInGameById(Integer.parseInt(enemyId)));
     }
 
-
-
     public void removePreventDamageFromEnemies(HttpSession session) {
         session.removeAttribute(PREVENT_DAMAGE_FROM_ENEMIES);
     }
