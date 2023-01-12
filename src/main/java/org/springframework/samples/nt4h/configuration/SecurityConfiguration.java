@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
@@ -27,8 +28,13 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	final
-    DataSource dataSource;
+	private final DataSource dataSource;
+
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    private CostomLogoutSuccesHandler costomLogoutSuccesHandler;
 
     public SecurityConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -44,16 +50,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .antMatchers("/achievements/**", "/games/**", "/users/**", "/cards/**", "/abilities",
                 "/friends/**", "/turns/**", "/evasion/**", "/messages/**", "/market/**", "/reestablishment/**",
-                "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**", "deletePlayer/**", "deleteGame/**", "/statistics/**","/admins/**").authenticated()
+                "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**", "deletePlayer/**", "deleteGame/**", "/statistics/**",
+                "/abilities/**").authenticated()
             .anyRequest().denyAll()
             .and()
             .formLogin()
-            .defaultSuccessUrl("/checkin")
-            /*.loginPage("/login")*/
+            .successHandler(customAuthenticationSuccessHandler)
             .failureUrl("/login-error")
             .and()
             .logout()
-            .logoutSuccessUrl("/checkout");
+            .logoutSuccessHandler(costomLogoutSuccesHandler);
                 // Configuración para que funcione la consola de administración
                 // de la BD H2 (deshabilitar las cabeceras de protección contra
                 // ataques de tipo csrf y habilitar los framesets si su contenido
@@ -79,8 +85,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-        // return new BCryptPasswordEncoder();
+        // return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
 	}
 
 }

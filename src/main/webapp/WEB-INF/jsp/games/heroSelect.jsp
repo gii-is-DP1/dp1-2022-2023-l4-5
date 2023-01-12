@@ -62,7 +62,9 @@
         <br/> <!-- salto de linea/ meter un espacio en blanco entre texto -->
         <button class="btn btn-default" type="submit">Choose Hero</button>
     </form:form>
+    <hr>
     <div class="row">
+        <h2>Chatea</h2>
         <div class="chatGroup"></div>
         <c:if test="${!loggedPlayer.isNew()}">
             <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">

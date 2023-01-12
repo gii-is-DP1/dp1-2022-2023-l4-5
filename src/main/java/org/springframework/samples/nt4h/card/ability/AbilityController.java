@@ -8,7 +8,9 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -19,23 +21,26 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/ability")
+@RequestMapping("/abilities")
 public class AbilityController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+    private final String PAGE_ABILITY = "redirect:/abilities/";
 
     private final UserService userService;
     private final GameService gameService;
     private final PlayerService playerService;
     private final AbilityService abilityService;
     private final ProductService productService;
+    private final TurnService turnService;
 
-    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService) {
+    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService) {
         this.userService = userService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.abilityService = abilityService;
         this.productService = productService;
+        this.turnService = turnService;
     }
 
     @ModelAttribute("loggedUser")
@@ -146,13 +151,14 @@ public class AbilityController {
         return PAGE_MAKE_DAMAGE;
     }
 
-    @GetMapping("/{cardId}")
-    private String findEffect(@PathVariable("cardId") Integer cardId) {
+    @GetMapping
+    private String findEffect() {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
-        AbilityInGame abilityInGame = abilityService.getAbilityInGameById(cardId);
-        return "/abilities/" + abilityInGame.getAbility().getPathName();
+        Turn turn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, currentPlayer.getId());
+        AbilityInGame abilityInGame = turn.getCurrentAbility();
+        return PAGE_ABILITY + abilityInGame.getAbility().getPathName();
     }
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.javatuples.Triplet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.statistic.StatisticService;
 import org.springframework.samples.nt4h.turn.Phase;
@@ -40,8 +41,8 @@ public class GameService {
     private final HeroService heroService;
     private final ProductService productService;
     private final EnemyService enemyService;
-    private final CacheManager cacheManager;
     private final StatisticService statisticService;
+    private final DeckService deckService;
     private final Advise advise;
 
     @Transactional(readOnly = true)
@@ -82,7 +83,6 @@ public class GameService {
             throw new FullGameException();
         if (user.getPlayer() != null)
             throw new UserHasAlreadyAPlayerException();
-
         Player newPlayer = Player.createPlayer(user, game, false);
         playerService.createTurns(newPlayer);
         saveGame(game);
@@ -116,7 +116,7 @@ public class GameService {
         HeroInGame updatedHeroInGame = HeroInGame.createHeroInGame(hero, player); // TODO: revisar si es redundante.
         game.addPlayerWithNewHero(player, updatedHeroInGame);
         player.setReady(player.getHeroes().size() == game.getMode().getNumHeroes());
-        playerService.addDeckFromRole(player, game.getMode());
+        deckService.addDeckFromRole(player, game.getMode());
         playerService.createTurns(player);
         saveGame(game);
         advise.chosenHero(player, heroInGame, game);
@@ -180,7 +180,7 @@ public class GameService {
         return addedEnemies;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void restoreEnemyLife(List<EnemyInGame> enemies) {
         for (EnemyInGame enemyInGame : enemies) {
             if (enemyInGame.getEnemy().getHasCure()) {
@@ -189,8 +189,8 @@ public class GameService {
         }
     }
 
-    @Transactional
-    public void deleteKilledEnemy(HttpSession session, List<EnemyInGame> attackedEnemies, Game game, Player player, Integer userId) {
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteKilledEnemy(List<EnemyInGame> attackedEnemies, Game game, Player player, Integer userId) {
         for(int e=0; e < attackedEnemies.size(); e++) {
             EnemyInGame enemy = attackedEnemies.get(e);
             if (enemy.getActualHealth() <= 0) {
@@ -206,6 +206,22 @@ public class GameService {
                 playerService.savePlayer(player);
             }
         }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void attackEnemies(AbilityInGame usedAbility, Integer effectDamage, List<EnemyInGame> enemies, List<Integer> enemiesMoreDamage, Player player, Game game, Integer userId) {
+        if (usedAbility.getAttack() == 0)
+            return;
+        Integer damageToEnemy = usedAbility.getAttack() + effectDamage;
+        for (int e = 0; enemies.size() > e; e++) {
+            EnemyInGame affectedEnemy = enemies.get(e);
+            Integer extraDamage = enemiesMoreDamage.get(e);
+            Integer initialEnemyHealth = affectedEnemy.getActualHealth();
+            affectedEnemy.setActualHealth(initialEnemyHealth - (damageToEnemy + extraDamage));
+            statisticService.damageDealt(player, (damageToEnemy + extraDamage));
+            enemyService.saveEnemyInGame(affectedEnemy);
+        }
+        deleteKilledEnemy(enemies, game, player, userId);
     }
 
 }
