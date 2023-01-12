@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * - Arco compuesto.
  */
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/abilities")
 public class AbilityProductController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";

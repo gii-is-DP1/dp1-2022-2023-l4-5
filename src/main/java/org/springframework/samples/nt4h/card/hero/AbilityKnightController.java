@@ -33,7 +33,7 @@ import javax.servlet.http.HttpSession;
  * - Voz de aliento.
  */
 @Controller
-@RequestMapping("/abilities/knight")
+@RequestMapping("/abilities")
 public class AbilityKnightController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";

@@ -121,7 +121,7 @@ public class HeroAttackController {
         turnService.saveTurn(oldTurn);
         advise.heroAttack(usedAbility, attackedEnemy, game);
         Optional<Enemy> nighLord = game.getActualOrcs().stream().map(EnemyInGame::getEnemy).filter(enemy -> enemy.getName().equals("Nigh Lord")).findFirst();
-        return nighLord.map(enemy -> PAGE_ABILITY + "/" + enemy.getName().toLowerCase()).orElse(PAGE_ABILITY);
+        return nighLord.map(enemy -> PAGE_ABILITY + "/" + enemy.getName().toLowerCase() + "/" + usedAbility.getId()).orElse(PAGE_ABILITY);
     }
 
     @GetMapping("/makeDamage")

@@ -65,8 +65,11 @@ public class WelcomeController {
     @GetMapping("/checkout")
     public String checkout() {
         User user = userService.getLoggedUser();
-        user.setIsConnected(false);
-        userService.saveUser(user);
+        if (user.getId() != null) {
+            user.setIsConnected(false);
+            userService.saveUser(user);
+        }
+
         return "redirect:/logout";
     }
 

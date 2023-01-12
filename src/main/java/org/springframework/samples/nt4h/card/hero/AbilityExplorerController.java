@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
  * - Supervivencia.
  */
 @Controller
-@RequestMapping("/abilities/explorer")
+@RequestMapping("/abilities")
 public class AbilityExplorerController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";

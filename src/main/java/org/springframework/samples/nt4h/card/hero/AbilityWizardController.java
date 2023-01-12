@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * - Torrente de luz.
  */
 @Controller
-@RequestMapping("/abilities/wizard")
+@RequestMapping("/abilities")
 public class AbilityWizardController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";

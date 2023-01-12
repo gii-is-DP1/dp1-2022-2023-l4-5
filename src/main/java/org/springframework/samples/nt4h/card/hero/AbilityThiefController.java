@@ -37,7 +37,7 @@ import javax.servlet.http.HttpSession;
  * - Trampa.
  */
 @Controller
-@RequestMapping("/abilityies/thief")
+@RequestMapping("/abilityies")
 public class AbilityThiefController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";

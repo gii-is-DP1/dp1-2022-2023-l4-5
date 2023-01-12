@@ -7,6 +7,9 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
+import org.springframework.samples.nt4h.turn.Phase;
+import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -25,7 +28,7 @@ import java.util.List;
  * - Shriekknifer
  */
 @Controller
-@RequestMapping("/enemies/nightLord")
+@RequestMapping("/abilities/nightLord")
 public class AbilityNightLordController {
 
 
@@ -40,6 +43,7 @@ public class AbilityNightLordController {
     private final EnemyService enemyService;
     private final DeckService deckService;
     private final CacheManager cacheManager;
+
 
     public AbilityNightLordController(UserService userService, AbilityService abilityService, GameService gameService, EnemyService enemyService, DeckService deckService, CacheManager cacheManager) {
         this.userService = userService;

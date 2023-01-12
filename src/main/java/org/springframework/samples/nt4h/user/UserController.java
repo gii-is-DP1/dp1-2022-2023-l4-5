@@ -21,8 +21,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -46,11 +46,13 @@ public class UserController {
 
     // Servicios.
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @InitBinder
@@ -97,6 +99,7 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEW_USER_CREATE_OR_UPDATE_FORM;
         } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(user);
             return PAGE_WELCOME;
         }

@@ -58,6 +58,7 @@
                 </c:if>
             </div>
             <div class="container">
+                <c:out value="In hand: ${currentPlayer.deck.inHand.size()} - In deck: ${currentPlayer.deck.inDeck.size()} - In Discard: ${currentPlayer.deck.inDiscard.size()}"/>
                 <c:if test="${currentPlayer.deck.inHand.size() != 0}">
                     <div class="pointer">
                         <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
@@ -110,6 +111,7 @@
         </div>
         <div class="container">
             <div style="display: flex; justify-content: center;">
+                <c:out value="In hand: ${currentPlayer.deck.inHand.size()} - In deck: ${currentPlayer.deck.inDeck.size()} - In Discard: ${currentPlayer.deck.inDiscard.size()}"/>
                 <c:if test="${currentPlayer.deck.inHand.size()!=0}">
                     <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
                         <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
@@ -144,5 +146,4 @@
             alert("The orcs makes you " + ${damage} +".");
     </script>
     <script src="/resources/js/radioButtom.js" type="module"></script>
-
 </nt4h:layout>
