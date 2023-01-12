@@ -74,10 +74,10 @@ public class User extends BaseEntity implements Jsonable {
     private Statistic statistic;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
-    private List<Message> sentMessages; // TODO: Solucionar de una mejor forma.
+    private List<Message> sentMessages;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
-    private List<Message> receivedMessages; // TODO: Solucionar de una mejor forma.
+    private List<Message> receivedMessages;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player player;

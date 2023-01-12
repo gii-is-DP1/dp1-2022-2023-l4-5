@@ -7,7 +7,6 @@ sendPetitionInInterval('/api/messages/' + username, function (responseText) {
     const chats = document.getElementsByClassName("chat");
     console.log(chats);
     for (let i = 0; i < chats.length; i++) {
-        // TODO: mejorar.
         const lis = resultado.messages.map((m) => createHtml(m.sender + (m.read ? '': '(Not Read)'), m.content, m.type, m.game));
         const res = '<div style="overflow-y: scroll; height: 200px;">' + lis.join("") + '</div>'
         if (chats[i].innerHTML !== res)
