@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
 public class EnemyService {
     private final EnemyInGameRepository enemyInGameRepository;
     private final EnemyRepository enemyRepository;
-    private final DeckService deckService;
 
 
     // EnemyInGame
@@ -99,22 +99,6 @@ public class EnemyService {
         EnemyInGame nightLordInGame = EnemyInGame.createEnemy(true, nightLord);
         saveEnemyInGame(nightLordInGame);
         return nightLordInGame;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public Integer attackEnemyToActualPlayer(Game game, HttpSession session, Predicate<EnemyInGame> hasPreventedDamage, int defendedDmg, List<EnemyInGame> enemiesInATrap) {
-        Player currentPlayer = game.getCurrentPlayer();
-        if (game.getActualOrcs().isEmpty()) return 0;
-        int damage = game.getActualOrcs().stream()
-            .filter(hasPreventedDamage)
-            .mapToInt(EnemyInGame::getActualHealth).sum();
-        int finalDamage = (damage >= defendedDmg) ? (damage - defendedDmg):damage;
-        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), damage);
-        for (int e = 0; e <= enemiesInATrap.size(); e++) {
-            enemiesInATrap.get(e).setActualHealth(0);
-            game.getActualOrcs().remove(enemiesInATrap.get(e));
-        }
-        return finalDamage;
     }
 
     @Transactional(rollbackFor = Exception.class)
