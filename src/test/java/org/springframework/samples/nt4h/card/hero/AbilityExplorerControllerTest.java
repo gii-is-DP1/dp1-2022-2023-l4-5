@@ -93,7 +93,6 @@ class AbilityExplorerControllerTest {
         game = Game.createGame( "Test Game",   Mode.MULTI_CLASS, 2, "test123");
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
-        game.setHasStages(true);
         player = Player.createPlayer(user, game, true);
         game.setCurrentPlayer(player);
         Deck deck = new Deck();
@@ -146,13 +145,13 @@ class AbilityExplorerControllerTest {
     @Test
     void testArrowRain() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/explorer/arrowRain/{cardId}",
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/arrowRain",
             123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()
             .perform(requestBuilder)
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.model().size(5))
+            .andExpect(MockMvcResultMatchers.model().size(7))
             .andExpect(MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
             .andExpect(MockMvcResultMatchers.view().name("abilities/choseEnemy"));
     }
@@ -161,7 +160,7 @@ class AbilityExplorerControllerTest {
     void testCollectArrows() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/explorer/collectArrows/{cardId}", 123);
+            .get("/abilities/collectArrow", 123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()
             .perform(requestBuilder)
@@ -177,7 +176,7 @@ class AbilityExplorerControllerTest {
     void testFellowWolf() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/explorer/fellowWolf/{cardId}", 123);
+            .get("/abilities/fellowWolf", 123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()
             .perform(requestBuilder)
@@ -193,7 +192,7 @@ class AbilityExplorerControllerTest {
     void testPreciseShot() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/explorer/preciseShot/{cardId}", 123);
+            .get("/abilities/preciseShot", 123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()
             .perform(requestBuilder)
@@ -209,7 +208,7 @@ class AbilityExplorerControllerTest {
     void testRapidFire() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/explorer/rapidFire/{cardId}", 123);
+            .get("/abilities/rapidFire", 123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()
             .perform(requestBuilder)
@@ -224,7 +223,7 @@ class AbilityExplorerControllerTest {
     @Test
     void testSurvival() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/explorer/survival/{cardId}",
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/survival",
             123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()
@@ -239,7 +238,7 @@ class AbilityExplorerControllerTest {
     @Test
     void testTarget() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/explorer/target/{cardId}",
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/target",
             123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()

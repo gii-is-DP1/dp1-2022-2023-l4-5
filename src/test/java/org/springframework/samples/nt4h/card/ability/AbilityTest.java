@@ -36,6 +36,7 @@ public class AbilityTest {
         ability.setAttack(3);
         ability.setQuantity(1);
         ability.setMaxUses(1);
+        ability.setPathName("nerd");
     }
 
     @Test

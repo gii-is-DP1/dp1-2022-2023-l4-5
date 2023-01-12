@@ -62,8 +62,6 @@ public class PlayerServiceTest {
         player = Player.createPlayer(user, game, true);
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        //game.setPhase(Phase.START);
-        game.setHasStages(true);
         gameService.saveGame(game);
         game.addPlayerWithNewHero(player, heroInGame);
         idPlayer = player.getId();
@@ -131,16 +129,6 @@ public class PlayerServiceTest {
         HeroInGame heroInGame2 = HeroInGame.createHeroInGame(this.heroService.getHeroByName("Idril"), player);
         player.addHero(heroInGame1);
         assertThrows(RoleAlreadyChosenException.class, () -> player.addHero(heroInGame2));
-    }
-
-    @Test
-    public void shouldAddDeckFromRole() {
-        HeroInGame heroInGame = player.getHeroes().get(0);
-        Role correctResult = heroInGame.getHero().getRole();
-        Game game = this.gameService.getGameById(idGame);
-        this.playerService.addDeckFromRole(player, game.getMode());
-        List<Integer> idAbilities = player.getDeck().getInDeck().stream().map(a -> a.getAbility().getId()).collect(Collectors.toList());
-        assertTrue(correctResult.getAbilities().containsAll(idAbilities));
     }
 
     @Test

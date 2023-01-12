@@ -61,7 +61,6 @@ public class ProductServiceTest {
         Player player = Player.createPlayer(user, game, true);
         System.out.println("numPlayers: " + game.getPlayers().size());
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        game.setHasStages(true);
         Product product = this.productService.getProductById(1);
         productInGame = ProductInGame.createProduct(product, player, game);
         gameService.saveGame(game);

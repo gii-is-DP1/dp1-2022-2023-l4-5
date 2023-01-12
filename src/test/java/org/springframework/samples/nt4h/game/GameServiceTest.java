@@ -39,7 +39,6 @@ public class GameServiceTest {
         game = Game.createGame( "Prueba",   Mode.UNI_CLASS, 2, "");
         Player player = Player.createPlayer(user, game, true);
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        game.setHasStages(true);
         Hero hero = heroService.getHeroById(1);
         HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
         player.addHero(heroInGame);
@@ -59,11 +58,6 @@ public class GameServiceTest {
         idGame = game.getId();
         numGames = gameService.getAllGames().size();
          */
-    }
-
-    @AfterEach
-    void tearDown() {
-        gameService.deleteGame(gameService.getGameById(idGame));
     }
 
     @Test

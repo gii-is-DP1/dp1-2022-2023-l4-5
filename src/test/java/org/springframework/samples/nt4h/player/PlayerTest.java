@@ -48,8 +48,6 @@ public class PlayerTest {
         player = Player.createPlayer(user, game, true);
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        //game.setPhase(Phase.START);
-        game.setHasStages(true);
         /*
         player = Player.createPlayer(userService.getUserById(1), Game.createGame("Test Game", Mode.MULTI_CLASS, 2, "test123"), true);
         player.setName("player1");

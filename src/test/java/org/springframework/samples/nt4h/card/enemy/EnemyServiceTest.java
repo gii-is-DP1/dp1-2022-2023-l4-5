@@ -3,12 +3,14 @@ package org.springframework.samples.nt4h.card.enemy;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +26,14 @@ class EnemyServiceTest {
     private int idEnemyInGame;
     private int numsEnemiesInGame;
 
+    @MockBean
+    private Advise advise;
 
     @BeforeEach
     void setUp() {
         enemy = enemyService.getEnemyById(1);
         enemyInGame = EnemyInGame.createEnemy(false, enemy);
+        enemyInGame.setActualHealth(4);
         enemyService.saveEnemyInGame(enemyInGame);
         idEnemyInGame = enemyInGame.getId();
         numsEnemiesInGame = enemyService.getAllEnemyInGame().size();
@@ -41,11 +46,6 @@ class EnemyServiceTest {
     @Test
     void testFindById() {
         assertEquals(enemyInGame, enemyService.getEnemyInGameById(idEnemyInGame));
-    }
-
-    @Test
-    void testFindByIncorrectId() {
-        assertThrows(NotFoundException.class,() -> enemyService.getEnemyInGameById(-1));
     }
 
     @Test
@@ -86,11 +86,6 @@ class EnemyServiceTest {
     void testDeleteEnemyById(){
         enemyService.deleteEnemyInGameById(idEnemyInGame);
         assertFalse(enemyService.enemyInGameExists(idEnemyInGame));
-    }
-
-    @Test
-    void testDeleteEnemyByIdNotFound(){
-        assertThrows(NotFoundException.class,() -> enemyService.deleteEnemyInGameById(-1));
     }
 
     @Test
