@@ -8,7 +8,9 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.turn.Turn;
+import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -19,23 +21,26 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/ability")
+@RequestMapping("/abilities")
 public class AbilityController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+    private final String PAGE_ABILITY = "redirect:/abilities/";
 
     private final UserService userService;
     private final GameService gameService;
     private final PlayerService playerService;
     private final AbilityService abilityService;
     private final ProductService productService;
+    private final TurnService turnService;
 
-    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService) {
+    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService) {
         this.userService = userService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.abilityService = abilityService;
         this.productService = productService;
+        this.turnService = turnService;
     }
 
     @ModelAttribute("loggedUser")
@@ -59,16 +64,16 @@ public class AbilityController {
     }
 
     @PostMapping("/loseCard")
-    public String loseCard(Turn turn) {
+    private String loseCard(Turn turn) {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
-        deck.discardCardOnHand(abilityInGame);
+        deck.discardCardOnHand(abilityInGame); // Esto debe de ser un efecto
         return PAGE_MAKE_DAMAGE;
     }
 
     @PostMapping("/chooseEnemy")
-    public String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
+    private String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
         EnemyInGame enemyInGame = turn.getCurrentEnemy();
         String nextUrl = session.getAttribute("nextUrl").toString();
         if (name != null) {
@@ -93,7 +98,7 @@ public class AbilityController {
     }
 
     @GetMapping("/findInDiscard")
-    public String findInDiscard(Turn turn) {
+    private String findInDiscard(Turn turn, HttpSession session) {
         // Cogemos la carta elegida de la pila de descarte.
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         // La colocamos en la mano.
@@ -106,7 +111,7 @@ public class AbilityController {
     }
 
     @PostMapping("/chooseAbilityFromDeck")
-    public String chooseAbilityFromDeck(Turn turn, HttpSession session) {
+    private String chooseAbilityFromDeck(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inDeck", abilityInGame.getId());
         String nextUrl = session.getAttribute("nextUrl").toString();
@@ -114,7 +119,7 @@ public class AbilityController {
     }
 
     @PostMapping("/exchangeCards")
-    public String exchangeCards(Turn turn, HttpSession session) {
+    private String exchangeCards(Turn turn, HttpSession session) {
         AbilityInGame inDeck = abilityService.getAbilityInGameById(((Integer)session.getAttribute("inDeck")));
         AbilityInGame inHand = turn.getCurrentAbility();
         Deck deck = getCurrentPlayer().getDeck();
@@ -127,7 +132,7 @@ public class AbilityController {
     }
 
     @PostMapping("/chooseProductFromMarket")
-    public String chooseProductFromMarket(Turn turn, HttpSession session) {
+    private String chooseProductFromMarket(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inMarket", abilityInGame.getId());
         String nextUrl = session.getAttribute("nextUrl").toString();
@@ -135,7 +140,7 @@ public class AbilityController {
     }
 
     @PostMapping("/exchangeProducts")
-    public String exchangeProducts(Turn turn, HttpSession session) {
+    private String exchangeProducts(Turn turn, HttpSession session) {
         ProductInGame inMarket = productService.getProductInGameById(((Integer) session.getAttribute("inMarket")));
         ProductInGame inSale = turn.getCurrentProduct();
         Integer id = inSale.getId();
@@ -146,13 +151,14 @@ public class AbilityController {
         return PAGE_MAKE_DAMAGE;
     }
 
-    @GetMapping("/{cardId}")
-    public String findEffect(@PathVariable("cardId") Integer cardId) {
+    @GetMapping
+    private String findEffect() {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
             return PAGE_MAKE_DAMAGE;
-        AbilityInGame abilityInGame = abilityService.getAbilityInGameById(cardId);
-        return "/abilities/" + abilityInGame.getAbility().getPathName();
+        Turn turn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, currentPlayer.getId());
+        AbilityInGame abilityInGame = turn.getCurrentAbility();
+        return PAGE_ABILITY + abilityInGame.getAbility().getPathName();
     }
 }

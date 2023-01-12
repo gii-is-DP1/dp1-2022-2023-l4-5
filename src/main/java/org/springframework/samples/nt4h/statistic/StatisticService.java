@@ -4,14 +4,13 @@ import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.javatuples.Quartet;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserRepository;
+import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
 import java.util.function.ToIntFunction;
 
 @Service
@@ -19,7 +18,7 @@ import java.util.function.ToIntFunction;
 public class StatisticService {
 
     private final StatisticRepository statisticRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public Statistic getStatisticById(int id) {
@@ -81,7 +80,7 @@ public class StatisticService {
     public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.numWonGamesByPlayerId(userId);}
 
     @Transactional
-    public List<User> listAllUsers() {return userRepository.findAll(); }
+    public List<User> listAllUsers() {return userService.getAllUsers(); }
 
     @Transactional
     public int getMin(ToIntFunction< User> function) {
@@ -157,27 +156,59 @@ public class StatisticService {
         return statistics;
     }
 
-    @Transactional
-    public void gainGlory(Statistic statistic, Integer glory) {
-        statistic.setGlory(statistic.getGlory() + glory);
-        saveStatistic(statistic);
+    @Transactional(rollbackFor = Exception.class)
+    public void gainGlory(Player player, Integer glory) {
+        Statistic playerStatistic = player.getStatistic();
+        User user = userService.getUserByUsername(player.getName());
+        Statistic userStatistic = user.getStatistic();
+        userStatistic.setGlory(userStatistic.getGlory() + glory);
+        playerStatistic.setGlory(playerStatistic.getGlory() + glory);
+        saveStatistic(userStatistic);
+        saveStatistic(playerStatistic);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void gainGold(Player player, Integer gold) {
+        Statistic playerStatistic = player.getStatistic();
+        User user = userService.getUserByUsername(player.getName());
+        Statistic userStatistic = user.getStatistic();
+        userStatistic.setGlory(userStatistic.getGold() + gold);
+        playerStatistic.setGlory(playerStatistic.getGold() + gold);
+        saveStatistic(userStatistic);
+        saveStatistic(playerStatistic);
     }
 
     @Transactional
-    public void gainGold(Statistic statistic, Integer gold) {
-        statistic.setGold(statistic.getGold() + gold);
-        saveStatistic(statistic);
-    }
-
-    @Transactional
-    public void looseGold(Statistic statistic, Integer gold) {
+    public void loseGold(Statistic statistic, Integer gold) {
         statistic.setGold(Math.max(statistic.getGold() - gold, 0));
         saveStatistic(statistic);
     }
 
     @Transactional
-    public void looseGlory(Statistic statistic, Integer glory) {
+    public void loseGlory(Statistic statistic, Integer glory) {
         statistic.setGlory(Math.max(statistic.getGlory() - glory, 0));
         saveStatistic(statistic);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void damageDealt(Player player, Integer damage) {
+        Statistic playerStatistic = player.getStatistic();
+        User user = userService.getUserByUsername(player.getName());
+        Statistic userStatistic = user.getStatistic();
+        userStatistic.setGlory(userStatistic.getDamageDealt() + damage);
+        playerStatistic.setGlory(playerStatistic.getDamageDealt() + damage);
+        saveStatistic(userStatistic);
+        saveStatistic(playerStatistic);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void killedOrcs(Player player) {
+        Statistic playerStatistic = player.getStatistic();
+        User user = userService.getUserByUsername(player.getName());
+        Statistic userStatistic = user.getStatistic();
+        userStatistic.setGlory(userStatistic.getNumOrcsKilled() + 1);
+        playerStatistic.setGlory(playerStatistic.getNumOrcsKilled() + 1);
+        saveStatistic(userStatistic);
+        saveStatistic(playerStatistic);
     }
 }

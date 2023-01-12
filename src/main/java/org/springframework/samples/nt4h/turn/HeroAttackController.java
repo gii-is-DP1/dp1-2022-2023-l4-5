@@ -2,6 +2,10 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.AbilityService;
+import org.springframework.samples.nt4h.card.ability.Deck;
+import org.springframework.samples.nt4h.card.ability.DeckService;
+import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
@@ -25,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/heroAttack")
@@ -41,16 +48,19 @@ public class HeroAttackController {
     private final PlayerService playerService;
     private final Advise advise;
     private final CacheManager cacheManager;
-
+    private final DeckService deckService;
+    private final AbilityService abilityService;
 
     @Autowired
-    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager) {
+    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager, DeckService deckService, AbilityService abilityService) {
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.advise = advise;
         this.cacheManager = cacheManager;
+        this.deckService = deckService;
+        this.abilityService = abilityService;
     }
 
     @ModelAttribute("loggedUser")
@@ -92,47 +102,55 @@ public class HeroAttackController {
     }
 
     @PostMapping
-    public String modifyCardAttributes(Turn turn) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
+    public String modifyCardAttributes(Turn turn, HttpSession session) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
         Player player = getPlayer();
         Game game = getGame();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-
         AbilityInGame usedAbility = turn.getCurrentAbility();
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
-        /*
         if (usedAbility == null)
             throw new WithOutAbilityException();
-        if (attackedEnemy == null)
-            throw new WithOutEnemyException();
-        Integer enemyInitialHealth = attackedEnemy.getActualHealth();
-        attackedEnemy.setActualHealth(enemyInitialHealth - usedAbility.getAttack());
-        player.getDeck().getInHand().remove(usedAbility);
-        player.getDeck().getInDiscard().add(usedAbility);
-        //
-        if (attackedEnemy.getActualHealth() <= 0) {
-            player.getStatistic().setGlory(player.getStatistic().getGlory() + attackedEnemy.getEnemy().getGlory());
-            player.getStatistic().setGold(player.getStatistic().getGold() + attackedEnemy.getEnemy().getGold());
-            playerService.savePlayer(player);
-            game.getActualOrcs().remove(attackedEnemy);
-            gameService.saveGame(game);
-        } else {
-            playerService.savePlayer(player);
-        }
-         */
-        Turn createdTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
+        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
         playerService.savePlayer(player);
-        createdTurn.addEnemy(attackedEnemy);
-        createdTurn.addAbility(usedAbility);
-        turnService.saveTurn(createdTurn);
+        oldTurn.addEnemy(attackedEnemy);
+        oldTurn.setCurrentEnemy(attackedEnemy);
+        oldTurn.addAbility(usedAbility);
+        oldTurn.setCurrentAbility(usedAbility);
+        turnService.saveTurn(oldTurn);
         advise.heroAttack(usedAbility, attackedEnemy, game);
-        return PAGE_ABILITY;
+        Optional<Enemy> nighLord = game.getActualOrcs().stream().map(EnemyInGame::getEnemy).filter(enemy -> enemy.getName().equals("Nigh Lord")).findFirst();
+        return nighLord.map(enemy -> PAGE_ABILITY + "/" + enemy.getName().toLowerCase() + "/" + usedAbility.getId()).orElse(PAGE_ABILITY);
     }
 
     @GetMapping("/makeDamage")
-    public String attackEnemy() {
+    public String attackEnemy(HttpSession session) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
+        Player player = getPlayer();
+        Game game = getGame();
+        Player loggedPlayer = getLoggedPlayer();
+        if (loggedPlayer != player)
+            throw new NoCurrentPlayer();
+        Turn turn = turnService.getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId());
+        Deck deck = loggedPlayer.getDeck();
+        AbilityInGame usedAbility = turn.getCurrentAbility();
+        EnemyInGame attackedEnemy = turn.getCurrentEnemy();
+        if (usedAbility == null)
+            throw new WithOutAbilityException();
+        Integer effectDamage = cacheManager.getSharpeningStone(session) + cacheManager.getAttack(session);
+        List<EnemyInGame> enemies = cacheManager.getEnemiesAlsoAttacked(session);
 
+        if (attackedEnemy != null) {
+            enemies.add(attackedEnemy);
+            cacheManager.setAttackedEnemy(session, attackedEnemy.getId());
+        }
+        List<Integer> enemiesMoreDamage = enemies.stream().map(enemy -> cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, enemy)).collect(Collectors.toList());
+        gameService.attackEnemies(usedAbility, effectDamage, enemies, enemiesMoreDamage, player, game, getLoggedUser().getId());
+        if (cacheManager.hasToBeDeletedAbility(session))
+            abilityService.deleteAbilityInGameById(usedAbility.getId());
+        else
+            deckService.specificCardFromHandToDiscard(deck, usedAbility);
+        cacheManager.deleteEndAttackHero(session);
         return PAGE_HERO_ATTACK;
     }
 

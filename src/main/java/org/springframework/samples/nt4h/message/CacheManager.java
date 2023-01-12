@@ -31,14 +31,35 @@ public class CacheManager extends BaseCacheManager {
     private final String HAS_ADDED_LIFE_TO_ORCS = "hasAddedLifeToOrcs"; // Nos permite saber si se ha añadido vida a los orcos.
     private final EnemyService enemyService;
 
+    public void deleteEndAttackHero(HttpSession session) {
+        removeAttack(session);
+        removeAttackedEnemy(session);
+        removeEnemiesAlsoAttacked(session);
+        removeHasToBeDeletedAbility(session);
+    }
+
+    public void deleteEndAttackEnemy(HttpSession session) {
+        removeFirstSlash(session);
+        removeFirstToTheHearth(session);
+        removeFirstStealthAttack(session);
+        removeAlreadyAttackedWithPreciseBow(session);
+        removeEnemiesThatReceiveMoreDamage(session);
+        removeAlreadyAttackedWithStaff(session);
+        removeSharpeningStone(session);
+        removeHasAddedLifeToOrcs(session);
+        removePreventDamageFromEnemies(session);
+        removeCapturedEnemies(session);
+        removeHasAddedLifeToOrcs(session);
+        removeDefend(session);
+
+
+    }
 
 
     @Autowired
     public CacheManager(EnemyService enemyService) {
         this.enemyService = enemyService;
     }
-
-
 
 
     // Defensa.
@@ -236,6 +257,10 @@ public class CacheManager extends BaseCacheManager {
 
     public Integer getEnemiesThatReceiveMoreDamageForEnemy(HttpSession session, EnemyInGame enemy) {
         return Math.toIntExact(getEnemiesThatReceiveMoreDamage(session).stream().filter(enemyInGame -> enemyInGame.getId().equals(enemy.getId())).count());
+    }
+
+    public void removeEnemiesThatReceiveMoreDamage(HttpSession session) {
+        session.removeAttribute(ENEMIES_THAT_RECEIVE_MORE_DAMAGE);
     }
 
     // Ya se ha atacado con el bastón?

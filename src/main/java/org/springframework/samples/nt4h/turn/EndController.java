@@ -91,7 +91,7 @@ public class EndController {
     @GetMapping("/finish")
     public String finishGame() {
         Game game = getGame();
-        gameService.deleteGame(game);
+        gameService.deleteGameById(game.getId());
         return "redirect:/";
     }
 

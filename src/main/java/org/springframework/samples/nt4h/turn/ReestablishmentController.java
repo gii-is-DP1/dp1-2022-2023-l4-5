@@ -115,7 +115,7 @@ public class ReestablishmentController {
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId());
         oldTurn.addAbility(currentAbility);
         turnService.saveTurn(oldTurn);
-        deckService.loseTheCard(currentPlayer.getDeck(), currentAbility);
+        deckService.specificCardFromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), currentAbility);
         advise.discardAbilityInHand(currentAbility, game);
         return PAGE_REESTABLISHMENT;
     }

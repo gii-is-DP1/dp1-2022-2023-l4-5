@@ -1,6 +1,8 @@
 package org.springframework.samples.nt4h.message;
 
+import com.google.common.collect.Lists;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
+import org.springframework.samples.nt4h.model.BaseEntity;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
@@ -14,11 +16,12 @@ public class BaseCacheManager {
 
     protected List<EnemyInGame> parseEnemies(HttpSession session, String name, Function<String, EnemyInGame> function) {
         Object enemies = session.getAttribute(name);
+        System.out.println("enemies = " + enemies + " " + (enemies == null) );
         if (enemies == null)
-            return Collections.emptyList();
+            return Lists.newArrayList();
         return Stream.of(enemies.toString().split(","))
                 .map(function)
-                .filter(enemy -> enemy.isNew())
+                .filter(BaseEntity::isNew)
                 .collect(Collectors.toList());
     }
 

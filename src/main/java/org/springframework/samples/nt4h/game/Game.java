@@ -53,8 +53,6 @@ public class Game extends NamedEntity implements Jsonable {
     @Enumerated(EnumType.STRING)
     private Accessibility accessibility;
 
-    private boolean hasStages;
-
     // Relaciones
     @OneToMany(cascade = CascadeType.ALL)
     private List<Player> alivePlayersInTurnOrder;
@@ -62,13 +60,13 @@ public class Game extends NamedEntity implements Jsonable {
     @OneToOne(cascade = CascadeType.ALL)
     private Turn currentTurn;
 
-    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> actualOrcs;
 
-    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> allOrcsInGame;
 
-    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<EnemyInGame> passiveOrcs;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)

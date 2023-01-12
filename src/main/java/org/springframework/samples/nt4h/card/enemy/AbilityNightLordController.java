@@ -2,13 +2,13 @@ package org.springframework.samples.nt4h.card.enemy;
 
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
-import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
+import org.springframework.samples.nt4h.turn.Phase;
+import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -28,28 +28,26 @@ import java.util.List;
  * - Shriekknifer
  */
 @Controller
-@RequestMapping("/enemies/nightLord")
+@RequestMapping("/abilities/nightLord")
 public class AbilityNightLordController {
 
-    private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
+
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_LOSE_CARD = "redirect:/loseCard";
-    private final String VIEW_LOSE_CARD = "abilities/loseCard";
-    private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final String PAGE_ABILITIES = "redirect:/abilities";
+
     private final UserService userService;
     private final AbilityService abilityService;
-    private final PlayerService playerService;
-    private final TurnService turnService;
+
+
     private final GameService gameService;
     private final EnemyService enemyService;
     private final DeckService deckService;
     private final CacheManager cacheManager;
 
-    public AbilityNightLordController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService, DeckService deckService, CacheManager cacheManager) {
+
+    public AbilityNightLordController(UserService userService, AbilityService abilityService, GameService gameService, EnemyService enemyService, DeckService deckService, CacheManager cacheManager) {
         this.userService = userService;
         this.abilityService = abilityService;
-        this.playerService = playerService;
-        this.turnService = turnService;
         this.gameService = gameService;
         this.enemyService = enemyService;
         this.deckService = deckService;
@@ -78,11 +76,11 @@ public class AbilityNightLordController {
 
     // Fase de ataque de héroe.
     @GetMapping("/gurdrug/{cardId}")
-    public String gurdrug(@PathVariable("cardId") int cardId, HttpSession session) {
-        Deck deck = getCurrentPlayer().getDeck();
-        deckService.loseACard(deck);
+    public String gurdrug(@PathVariable("cardId") int cardId) {
+        Player currentPlayer = getCurrentPlayer();
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
         AbilityInGame currentAbility = abilityService.getAbilityInGameById(cardId);
-        return "/abilities/" + currentAbility.getAbility().getRole() + "/" + currentAbility.getId();
+        return PAGE_ABILITIES + currentAbility.getAbility().getPathName();
     }
 
     // Fase de ataque de héroe.
@@ -91,7 +89,6 @@ public class AbilityNightLordController {
         Game game = getGame();
         // Añade un punto de fortaleza a cada orco.
         AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
-        String url = "redirect:/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
         List<EnemyInGame> enemies = game.getActualOrcs();
         if (!cacheManager.hasAddedLifeToOrcs(session)) {
             for (var i = 0; i < enemies.size(); i++) {
@@ -103,14 +100,11 @@ public class AbilityNightLordController {
             }
             cacheManager.setHasAddedLifeToOrcs(session);
         }
-
-
-
-        return url;
+        return PAGE_ABILITIES + ability.getAbility().getPathName();
     }
 
     @GetMapping("/shriekknifer/{cardId}")
-    public String shriekknifer(@PathVariable("cardId") int cardId, HttpSession session) {
+    public String shriekknifer(@PathVariable("cardId") int cardId) {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
@@ -118,9 +112,8 @@ public class AbilityNightLordController {
         AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
         // Recupera una carta si el ataque es 1.
         if (ability.getAttack() == 1)
-            deckService.retrievesACard(currentPlayer.getDeck());
-        // TODO: mejorar URL.
-        return "/abilities/" + ability.getAbility().getRole() + "/" + ability.getId();
+            deckService.fromDiscardToDeck(currentPlayer.getDeck());
+        return PAGE_ABILITIES + ability.getAbility().getPathName();
     }
 
 }

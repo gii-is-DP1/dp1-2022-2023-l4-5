@@ -1,7 +1,7 @@
 package org.springframework.samples.nt4h.turn.exceptions;
 
-public class EnoughCardsException extends Exception {
-    public EnoughCardsException() {
+public class NoEnoughCardsException extends Exception {
+    public NoEnoughCardsException() {
         super("There are enough cards.");
     }
 }

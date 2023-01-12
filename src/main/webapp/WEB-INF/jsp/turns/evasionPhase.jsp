@@ -67,7 +67,9 @@
             </div>
         </div>
     </c:if>
+    <hr>
     <div class="row">
+        <h2>Chatea</h2>
         <div class="chatGroup"></div>
         <c:if test="${!loggedPlayer.isNew()}">
             <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
