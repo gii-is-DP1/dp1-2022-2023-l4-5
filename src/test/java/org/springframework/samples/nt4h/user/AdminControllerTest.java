@@ -41,6 +41,9 @@ class AdminControllerTest {
     private UserService userService;
 
     @MockBean
+    private Advise advise;
+
+    @MockBean
     private GameService gameService;
 
     private User user;
