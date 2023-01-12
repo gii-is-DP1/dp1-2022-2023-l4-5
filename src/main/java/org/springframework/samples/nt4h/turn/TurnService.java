@@ -87,6 +87,6 @@ public class TurnService {
             player.setNextPhase(Phase.EVADE);
         } else
             player.setNextPhase(Phase.HERO_ATTACK);
-        saveTurn(turn); // TODO: Comprobar si se actualiza el jugador y la partida.
+        saveTurn(turn);
     }
 }

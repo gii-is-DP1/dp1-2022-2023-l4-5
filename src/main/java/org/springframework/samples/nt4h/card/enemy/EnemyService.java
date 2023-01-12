@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,9 +22,8 @@ import java.util.stream.Collectors;
 public class EnemyService {
     private final EnemyInGameRepository enemyInGameRepository;
     private final EnemyRepository enemyRepository;
-    private final PlayerService playerService;
     private final DeckService deckService;
-    private final CacheManager cacheManager;
+
 
     // EnemyInGame
     @Transactional(readOnly = true)
@@ -100,20 +100,16 @@ public class EnemyService {
         saveEnemyInGame(nightLordInGame);
         return nightLordInGame;
     }
-    //Obtener el daño total de los enemigos en batalla
-    // TODO: comprobar.
 
     @Transactional
-    public Integer attackEnemyToActualPlayer(Game game, HttpSession session) {
+    public Integer attackEnemyToActualPlayer(Game game, HttpSession session, Predicate<EnemyInGame> hasPreventedDamage, int defendedDmg, List<EnemyInGame> enemiesInATrap) {
         Player currentPlayer = game.getCurrentPlayer();
         if (game.getActualOrcs().isEmpty()) return 0;
         int damage = game.getActualOrcs().stream()
-            .filter(enemy -> !(cacheManager.hasPreventDamageFromEnemies(session, enemy)))
+            .filter(hasPreventedDamage)
             .mapToInt(EnemyInGame::getActualHealth).sum();
-        int defendedDmg = cacheManager.getDefend(session);
         int finalDamage = (damage >= defendedDmg) ? (damage - defendedDmg):damage;
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), damage);
-        List<EnemyInGame> enemiesInATrap = cacheManager.getCapturedEnemies(session);
         for (int e = 0; e <= enemiesInATrap.size(); e++) {
             enemiesInATrap.get(e).setActualHealth(0);
             game.getActualOrcs().remove(enemiesInATrap.get(e));
