@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
@@ -25,6 +26,7 @@ import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -49,6 +51,9 @@ public class PlayerServiceTest {
     private int idGame;
     private String namePlayer;
     private Player player;
+
+    @MockBean
+    private Advise advise;
 
     public PlayerServiceTest() {
     }
@@ -83,11 +88,6 @@ public class PlayerServiceTest {
         idGame = game.getId();
         namePlayer = player.getName();
         */
-    }
-
-    @AfterEach
-    void tearDown() {
-        gameService.deleteGameById(idGame);
     }
 
     @Test
