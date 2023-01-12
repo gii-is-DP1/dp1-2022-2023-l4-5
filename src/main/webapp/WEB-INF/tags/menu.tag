@@ -42,11 +42,16 @@
                         <span>Cards</span>
                     </nt4h:menuItem>
                 </sec:authorize>
-                <sec:authorize access="isAuthenticated()">
-                    <nt4h:menuItem active="${name eq 'All'}" url="/admins/all"
-                                   title="All games">
+                <sec:authorize access="hasAuthority('DOKTOL')">
+                    <nt4h:menuItem active="${name eq 'Finished'}" url="/admins/finished"
+                                   title="Finished Games">
                         <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
-                        <span>All Games</span>
+                        <span>Finished Games</span>
+                    </nt4h:menuItem>
+                    <nt4h:menuItem active="${name eq 'GameInProgress'}" url="/games/gameInProgres"
+                                   title="Games In Progress">
+                        <span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>
+                        <span>Games In Progress</span>
                     </nt4h:menuItem>
                 </sec:authorize>
             </ul>
