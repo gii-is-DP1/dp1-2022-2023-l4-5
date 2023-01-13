@@ -26,11 +26,11 @@ import java.util.List;
 /**
  * Las habilidades de explorador son:
  * - Compañero lobo.
- * - Disparo certero.
+ * - Disparo certero. Fufa
  * - Disparo rápido.
  * - En la diana.
  * - Lluvia de flechas.
- * - Recoger flechas.
+ * - Recoger flechas. Fufa
  * - Supervivencia.
  */
 @Controller
@@ -101,6 +101,7 @@ public class AbilityExplorerController {
         // Tomo una primera carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
+        System.out.println("abilityInGame = " + abilityInGame.getAbility().getName());
         while (abilityInGame.getAbility().getName().equals("Disparo rápido")) {
             // Añade el daño.
             cacheManager.addAttack(session, abilityInGame.getAbility().getAttack());
@@ -140,7 +141,7 @@ public class AbilityExplorerController {
         model.put("name", "enemyAlsoAttacked");
         model.put("enemies", getGame().getActualOrcs());
         model.put("newTurn", new Turn());
-        model.put("message", new Message());
+        model.put("chat", new Message());
         return VIEW_CHOSE_ENEMY;
     }
 

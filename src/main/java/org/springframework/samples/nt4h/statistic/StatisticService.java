@@ -184,7 +184,7 @@ public class StatisticService {
 
         //=============================================================\\
       List<Achievement> list= achievementService.getAllAchievementsByType(AchievementType.TOTAL_GOLD);
-        for(int i=0; i<= list.size(); i++){
+        for(int i=0; i< list.size(); i++){
             if(gold >= list.get(i).getThreshold()) {
             user.getAchievements().add(list.get(i));
             userRepository.save(user);
@@ -217,7 +217,7 @@ public class StatisticService {
 
         //=============================================================\\
         List<Achievement> list= achievementService.getAllAchievementsByType(AchievementType.DMG_TO_ORCS);
-        for(int i=0; i<= list.size(); i++){
+        for(int i=0; i < list.size(); i++){
             if(userStatistic.getDamageDealt()>= list.get(i).getThreshold()) {
                 user.getAchievements().add(list.get(i));
                 userRepository.save(user);
@@ -238,7 +238,7 @@ public class StatisticService {
 
         //=============================================================\\
         List<Achievement> list= achievementService.getAllAchievementsByType(AchievementType.KILLED_ORCS);
-        for(int i=0; i<= list.size(); i++){
+        for(int i=0; i< list.size(); i++){
             if(userStatistic.getNumOrcsKilled() >= list.get(i).getThreshold()) {
                 user.getAchievements().add(list.get(i));
                 userRepository.save(user);

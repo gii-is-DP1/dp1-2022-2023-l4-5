@@ -1,6 +1,7 @@
 package org.springframework.samples.nt4h.card.ability;
 
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
@@ -36,7 +37,8 @@ public class AbilityController {
     private final TurnService turnService;
     private final CacheManager cacheManager;
 
-    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService) {
+    @Autowired
+    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService, CacheManager cacheManager) {
         this.userService = userService;
         this.gameService = gameService;
         this.playerService = playerService;
@@ -67,7 +69,7 @@ public class AbilityController {
     }
 
     @PostMapping("/loseCard")
-    public String loseCard(Turn turn) {
+    public String loseCard(Turn turn, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
@@ -76,7 +78,7 @@ public class AbilityController {
     }
 
     @PostMapping("/chooseEnemy")
-    private String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
+    public String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
         EnemyInGame enemyInGame = turn.getCurrentEnemy();
         if (name != null) {
             String action = session.getAttribute("name").toString();
