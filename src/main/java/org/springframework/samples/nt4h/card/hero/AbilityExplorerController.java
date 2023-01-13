@@ -153,7 +153,7 @@ public class AbilityExplorerController {
         deck.getInDiscard().stream().filter(a -> a.getAbility().getName().equals("Disparo Rápido")).findFirst()
             .ifPresent(card -> deckService.specificCardFromDiscardToHand(deck, card));
         // Gana una moneda.
-        statisticService.gainGlory(currentPlayer, 1);
+        statisticService.gainGold(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;
     }
 
