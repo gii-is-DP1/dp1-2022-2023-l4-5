@@ -57,7 +57,7 @@
                     <nt4h:menuItem active="${name eq 'GameInProgress'}" url="/games/gameInProgres"
                                    title="Games In Progress">
                         <span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>
-                        <span>Games In Progress</span>
+                        <span>G.Progress</span>
                     </nt4h:menuItem>
                 </sec:authorize>
             </ul>
