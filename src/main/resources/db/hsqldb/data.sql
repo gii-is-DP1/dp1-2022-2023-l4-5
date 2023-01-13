@@ -242,7 +242,6 @@ INSERT INTO achievements(name, description, image, threshold, achievement_type)
 VALUES ('Peleador novato', 'Se le otorga un logro al usuario cuando inflije 10 de daño en total. ', 'awanakimkum', '10',4),
        ('Peleador de barrio', 'Se le otorga un logro al usuario cuando inflije 40 de daño en total. ', 'awanakimkum', '40',4),
        ('Bruce Lee', 'Se le otorga un logro al usuario cuando inflije 100 de daño en total. ', 'awanakimkum', '100',4),
-       ('MariconaUwU', 'Se le otorga un logro al usuario cuando inflije 200 de daño en total. ', 'awanakimkum', '200',4),
 
        ('Aficionado', 'Se le otorga un logro al usuario cuando mata a 10 orcos. ', 'awanakimkum', '10',5),
        ('Veterano', 'Se le otorga un logro al usuario cuando mata a 50 orcos. ', 'awanakimkum', '50',5),
