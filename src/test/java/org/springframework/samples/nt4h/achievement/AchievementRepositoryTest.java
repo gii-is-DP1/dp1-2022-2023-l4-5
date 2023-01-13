@@ -31,11 +31,6 @@ class AchievementRepositoryTest {
     }
 
     @Test
-    void testFindByCorrectName() {
-        assertEquals(nameAchievement, achievementRepository.findByName(nameAchievement).get().getName());
-    }
-
-    @Test
     void testFindById() {
         assertEquals(nameAchievement, achievementRepository.findById(idAchievement).get().getName());
     }

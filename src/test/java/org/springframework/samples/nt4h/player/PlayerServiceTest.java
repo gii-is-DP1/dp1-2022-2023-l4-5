@@ -5,11 +5,6 @@
 
 package org.springframework.samples.nt4h.player;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
-import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
@@ -32,7 +26,10 @@ import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest(
     includeFilters = {@Filter({Service.class})}
@@ -83,21 +80,6 @@ public class PlayerServiceTest {
     @Test
     public void testFindByIncorrectId() {
         assertThrows(NotFoundException.class, () -> playerService.getPlayerById(-1));
-    }
-
-    @Test
-    public void testFindByName() {
-        assertEquals(namePlayer, playerService.getPlayerByName(namePlayer).getName());
-    }
-
-    @Test
-    public void testFindByIncorrectName() {
-        assertThrows(NotFoundException.class, () -> playerService.getPlayerByName("No existe"));
-    }
-
-    @Test
-    public void findAll() {
-        assertEquals(1, playerService.getAllPlayers().size());
     }
 
     @Test

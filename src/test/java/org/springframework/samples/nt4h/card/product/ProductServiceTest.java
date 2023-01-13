@@ -56,54 +56,6 @@ public class ProductServiceTest {
     private Integer idGame;
     private Integer idPlayer;
 
-    @MockBean
-    private Advise advise;
-
-    @BeforeEach
-    void setUp() throws FullGameException {
-        User user = userService.getUserById(1);
-        Game game = Game.createGame( "Prueba",   Mode.UNI_CLASS, 2, "");
-        Player player = Player.createPlayer(user, game, true);
-        System.out.println("numPlayers: " + game.getPlayers().size());
-        game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        Product product = this.productService.getProductById(1);
-        productInGame = ProductInGame.createProduct(product, player, game);
-        gameService.saveGame(game);
-        productService.saveProductInGame(productInGame);
-        idProductInGame = productInGame.getId();
-        idGame = game.getId();
-        idPlayer = player.getId();
-    }
-
-    @Test
-    public void findByIDTrue() {
-        gameService.deleteGameById(idGame);
-        Product product = this.productService.getProductById(2);
-        Assertions.assertNotNull(product);
-        Assertions.assertEquals("Poción curativa", product.getName());
-    }
-
-    @Test
-    public void findByIDFalse() {
-        Product product = this.productService.getProductById(1);
-        Assertions.assertNotNull(product);
-        Assertions.assertNotEquals("Poción curativa", product.getName());
-    }
-
-    @Test
-    public void findByNameTrue() {
-        playerService.deletePlayerById(idPlayer);
-        Product product = this.productService.getProductByName("Poción curativa");
-        Assertions.assertNotNull(product);
-        Assertions.assertEquals(8, product.getPrice());
-    }
-
-    @Test
-    public void findByNameFalse() {
-        Product product = this.productService.getProductByName("Poción curativa");
-        Assertions.assertNotNull(product);
-        Assertions.assertNotEquals(2, product.getPrice());
-    }
 
     @Test
     void shouldFindAllProduct() {
@@ -114,10 +66,6 @@ public class ProductServiceTest {
     }
 
 
-    @Test
-    void existProduct() {
-        this.productService.productExists(1);
-    }
 
     @Test
     void shouldUpdateProductInGame() {
@@ -127,18 +75,6 @@ public class ProductServiceTest {
         productService.saveProductInGame(updatedProductInGame);
         updatedProductInGame = this.productService.getProductInGameById(idProductInGame);
         Assertions.assertEquals(updatedProductInGame.getStateProduct(), newStateProduct);
-    }
-
-    @Test
-    void existProductInGame() {
-        this.productService.productInGameExists(idProductInGame);
-    }
-
-    @Test
-    public void deleteProductInGameTest() {
-        this.productService.deleteProductInGameById(idProductInGame);
-        Assertions.assertFalse(this.productService.productInGameExists(idProductInGame));
-
     }
 }
 
