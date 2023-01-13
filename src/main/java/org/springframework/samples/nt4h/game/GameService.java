@@ -199,7 +199,7 @@ public class GameService {
             if (enemy.getActualHealth() <= 0) {
                 System.out.println("Enemy " + enemy.getEnemy().getName() + " killed");
                 // statisticService.killedOrcs(player);
-                statisticService.gainGold(player, enemy.getEnemy().getGold());
+                statisticService.gainGold(player, enemy.getEnemy().getGold() + 20);
                 statisticService.gainGlory(player, enemy.getEnemy().getGlory());
                 statisticService.getNumDamageByUser(userId);
                 statisticService.getNumOrcsByUser(userId);
@@ -217,7 +217,7 @@ public class GameService {
         // TODO: quitar
         // if (usedAbility.getAttack() == 0)
         //    return;
-        effectDamage += 999;
+        effectDamage += 99;
         Integer damageToEnemy = usedAbility.getAttack() + effectDamage;
         for (int e = 0; enemies.size() > e; e++) {
             EnemyInGame affectedEnemy = enemies.get(e);

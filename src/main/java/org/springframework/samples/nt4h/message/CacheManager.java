@@ -96,6 +96,7 @@ public class CacheManager extends BaseCacheManager {
     public Boolean hasNextUrl(HttpSession session) {
         return hasAttribute(session);
     }
+
     public Optional<String> getNextUrl(HttpSession session) {
         return getString(session);
     }

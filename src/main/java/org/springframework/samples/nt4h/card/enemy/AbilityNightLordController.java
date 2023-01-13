@@ -33,7 +33,7 @@ public class AbilityNightLordController {
 
 
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_ABILITIES = "redirect:/abilities";
+    private final String PAGE_ABILITIES = "redirect:/abilities/";
 
     private final UserService userService;
     private final AbilityService abilityService;
