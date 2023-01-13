@@ -41,6 +41,12 @@
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                         <span>Cards</span>
                     </nt4h:menuItem>
+                    <nt4h:menuItem active="${name eq 'Achievements'}" url="/achievements"
+                                   title="achievements">
+                        <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span>
+                        <span>Achievement</span>
+                    </nt4h:menuItem>
+
                 </sec:authorize>
                 <sec:authorize access="hasAuthority('DOKTOL')">
                     <nt4h:menuItem active="${name eq 'Finished'}" url="/admins/finished"
