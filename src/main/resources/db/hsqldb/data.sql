@@ -229,12 +229,12 @@ VALUES ('Daga élfica', '/resources/images/products/dagaelfica_product_front.png
 INSERT INTO products_capacity(product_id, capacity_id)
 VALUES (3, 1),
        (3, 2),
-       (3, 4),
+       (3, 2),
        (6, 3),
        (6, 4),
-       (7, 2),
-       (8, 2),
-       (9, 4);
+       (7, 1),
+       (8, 1),
+       (9, 2);
 
 -- Creación de logros.
 

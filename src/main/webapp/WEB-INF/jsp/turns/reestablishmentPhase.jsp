@@ -27,11 +27,18 @@
     </div>
     <div class="container" style="position: center; padding-top: 5rem;">
         <c:forEach items="${game.actualOrcs}" var="orc" >
-            <div class="row" ">
+            <div class="row">
             <div class="col-sm-2" >
                 <div class="col-8">
                     <p style="font-size:2rem">
-                        <img src="/resources/images/heart_orc.gif" width="50" height="50"> ${orc.actualHealth}
+                        <c:if test="${enemyInGame.isNightLord}">
+                            <img src="/resources/images/heart_orc.gif" width="50"
+                                 height="50"> ${enemyInGame.actualHealth}
+                        </c:if>
+                        <c:if test="${!enemyInGame.isNightLord}">
+                            <img src="/resources/images/heart_nightlord.gif" width="50"
+                                 height="50"> ${enemyInGame.actualHealth}
+                        </c:if>
                     </p>
                     <img src="${orc.enemy.frontImage}"  width=100%>
                 </div>

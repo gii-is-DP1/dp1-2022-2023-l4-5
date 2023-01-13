@@ -19,9 +19,15 @@
             justify-content: center;
         }
     </style>
-    <h1>Gold: ${currentPlayer.statistic.glory},
-        Glory: ${currentPlayer.statistic.gold},
-        Wounds: ${currentPlayer.wounds}</h1>
+    <div class="container">
+        <c:forEach var="i" begin="0" end="${currentPlayer.health}">
+            <img src="/resources/images/heart_hero.gif" width="50" height="50">
+        </c:forEach>
+        <p style="font-size:5rem">
+            <img src="/resources/images/gloria.gif" width="50" height="50"> ${currentPlayer.statistic.glory}
+            <img src="/resources/images/coin.gif" width="50" height="50"> ${currentPlayer.statistic.gold}
+        </p>
+    </div>
     <c:if test="${!loggedPlayer.isNew()}">
         <form:form modelAttribute="newTurn" class="form-horizontal" id="choose-phases-form">
             <div class="container">
