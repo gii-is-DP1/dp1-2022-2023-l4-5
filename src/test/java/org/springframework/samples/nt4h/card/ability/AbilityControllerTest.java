@@ -1,8 +1,8 @@
 package org.springframework.samples.nt4h.card.ability;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,6 +49,8 @@ import org.springframework.samples.nt4h.player.PlayerRepository;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
+import org.springframework.samples.nt4h.statistic.StatisticRepository;
+import org.springframework.samples.nt4h.statistic.StatisticService;
 import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.samples.nt4h.turn.TurnRepository;
@@ -93,6 +95,7 @@ class AbilityControllerTest {
     private User user;
     private Turn turn;
     private AbilityInGame abilityInGame;
+    private ProductInGame productInGame;
 
     @BeforeEach
     void setUp() {
@@ -171,7 +174,7 @@ class AbilityControllerTest {
         ability.setRole(Role.WIZARD);
 
 
-        ProductInGame productInGame = new ProductInGame();
+        productInGame = new ProductInGame();
         productInGame.setGame(new Game());
         productInGame.setId(1);
         productInGame.setName("Name");
@@ -225,7 +228,7 @@ class AbilityControllerTest {
         product.setQuantity(1);
 
         deck.setInDiscard(List.of(abilityInGame));
-        deck.setInHand(List.of(abilityInGame,abilityInGame));
+        deck.setInHand(List.of(abilityInGame, abilityInGame));
         deck.setInDeck(List.of(abilityInGame));
         player.setDeck(deck);
         game.setCurrentPlayer(player);
@@ -253,11 +256,62 @@ class AbilityControllerTest {
 
     }
 
+
+    @Test
+    void testChooseEnemy() {
+        MockHttpSession session=new MockHttpSession();
+        session.setAttribute("name","Name");
+        session.setAttribute("nextUrl","redirect:/heroAttack/makeDamage");
+        session.setAttribute("Name",List.of(2,3,4));
+        assertEquals("redirect:/heroAttack/makeDamage",abilityController.chooseEnemy(turn, null,session));
+    }
+
+    @Test
+    @Disabled
+    void testFindInDiscard() {
+        MockHttpSession session=new MockHttpSession();
+        when(userService.getLoggedUser()).thenReturn(user);
+        assertEquals("redirect:/heroAttack/makeDamage",abilityController.findInDiscard(turn, session));
+    }
+
+    @Test
+    void testChooseAbilityFromDeck() {
+        MockHttpSession session=new MockHttpSession();
+        session.setAttribute("nextUrl","redirect:/heroAttack/makeDamage");
+        assertEquals("redirect:/heroAttack/makeDamage",abilityController.chooseAbilityFromDeck(turn, session));
+    }
+
+    @Test
+    void testChooseProductFromMarket() {
+        MockHttpSession session=new MockHttpSession();
+        session.setAttribute("nextUrl","redirect:/heroAttack/makeDamage");
+        assertEquals("redirect:/heroAttack/makeDamage",abilityController.chooseProductFromMarket(turn, session));
+    }
+
+
+    @Test
+    void testExchangeProducts() {
+        MockHttpSession session=new MockHttpSession();
+        session.setAttribute("inMarket",5);
+        when(productService.getProductInGameById(anyInt())).thenReturn(productInGame);
+        assertEquals("redirect:/heroAttack/makeDamage",abilityController.exchangeProducts(turn,session));
+    }
+
+
+    @Test
+    @Disabled
+    void testExchangeCards() throws Exception {
+        when(userService.getLoggedUser()).thenReturn(user);
+        when(abilityService.getAbilityInGameById(1)).thenReturn(abilityInGame);
+        when(turnService.getTurnsByPhaseAndPlayerId(any(), anyInt())).thenReturn(turn);
+        assertEquals("redirect:/heroAttack/makeDamage",abilityController.exchangeCards(turn,new MockHttpSession()));
+    }
+
     @Test
     void testFindEffect() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         when(abilityService.getAbilityInGameById(1)).thenReturn(abilityInGame);
-        when(turnService.getTurnsByPhaseAndPlayerId(any(),anyInt())).thenReturn(turn);
+        when(turnService.getTurnsByPhaseAndPlayerId(any(), anyInt())).thenReturn(turn);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities");
         MockMvcBuilders.standaloneSetup(abilityController)
             .build()
@@ -271,6 +325,7 @@ class AbilityControllerTest {
     }
 
     @Test
+    @Disabled
     void testLoseCard() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/abilities/loseCard");

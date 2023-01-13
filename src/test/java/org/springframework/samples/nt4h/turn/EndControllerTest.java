@@ -266,6 +266,7 @@ class EndControllerTest {
     @Test
     void testShowEnd() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
+        when(userService.getUserByUsername(anyString())).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/end");
         MockMvcBuilders.standaloneSetup(endController)
             .build()
@@ -281,6 +282,7 @@ class EndControllerTest {
     @Test
     void testShowEnd2() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
+        when(userService.getUserByUsername(anyString())).thenReturn(user);
         ModelMap model = new ModelMap();
         assertEquals("turns/endPhase",endController.showEnd(model));
 
