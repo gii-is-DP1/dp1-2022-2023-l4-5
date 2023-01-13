@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -89,7 +90,7 @@ public class GameService {
         user.setGame(game);
         user.setPlayer(newPlayer);
         userService.saveUser(user);
-        advise.playerJoinGame(newPlayer, game);
+        advise.playerJoinGame();
     }
 
     @Transactional(rollbackFor = FullGameException.class)
@@ -104,7 +105,7 @@ public class GameService {
         game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
-        advise.createGame(user, game);
+        advise.createGame(game);
     }
 
 
@@ -119,7 +120,7 @@ public class GameService {
         deckService.addDeckFromRole(player, game.getMode());
         playerService.createTurns(player);
         saveGame(game);
-        advise.chosenHero(player, heroInGame, game);
+        advise.chosenHero(heroInGame);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -160,24 +161,26 @@ public class GameService {
         user.setGame(game);
         userService.saveUser(user);
         saveGame(game);
-        advise.spectatorJoinGame(user, game);
+        advise.spectatorJoinGame();
     }
 
     @Transactional
-    public List<EnemyInGame> addNewEnemiesToBattle(List<EnemyInGame> enemies, List<EnemyInGame> allOrcs, Game game) {
-        List<EnemyInGame> addedEnemies = Lists.newArrayList();
-        if (enemies.size() == 1 || enemies.size() == 2) {
-            EnemyInGame enemy = allOrcs.get(1);
-            enemies.add(enemy);
-            addedEnemies.add(enemy);
-            allOrcs.remove(1);
-        } else if (enemies.isEmpty()) {
-            List<EnemyInGame> newEnemies = game.getAllOrcsInGame().stream().limit(3).collect(Collectors.toList());
-            addedEnemies.addAll(newEnemies);
-            allOrcs.removeAll(newEnemies);
-        }
+    public List<EnemyInGame> addNewEnemiesToBattle(Game game) {
+        int numEnemies = 0;
+        List<EnemyInGame> actualEnemies = game.getActualOrcs();
+        List<EnemyInGame> allOrcsInGame = game.getAllOrcsInGame();
+        if ((actualEnemies.size() == 2) || (actualEnemies.size() == 1))
+            numEnemies = 1;
+        else if (actualEnemies.size() == 0)
+            numEnemies = 3;
+        int addNighLord = actualEnemies.size() <= numEnemies ? 0 : 1;
+        System.out.println("addNighLord: " + addNighLord);
+        System.out.println("numEnemies: " + numEnemies);
+        List<EnemyInGame> newEnemies = new ArrayList<>(allOrcsInGame.stream().skip(addNighLord).limit(numEnemies).collect(Collectors.toList()));
+        allOrcsInGame.removeAll(newEnemies);
+        actualEnemies.addAll(newEnemies);
         saveGame(game);
-        return addedEnemies;
+        return newEnemies;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -211,11 +214,15 @@ public class GameService {
 
     @Transactional(rollbackFor = Exception.class)
     public void attackEnemies(AbilityInGame usedAbility, Integer effectDamage, List<EnemyInGame> enemies, List<Integer> enemiesMoreDamage, Player player, Game game, Integer userId) {
-        if (usedAbility.getAttack() == 0)
-            return;
+        // TODO: quitar
+        // if (usedAbility.getAttack() == 0)
+        //    return;
+        effectDamage += 999;
         Integer damageToEnemy = usedAbility.getAttack() + effectDamage;
         for (int e = 0; enemies.size() > e; e++) {
             EnemyInGame affectedEnemy = enemies.get(e);
+            if (affectedEnemy.isNightLord())
+                statisticService.gainGlory(player, 1);
             Integer extraDamage = enemiesMoreDamage.get(e);
             Integer initialEnemyHealth = affectedEnemy.getActualHealth();
             affectedEnemy.setActualHealth(initialEnemyHealth - (damageToEnemy + extraDamage));

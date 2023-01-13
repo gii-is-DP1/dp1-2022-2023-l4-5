@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.exceptions.TooManyAbilitiesException;
@@ -21,6 +22,7 @@ public class DeckService {
     private final DeckRepository deckRepository;
     private final AbilityService abilityService;
     private final PlayerService playerService;
+    private final Advise advise;
 
     @Transactional(rollbackFor = Exception.class)
     public void saveDeck(Deck deck) {
@@ -40,6 +42,7 @@ public class DeckService {
         abilityService.saveAbilityInGame(inDeck);
         deck.getInDeck().remove(inDeck);
         deck.getInDiscard().add(inDeck);
+        advise.fromDeckToDiscard(inDeck);
         if (deck.getInDeck().isEmpty())
             moveAllCardsFromDiscardToDeck(player, deck);
         saveDeck(deck);
@@ -67,6 +70,7 @@ public class DeckService {
         abilityService.saveAbilityInGame(inDiscard);
         deck.getInDiscard().remove(inDiscard);
         deck.getInDeck().add(inDiscard);
+        advise.fromDiscardToDeck(inDiscard);
         saveDeck(deck);
     }
 
@@ -89,6 +93,7 @@ public class DeckService {
         abilityService.saveAbilityInGame(inDeck);
         deck.getInDeck().remove(inDeck);
         deck.getInHand().add(inDeck);
+        advise.fromDeckToHand(inDeck);
         if (deck.getInDeck().isEmpty())
             moveAllCardsFromDiscardToDeck(player, deck);
         saveDeck(deck);
@@ -151,6 +156,7 @@ public class DeckService {
         deck.getInDiscard().clear();
         deck.getInDeck().addAll(tmp);
         saveDeck(deck);
+
         playerService.inflictWounds(player, 1);
     }
 
@@ -185,13 +191,11 @@ public class DeckService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public List<AbilityInGame> moveCardsFromDeckToHand(Deck deck) throws TooManyAbilitiesException {
+    public void moveCardsFromDeckToHand(Player player, Deck deck) throws TooManyAbilitiesException {
         if (deck.getInHand().size() > 4)
             throw new TooManyAbilitiesException();
-        List<AbilityInGame> added = deck.getInDeck().subList(0, 5 - deck.getInHand().size());
-        deck.getInHand().addAll(added);
-        saveDeck(deck);
-        return added;
+        Integer cardsToMove = 5 - deck.getInHand().size();
+        fromDeckToHand(player, deck, cardsToMove);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -228,5 +232,11 @@ public class DeckService {
             createDeck(player, abilityService.getAbilitiesByRole(roles[0]), 8);
             createDeck(player, abilityService.getAbilitiesByRole(roles[1]), 7);
         }
+    }
+
+    public void deleteAbilityInHand(Deck deck, AbilityInGame abilityInGame) {
+        deck.getInHand().remove(abilityInGame);
+        abilityService.deleteAbilityInGame(abilityInGame);
+        saveDeck(deck);
     }
 }

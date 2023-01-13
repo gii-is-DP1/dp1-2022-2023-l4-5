@@ -36,13 +36,6 @@
                     <img src="${orc.enemy.frontImage}"  width=100%>
                 </div>
                 </div>
-
-
-
-
-
-
-
         </c:forEach>
     </div>
     <c:if test="${!loggedPlayer.isNew()}">

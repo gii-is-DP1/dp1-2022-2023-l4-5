@@ -32,7 +32,6 @@ public class EnemyAttackController {
     private final TurnService turnService;
     private final GameService gameService;
     private final CacheManager cacheManager;
-    private final EnemyService enemyService;
     public final String VIEW_ATTACK = "turns/attackPhase";
     public final String NEXT_TURN = "redirect:/turns";
     private final Advise advise;
@@ -73,12 +72,11 @@ public class EnemyAttackController {
 
 
     @Autowired
-    public EnemyAttackController(UserService userService, TurnService turnService, GameService gameService, CacheManager cacheManager, EnemyService enemyService, Advise advise) {
+    public EnemyAttackController(UserService userService, TurnService turnService, GameService gameService, CacheManager cacheManager, Advise advise) {
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
         this.cacheManager = cacheManager;
-        this.enemyService = enemyService;
         this.advise = advise;
         this.damage = null;
     }
@@ -92,7 +90,7 @@ public class EnemyAttackController {
             Predicate<EnemyInGame> hasPreventedDamage = enemy -> !(cacheManager.hasPreventDamageFromEnemies(session, enemy));
             List<EnemyInGame> enemiesInATrap = cacheManager.getCapturedEnemies(session);
             damage = gameService.attackEnemyToActualPlayer(game, session, hasPreventedDamage, defendedDmg, enemiesInATrap);
-            advise.playerIsAttacked(damage, game);
+            advise.playerIsAttacked(damage);
         }
         model.put("damage", damage);
         advise.keepUrl(session, request);

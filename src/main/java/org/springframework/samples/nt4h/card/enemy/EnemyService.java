@@ -82,7 +82,8 @@ public class EnemyService {
     @Transactional
     public List<EnemyInGame> addOrcsToGame(Integer numPlayers) {
         int limitEnemies = 19;
-        if(numPlayers == 2) limitEnemies = 19;
+        // TODO: Ponr en su estado original.
+        if(numPlayers == 2) limitEnemies = 4;
         else if(numPlayers == 3) limitEnemies = 23;
         else if(numPlayers == 4) limitEnemies = 27;
         List<EnemyInGame> orcs = getAllNotNightLords().stream().map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());

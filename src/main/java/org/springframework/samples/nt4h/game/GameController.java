@@ -184,7 +184,7 @@ public class GameController {
         Game game = getGame();
         advise.getMessage(session, model);
         advise.keepUrl(session, request);
-        advise.chooseHero(loggedUser, game);
+        advise.chooseHero();
         return VIEW_GAME_HERO_SELECT;
     }
 
