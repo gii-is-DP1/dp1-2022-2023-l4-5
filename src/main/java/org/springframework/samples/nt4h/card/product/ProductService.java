@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,8 +34,8 @@ public class ProductService {
     public void buyProduct(Player player, ProductInGame productInGame) throws NoMoneyException, NotInSaleException, CapacitiesRequiredException {
         ProductInGame selectedProduct = getProductInGameById(productInGame.getId());
         List<StateCapacity> stateCapacities = player.getHeroes().stream()
-                .flatMap(heroInGame -> heroInGame.getHero().getCapacities().stream().map(Capacity::getStateCapacity))
-                .collect(Collectors.toList());
+            .flatMap(heroInGame -> heroInGame.getHero().getCapacities().stream().map(Capacity::getStateCapacity))
+            .collect(Collectors.toList());
         List<StateCapacity> capacitiesNeeded = productInGame.getProduct().getCapacity().stream().map(Capacity::getStateCapacity).collect(Collectors.toList());
         stateCapacities.retainAll(capacitiesNeeded);
         if (!capacitiesNeeded.isEmpty() && stateCapacities.size() == 0)
@@ -43,7 +44,7 @@ public class ProductService {
             if (player.getStatistic().getGold() < selectedProduct.getProduct().getPrice())
                 throw new NoMoneyException();
             AbilityInGame abilityInGame = AbilityInGame.builder().timesUsed(0).attack(productInGame.getProduct().getAttack()).isProduct(true)
-                    .productInGame(productInGame).build();
+                .productInGame(productInGame).build();
             player.getDeck().getInDeck().add(abilityInGame);
             productInGame.setStateProduct(StateProduct.PLAYER);
             productInGame.setPlayer(player);
