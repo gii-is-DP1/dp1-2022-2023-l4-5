@@ -64,33 +64,33 @@ public class HeroAttackController {
     }
 
     @ModelAttribute("loggedUser")
-    public User getLoggedUser() {
+    private User getLoggedUser() {
         return userService.getLoggedUser();
     }
 
     @ModelAttribute("currentPlayer")
-    public Player getPlayer() {
+    private Player getPlayer() {
         return getLoggedUser().getGame().getCurrentPlayer();
     }
 
     @ModelAttribute("game")
-    public Game getGame() {
+    private Game getGame() {
         return getPlayer().getGame();
     }
 
     @ModelAttribute("newTurn")
-    public Turn getNewTurn() {
+    private Turn getNewTurn() {
         return new Turn();
     }
 
     @ModelAttribute("loggedPlayer")
-    public Player getLoggedPlayer() {
+    private Player getLoggedPlayer() {
         User loggedUser = getLoggedUser();
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
     @ModelAttribute("chat")
-    public Message getChat() {
+    private Message getChat() {
         return new Message();
     }
 
@@ -98,6 +98,7 @@ public class HeroAttackController {
     public String showHeroAttackBoard(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
         advise.keepUrl(session, request);
+        cacheManager.deleteEndAttackHero(session);
         return VIEW_HERO_ATTACK;
     }
 
@@ -119,8 +120,10 @@ public class HeroAttackController {
         oldTurn.addAbility(usedAbility);
         oldTurn.setCurrentAbility(usedAbility);
         turnService.saveTurn(oldTurn);
-        advise.heroAttack(usedAbility, attackedEnemy, game);
-        Optional<Enemy> nighLord = game.getActualOrcs().stream().map(EnemyInGame::getEnemy).filter(enemy -> enemy.getName().equals("Nigh Lord")).findFirst();
+        advise.heroAttack(usedAbility, attackedEnemy);
+        Optional<Enemy> nighLord = game.getActualOrcs().stream().map(EnemyInGame::getEnemy).filter(Enemy::getIsNightLord).findFirst();
+        cacheManager.setAttackedEnemy(session, attackedEnemy.getId());
+
         return nighLord.map(enemy -> PAGE_ABILITY + "/" + enemy.getName().toLowerCase() + "/" + usedAbility.getId()).orElse(PAGE_ABILITY);
     }
 
@@ -140,19 +143,17 @@ public class HeroAttackController {
         Integer effectDamage = cacheManager.getSharpeningStone(session) + cacheManager.getAttack(session);
         List<EnemyInGame> enemies = cacheManager.getEnemiesAlsoAttacked(session);
 
-        if (attackedEnemy != null) {
+        if (attackedEnemy != null)
             enemies.add(attackedEnemy);
-            cacheManager.setAttackedEnemy(session, attackedEnemy.getId());
-        }
         List<Integer> enemiesMoreDamage = enemies.stream().map(enemy -> cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, enemy)).collect(Collectors.toList());
         gameService.attackEnemies(usedAbility, effectDamage, enemies, enemiesMoreDamage, player, game, getLoggedUser().getId());
         if (cacheManager.hasToBeDeletedAbility(session))
-            abilityService.deleteAbilityInGameById(usedAbility.getId());
+            deckService.deleteAbilityInHand(player.getDeck(), usedAbility);
         else
             deckService.specificCardFromHandToDiscard(deck, usedAbility);
-        cacheManager.deleteEndAttackHero(session);
-        return PAGE_HERO_ATTACK;
-    } 
+        Optional<String> nextUrl = cacheManager.getNextUrl(session);
+        return nextUrl.orElse(PAGE_HERO_ATTACK);
+    }
 
     @GetMapping("/next")
     public String next() {

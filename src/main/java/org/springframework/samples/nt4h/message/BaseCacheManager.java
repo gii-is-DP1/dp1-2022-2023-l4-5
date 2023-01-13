@@ -7,6 +7,7 @@ import org.springframework.samples.nt4h.model.BaseEntity;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -14,19 +15,20 @@ import java.util.stream.Stream;
 
 public class BaseCacheManager {
 
+    private final String ATTACKED_ENEMY = "attackedEnemy"; // El enemigo que ha sido seleccionado.
+
     protected List<EnemyInGame> parseEnemies(HttpSession session, String name, Function<String, EnemyInGame> function) {
         Object enemies = session.getAttribute(name);
-        System.out.println("enemies = " + enemies + " " + (enemies == null) );
         if (enemies == null)
             return Lists.newArrayList();
         return Stream.of(enemies.toString().split(","))
                 .map(function)
-                .filter(BaseEntity::isNew)
+                .filter(enemy -> !enemy.isNew())
                 .collect(Collectors.toList());
     }
 
     protected EnemyInGame parseEnemy(HttpSession session, Function<Integer, EnemyInGame> function) {
-        Object enemy = session.getAttribute("attackedEnemy");
+        Object enemy = session.getAttribute(ATTACKED_ENEMY);
         Integer idAttackedEnemy = enemy == null ? null : Integer.parseInt(enemy.toString());
         return idAttackedEnemy == null ? new EnemyInGame() : function.apply(idAttackedEnemy);
     }
@@ -35,7 +37,7 @@ public class BaseCacheManager {
         Object enemies = session.getAttribute(name);
         if (enemies == null)
             session.setAttribute(name, enemyInGame.getId());
-        else if (Boolean.FALSE.equals(predicate.test(enemyInGame)))
+        else if (!(predicate.test(enemyInGame)))
             session.setAttribute(name, enemies + "," + enemyInGame.getId());
     }
 
@@ -63,9 +65,9 @@ public class BaseCacheManager {
         return session.getAttribute("nextUrl") != null;
     }
 
-    protected String getString(HttpSession session) {
+    protected Optional<String> getString(HttpSession session) {
         Object value = session.getAttribute("nextUrl");
-        return value == null ? null :value.toString();
+        return value == null ? Optional.empty() :Optional.of(value.toString());
     }
 
     protected boolean getBoolean(HttpSession session, String name) {

@@ -1,23 +1,36 @@
+-- Creación de estadísticas.
+INSERT INTO statistic(gold, glory, num_orcs_killed, num_war_lord_killed, num_won_games, num_played_games, time_played, num_players, damage_dealt)
+VALUES (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0);
+
 -- Creación de usuarios.
-INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable, is_connected)
+INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable, is_connected, statistic_id)
 VALUES ('alesanfe', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 'USER', '1999-02-01', 1, 0),
+        'I am a description', 'DOLKTOL', '1999-02-01', 1, 0, 1),
         ('antonio', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 'USER', '1999-02-01', 1, 0),
+        'I am a description', 'USER', '1999-02-01', 1, 0, 2),
        ('laurolmer', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'awanabumbambam', 'DOKTOL', '2002-08-21', 1, 0),
+        'awanabumbambam', 'DOKTOL', '2002-08-21', 1, 0, 3),
        ('alvhidrod', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'drakorion', 'USER', '2002-02-23', 1, 0),
+        'drakorion', 'USER', '2002-02-23', 1, 0, 4),
        ('ismruijur', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'er jefe brrr', 'USER', '2002-10-27', 1, 0),
+        'er jefe brrr', 'USER', '2002-10-27', 1, 0, 5),
        ('ivasansan1', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'bético encubierto', 'DOKTOL', '2002-11-12', 1, 0),
+        'bético encubierto', 'DOKTOL', '2002-11-12', 1, 0, 6),
        ('pedruiagu', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'sácame del bolsillo', 'USER', '2002-10-01', 1, 0),
+        'sácame del bolsillo', 'USER', '2002-10-01', 1, 0, 7),
         ('lapaqui', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'vivo en una simulación', 'USER', '2003-05-11', 1, 0),
+        'vivo en una simulación', 'USER', '2003-05-11', 1, 0, 8),
         ('pepe', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'pepito de carne mechá', 'USER', '2004-07-14', 1, 0);
+        'pepito de carne mechá', 'USER', '2004-07-14', 1, 0, 9);
 
 -- Creación de mensajes.
 INSERT INTO messages(content, time, receiver_id, sender_id, read, type)
@@ -104,8 +117,8 @@ VALUES ('Compañero Lobo', '/resources/images/abilities/wolf_abilities_front.png
         '/resources/images/abilities/ability_back.png', -1, 'WIZARD', 0, 1, 'reconstitution'),
        ('Torrente de luz', '/resources/images/abilities/torrentedeluz_ability_front.png',
         '/resources/images/abilities/ability_back.png', -1, 'WIZARD', 2, 1, 'lightTorrent'),
-       ('Al corazón', '/resources/images/abilities/alcorazon_ability_front.png',
-        '/resources/images/abilities/ability_back.png', -1, 'THIEF', 4, 2, 'toTheHearth'),
+       ('Al corazon', '/resources/images/abilities/alcorazon_ability_front.png',
+        '/resources/images/abilities/ability_back.png', -1, 'THIEF', 4, 2, 'toTheHeart'),
        ('Ataque furtivo', '/resources/images/abilities/ataquefurtivo_ability_front.png',
         '/resources/images/abilities/ability_back.png', -1, 'THIEF', 2, 3, 'stealthAttack'),
        ('Ballesta precisa', '/resources/images/abilities/ballestaprecisa_ability_front.png',
@@ -180,12 +193,12 @@ VALUES ('Honda', '/resources/images/orcs/0-0_orc_back.png',
         '/resources/images/orcs/axe_orc_front.png', -1, 6, 4, 0, 0, 0, FALSE, FALSE, FALSE),
        ('Terminator', '/resources/images/orcs/0-0_orc_back.png',
         '/resources/images/orcs/axe_orc_front.png', -1, 6, 4, 1, 0, 0, FALSE, FALSE, FALSE),
-       ('Gurdrug', '/resources/images/orcs/nightlord_back.png',
-        '/resources/images/orcs/gur_nightlord_front.png', -1, 8, 0, 0, 0, 0, FALSE, FALSE, TRUE),
+       ('Gurdrug', '/resources/images/nightlords/nightlord_back.png',
+        '/resources/images/nightlords/gur_nightlord_front.png', -1, 8, 0, 0, 0, 0, FALSE, FALSE, TRUE),
        ('Roghkiller', '/resources/images/orcs/nightlord_back.png',
-        '/resources/images/orcs/rogh_nightlord_front.png', -1, 9, 0, 0, 0, 0, FALSE, FALSE, TRUE),
-       ('Shriekknifer', '/resources/images/orcs/nightlord_back.png',
-        '/resources/images/orcs/shriek_nightlord_front.png', -1, 10, 0, 0, 0, 0, FALSE, FALSE, TRUE);
+        '/resources/images/nightlords/rogh_nightlord_front.png', -1, 9, 0, 0, 0, 0, FALSE, FALSE, TRUE),
+       ('Shriekknifer', '/resources/images/nightlords/nightlord_back.png',
+        '/resources/images/nightlords/shriek_nightlord_front.png', -1, 10, 0, 0, 0, 0, FALSE, FALSE, TRUE);
 
 -- Productos
 INSERT INTO products(name, front_image, back_image, max_uses, price, attack, quantity, path_name)
@@ -224,23 +237,25 @@ VALUES (3, 1),
        (9, 4);
 
 -- Creación de logros.
-INSERT INTO achievements(name, description, image, threshold)
-VALUES ('Primera partida', 'Se le otorga un logro al usuario cuando completa su primera partida. ', 'awanakimkum', '1'),
-       ('Primera victoria', 'Se le otorga un logro al usuario cuando gana su primera partida. ', 'awanakimkum', '1'),
-       ('Última Sangre', 'Se le otorga un logro al usuario cuando gana su primera partida.', 'awanakimkum', '1'),
-       ('Aficionado', 'Se le otorga un logro al usuario cuando mata a 10 orcos. ', 'awanakimkum', '10'),
-       ('Veterano', 'Se le otorga un logro al usuario cuando mata a 50 orcos. ', 'awanakimkum', '50'),
-       ('Maestro', 'Se le otorga un logro al usuario cuando mata a 100 orcos. ', 'awanakimkum', '100'),
-       ('Exterminador', 'Se le otorga un logro al usuario cuando mata a 200 orcos. ', 'awanakimkum', '200'),
-       ('Asesino', 'Se le otorga un logro al usuario cuando mata a 500 orcos. ', 'awanakimkum', '500'),
-       ('Mataorcos', 'Se le otorga un logro al usuario cuando mata a 1000 orcos. ', 'awanakimkum', '1000'),
-       ('Primeros pasos', 'Se le otorga un logro al usuario cuando compra su primer producto. ', 'awanakimkum', '1'),
-       ('Héroe', 'Se le otorga un logro al usuario cuando vence su primer señor de la guerra. ', 'awanakimkum', '1'),
-       ('Campeón', 'Se le otorga un logro al usuario cuando vence a 5 señores de la guerra. ', 'awanakimkum', '5'),
-       ('Comisario Yarrick', 'Se le otorga un logro al usuario cuando vence a 10 señores de la guerra. ', 'awanakimkum', '10'),
-       ('Touch Some Grass', 'Se le otorga un logro al usuario cuando juega 20 partidas.', 'awanakimkum', '20'),
-       ('Un poco de todo', 'Se le otorga un logro al usuario cuando completa su primera partida en modo multiclase.',
-        'awanakimkum', '1');
+
+INSERT INTO achievements(name, description, image, threshold, achievement_type)
+VALUES ('Peleador novato', 'Se le otorga un logro al usuario cuando inflije 10 de daño en total. ', 'awanakimkum', '10',4),
+       ('Peleador de barrio', 'Se le otorga un logro al usuario cuando inflije 40 de daño en total. ', 'awanakimkum', '40',4),
+       ('Bruce Lee', 'Se le otorga un logro al usuario cuando inflije 100 de daño en total. ', 'awanakimkum', '100',4),
+       ('MariconaUwU', 'Se le otorga un logro al usuario cuando inflije 200 de daño en total. ', 'awanakimkum', '200',4),
+
+       ('Aficionado', 'Se le otorga un logro al usuario cuando mata a 10 orcos. ', 'awanakimkum', '10',5),
+       ('Veterano', 'Se le otorga un logro al usuario cuando mata a 50 orcos. ', 'awanakimkum', '50',5),
+       ('Maestro', 'Se le otorga un logro al usuario cuando mata a 100 orcos. ', 'awanakimkum', '100',5),
+       ('Asesino', 'Se le otorga un logro al usuario cuando mata a 200 orcos. ', 'awanakimkum', '200',5),
+       ('Mataorcos', 'Se le otorga un logro al usuario cuando mata a 500 orcos. ', 'awanakimkum', '500',5),
+       ('Exterminador', 'Se le otorga un logro al usuario cuando mata a 1000 orcos. ', 'awanakimkum', '1000',5),
+
+       ('Money', 'Se le otorga un logro al usuario cuando tiene 10 de oro. ', 'awanakimkum', '10',0),
+       ('Economista', 'Se le otorga un logro al usuario cuando tiene 20 de oro. ', 'awanakimkum', '20',0),
+       ('Catalan', 'Se le otorga un logro al usuario cuando tiene 50 de oro. ', 'awanakimkum', '50',0),
+       ('Elon Musk', 'Se le otorga un logro al usuario cuando tiene 100 de oro. ', 'awanakimkum', '10',0),
+       ('Tio Gilito', 'Se le otorga un logro al usuario cuando tiene 1000 de oro. ', 'awanakimkum', '1000',0);
 
 -- Habilidades de los heroes
 INSERT INTO heroes_abilities(hero_id, abilities_id)

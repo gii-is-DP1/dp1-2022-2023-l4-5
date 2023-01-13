@@ -21,20 +21,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
-import org.springframework.samples.nt4h.game.Accessibility;
-import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.exceptions.FullGameException;
-import org.springframework.samples.nt4h.game.exceptions.IncorrectPasswordException;
-import org.springframework.samples.nt4h.game.exceptions.UserInAGameException;
 import org.springframework.samples.nt4h.player.Tier;
+import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -68,6 +62,7 @@ public class UserService {
         if (user.getTier()== null) user.setTier(Tier.IRON);
         if (user.getAuthority()== null) user.setAuthority("USER");
         if (user.getIsConnected()== null) user.setIsConnected(true);
+        if (user.getStatistic() == null) user.setStatistic(Statistic.createStatistic());
         userRepository.save(user);
     }
 
@@ -168,19 +163,19 @@ public class UserService {
     }
 
 
-    @Transactional
-    public void uppRank(Integer userId){
+    @Transactional(rollbackFor = Exception.class)
+    public void upRank(Integer userId){
         User user = userRepository.findById(userId).get();
         Integer winnedG = user.getStatistic().getNumWonGames();
-        if( winnedG>= 3 && winnedG < 5){
+        if(winnedG < 5) {
             user.setTier(Tier.BRONZE);
-        } else if (winnedG >= 5 && winnedG < 7) {
+        } else if (winnedG < 7) {
             user.setTier(Tier.SILVER);
-        } else if(winnedG >= 7 && winnedG < 9){
+        } else if(winnedG < 9) {
             user.setTier(Tier.GOLD);
-        } else if(winnedG >= 9 && winnedG < 1700){
+        } else if(winnedG < 1700) {
             user.setTier(Tier.PLATINUM);
-        } else if(winnedG >= 1700) {
+        } else {
             user.setTier(Tier.LEYENDA_VIVA);
         }
     }

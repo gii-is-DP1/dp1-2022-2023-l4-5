@@ -106,7 +106,7 @@ public class MarketController {
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId());
         oldTurn.addProduct(productInGame);
         turnService.saveTurn(oldTurn);
-        advise.buyProduct(productInGame, game);
+        advise.buyProduct(productInGame);
         return PAGE_MARKET;
     }
 

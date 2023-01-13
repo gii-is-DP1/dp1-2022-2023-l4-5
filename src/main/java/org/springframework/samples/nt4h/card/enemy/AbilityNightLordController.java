@@ -37,40 +37,36 @@ public class AbilityNightLordController {
 
     private final UserService userService;
     private final AbilityService abilityService;
-
-
-    private final GameService gameService;
     private final EnemyService enemyService;
     private final DeckService deckService;
     private final CacheManager cacheManager;
 
 
-    public AbilityNightLordController(UserService userService, AbilityService abilityService, GameService gameService, EnemyService enemyService, DeckService deckService, CacheManager cacheManager) {
+    public AbilityNightLordController(UserService userService, AbilityService abilityService, EnemyService enemyService, DeckService deckService, CacheManager cacheManager) {
         this.userService = userService;
         this.abilityService = abilityService;
-        this.gameService = gameService;
         this.enemyService = enemyService;
         this.deckService = deckService;
         this.cacheManager = cacheManager;
     }
 
     @ModelAttribute("loggedUser")
-    public User getLoggedUser() {
+    private User getLoggedUser() {
         return userService.getLoggedUser();
     }
 
     @ModelAttribute("game")
-    public Game getGame() {
+    private Game getGame() {
         return getLoggedUser().getGame();
     }
 
     @ModelAttribute("currentPlayer")
-    public Player getCurrentPlayer() {
+    private Player getCurrentPlayer() {
         return getGame().getCurrentPlayer();
     }
 
     @ModelAttribute("loggedPlayer")
-    public Player getLoggedPlayer() {
+    private Player getLoggedPlayer() {
         return getLoggedUser().getPlayer();
     }
 

@@ -1,7 +1,6 @@
 package org.springframework.samples.nt4h.card.hero;
 
 import org.springframework.samples.nt4h.card.ability.Ability;
-import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
@@ -23,6 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.Comparator;
+import java.util.Optional;
 
 /**
  * Las habilidades del ladrón son:
@@ -37,7 +38,7 @@ import javax.servlet.http.HttpSession;
  * - Trampa.
  */
 @Controller
-@RequestMapping("/abilityies")
+@RequestMapping("/abilities")
 public class AbilityThiefController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
@@ -76,20 +77,27 @@ public class AbilityThiefController {
     }
 
     // Al corazón.
-    @GetMapping("/toTheHearth")
-    private String toTheHearth(HttpSession session) {
+    @GetMapping("/toTheHeart")
+    private String toTheHeart(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         // Comprobamos si podemos cargarnos al enemigo.
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
-
         Integer sharpeningStone = cacheManager.getSharpeningStone(session);
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
-        Ability ability = abilityService.getAbilityByName("Al Corazón");
+        System.out.println("Sharpening stone: " + sharpeningStone);
+        abilityService.getAllAbilities().forEach(ability -> {
+            if (ability.getName().contains("Al")) {
+               System.out.println("Al corazon: " + ability.getName());
+            }
+        });
+        Ability ability = abilityService.getAbilityByName("Al corazon");
+        System.out.println("Al corazon: " + ability.getId());
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
-        if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHearth(session)) {
-            cacheManager.setFirstToTheHearth(session);
+        if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHeart(session)) {
+            cacheManager.setFirstToTheHeart(session);
             // Gana uno de oro.
-            statisticService.gainGlory(currentPlayer, 1);
+            statisticService.gainGold(currentPlayer, 1);
+            System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         }
         // Pierde 1 carta.
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
@@ -104,12 +112,15 @@ public class AbilityThiefController {
         EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
         Integer sharpeningStone = cacheManager.getSharpeningStone(session);
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
-        Ability ability = abilityService.getAbilityByName("Ataque Furtivo");
+        Ability ability = abilityService.getAbilityByName("Ataque furtivo");
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
+        System.out.println(attack >= attackedEnemy.getActualHealth());
+        System.out.println(cacheManager.isFirstStealthAttack(session));
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstStealthAttack(session)) {
             cacheManager.setFirstStealthAttack(session);
             // Gana uno de oro.
             statisticService.gainGold(currentPlayer, 1);
+            System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         }
         return PAGE_MAKE_DAMAGE;
     }
@@ -117,8 +128,7 @@ public class AbilityThiefController {
     // Ballesta precisa.
     @GetMapping("/preciseBow")
     private String preciseBow(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
-        // SI ya ha sido atacado con golpe de bastón, realiza más daño.
+        // Si ya ha sido atacado con golpe de bastón, realiza más daño.
         if (cacheManager.hasAlreadyAttackedWithPreciseBow(session))
             cacheManager.addAttack(session,  1);
         else
@@ -129,7 +139,6 @@ public class AbilityThiefController {
     // En las sombras.
     @GetMapping("/inTheShadows")
     private String inTheShadows(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
         // Previene dos puntos de daño.
         cacheManager.setDefend(session, 2);
         return PAGE_MAKE_DAMAGE;
@@ -158,37 +167,46 @@ public class AbilityThiefController {
             if (statistic.getGold() > 0 && player != currentPlayer) {
                 statisticService.loseGold(statistic, 1);
                 statisticService.gainGold(currentPlayer, 1);
+                System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
             }
         }
         return PAGE_MAKE_DAMAGE;
     }
 
     // Saqueo1
-    @GetMapping("/loot1/{cardId}")
+    @GetMapping("/loot1")
     private String loot1() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas dos monedas por cada enemigo vivo.
         statisticService.gainGold(currentPlayer, 2 * getGame().getActualOrcs().size());
+        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         return PAGE_MAKE_DAMAGE;
     }
 
     // Saqueo2
     @GetMapping("/loot2")
-    private String loot2() {
+    public String loot2() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas una moneda por cada enemigo vivo.
         statisticService.gainGold(currentPlayer, getGame().getActualOrcs().size());
+        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         // Gana un punto de gloria.
         statisticService.gainGlory(currentPlayer, 1);
+        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         return PAGE_MAKE_DAMAGE;
     }
 
     // Trampa
     @GetMapping("/trap")
-    private String trap(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
+    public String trap(HttpSession session) {
         // El enemigo seleccionado morirá al terminar la fase de ataque.
-        cacheManager.addCapturedEnemies(session);
+        EnemyInGame attackedEnemy = cacheManager.getAttackedEnemy(session);
+        if (attackedEnemy == null) {
+            Optional<EnemyInGame> enemy = getGame().getActualOrcs().stream().max(Comparator.comparing(EnemyInGame::getActualHealth));
+            enemy.ifPresent(enemyInGame -> cacheManager.addCapturedEnemies(session, enemyInGame));
+        }
+        else
+            cacheManager.addCapturedEnemies(session);
         return PAGE_MAKE_DAMAGE;
     }
 }

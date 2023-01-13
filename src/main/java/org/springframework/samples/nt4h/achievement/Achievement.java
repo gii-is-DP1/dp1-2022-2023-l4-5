@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.samples.nt4h.model.NamedEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -30,5 +31,6 @@ public class Achievement extends NamedEntity {
     @URL
     private String image;
 
+    @Enumerated
     private AchievementType achievementType;
 }

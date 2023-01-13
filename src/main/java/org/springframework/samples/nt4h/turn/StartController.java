@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.statistic.Statistic;
@@ -32,13 +33,15 @@ public class StartController {
     private final TurnService turnService;
     private final Advise advise;
     private Boolean isChosen = false;
+    private final CacheManager cacheManager;
 
 
     @Autowired
-    public StartController(UserService userService, TurnService turnService, Advise advise) {
+    public StartController(UserService userService, TurnService turnService, Advise advise, CacheManager cacheManager) {
         this.userService = userService;
         this.turnService = turnService;
         this.advise = advise;
+        this.cacheManager = cacheManager;
     }
 
     @ModelAttribute("game")
@@ -81,6 +84,9 @@ public class StartController {
     public String chooseEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
         advise.keepUrl(session, request);
+        System.out.println("sdfsdf" + cacheManager);
+        cacheManager.deleteEndAttackHero(session);
+        cacheManager.deleteEndAttackEnemy(session);
         if (!isChosen) {
             advise.choose(getGame());
             isChosen = true;

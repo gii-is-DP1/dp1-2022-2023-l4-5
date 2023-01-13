@@ -13,7 +13,10 @@ sendPetitionInInterval("/api/turns", function(responseText) {
         '<img src=' + url1 + ' alt="Texto alternativo" onmouseout="this.src=' + url1 + '" onmouseover="this.src=' + url2 + '">' +'</a>';
     if (loggedPlayer.id === playerInTurn.id) {
         for (let i = 0; i < bottoms.length; i++) {
-            if (turn.phase !== "start" || phase !== turn.phase)
+            if (phase !== "start" && turn.phase === "start") {
+                bottoms[i].innerHTML = '<a href = "/turns">' +
+                    '<img src=' + url1 + ' alt="Texto alternativo" onmouseout="this.src=' + url1 + '" onmouseover="this.src=' + url2 + '">' +'</a>';
+            else if (turn.phase !== "start" || phase !== turn.phase)
                 bottoms[i].innerHTML = bottom;
         }
     }
