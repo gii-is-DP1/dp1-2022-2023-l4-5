@@ -55,22 +55,22 @@ public class AbilityNightLordController {
     }
 
     @ModelAttribute("loggedUser")
-    public User getLoggedUser() {
+    private User getLoggedUser() {
         return userService.getLoggedUser();
     }
 
     @ModelAttribute("game")
-    public Game getGame() {
+    private Game getGame() {
         return getLoggedUser().getGame();
     }
 
     @ModelAttribute("currentPlayer")
-    public Player getCurrentPlayer() {
+    private Player getCurrentPlayer() {
         return getGame().getCurrentPlayer();
     }
 
     @ModelAttribute("loggedPlayer")
-    public Player getLoggedPlayer() {
+    private Player getLoggedPlayer() {
         return getLoggedUser().getPlayer();
     }
 
