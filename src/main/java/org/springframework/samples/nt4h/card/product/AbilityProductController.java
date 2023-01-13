@@ -7,6 +7,7 @@ import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.message.CacheManager;
+import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.Turn;
@@ -117,6 +118,7 @@ public class AbilityProductController {
         Player currentPlayer = getCurrentPlayer();
         model.put("discard", currentPlayer.getDeck().getInDiscard());
         model.put("newTurn", new Turn());
+        model.put("chat", new Message());
         return VIEW_FIND_IN_DISCARD;
     }
 
