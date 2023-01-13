@@ -25,15 +25,24 @@
             <img src="/resources/images/coin.gif" width="50" height="50"> ${currentPlayer.statistic.gold}
         </p>
     </div>
-    <div class="container">
-        <c:forEach items="${game.actualOrcs}" var="orc">
-            <div class="row">
+    <div class="container" style="position: center; padding-top: 5rem;">
+        <c:forEach items="${game.actualOrcs}" var="orc" >
+            <div class="row" ">
+            <div class="col-sm-2" >
                 <div class="col-8">
                     <p style="font-size:2rem">
                         <img src="/resources/images/heart_orc.gif" width="50" height="50"> ${orc.actualHealth}
                     </p>
+                    <img src="${orc.enemy.frontImage}"  width=100%>
                 </div>
-            <img src="${orc.enemy.frontImage}"> <!-- TODO: Reducir tamaño -->
+                </div>
+
+
+
+
+
+
+
         </c:forEach>
     </div>
     <c:if test="${!loggedPlayer.isNew()}">

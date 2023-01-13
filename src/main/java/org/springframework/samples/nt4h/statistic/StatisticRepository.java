@@ -40,4 +40,6 @@ public interface StatisticRepository extends CrudRepository<Statistic, Integer> 
     @Query("SELECT st.numWonGames FROM Statistic st JOIN User u WHERE u.id = ?1")
     Integer numWonGamesByPlayerId(int userId);
 
+
+
 }
