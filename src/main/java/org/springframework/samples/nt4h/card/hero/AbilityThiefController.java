@@ -97,6 +97,7 @@ public class AbilityThiefController {
             cacheManager.setFirstToTheHeart(session);
             // Gana uno de oro.
             statisticService.gainGold(currentPlayer, 1);
+            System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         }
         // Pierde 1 carta.
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());
@@ -113,10 +114,13 @@ public class AbilityThiefController {
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
         Ability ability = abilityService.getAbilityByName("Ataque furtivo");
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
+        System.out.println(attack >= attackedEnemy.getActualHealth());
+        System.out.println(cacheManager.isFirstStealthAttack(session));
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstStealthAttack(session)) {
             cacheManager.setFirstStealthAttack(session);
             // Gana uno de oro.
             statisticService.gainGold(currentPlayer, 1);
+            System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         }
         return PAGE_MAKE_DAMAGE;
     }
@@ -163,6 +167,7 @@ public class AbilityThiefController {
             if (statistic.getGold() > 0 && player != currentPlayer) {
                 statisticService.loseGold(statistic, 1);
                 statisticService.gainGold(currentPlayer, 1);
+                System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
             }
         }
         return PAGE_MAKE_DAMAGE;
@@ -174,6 +179,7 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         // Ganas dos monedas por cada enemigo vivo.
         statisticService.gainGold(currentPlayer, 2 * getGame().getActualOrcs().size());
+        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         return PAGE_MAKE_DAMAGE;
     }
 
@@ -183,8 +189,10 @@ public class AbilityThiefController {
         Player currentPlayer = getCurrentPlayer();
         // Ganas una moneda por cada enemigo vivo.
         statisticService.gainGold(currentPlayer, getGame().getActualOrcs().size());
+        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         // Gana un punto de gloria.
         statisticService.gainGlory(currentPlayer, 1);
+        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         return PAGE_MAKE_DAMAGE;
     }
 

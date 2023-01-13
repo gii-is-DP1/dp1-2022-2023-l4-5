@@ -162,14 +162,9 @@ public class StatisticService {
         Statistic userStatistic = user.getStatistic();
         userStatistic.setGlory(userStatistic.getGlory() + glory);
         playerStatistic.setGlory(playerStatistic.getGlory() + glory);
-        System.out.println("Previo");
         System.out.println(playerStatistic.getGlory());
-        System.out.println(userStatistic.getGlory());
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
-        System.out.println("Post");
-        System.out.println(playerStatistic.getGlory());
-        System.out.println(userStatistic.getGlory());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -177,16 +172,11 @@ public class StatisticService {
         Statistic playerStatistic = player.getStatistic();
         User user = userService.getUserByUsername(player.getName());
         Statistic userStatistic = user.getStatistic();
-        userStatistic.setGlory(userStatistic.getGold() + gold);
-        playerStatistic.setGlory(playerStatistic.getGold() + gold);
-        System.out.println("Previo");
+        userStatistic.setGold(userStatistic.getGold() + gold);
+        playerStatistic.setGold(playerStatistic.getGold() + gold);
         System.out.println(playerStatistic.getGold());
-        System.out.println(userStatistic.getGold());
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
-        System.out.println("Post");
-        System.out.println(playerStatistic.getGold());
-        System.out.println(userStatistic.getGold());
     }
 
     @Transactional
