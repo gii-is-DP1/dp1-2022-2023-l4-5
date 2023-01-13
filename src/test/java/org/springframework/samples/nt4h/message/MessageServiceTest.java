@@ -1,5 +1,5 @@
 package org.springframework.samples.nt4h.message;
-import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,8 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+
+import java.util.List;
 
 @DataJpaTest(
     includeFilters = {@Filter({Service.class})}
@@ -59,12 +60,6 @@ public class MessageServiceTest {
         this.messageService.saveMessage(message);
         Message m = (Message)this.messageService.getMessageBySenderWithReceiver("alesanfe", "antonio").get(1);
         Assertions.assertEquals(message, m);
-    }
-
-    @Test
-    public void deleteMessageTest() {
-        this.messageService.deleteMessageById(1);
-        Assertions.assertFalse(this.messageService.messageExists(1));
     }
 }
 

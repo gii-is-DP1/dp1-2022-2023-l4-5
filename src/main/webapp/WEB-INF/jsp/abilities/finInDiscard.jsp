@@ -34,7 +34,6 @@
                 <div class="pointer">
                     <c:forEach var="i" begin="0" end="${discard.size()-1}">
                         <c:set var="abilityInGame" value="${discard[i]}" scope="page"/>
-
                         <div class="col-sm-2">
                             <nt4h:radioButtom name="currentAbility" element="${abilityInGame.id}"
                                               frontImage="${abilityInGame.ability.frontImage}" i="${i}1"

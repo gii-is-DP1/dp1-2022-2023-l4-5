@@ -30,6 +30,8 @@ public class AdminController {
 
     private static final String VIEW_USER_STATISTICS = "users/userStatistics";
     private static final String PAGE_USER_LIST = "redirect:/users";
+    private static final String VIEW_ADMINS_GAMES =  "admins/games";
+    private static final Integer SIZE_PAGE = 5;
 
 
     // Servicios.
@@ -100,30 +102,30 @@ public class AdminController {
     @GetMapping("/games")
     public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model, HttpSession session) {
         page = page < 0 ? 0 : page;
-        Pageable pageable = PageRequest.of(page, 5);
+        Pageable pageable = PageRequest.of(page, SIZE_PAGE);
         List<Game> games = gameService.getAllGames();
         Page<Game> gamePage = gameService.getAllGames(pageable);
         if (!games.isEmpty() && gamePage.isEmpty()) {
-            page = games.size() / 5;
-            pageable = PageRequest.of(page, 5);
+            page = games.size() / SIZE_PAGE;
+            pageable = PageRequest.of(page, SIZE_PAGE);
             gamePage = gameService.getAllGames(pageable);
         }
         advise.getMessage(session, model);
         model.put("isNext", gamePage.hasNext());
         model.put("games", gamePage.getContent());
         model.put("page", page);
-        return "admins/games";
+        return VIEW_ADMINS_GAMES;
     }
 
     @GetMapping("/finished")
     public String showAllGames(@RequestParam(defaultValue = "0") int page, ModelMap model, HttpSession session) {
         page = page < 0 ? 0 : page;
-        Pageable pageable = PageRequest.of(page, 5);
+        Pageable pageable = PageRequest.of(page, SIZE_PAGE);
         List<Game> games = gameService.getAllGames();
         Page<Game> gamePage = gameService.getAllGames(pageable);
         if (!games.isEmpty() && gamePage.isEmpty()) {
-            page = games.size() / 5;
-            pageable = PageRequest.of(page, 5);
+            page = games.size() / SIZE_PAGE;
+            pageable = PageRequest.of(page, SIZE_PAGE);
             gamePage = gameService.getAllGames(pageable);
         }
         advise.getMessage(session, model);

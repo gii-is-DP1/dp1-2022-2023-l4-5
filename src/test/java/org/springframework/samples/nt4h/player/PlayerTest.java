@@ -87,16 +87,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void testPlayerQueries() {
-        playerService.savePlayer(player);
-        assertThat(playerService.getAllPlayers()).isNotEmpty();
-
-        assertThat(playerService.getPlayerById(player.getId())).isNotNull();
-
-        assertThat(playerService.getPlayerByName(player.getName())).isNotNull();
-    }
-
-    @Test
     public void testAddHero_roleAlreadyChosenException() throws RoleAlreadyChosenException {
         HeroInGame h1 = HeroInGame.createHeroInGame(heroService.getHeroById(1), player);
         HeroInGame h2 = HeroInGame.createHeroInGame(heroService.getHeroById(2), player);

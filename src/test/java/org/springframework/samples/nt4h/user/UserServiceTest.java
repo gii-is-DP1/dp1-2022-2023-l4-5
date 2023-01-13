@@ -1,13 +1,5 @@
 package org.springframework.samples.nt4h.user;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,14 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -106,13 +101,6 @@ public class UserServiceTest {
         this.userService.saveUser(user);
         Assertions.assertEquals(newUsername, this.userService.getUserById(1).getUsername());
         this.userService.deleteUser(user);
-    }
-
-    @Test
-    @Disabled
-    public void userExistsTest() {
-        int userId = user.getId();
-        Assertions.assertEquals(true, this.userService.userExists(userId));
     }
 
     @Test

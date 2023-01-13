@@ -24,6 +24,7 @@ public class FriendController {
     private static final String PAGE_FRIEND_LIST = "redirect:/friends";
     private final UserService userService;
     private final MessageService messageService;
+    private final Integer PAGE_SIZE = 5;
 
 
     @Autowired
@@ -35,12 +36,12 @@ public class FriendController {
     @RequestMapping
     public String listFriends(@RequestParam(defaultValue = "0") int page, ModelMap model) {
         page = page < 0 ? 0 : page;
-        Pageable pageable = PageRequest.of(page, 3);
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         List<User> friends = userService.getFriends();
         Page<User> friendsPage = userService.getFriendsPaged(pageable);
         if (!friends.isEmpty() && friendsPage.isEmpty()) {
-            page = friends.size() / 5;
-            pageable = PageRequest.of(page, 3);
+            page = friends.size() / PAGE_SIZE;
+            pageable = PageRequest.of(page, PAGE_SIZE);
             friendsPage = userService.getFriendsPaged(pageable);
         }
         model.put("isNext", friendsPage.hasNext());

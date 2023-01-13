@@ -37,10 +37,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/heroAttack")
 public class HeroAttackController {
 
-    private final String NEXT_TURN = "redirect:/turns";
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String VIEW_HERO_ATTACK = "turns/attackPhase";
-    private final String PAGE_ABILITY = "redirect:/abilities";
+    private final static String NEXT_TURN = "redirect:/turns";
+    private final static String PAGE_HERO_ATTACK = "redirect:/heroAttack";
+    private final static String VIEW_HERO_ATTACK = "turns/attackPhase";
+    private final static String PAGE_ABILITY = "redirect:/abilities";
 
     private final UserService userService;
     private final TurnService turnService;
@@ -49,10 +49,9 @@ public class HeroAttackController {
     private final Advise advise;
     private final CacheManager cacheManager;
     private final DeckService deckService;
-    private final AbilityService abilityService;
 
     @Autowired
-    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager, DeckService deckService, AbilityService abilityService) {
+    public HeroAttackController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise, CacheManager cacheManager, DeckService deckService) {
         this.userService = userService;
         this.turnService = turnService;
         this.gameService = gameService;
@@ -60,7 +59,6 @@ public class HeroAttackController {
         this.advise = advise;
         this.cacheManager = cacheManager;
         this.deckService = deckService;
-        this.abilityService = abilityService;
     }
 
     @ModelAttribute("loggedUser")
@@ -103,7 +101,7 @@ public class HeroAttackController {
     }
 
     @PostMapping
-    public String modifyCardAttributes(Turn turn, HttpSession session) throws NoCurrentPlayer, WithOutAbilityException, WithOutEnemyException {
+    public String modifyCardAttributes(Turn turn, HttpSession session) throws NoCurrentPlayer, WithOutAbilityException {
         Player player = getPlayer();
         Game game = getGame();
         Player loggedPlayer = getLoggedPlayer();
@@ -144,9 +142,7 @@ public class HeroAttackController {
             throw new WithOutEnemyException();
         Integer effectDamage = cacheManager.getSharpeningStone(session) + cacheManager.getAttack(session);
         List<EnemyInGame> enemies = cacheManager.getEnemiesAlsoAttacked(session);
-
-        if (attackedEnemy != null)
-            enemies.add(attackedEnemy);
+        enemies.add(attackedEnemy);
         List<Integer> enemiesMoreDamage = enemies.stream().map(enemy -> cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, enemy)).collect(Collectors.toList());
         gameService.attackEnemies(usedAbility, effectDamage, enemies, enemiesMoreDamage, player, game, getLoggedUser().getId());
         if (cacheManager.hasToBeDeletedAbility(session))

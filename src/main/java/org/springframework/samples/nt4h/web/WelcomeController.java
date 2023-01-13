@@ -1,8 +1,6 @@
 package org.springframework.samples.nt4h.web;
 
 import org.springframework.samples.nt4h.model.Person;
-import org.springframework.samples.nt4h.user.User;
-import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -14,10 +12,10 @@ import java.util.Map;
 @Controller
 public class WelcomeController {
 
-    private final UserService userService;
+    private static final String VIEW_WELCOME = "welcome";
 
-    public WelcomeController(UserService userService) {
-        this.userService = userService;
+
+    public WelcomeController() {
     }
 
     @GetMapping({"/", "/welcome"})
@@ -51,7 +49,7 @@ public class WelcomeController {
         model.put("people", people);
         model.put("title", "No Time For Heroes");
 
-        return "welcome";
+        return VIEW_WELCOME;
     }
 
 }

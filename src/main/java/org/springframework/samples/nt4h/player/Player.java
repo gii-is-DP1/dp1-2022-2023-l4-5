@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter

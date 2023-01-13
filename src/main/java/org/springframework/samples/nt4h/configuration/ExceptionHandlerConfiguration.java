@@ -36,9 +36,9 @@ public class ExceptionHandlerConfiguration
     private static final String PAGE_EVASION = "redirect:/evasion";
     private static final String PAGE_MARKET = "redirect:/market";
     private static final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
+    private final static String PAGE_HERO_ATTACK = "redirect:/heroAttack";
 
-    private final String PAGE_START = "redirect:/start";
+    private final static String PAGE_START = "redirect:/start";
 
     public ExceptionHandlerConfiguration(UserService userService) {
         this.userService = userService;
@@ -98,8 +98,6 @@ public class ExceptionHandlerConfiguration
         session.setAttribute("messageType", "danger");
         return PAGE_GAMES;
     }
-
-    // TODO: decidir si esto debería de ser una excepción o no.
     @ExceptionHandler(UserHasAlreadyAPlayerException.class)
     public String handleUserHasAlreadyAPlayerException() {
         return PAGE_GAME_HERO_SELECT;

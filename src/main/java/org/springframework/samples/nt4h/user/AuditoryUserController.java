@@ -14,9 +14,8 @@ import java.util.List;
 public class AuditoryUserController {
 
     private final AuditoryUserRepository auditoryUserRepository;
-    final UserService userService;
-
-    final List<AuditoryUser> users= new ArrayList<>();
+    private final UserService userService;
+    private final List<AuditoryUser> users= new ArrayList<>();
 
     @Autowired
     public AuditoryUserController(AuditoryUserRepository auditoryUserRepository, UserService userService) {

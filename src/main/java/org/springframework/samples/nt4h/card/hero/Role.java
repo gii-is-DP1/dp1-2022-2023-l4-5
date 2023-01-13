@@ -11,7 +11,7 @@ public enum Role {
     EXPLORER(Lists.newArrayList(1, 2, 3, 4, 5, 6, 7)),
     THIEF(Lists.newArrayList(25, 26, 27, 28, 29, 30, 30, 31, 32));
 
-    final List<Integer> abilities;
+    private final List<Integer> abilities;
 
     Role(ArrayList<Integer> abilities) {
         this.abilities = abilities;

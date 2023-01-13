@@ -33,7 +33,7 @@ public class  Hero extends Card implements Jsonable {
     @Override
     public String toJson() {
         JsonObject json = new JsonObject();
-        json.put("name", name);
+        json.put("name", getName());
         return json.toJson();
     }
 

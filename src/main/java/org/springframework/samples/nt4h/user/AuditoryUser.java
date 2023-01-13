@@ -25,13 +25,9 @@ public class AuditoryUser extends BaseEntity{
 
     @OneToOne
     @NotAudited
-    User user;
+    private User user;
 
     @OneToOne
     @NotAudited
-    User userMod;
-
-  //  String username;
-
-
+    private User userMod;
 }

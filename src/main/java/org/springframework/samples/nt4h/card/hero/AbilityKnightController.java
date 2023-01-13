@@ -1,23 +1,17 @@
 package org.springframework.samples.nt4h.card.hero;
 
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.StatisticService;
-import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -36,8 +30,8 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/abilities")
 public class AbilityKnightController {
 
-    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
-    private final String PAGE_END_ATTACK = "redirect:/heroAttack/next";
+    private final static String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+    private final static String PAGE_END_ATTACK = "redirect:/heroAttack/next";
     private final UserService userService;
     private final DeckService deckService;
     private final CacheManager cacheManager;

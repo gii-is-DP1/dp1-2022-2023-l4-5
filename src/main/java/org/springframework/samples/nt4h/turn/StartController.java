@@ -27,8 +27,8 @@ import java.util.List;
 @RequestMapping("/start")
 public class StartController {
 
-    public final String VIEW_CHOOSE_EVASION = "turns/actionDecision";
-    public final String NEXT_TURN = "redirect:/turns";
+    private static final String VIEW_CHOOSE_EVASION = "turns/actionDecision";
+    private static final String NEXT_TURN = "redirect:/turns";
     private final UserService userService;
     private final TurnService turnService;
     private final Advise advise;

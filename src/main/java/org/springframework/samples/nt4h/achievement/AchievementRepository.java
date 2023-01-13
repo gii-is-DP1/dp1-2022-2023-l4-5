@@ -10,8 +10,6 @@ import java.util.Optional;
 @Repository
 public interface AchievementRepository extends CrudRepository<Achievement, Integer> {
 
-    Optional<Achievement> findByName(String name);
-
     Optional<Achievement> findById(int id);
 
     List<Achievement> findAll();

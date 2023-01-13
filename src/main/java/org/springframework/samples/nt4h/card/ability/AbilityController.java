@@ -1,6 +1,5 @@
 package org.springframework.samples.nt4h.card.ability;
 
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
@@ -19,15 +18,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Objects;
 
 @Controller
 @RequestMapping("/abilities")
 public class AbilityController {
 
-    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
-    private final String PAGE_ABILITY = "redirect:/abilities/";
+    private final static String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+    private final static String PAGE_ABILITY = "redirect:/abilities/";
 
     private final UserService userService;
     private final GameService gameService;
@@ -96,7 +94,7 @@ public class AbilityController {
                 if (enemies == null)
                     session.setAttribute(name, enemyInGame.getId());
                 else {
-                    session.setAttribute(name, enemies.toString() + "," + enemyInGame.getId());
+                    session.setAttribute(name, enemies + "," + enemyInGame.getId());
                 }
 
             }

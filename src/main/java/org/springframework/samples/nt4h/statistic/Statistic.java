@@ -6,7 +6,6 @@ import org.springframework.samples.nt4h.model.BaseEntity;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

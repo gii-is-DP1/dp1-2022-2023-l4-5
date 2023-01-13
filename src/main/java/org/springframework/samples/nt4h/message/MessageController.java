@@ -22,8 +22,8 @@ public class MessageController {
     private final UserService userService;
 
     // Constantes.
-    private final String VIEW_MESSAGE_LIST = "messages/messagesList";
-    private final String PAGE_MESSAGE_WITH = "redirect:/messages/{username}";
+    private final static String VIEW_MESSAGE_LIST = "messages/messagesList";
+    private final static String PAGE_MESSAGE_WITH = "redirect:/messages/{username}";
 
     @Autowired
     public MessageController(MessageService messageService, UserService userService) {

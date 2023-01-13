@@ -1,20 +1,6 @@
 package org.springframework.samples.nt4h.turn;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,45 +10,24 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.nt4h.card.ability.Ability;
 import org.springframework.samples.nt4h.card.ability.AbilityCardType;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
-import org.springframework.samples.nt4h.card.ability.AbilityInGameRepository;
-import org.springframework.samples.nt4h.card.ability.AbilityRepository;
-import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
-import org.springframework.samples.nt4h.card.ability.DeckRepository;
-import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.Enemy;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.card.enemy.EnemyInGameRepository;
-import org.springframework.samples.nt4h.card.enemy.EnemyRepository;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
-import org.springframework.samples.nt4h.card.hero.HeroInGameRepository;
-import org.springframework.samples.nt4h.card.hero.HeroRepository;
-import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
-import org.springframework.samples.nt4h.card.product.ProductInGameRepository;
-import org.springframework.samples.nt4h.card.product.ProductRepository;
-import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameRepository;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.message.CacheManager;
-import org.springframework.samples.nt4h.message.MessageRepository;
-import org.springframework.samples.nt4h.message.MessageService;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerRepository;
-import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.samples.nt4h.statistic.StatisticRepository;
-import org.springframework.samples.nt4h.statistic.StatisticService;
 import org.springframework.samples.nt4h.user.User;
-import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -71,6 +36,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {EnemyAttackController.class})
 @ExtendWith(SpringExtension.class)

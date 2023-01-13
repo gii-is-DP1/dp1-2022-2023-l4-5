@@ -1,21 +1,11 @@
 package org.springframework.samples.nt4h.card.enemy;
 
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.card.ability.DeckService;
-import org.springframework.samples.nt4h.exceptions.NotFoundException;
-import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
-import org.springframework.samples.nt4h.message.CacheManager;
-import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +13,7 @@ import java.util.stream.Collectors;
 public class EnemyService {
     private final EnemyInGameRepository enemyInGameRepository;
     private final EnemyRepository enemyRepository;
+    private static final Integer NUM_NIGHTLORDS = 3;
 
 
     // EnemyInGame
@@ -31,40 +22,14 @@ public class EnemyService {
         return enemyInGameRepository.findById(id).orElse(new EnemyInGame());
     }
 
-    @Transactional(readOnly = true)
-    public List<EnemyInGame> getAllEnemyInGame() {
-        return enemyInGameRepository.findAll();
-    }
-
     @Transactional
     public void saveEnemyInGame(EnemyInGame enemyInGame) {
         enemyInGameRepository.save(enemyInGame);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteEnemyInGame(EnemyInGame enemyInGame) {
-        enemyInGame.onDeleteSetNull();
-        enemyInGameRepository.save(enemyInGame);
-        enemyInGameRepository.delete(enemyInGame);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteEnemyInGameById(int id) {
-        EnemyInGame enemyInGame = getEnemyInGameById(id);
-        deleteEnemyInGame(enemyInGame);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean enemyInGameExists(int id) {
-        return enemyInGameRepository.existsById(id);
-    }
-
-    @Transactional
-    public List<Enemy> getAllEnemies() { return enemyRepository.findAll(); }
-
     @Transactional
     public Enemy getNightLord() {
-        int randomNumber = (int) (Math.random() * 3);
+        int randomNumber = (int) (Math.random() * NUM_NIGHTLORDS);
         List<Enemy> allNightLords = getAllNightLords();
         return allNightLords.get(randomNumber);
     }
@@ -82,8 +47,7 @@ public class EnemyService {
     @Transactional
     public List<EnemyInGame> addOrcsToGame(Integer numPlayers) {
         int limitEnemies = 19;
-        // TODO: Ponr en su estado original.
-        if(numPlayers == 2) limitEnemies = 4;
+        if(numPlayers == 2) limitEnemies = 17;
         else if(numPlayers == 3) limitEnemies = 23;
         else if(numPlayers == 4) limitEnemies = 27;
         List<EnemyInGame> orcs = getAllNotNightLords().stream().map(enemy -> EnemyInGame.createEnemy(false, enemy)).collect(Collectors.toList());
@@ -100,11 +64,6 @@ public class EnemyService {
         EnemyInGame nightLordInGame = EnemyInGame.createEnemy(true, nightLord);
         saveEnemyInGame(nightLordInGame);
         return nightLordInGame;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public Enemy getEnemyById(int id) {
-        return enemyRepository.findById(id).orElseThrow(() -> new NotFoundException("Enemy not found"));
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -58,7 +58,7 @@
             <c:forEach var="i" begin="0" end="${productsOnSale.size()-1}">
                 <c:set var="productInGame" value="${productsOnSale[i]}" scope="page"/>
                 <div class="col-sm-2">
-                    <img src="${productInGame.product.frontImage}">
+                    <img src="${productInGame.product.frontImage}" width="90%" height="90%">
                 </div>
             </c:forEach>
         </div>
@@ -79,6 +79,9 @@
             <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
                 <nt4h:inputField label="Content" name="content"/>
             </form:form>
+        </c:if>
+        <c:if test="${loggedPlayer.isNew()}">
+            <a href="/turns">Reload</a>
         </c:if>
     </div>
     <div class="nextTurn"></div>

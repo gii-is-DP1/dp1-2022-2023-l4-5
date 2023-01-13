@@ -11,7 +11,7 @@ import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.turn.exceptions.NoCurrentPlayer;
 import org.springframework.samples.nt4h.turn.exceptions.WhenEvasionDiscardAtLeast2Exception;
-import org.springframework.samples.nt4h.turn.exceptions.WithOutPhaseException;
+import org.springframework.samples.nt4h.turn.exceptions.WithOutAbilityException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -29,9 +29,9 @@ import javax.validation.Valid;
 @RequestMapping("/evasion")
 public class EvasionController {
 
-    private final String PAGE_EVASION = "redirect:/evasion";
-    private final String VIEW_EVASION = "turns/evasionPhase";
-    private final String NEXT_TURN = "redirect:/turns";
+    private final static String PAGE_EVASION = "redirect:/evasion";
+    private final static String VIEW_EVASION = "turns/evasionPhase";
+    private final static String NEXT_TURN = "redirect:/turns";
     private final UserService userService;
     private final TurnService turnService;
     private final PlayerService playerService;
@@ -88,14 +88,15 @@ public class EvasionController {
     }
 
     @PostMapping
-    public String postEvasion(@Valid Turn turn) throws NoCurrentPlayer, WithOutPhaseException {
+    public String postEvasion(@Valid Turn turn) throws NoCurrentPlayer, WithOutAbilityException {
         Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
-        Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
-        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
         AbilityInGame currentAbility = turn.getCurrentAbility();
+        if (currentAbility == null)
+            throw new WithOutAbilityException();
+        Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.EVADE, player.getId());
         oldTurn.addAbility(currentAbility);
         turnService.saveTurn(oldTurn);
         player.getDeck().discardCardOnHand(currentAbility);

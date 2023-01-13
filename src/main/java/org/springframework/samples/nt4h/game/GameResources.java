@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit;
 public class GameResources {
 
     private final UserService userService;
-    private final Integer duration = 20;
+    private final static Integer duration = 20;
 
     @GetMapping
     public ResponseEntity<String> updateMessages() {

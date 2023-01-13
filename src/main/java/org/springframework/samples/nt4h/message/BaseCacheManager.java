@@ -2,10 +2,8 @@ package org.springframework.samples.nt4h.message;
 
 import com.google.common.collect.Lists;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.model.BaseEntity;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -15,7 +13,7 @@ import java.util.stream.Stream;
 
 public class BaseCacheManager {
 
-    private final String ATTACKED_ENEMY = "attackedEnemy"; // El enemigo que ha sido seleccionado.
+    private final static String ATTACKED_ENEMY = "attackedEnemy"; // El enemigo que ha sido seleccionado.
 
     protected List<EnemyInGame> parseEnemies(HttpSession session, String name, Function<String, EnemyInGame> function) {
         Object enemies = session.getAttribute(name);

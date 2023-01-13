@@ -37,9 +37,9 @@ import java.util.List;
 @RequestMapping("/abilities")
 public class AbilityExplorerController {
 
-    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
-    private final String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
-    private final String PAGE_END_ATTACK = "redirect:/heroAttack/next";
+    private final static String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+    private final static String VIEW_CHOSE_ENEMY = "abilities/choseEnemy";
+    private final static String PAGE_END_ATTACK = "redirect:/heroAttack/next";
     private final UserService userService;
     private final PlayerService playerService;
     private final CacheManager cacheManager;
@@ -162,7 +162,7 @@ public class AbilityExplorerController {
 
     // Supervivencia
     @GetMapping("/survival")
-    private String survival(ModelMap model) {
+    private String survival() {
         // Gana una carta de supervivencia.
         Game game = getGame();
         EnemyInGame enemyInGame = game.getActualOrcs().get(0);
@@ -172,7 +172,6 @@ public class AbilityExplorerController {
         game.getActualOrcs().set(index, lastOne);
         gameService.saveGame(game);
         return PAGE_MAKE_DAMAGE;
-
 
 
     }

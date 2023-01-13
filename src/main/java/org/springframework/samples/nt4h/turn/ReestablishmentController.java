@@ -37,15 +37,14 @@ public class ReestablishmentController {
     private final TurnService turnService;
     private final Advise advise;
 
-    public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
-    private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
-    private final String NEXT_TURN = "redirect:/turns";
+    private final static String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
+    private final static String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
+    private final static String NEXT_TURN = "redirect:/turns";
     private boolean hasAddedEnemies = false;
 
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise,
-                                     AbilityRepository abilityRepository) {
+    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise) {
         this.playerService = playerService;
         this.userService = userService;
         this.deckService = deckService;

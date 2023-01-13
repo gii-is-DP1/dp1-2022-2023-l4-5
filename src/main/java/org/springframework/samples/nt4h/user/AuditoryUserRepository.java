@@ -8,7 +8,6 @@ import java.util.List;
 public interface AuditoryUserRepository extends CrudRepository<AuditoryUser, Integer> {
 
     List<AuditoryUser> findAll();
-  //  Optional<AuditoryUser> findByUsername(String username);
 
 }
 

@@ -30,6 +30,9 @@
                 <nt4h:inputField label="Content" name="content"/>
             </form:form>
         </c:if>
+        <c:if test="${loggedPlayer.isNew()}">
+            <a href="/turns">Reload</a>
+        </c:if>
     </div>
     <a href="/end/finish" class="btn btn-danger">Leave</a>
     <script src="/resources/js/chatGroup.js" type="module"></script>

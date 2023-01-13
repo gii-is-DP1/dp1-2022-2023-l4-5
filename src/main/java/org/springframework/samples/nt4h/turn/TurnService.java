@@ -32,41 +32,9 @@ public class TurnService {
         }
     }
 
-    @Transactional
-    public List<Turn> getWaysTurns(Player player) {
-        return Lists.newArrayList(
-            getTurnsByPhaseAndPlayerId(Phase.MARKET, player.getId()),
-            getTurnsByPhaseAndPlayerId(Phase.HERO_ATTACK, player.getId()));
-    }
-
-    @Transactional(readOnly = true)
-    public Turn getTurnByID(int id) {
-        return turnRepository.findById(id).orElse(null);
-    }
-
     @Transactional(readOnly = true)
     public List<Turn> getAllTurns() {
         return turnRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public List<Turn> getTurnsByPhase(Phase phase) {
-        return turnRepository.findByPhase(phase);
-    }
-
-    @Transactional
-    public void deleteTurn(Turn turn) {
-        turnRepository.delete(turn);
-    }
-
-    @Transactional
-    public void deleteTurnById(int id) {
-        turnRepository.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean turnExists(int id) {
-        return turnRepository.existsById(id);
     }
 
     @Transactional(readOnly = true)
