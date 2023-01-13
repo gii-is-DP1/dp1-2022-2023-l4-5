@@ -14,7 +14,7 @@ VALUES (0, 0, 0, 0, 0, 0, 0, null, 0),
 -- Creación de usuarios.
 INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable, is_connected, statistic_id)
 VALUES ('alesanfe', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 'DOLKTOL', '1999-02-01', 1, 0, 1),
+        'I am a description', 'DOKTOL', '1999-02-01', 1, 0, 1),
         ('antonio', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'I am a description', 'USER', '1999-02-01', 1, 0, 2),
        ('laurolmer', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
@@ -26,7 +26,7 @@ VALUES ('alesanfe', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPI
        ('ivasansan1', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'bético encubierto', 'DOKTOL', '2002-11-12', 1, 0, 6),
        ('pedruiagu', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'sácame del bolsillo', 'USER', '2002-10-01', 1, 0, 7),
+        'sácame del bolsillo', 'DOKTOL', '2002-10-01', 1, 0, 7),
         ('lapaqui', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
         'vivo en una simulación', 'USER', '2003-05-11', 1, 0, 8),
         ('pepe', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
