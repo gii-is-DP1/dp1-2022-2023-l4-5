@@ -117,7 +117,6 @@ public class Advise {
     }
 
     public void discardAbilityInHand(AbilityInGame ability, Game game) {
-        Player currentPlayer = game.getCurrentPlayer();
         messageService.createNotification(getGame(), getCurrentPlayer().getName() + " has discarded " + ability.getAbility().getName() + " from hand.");
     }
 

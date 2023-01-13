@@ -3,10 +3,8 @@ package org.springframework.samples.nt4h.turn;
 import org.javatuples.Pair;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
-import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
-import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.Statistic;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -23,18 +21,15 @@ import java.util.List;
 @RequestMapping("/end")
 public class EndController {
 
-    private final String NEXT_TURN = "redirect:/turns";
-    private final String PAGE_END = "redirect:/end";
-    private final String VIEW_END = "turns/endPhase";
+    private final static String VIEW_END = "turns/endPhase";
+    private final static String VIEW_WELCOME =  "redirect:/";
 
     private final UserService userService;
     private final GameService gameService;
-    private final Advise advise;
 
-    public EndController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise) {
+    public EndController(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
-        this.advise = advise;
     }
 
     @ModelAttribute("loggedUser")
@@ -92,7 +87,7 @@ public class EndController {
     public String finishGame() {
         Game game = getGame();
         gameService.deleteGameById(game.getId());
-        return "redirect:/";
+        return VIEW_WELCOME;
     }
 
 

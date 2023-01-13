@@ -1,21 +1,17 @@
 package org.springframework.samples.nt4h.card.hero;
 
-import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.statistic.StatisticService;
-import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -38,7 +34,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/abilities")
 public class AbilityWizardController {
 
-    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+    private final static String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
     private final UserService userService;
     private final PlayerService playerService;
     private final StatisticService statisticService;
@@ -130,7 +126,6 @@ public class AbilityWizardController {
     // Golpe de bastón
     @GetMapping("/staffHit")
     private String staffHit(HttpSession session) {
-        Player currentPlayer = getCurrentPlayer();
         // SI ya ha sido atacado con golpe de bastón, realiza más daño.
         if (cacheManager.hasAlreadyAttackedWithStaff(session))
             cacheManager.addAttack(session, 1);

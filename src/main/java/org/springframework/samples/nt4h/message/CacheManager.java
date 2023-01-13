@@ -14,22 +14,22 @@ import java.util.stream.Collectors;
 @Component
 public class CacheManager extends BaseCacheManager {
 
-    private final String DEFEND = "defend"; // Defensa contra ataque de orcos.
-    private final String ATTACK = "attack"; // Ataque contra orcos.
-    private final String NEXT_URL = "nextUrl"; // Siguiente url a la que se redirige.
-    private final String FIRST_SLASH = "firstSlash"; // Nos permite saber si es la primera vez que se ha utilizado espadazo.
-    private final String ATTACKED_ENEMY = "attackedEnemy"; // El enemigo que ha sido seleccionado.
-    private final String FIRST_TO_THE_HEART = "firstToTheHeart"; // Nos permite saber si es la primera vez que se ha utilizado el ataque al corazón.
-    private final String FIRST_STEALTH_ATTACK = "firstStealthAttack"; // Nos permite saber si es la primera vez que se ha utilizado el ataque furtivo.
-    private final String ALREADY_ATTACKED_WITH_PRECISE_BOW = "alreadyAttackedWithPreciseBow"; // Nos permite saber si ya se ha atacado con el arco preciso.
-    private final String PREVENT_DAMAGE_FROM_ENEMIES = "preventDamageFromEnemies"; // Permite anular el ataque de varios enemigos.
-    private final String CAPTURED_ENEMIES = "capturedEnemies"; // Enemigos capturados.
-    private final String ENEMIES_ALSO_ATTACKED = "enemiesAlsoAttacked"; // Enemigos que también van a ser también atacados.
-    private final String ENEMIES_THAT_RECEIVE_MORE_DAMAGE = "enemiesThatReceiveMoreDamage"; // Enemigos que van a recibir más daño.
-    private final String ALREADY_ATTACKED_WITH_STAFF = "alreadyAttackedWithStaff"; // Nos permite saber si ya se ha atacado con el bastón.
-    private final String HAS_TO_BE_DELETED_ABILITY = "hasToBeDeletedAbility"; // Nos permite saber si hay que eliminar una habilidad.
-    private final String SHARPENING_STONE = "sharpeningStone"; // Nos permite saber si se ha utilizado la piedra amolar.
-    private final String HAS_ADDED_LIFE_TO_ORCS = "hasAddedLifeToOrcs"; // Nos permite saber si se ha añadido vida a los orcos.
+    private final static String DEFEND = "defend"; // Defensa contra ataque de orcos.
+    private final static String ATTACK = "attack"; // Ataque contra orcos.
+    private final static String NEXT_URL = "nextUrl"; // Siguiente url a la que se redirige.
+    private final static String FIRST_SLASH = "firstSlash"; // Nos permite saber si es la primera vez que se ha utilizado espadazo.
+    private final static String ATTACKED_ENEMY = "attackedEnemy"; // El enemigo que ha sido seleccionado.
+    private final static String FIRST_TO_THE_HEART = "firstToTheHeart"; // Nos permite saber si es la primera vez que se ha utilizado el ataque al corazón.
+    private final static String FIRST_STEALTH_ATTACK = "firstStealthAttack"; // Nos permite saber si es la primera vez que se ha utilizado el ataque furtivo.
+    private final static String ALREADY_ATTACKED_WITH_PRECISE_BOW = "alreadyAttackedWithPreciseBow"; // Nos permite saber si ya se ha atacado con el arco preciso.
+    private final static String PREVENT_DAMAGE_FROM_ENEMIES = "preventDamageFromEnemies"; // Permite anular el ataque de varios enemigos.
+    private final static String CAPTURED_ENEMIES = "capturedEnemies"; // Enemigos capturados.
+    private final static String ENEMIES_ALSO_ATTACKED = "enemiesAlsoAttacked"; // Enemigos que también van a ser también atacados.
+    private final static String ENEMIES_THAT_RECEIVE_MORE_DAMAGE = "enemiesThatReceiveMoreDamage"; // Enemigos que van a recibir más daño.
+    private final static String ALREADY_ATTACKED_WITH_STAFF = "alreadyAttackedWithStaff"; // Nos permite saber si ya se ha atacado con el bastón.
+    private final static String HAS_TO_BE_DELETED_ABILITY = "hasToBeDeletedAbility"; // Nos permite saber si hay que eliminar una habilidad.
+    private final static String SHARPENING_STONE = "sharpeningStone"; // Nos permite saber si se ha utilizado la piedra amolar.
+    private final static String HAS_ADDED_LIFE_TO_ORCS = "hasAddedLifeToOrcs"; // Nos permite saber si se ha añadido vida a los orcos.
     private final EnemyService enemyService;
 
     public void deleteEndAttackHero(HttpSession session) {
@@ -243,10 +243,6 @@ public class CacheManager extends BaseCacheManager {
 
     public Boolean hasEnemiesAlsoAttacked(HttpSession session) {
         return getEnemiesAlsoAttacked(session).stream().anyMatch(enemy -> enemy.getId().equals(getAttackedEnemy(session).getId()));
-    }
-
-    public Boolean hasEnemiesAlsoAttacked(HttpSession session, EnemyInGame enemy) {
-        return getEnemiesAlsoAttacked(session).stream().anyMatch(enemyInGame -> enemyInGame.getId().equals(enemy.getId()));
     }
 
     // Enemigos a los que va a hacer más daño.

@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import org.javatuples.Triplet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.samples.nt4h.card.ability.DeckService;
-import org.springframework.samples.nt4h.statistic.StatisticService;
-import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
+import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.card.hero.Hero;
@@ -21,12 +19,13 @@ import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
+import org.springframework.samples.nt4h.statistic.StatisticService;
+import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +44,7 @@ public class GameService {
     private final StatisticService statisticService;
     private final DeckService deckService;
     private final Advise advise;
+    private static final Integer ORCS_IN_BATTLE = 3;
 
     @Transactional(readOnly = true)
     public List<Game> getAllGames() {
@@ -103,7 +103,7 @@ public class GameService {
         List<EnemyInGame> orcsInGame = enemyService.addOrcsToGame(game.getMaxPlayers());
         game.setAllOrcsInGame(orcsInGame.subList(4, orcsInGame.size()));
         game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
-        game.setActualOrcs(orcsInGame.subList(0, 3));
+        game.setActualOrcs(orcsInGame.subList(0, ORCS_IN_BATTLE));
         productService.addProduct(game);
         advise.createGame(game);
     }
@@ -172,7 +172,7 @@ public class GameService {
         if ((actualEnemies.size() == 2) || (actualEnemies.size() == 1))
             numEnemies = 1;
         else if (actualEnemies.size() == 0)
-            numEnemies = 3;
+            numEnemies = ORCS_IN_BATTLE;
         int addNighLord = actualEnemies.size() <= numEnemies ? 0 : 1;
         System.out.println("addNighLord: " + addNighLord);
         System.out.println("numEnemies: " + numEnemies);
@@ -197,8 +197,6 @@ public class GameService {
         for(int e=0; e < attackedEnemies.size(); e++) {
             EnemyInGame enemy = attackedEnemies.get(e);
             if (enemy.getActualHealth() <= 0) {
-                System.out.println("Enemy " + enemy.getEnemy().getName() + " killed");
-                // statisticService.killedOrcs(player);
                 statisticService.gainGold(player, enemy.getEnemy().getGold());
                 statisticService.gainGlory(player, enemy.getEnemy().getGlory());
                 statisticService.getNumDamageByUser(userId);
@@ -214,10 +212,8 @@ public class GameService {
 
     @Transactional(rollbackFor = Exception.class)
     public void attackEnemies(AbilityInGame usedAbility, Integer effectDamage, List<EnemyInGame> enemies, List<Integer> enemiesMoreDamage, Player player, Game game, Integer userId) {
-        // TODO: quitar
-        // if (usedAbility.getAttack() == 0)
-        //    return;
-        effectDamage += 999;
+        if (usedAbility.getAttack() == 0)
+            return;
         Integer damageToEnemy = usedAbility.getAttack() + effectDamage;
         for (int e = 0; enemies.size() > e; e++) {
             EnemyInGame affectedEnemy = enemies.get(e);
@@ -233,15 +229,13 @@ public class GameService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Integer attackEnemyToActualPlayer(Game game, HttpSession session, Predicate<EnemyInGame> hasPreventedDamage, int defendedDmg, List<EnemyInGame> enemiesInATrap) {
+    public Integer attackEnemyToActualPlayer(Game game, Predicate<EnemyInGame> hasPreventedDamage, int defendedDmg, List<EnemyInGame> enemiesInATrap) {
         Player currentPlayer = game.getCurrentPlayer();
         if (game.getActualOrcs().isEmpty()) return 0;
         int damage = game.getActualOrcs().stream()
-            .filter(hasPreventedDamage)
-            .mapToInt(EnemyInGame::getActualHealth).sum();
-        System.out.println("Damage: " + damage);
-        int finalDamage = (damage >= defendedDmg) ? (damage - defendedDmg):damage;
-        System.out.println("Final Damage: " + finalDamage);
+                .filter(hasPreventedDamage)
+                .mapToInt(EnemyInGame::getActualHealth).sum();
+        int finalDamage = (damage >= defendedDmg) ? (damage - defendedDmg) : damage;
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), damage);
         for (int i = 0; i < enemiesInATrap.size(); i++) {
             EnemyInGame enemyInGame = enemiesInATrap.get(i);

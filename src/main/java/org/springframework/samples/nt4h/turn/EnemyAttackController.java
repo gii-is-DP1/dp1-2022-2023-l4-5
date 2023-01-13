@@ -2,7 +2,6 @@ package org.springframework.samples.nt4h.turn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
-import org.springframework.samples.nt4h.card.enemy.EnemyService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.Advise;
@@ -32,8 +31,8 @@ public class EnemyAttackController {
     private final TurnService turnService;
     private final GameService gameService;
     private final CacheManager cacheManager;
-    public final String VIEW_ATTACK = "turns/attackPhase";
-    public final String NEXT_TURN = "redirect:/turns";
+    private final static String VIEW_ATTACK = "turns/attackPhase";
+    private final static String NEXT_TURN = "redirect:/turns";
     private final Advise advise;
 
     private Integer damage;
@@ -89,7 +88,7 @@ public class EnemyAttackController {
             System.out.println("Defended dmg: " + defendedDmg);
             Predicate<EnemyInGame> hasPreventedDamage = enemy -> !(cacheManager.hasPreventDamageFromEnemies(session, enemy));
             List<EnemyInGame> enemiesInATrap = cacheManager.getCapturedEnemies(session);
-            damage = gameService.attackEnemyToActualPlayer(game, session, hasPreventedDamage, defendedDmg, enemiesInATrap);
+            damage = gameService.attackEnemyToActualPlayer(game, hasPreventedDamage, defendedDmg, enemiesInATrap);
             advise.playerIsAttacked(damage);
         }
         model.put("damage", damage);

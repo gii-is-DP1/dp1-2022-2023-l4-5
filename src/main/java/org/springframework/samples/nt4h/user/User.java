@@ -3,7 +3,6 @@ package org.springframework.samples.nt4h.user;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
-import com.google.common.collect.Lists;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -81,14 +80,6 @@ public class User extends BaseEntity implements Jsonable {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player player;
-
-    public void defaultUser() {
-        this.authority = Authority.USER.toString();
-        this.enable = "true";
-        this.tier = Tier.BRONZE;
-        this.friends = Lists.newArrayList();
-        this.statistic = Statistic.createStatistic();
-    }
 
     public void onDeleteSetNull() {
         game = null;

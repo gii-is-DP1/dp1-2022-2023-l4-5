@@ -1,20 +1,12 @@
 package org.springframework.samples.nt4h.player;
 
-import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
-import org.springframework.samples.nt4h.card.ability.*;
-import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
-import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -58,22 +50,6 @@ public class PlayerService {
         playerRepository.save(player);
         playerRepository.delete(player);
     }
-
-    @Transactional(readOnly = true)
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
-    }
-
-    @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
-    public Player getPlayerByName(String name) {
-        return playerRepository.findByName(name).orElseThrow(() -> new NotFoundException("Player not found"));
-    }
-
-    @Transactional(readOnly = true)
-    public boolean playerExists(int id) {
-        return playerRepository.existsById(id);
-    }
-
 
 
     @Transactional(rollbackFor = Exception.class)

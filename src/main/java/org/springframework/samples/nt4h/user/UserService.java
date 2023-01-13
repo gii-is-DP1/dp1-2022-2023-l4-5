@@ -43,19 +43,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    /*
-    @Transactional(rollbackFor = Exception.class)
-    public void createUser(User user) {
-        if (user.getEnable() == null) user.setEnable("1");
-        if (user.getTier()== null) user.setTier(Tier.IRON);
-        if (user.getAuthority()== null) user.setAuthority("USER");
-        if (user.getIsConnected()== null) user.setIsConnected(true);
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
-     */
-
     @Transactional(rollbackFor = Exception.class)
     public void saveUser(User user) throws DataAccessException {
         if (user.getEnable() == null) user.setEnable("1");
@@ -99,11 +86,6 @@ public class UserService {
     public void deleteUserById(int id) {
         User user = getUserById(id);
         deleteUser(user);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean userExists(int id) {
-        return userRepository.existsById(id);
     }
 
     @Transactional(readOnly = true)
@@ -179,5 +161,4 @@ public class UserService {
             user.setTier(Tier.LEYENDA_VIVA);
         }
     }
-
 }

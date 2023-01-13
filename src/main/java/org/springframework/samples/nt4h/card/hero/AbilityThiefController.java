@@ -18,7 +18,6 @@ import org.springframework.samples.nt4h.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -41,14 +40,14 @@ import java.util.Optional;
 @RequestMapping("/abilities")
 public class AbilityThiefController {
 
-    private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
+    private final static String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
     private final UserService userService;
     private final AbilityService abilityService;
     private final CacheManager cacheManager;
     private final StatisticService statisticService;
     private final DeckService deckService;
 
-    public AbilityThiefController(UserService userService, AbilityService abilityService, PlayerService playerService, TurnService turnService, GameService gameService, EnemyService enemyService, CacheManager cacheManager, StatisticService statisticService, DeckService deckService) {
+    public AbilityThiefController(UserService userService, AbilityService abilityService, CacheManager cacheManager, StatisticService statisticService, DeckService deckService) {
         this.userService = userService;
         this.abilityService = abilityService;
         this.cacheManager = cacheManager;

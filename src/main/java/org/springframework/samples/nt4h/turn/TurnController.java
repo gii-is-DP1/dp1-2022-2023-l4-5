@@ -16,15 +16,15 @@ public class TurnController {
 
 
     private final UserService userService;
-    private final String PAGE_START = "redirect:/start";
+    private final static String PAGE_START = "redirect:/start";
 
-    private final String PAGE_EVADE = "redirect:/evasion";
-    private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
-    private final String PAGE_MARKET = "redirect:/market";
-    private final String PAGE_RESUPPLY = "redirect:/reestablishment";
-    private final String PAGE_LOBBY = "redirect:/games/";
-    private final String PAGE_END = "redirect:/end";
+    private final static String PAGE_EVADE = "redirect:/evasion";
+    private final static String PAGE_HERO_ATTACK = "redirect:/heroAttack";
+    private final static String PAGE_ENEMY_ATTACK = "redirect:/enemyAttack";
+    private final static String PAGE_MARKET = "redirect:/market";
+    private final static String PAGE_RESUPPLY = "redirect:/reestablishment";
+    private final static String PAGE_LOBBY = "redirect:/games/";
+    private final static String PAGE_END = "redirect:/end";
 
     @Autowired
     public TurnController(UserService userService) {

@@ -45,6 +45,7 @@ public class GameController {
     private static final String VIEW_GAME_PREORDER = "games/preSelectOrder";
     private static final String GAMES_IN_PROGRES= "admins/gameInProgres";
     private static final String PAGE_CURRENT_GAME = "redirect:/games/current";
+    private static final Integer PAGE_SIZE = 5;
 
     // Servicios
     private final GameService gameService;
@@ -64,7 +65,7 @@ public class GameController {
     }
 
     @GetMapping("/gameInProgres")
-    private String getGamesInProgres() {
+    private String getGamesInProgress() {
         return GAMES_IN_PROGRES;
     }
 
@@ -131,12 +132,12 @@ public class GameController {
     @GetMapping
     public String showGames(@RequestParam(defaultValue = "0") int page, ModelMap model, HttpSession session) {
         page = page < 0 ? 0 : page;
-        Pageable pageable = PageRequest.of(page, 5);
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         List<Game> games = gameService.getAllGames();
         Page<Game> gamePage = gameService.getAllGames(pageable);
         if (!games.isEmpty() && gamePage.isEmpty()) {
-            page = games.size() / 5;
-            pageable = PageRequest.of(page, 5);
+            page = games.size() / PAGE_SIZE;
+            pageable = PageRequest.of(page, PAGE_SIZE);
             gamePage = gameService.getAllGames(pageable);
         }
         advise.getMessage(session, model);
@@ -179,9 +180,7 @@ public class GameController {
     //Elegir here
     @GetMapping(value = "/heroSelect")
     public String initHeroSelectForm(HttpSession session, ModelMap model, HttpServletRequest request) {
-        // Los datos para el formulario.
-        User loggedUser = getLoggedUser();
-        Game game = getGame();
+        // Los datos para el formulario
         advise.getMessage(session, model);
         advise.keepUrl(session, request);
         advise.chooseHero();
@@ -216,8 +215,6 @@ public class GameController {
 
     @GetMapping("/selectOrder")
     public String orderPlayers(HttpSession session, HttpServletRequest request) {
-        User loggedUser = getLoggedUser();
-        Game game = getGame();
         advise.keepUrl(session, request);
         return VIEW_GAME_PREORDER;
     }

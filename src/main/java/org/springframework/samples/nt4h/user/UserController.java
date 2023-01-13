@@ -43,6 +43,7 @@ public class UserController {
     private static final String PAGE_WELCOME = "redirect:/welcome";
     private static final String PAGE_USER_DETAILS = "redirect:/users/details";
     private static final String VIEW_USER_STATISTICS = "users/userStatistics";
+    private static final Integer PAGE_SIZE = 5;
 
     // Servicios.
     private final UserService userService;
@@ -70,12 +71,12 @@ public class UserController {
     @GetMapping
     public String getUsers(@RequestParam(defaultValue = "0") int page, ModelMap model) {
         page = page < 0 ? 0 : page;
-        Pageable pageable = PageRequest.of(page, 5);
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         List<User> users = userService.getAllUsers();
         Page<User> usersPage = userService.getAllUsers(pageable);
         if (!users.isEmpty() && usersPage.isEmpty()) {
-            page = users.size() / 5;
-            pageable = PageRequest.of(page, 5);
+            page = users.size() / PAGE_SIZE;
+            pageable = PageRequest.of(page, PAGE_SIZE);
             usersPage = userService.getAllUsers(pageable);
         }
         model.put("isNext", usersPage.hasNext());

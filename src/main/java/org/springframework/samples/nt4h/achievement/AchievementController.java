@@ -16,8 +16,8 @@ import java.util.List;
 @RequestMapping("/achievements")
 public class AchievementController {
 
-    private final String ACHIEVEMENTS_LIST_VIEW ="achievements/achievementsList";
-    private final String VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM ="achievements/createOrUpdateAchievementsForm";
+    private final static String ACHIEVEMENTS_LIST_VIEW ="achievements/achievementsList";
+    private final static String VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM ="achievements/createOrUpdateAchievementsForm";
 
     private final AchievementService achievementService;
 

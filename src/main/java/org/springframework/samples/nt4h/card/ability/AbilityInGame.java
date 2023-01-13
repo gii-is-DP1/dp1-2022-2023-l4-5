@@ -49,15 +49,6 @@ public class AbilityInGame extends BaseEntity {
                 .build();
     }
 
-    public static AbilityInGame fromProduct(ProductInGame productInGame, Player player) {
-        return AbilityInGame.builder()
-                .timesUsed(0)
-                .attack(productInGame.getProduct().getAttack())
-                .isProduct(true)
-                .productInGame(productInGame)
-                .player(player)
-                .build();
-    }
     public void onDeleteSetNull() {
         ability = null;
         player = null;

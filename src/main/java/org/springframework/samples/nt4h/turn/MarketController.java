@@ -30,9 +30,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/market")
 public class MarketController {
-    public final String VIEW_MARKET = "turns/marketPhase";
-    public final String PAGE_MARKET = "redirect:/market";
-    public final String NEXT_TURN = "redirect:/turns";
+    private final static String VIEW_MARKET = "turns/marketPhase";
+    private final static String PAGE_MARKET = "redirect:/market";
+    private final static String NEXT_TURN = "redirect:/turns";
 
     private final UserService userService;
     private final ProductService productService;
@@ -97,7 +97,6 @@ public class MarketController {
         Player player = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         ProductInGame productInGame = turn.getCurrentProduct();
-        Game game = getGame();
         if (loggedPlayer != player)
             throw new NoCurrentPlayer();
         if (productInGame == null)

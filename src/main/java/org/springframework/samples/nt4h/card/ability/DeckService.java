@@ -23,6 +23,7 @@ public class DeckService {
     private final AbilityService abilityService;
     private final PlayerService playerService;
     private final Advise advise;
+    private final Integer SIZE_HAND = 5;
 
     @Transactional(rollbackFor = Exception.class)
     public void saveDeck(Deck deck) {
@@ -74,13 +75,6 @@ public class DeckService {
         saveDeck(deck);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void fromDiscardToDeck(Deck deck, Integer times) {
-        for (int i = 0; i < times; i++) {
-            fromDiscardToDeck(deck);
-        }
-    }
-
     // De mazo a mano
     @Transactional(rollbackFor = Exception.class)
     public void fromDeckToHand(Player player, Deck deck) {
@@ -126,13 +120,6 @@ public class DeckService {
         }
     }
 
-    // De mano a descarte.
-    @Transactional(rollbackFor = Exception.class)
-    public void fromHandToDiscard(Deck deck) {
-        AbilityInGame inHand = deck.getInHand().get(0);
-        specificCardFromHandToDiscard(deck, inHand);
-    }
-
 
     @Transactional(rollbackFor = Exception.class)
     public void specificCardFromHandToDiscard(Deck deck, AbilityInGame inHand) {
@@ -140,13 +127,6 @@ public class DeckService {
         deck.getInHand().remove(inHand);
         deck.getInDiscard().add(inHand);
         saveDeck(deck);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public void fromHandToDiscard(Deck deck, Integer times) {
-        for (int i = 0; i < times; i++) {
-            fromHandToDiscard(deck);
-        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -179,22 +159,10 @@ public class DeckService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void restoreDeck(Deck deck) {
-        for (int i = 0; i < deck.getInDiscard().size(); i++) {
-            AbilityInGame recoveredCard = deck.getInDiscard().get(0);
-            deck.getInDiscard().remove(recoveredCard);
-            deck.getInDeck().add(recoveredCard);
-        }
-        // Shuffle the new abilityPile
-        Collections.shuffle(deck.getInDeck());
-        saveDeck(deck);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
     public void moveCardsFromDeckToHand(Player player, Deck deck) throws TooManyAbilitiesException {
-        if (deck.getInHand().size() > 5)
+        if (deck.getInHand().size() > SIZE_HAND)
             throw new TooManyAbilitiesException();
-        Integer cardsToMove = 5 - deck.getInHand().size();
+        Integer cardsToMove = SIZE_HAND - deck.getInHand().size();
         fromDeckToHand(player, deck, cardsToMove);
     }
 
@@ -211,7 +179,7 @@ public class DeckService {
             Ability ability = totalAbilities.get(i);
             AbilityInGame abilityInGame = AbilityInGame.fromAbility(ability, player);
             abilityService.saveAbilityInGame(abilityInGame);
-            Boolean haveLessThanFiveAndIsUniclass = (i < 5 && player.getHeroes().size() == 1);
+            Boolean haveLessThanFiveAndIsUniclass = (i < SIZE_HAND && player.getHeroes().size() == 1);
             Boolean isTheFirstHeroInMulticlass = deck.getInDeck().isEmpty() && i < 3 && player.getHeroes().size() == 2;
             Boolean isTheSecondHeroInMUlticlass = (i < 2 && player.getHeroes().size() == 2);
             if (haveLessThanFiveAndIsUniclass || isTheFirstHeroInMulticlass || isTheSecondHeroInMUlticlass)
