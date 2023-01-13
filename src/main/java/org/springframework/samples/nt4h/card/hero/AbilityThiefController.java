@@ -87,11 +87,11 @@ public class AbilityThiefController {
         System.out.println("Sharpening stone: " + sharpeningStone);
         abilityService.getAllAbilities().forEach(ability -> {
             if (ability.getName().contains("Al")) {
-               System.out.println("Al corazón: " + ability.getName());
+               System.out.println("Al corazon: " + ability.getName());
             }
         });
-        Ability ability = abilityService.getAbilityByName("Al corazón");
-        System.out.println("Al corazón: " + ability.getId());
+        Ability ability = abilityService.getAbilityByName("Al corazon");
+        System.out.println("Al corazon: " + ability.getId());
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHeart(session)) {
             cacheManager.setFirstToTheHeart(session);
