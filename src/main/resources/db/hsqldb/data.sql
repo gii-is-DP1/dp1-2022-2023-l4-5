@@ -50,7 +50,7 @@ VALUES ('MELEE', false),
 
 -- Creación de héroes.
 INSERT INTO heroes(name, front_image, back_image, max_uses, health, role)
-VALUES ('Valèrys', '/resources/images/heroes/valerys_hero_front.png',
+VALUES ('Valerys', '/resources/images/heroes/valerys_hero_front.png',
         '/resources/images/heroes/lisavette_hero_back.png', -1, 3, 'KNIGHT'),
        ('Lisavette', '/resources/images/heroes/lisavette_hero_back.png',
         '/resources/images/heroes/valerys_hero_front.png', -1, 3, 'KNIGHT'),
