@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
  * - Aura protectora.
  * - Bola de fuego. Fufa
  * - Disparo gélido. Fufa
- * - Flecha corrosiva.
+ * - Flecha corrosiva. Fufa
  * - Golpe de bastón. Fufa
- * - Orbe curativo.
+ * - Orbe curativo. Fufa
  * - Proyectil ígneo. Fufa
- * - Reconstitución.
- * - Torrente de luz.
+ * - Reconstitución. Fufa
+ * - Torrente de luz. Fufa
  */
 @Controller
 @RequestMapping("/abilities")
@@ -146,7 +146,7 @@ public class AbilityWizardController {
         List<Player> players = getGame().getPlayers();
         // Todos los héroes recuperan dos cartas.
         for (var i = 0; i < players.size(); i++)
-            deckService.fromDiscardToHand(players.get(i).getDeck());
+            deckService.fromDiscardToHand(players.get(i).getDeck(), 2);
         // Elimina 1 herida del héroe.
         playerService.decreaseWounds(currentPlayer, 1);
         // Elimina la carta.
@@ -171,7 +171,7 @@ public class AbilityWizardController {
         // Roba 1 carta.
         deckService.fromDeckToHand(currentPlayer, deck);
         // Recupera 2 cartas.
-        deckService.fromDiscardToDeck(deck, 2);
+        deckService.fromDiscardToHand(deck, 2);
         return PAGE_MAKE_DAMAGE;
     }
 

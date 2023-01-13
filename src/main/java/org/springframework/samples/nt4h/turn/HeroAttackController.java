@@ -147,7 +147,7 @@ public class HeroAttackController {
         List<Integer> enemiesMoreDamage = enemies.stream().map(enemy -> cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, enemy)).collect(Collectors.toList());
         gameService.attackEnemies(usedAbility, effectDamage, enemies, enemiesMoreDamage, player, game, getLoggedUser().getId());
         if (cacheManager.hasToBeDeletedAbility(session))
-            abilityService.deleteAbilityInGameById(usedAbility.getId());
+            deckService.deleteAbilityInHand(player.getDeck(), usedAbility);
         else
             deckService.specificCardFromHandToDiscard(deck, usedAbility);
         Optional<String> nextUrl = cacheManager.getNextUrl(session);

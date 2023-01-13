@@ -233,4 +233,10 @@ public class DeckService {
             createDeck(player, abilityService.getAbilitiesByRole(roles[1]), 7);
         }
     }
+
+    public void deleteAbilityInHand(Deck deck, AbilityInGame abilityInGame) {
+        deck.getInHand().remove(abilityInGame);
+        abilityService.deleteAbilityInGame(abilityInGame);
+        saveDeck(deck);
+    }
 }
