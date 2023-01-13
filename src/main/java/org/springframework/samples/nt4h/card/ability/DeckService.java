@@ -192,7 +192,7 @@ public class DeckService {
 
     @Transactional(rollbackFor = Exception.class)
     public void moveCardsFromDeckToHand(Player player, Deck deck) throws TooManyAbilitiesException {
-        if (deck.getInHand().size() > 4)
+        if (deck.getInHand().size() > 5)
             throw new TooManyAbilitiesException();
         Integer cardsToMove = 5 - deck.getInHand().size();
         fromDeckToHand(player, deck, cardsToMove);

@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/achievements/**", "/games/**", "/users/**", "/cards/**", "/abilities",
                 "/friends/**", "/turns/**", "/evasion/**", "/messages/**", "/market/**", "/reestablishment/**",
                 "/api/**", "/heroAttack/**", "/enemyAttack/**", "/start/**","/AuditoryGame/get/**", "deletePlayer/**", "deleteGame/**", "/statistics/**",
-                "/abilities/**").authenticated()
+                "/abilities/**", "/end/**").authenticated()
             .anyRequest().denyAll()
             .and()
             .formLogin()

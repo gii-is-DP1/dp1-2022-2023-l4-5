@@ -217,7 +217,7 @@ public class GameService {
         // TODO: quitar
         // if (usedAbility.getAttack() == 0)
         //    return;
-        effectDamage += 999;
+        effectDamage += 99;
         Integer damageToEnemy = usedAbility.getAttack() + effectDamage;
         for (int e = 0; enemies.size() > e; e++) {
             EnemyInGame affectedEnemy = enemies.get(e);

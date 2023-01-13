@@ -6,9 +6,9 @@
 
 <nt4h:layout pageName="allStatistics">
 
-<c:for begin="0" end="${allStatistics.size()}" var="section">
-  <a href="/statistics/${section}" class="btn btn-primary btn-lg btn-block" role="button">${allStatistics[section].getValue0()}</a>
-</c:for>
+<c:forEach begin="0" end="${allStatistic.size()-1}" var="section">
+  <a href="/statistics/${section}" class="btn btn-primary btn-lg btn-block" role="button">${allStatistic[section].getValue0()}</a>
+</c:forEach>
 
 </nt4h:layout>
 

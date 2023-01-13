@@ -28,16 +28,12 @@ public class EndController {
     private final String VIEW_END = "turns/endPhase";
 
     private final UserService userService;
-    private final TurnService turnService;
     private final GameService gameService;
-    private final PlayerService playerService;
     private final Advise advise;
 
     public EndController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise) {
         this.userService = userService;
-        this.turnService = turnService;
         this.gameService = gameService;
-        this.playerService = playerService;
         this.advise = advise;
     }
 
@@ -84,9 +80,9 @@ public class EndController {
             pairs.add(new Pair<>(player, total));
         }
         pairs.sort((o1, o2) -> o2.getValue1().compareTo(o1.getValue1()));
-        User winner =userService.getUserByUsername(pairs.get(0).getValue0().getName());
-        Integer wonned = winner.getStatistic().getNumWonGames();
-        winner.getStatistic().setNumWonGames(wonned+1);
+        User winner = userService.getUserByUsername(pairs.get(0).getValue0().getName());
+        Integer won = winner.getStatistic().getNumWonGames();
+        winner.getStatistic().setNumWonGames(won+1);
         userService.upRank(winner.getId());
         model.addAttribute("punctuations", pairs);
         return VIEW_END;

@@ -24,16 +24,16 @@ import java.util.List;
 /**
  * Los señores de la noche que hay disponibles en el juego son:
  * - Gurdrug.
- * - Roghkiller.
+ * - Roghkiller. Fufa
  * - Shriekknifer
  */
 @Controller
-@RequestMapping("/abilities/nightLord")
+@RequestMapping("/abilities")
 public class AbilityNightLordController {
 
 
     private final String PAGE_HERO_ATTACK = "redirect:/heroAttack";
-    private final String PAGE_ABILITIES = "redirect:/abilities";
+    private final String PAGE_ABILITIES = "redirect:/abilities/";
 
     private final UserService userService;
     private final AbilityService abilityService;
@@ -108,7 +108,7 @@ public class AbilityNightLordController {
         AbilityInGame ability = abilityService.getAbilityInGameById(cardId);
         // Recupera una carta si el ataque es 1.
         if (ability.getAttack() == 1)
-            deckService.fromDiscardToDeck(currentPlayer.getDeck());
+            deckService.fromDiscardToHand(currentPlayer.getDeck());
         return PAGE_ABILITIES + ability.getAbility().getPathName();
     }
 

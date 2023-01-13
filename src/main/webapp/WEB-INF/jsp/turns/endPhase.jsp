@@ -16,11 +16,11 @@
     </style>
     <h2>Action decision</h2>
     <h1>Turno del jugador ${currentPlayer}</h1>
-    <c:for var="puntuation" elements="${puntuations}">
-        <c:out value="${puntuation}"/>
-    </c:for>
-
-
+    <ol>
+    <c:forEach var="puntuation" items="${punctuations}">
+        <li>${puntuation.value0}: ${puntuation.value1}</li>
+    </c:forEach>
+    </ol>
     <hr>
     <div>
         <h2>Chatea</h2>

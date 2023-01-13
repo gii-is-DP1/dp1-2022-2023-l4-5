@@ -13,14 +13,14 @@ public interface StatisticRepository extends CrudRepository<Statistic, Integer> 
 
     List<Statistic> findAll();
 
-    @Query("SELECT st.numPlayedGames FROM Statistic st JOIN User u WHERE u.id = ?1")
+    @Query("SELECT u.statistic.numPlayedGames FROM User u WHERE u.id = ?1")
     Integer findNumPlayedGamesByUser(int userId);
 
-    @Query("SELECT st.timePlayed FROM Statistic st JOIN User u WHERE u.id = ?1")
+    @Query("SELECT u.statistic.timePlayed FROM User u WHERE u.id = ?1")
     Integer findNumMinutesPlayedByUser(int userId);
 
     @Query("SELECT count(g) FROM Game g WHERE g.statistic.numPlayers = ?1")
-    Integer findnumGamesByNumPlayers(int numP);
+    Integer findNumGamesByNumPlayers(int numP);
 
     @Query("SELECT u.statistic.gold FROM User u WHERE u.id = ?1")
     Integer findNumGoldByUser(int userId);

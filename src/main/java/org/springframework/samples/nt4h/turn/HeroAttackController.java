@@ -140,6 +140,8 @@ public class HeroAttackController {
         EnemyInGame attackedEnemy = turn.getCurrentEnemy();
         if (usedAbility == null)
             throw new WithOutAbilityException();
+        if (attackedEnemy == null)
+            throw new WithOutEnemyException();
         Integer effectDamage = cacheManager.getSharpeningStone(session) + cacheManager.getAttack(session);
         List<EnemyInGame> enemies = cacheManager.getEnemiesAlsoAttacked(session);
 

@@ -42,7 +42,8 @@ public class ProductService {
             .flatMap(heroInGame -> heroInGame.getHero().getCapacities().stream().map(Capacity::getStateCapacity))
             .collect(Collectors.toList());
         List<StateCapacity> capacitiesNeeded = productInGame.getProduct().getCapacity().stream().map(Capacity::getStateCapacity).collect(Collectors.toList());
-        if (!new HashSet<>(stateCapacities).containsAll(capacitiesNeeded))
+        stateCapacities.retainAll(capacitiesNeeded);
+        if (!capacitiesNeeded.isEmpty() && stateCapacities.size() == 0)
             throw new CapacitiesRequiredException();
         if (Objects.requireNonNull(selectedProduct.getStateProduct()) == StateProduct.IN_SALE) {
             if (player.getStatistic().getGold() < selectedProduct.getProduct().getPrice())
