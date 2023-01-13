@@ -64,66 +64,66 @@ public class GameController {
     }
 
     @GetMapping("/gameInProgres")
-    public String getGamesInProgres() {
+    private String getGamesInProgres() {
         return GAMES_IN_PROGRES;
     }
 
     @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
+    private void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
     }
 
     @ModelAttribute("mode")
-    public List<Mode> getMode() {
+    private List<Mode> getMode() {
         return Lists.newArrayList(Mode.UNI_CLASS, Mode.MULTI_CLASS);
     }
 
     @ModelAttribute("heroes")
-    public List<Hero> getHeroes() {
+    private List<Hero> getHeroes() {
         return heroService.getAllHeroes();
     }
 
     @ModelAttribute("accessibility")
-    public List<Accessibility> getAccessibility() {
+    private List<Accessibility> getAccessibility() {
         return Lists.newArrayList(Accessibility.PUBLIC, Accessibility.PRIVATE);
     }
 
     @ModelAttribute("newHero")
-    public HeroInGame getHero() {
+    private HeroInGame getHero() {
         return new HeroInGame();
     }
 
 
     @ModelAttribute("loggedPlayer")
-    public Player getPlayer() {
+    private Player getPlayer() {
         User loggedUser = getLoggedUser();
         return loggedUser.getPlayer() != null ? loggedUser.getPlayer() : Player.builder().statistic(Statistic.createStatistic()).build();
     }
 
     @ModelAttribute("players")
-    public List<Player> getPlayers() {
+    private List<Player> getPlayers() {
         Game game = getGame();
         return game != null ? game.getPlayers() : null;
     }
 
     @ModelAttribute("game")
-    public Game getGame() {
+    private Game getGame() {
         Game loggedGame = getLoggedUser().getGame();
         return loggedGame != null ? loggedGame : new Game();
     }
 
     @ModelAttribute("games")
-    public List<Game> getGames() {
+    private List<Game> getGames() {
         return gameService.getAllGames();
     }
 
     @ModelAttribute("loggedUser")
-    public User getLoggedUser() {
+    private User getLoggedUser() {
         return userService.getLoggedUser();
     }
 
     @ModelAttribute("chat")
-    public Message getChat() {
+    private Message getChat() {
         return new Message();
     }
 

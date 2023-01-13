@@ -36,7 +36,7 @@ public class AbilityController {
     private final TurnService turnService;
     private final CacheManager cacheManager;
 
-    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService, CacheManager cacheManager) {
+    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService) {
         this.userService = userService;
         this.gameService = gameService;
         this.playerService = playerService;
@@ -67,7 +67,7 @@ public class AbilityController {
     }
 
     @PostMapping("/loseCard")
-    private String loseCard(Turn turn, HttpSession session) {
+    public String loseCard(Turn turn) {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
@@ -99,7 +99,7 @@ public class AbilityController {
     }
 
     @GetMapping("/findInDiscard")
-    private String findInDiscard(Turn turn, HttpSession session) {
+    public String findInDiscard(Turn turn) {
         // Cogemos la carta elegida de la pila de descarte.
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         // La colocamos en la mano.
@@ -108,18 +108,18 @@ public class AbilityController {
         deck.getInDiscard().remove(abilityInGame);
         deck.getInHand().add(abilityInGame);
         playerService.savePlayer(currentPlayer);
-        return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
+        return PAGE_MAKE_DAMAGE;
     }
 
     @PostMapping("/chooseAbilityFromDeck")
-    private String chooseAbilityFromDeck(Turn turn, HttpSession session) {
+    public String chooseAbilityFromDeck(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inDeck", abilityInGame.getId());
         return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
 
     @PostMapping("/exchangeCards")
-    private String exchangeCards(Turn turn, HttpSession session) {
+    public String exchangeCards(Turn turn, HttpSession session) {
         AbilityInGame inDeck = abilityService.getAbilityInGameById(((Integer)session.getAttribute("inDeck")));
         AbilityInGame inHand = turn.getCurrentAbility();
         Deck deck = getCurrentPlayer().getDeck();
@@ -132,7 +132,7 @@ public class AbilityController {
     }
 
     @PostMapping("/chooseProductFromMarket")
-    private String chooseProductFromMarket(Turn turn, HttpSession session) {
+    public String chooseProductFromMarket(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inMarket", abilityInGame.getId());
         Object nextUrl = session.getAttribute("nextUrl");
@@ -140,7 +140,7 @@ public class AbilityController {
     }
 
     @PostMapping("/exchangeProducts")
-    private String exchangeProducts(Turn turn, HttpSession session) {
+    public String exchangeProducts(Turn turn, HttpSession session) {
         ProductInGame inMarket = productService.getProductInGameById(((Integer) session.getAttribute("inMarket")));
         ProductInGame inSale = turn.getCurrentProduct();
         Integer id = inSale.getId();
@@ -152,7 +152,7 @@ public class AbilityController {
     }
 
     @GetMapping
-    private String findEffect() {
+    public String findEffect() {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)
