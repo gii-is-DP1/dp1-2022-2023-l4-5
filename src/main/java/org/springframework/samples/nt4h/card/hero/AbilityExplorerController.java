@@ -5,7 +5,7 @@ import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
-import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
@@ -31,7 +31,7 @@ import java.util.List;
  * - En la diana. Fufa
  * - Lluvia de flechas. Fufa
  * - Recoger flechas. Fufa
- * - Supervivencia.
+ * - Supervivencia. Fufa
  */
 @Controller
 @RequestMapping("/abilities")
@@ -45,14 +45,18 @@ public class AbilityExplorerController {
     private final CacheManager cacheManager;
     private final DeckService deckService;
     private final StatisticService statisticService;
+    private final GameService gameService;
 
-    public AbilityExplorerController(UserService userService, PlayerService playerService, CacheManager cacheManager, DeckService deckService, StatisticService statisticService) {
+    public AbilityExplorerController(UserService userService, PlayerService playerService, CacheManager cacheManager, DeckService deckService, StatisticService statisticService, GameService gameService) {
         this.userService = userService;
         this.playerService = playerService;
         this.cacheManager = cacheManager;
         this.deckService = deckService;
         this.statisticService = statisticService;
+        this.gameService = gameService;
     }
+
+
 
     @ModelAttribute("loggedUser")
     public User getLoggedUser() {
@@ -160,14 +164,14 @@ public class AbilityExplorerController {
     @GetMapping("/survival")
     private String survival(ModelMap model) {
         // Gana una carta de supervivencia.
-
-        List<EnemyInGame> enemies = getGame().getActualOrcs();
-        //EnemyInGame lastOne = game.getAllOrcsInGame().get(game.getAllOrcsInGame().size() - 1);
-        //game.getAllOrcsInGame().set(game.getAllOrcsInGame().size() - 1, enemyInGame);
-        //int index = game.getActualOrcs().indexOf(enemyInGame);
-        //game.getActualOrcs().set(index, lastOne);
-        //gameService.saveGame(game);
-        return VIEW_CHOSE_ENEMY;
+        Game game = getGame();
+        EnemyInGame enemyInGame = game.getActualOrcs().get(0);
+        EnemyInGame lastOne = game.getAllOrcsInGame().get(game.getAllOrcsInGame().size() - 1);
+        game.getAllOrcsInGame().set(game.getAllOrcsInGame().size() - 1, enemyInGame);
+        int index = game.getActualOrcs().indexOf(enemyInGame);
+        game.getActualOrcs().set(index, lastOne);
+        gameService.saveGame(game);
+        return PAGE_MAKE_DAMAGE;
 
 
 

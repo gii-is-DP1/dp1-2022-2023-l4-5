@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 /**
  * Las habilidades del mago son:
  * - Aura protectora.
- * - Bola de fuego.
- * - Disparo gélido.
+ * - Bola de fuego. Fufa
+ * - Disparo gélido. Fufa
  * - Flecha corrosiva.
- * - Golpe de bastón.
+ * - Golpe de bastón. Fufa
  * - Orbe curativo.
- * - Proyectil ígneo.
+ * - Proyectil ígneo. Fufa
  * - Reconstitución.
  * - Torrente de luz.
  */

@@ -82,7 +82,7 @@ VALUES ('Compañero Lobo', '/resources/images/abilities/wolf_abilities_front.png
        ('Recoger flechas', '/resources/images/abilities/pick_abilites_front.png',
         '/resources/images/abilities/parte_atras_general.png', -1, 'EXPLORER', 0, 2, 'collectArrows'),
        ('Supervivencia', '/resources/images/abilities/survival_abilities_front.png',
-        '/resources/images/abilities/parte_atras_general.png', -1, 'EXPLORER', 0, 10, 'survival'),
+        '/resources/images/abilities/parte_atras_general.png', -1, 'EXPLORER', 0, 1, 'survival'),
        ('Ataque Brutal', '/resources/images/abilities/brutal_abilities_front.png',
         '/resources/images/abilities/parte_atras_general.png', -1, 'KNIGHT', 3, 2, 'brutalAttack'),
        ('Carga con Escudo', '/resources/images/abilities/charge_abilities_front.png',
