@@ -73,21 +73,6 @@ public class PlayerServiceTest {
         idGame = game.getId();
         namePlayer = player.getName();
 
-
-        /*
-        User user = userService.getUserById(1);
-        Hero hero = heroService.getHeroById(1);
-        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
-        Game game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
-        user.createPlayer(game);
-        player = user.getPlayer();
-        player.addHero(heroInGame);
-        game.addPlayer(player);
-        gameService.saveGame(game);
-        idPlayer = player.getId();
-        idGame = game.getId();
-        namePlayer = player.getName();
-        */
     }
 
     @Test
@@ -134,7 +119,6 @@ public class PlayerServiceTest {
     @Test
     public void deletePlayerTest() {
         playerService.deletePlayerById(idPlayer);
-        // assertThrows(NotFoundException.class, () -> playerService.getPlayerById(idPlayer));
         System.out.println("Game: " + gameService.getGameById(idGame).getPlayers());
     }
 }

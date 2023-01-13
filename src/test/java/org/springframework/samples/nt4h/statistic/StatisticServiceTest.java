@@ -57,12 +57,6 @@ public class StatisticServiceTest {
         statisticService.saveStatistic(stat);
         assertEquals(newGold,statisticService.getStatisticById(idStatistic).getGold());
     }
-    @Test
-    public void deleteStatisticTest(){
-        // TODO: arreglar algún día.
-        // System.out.println(statisticService.getStatisticById(idStatistic));
-        // statisticService.deleteStatisticById(idStatistic);
-        //assertThrows(NotFoundException.class, () -> statisticService.getStatisticById(idStatistic));
-    }
+
 
 }

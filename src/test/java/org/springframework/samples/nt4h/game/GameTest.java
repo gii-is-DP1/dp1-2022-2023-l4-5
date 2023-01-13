@@ -65,7 +65,6 @@ public class GameTest {
 
     @Test
     public void testGameConstraints() {
-        // Test maxPlayers constraints
         game.setMaxPlayers(-1); // TODO: Decidir si puede ser negativo.
         assertThat(validator.validate(game)).isEmpty();
         game.setMaxPlayers(0);
@@ -75,14 +74,12 @@ public class GameTest {
         game.setMaxPlayers(2);
         assertThat(validator.validate(game)).isEmpty();
 
-        // Test password constraints
         game.setAccessibility(Accessibility.PUBLIC);
         game.setPassword(null);
         assertThat(validator.validate(game)).isEmpty();
         game.setPassword("password");
         assertThat(validator.validate(game)).isEmpty();
 
-        // Test name constraints
         game.setName("");
         assertThat(validator.validate(game)).isNotEmpty();
         game.setName("A");
@@ -90,43 +87,33 @@ public class GameTest {
         game.setName("Game");
         assertThat(validator.validate(game)).isEmpty();
 
-        // Test startDate constraints
         game.setStartDate(null);
         assertThat(validator.validate(game)).isEmpty();
 
-        // Test finishDate constraints
         game.setStartDate(LocalDateTime.now());
         game.setFinishDate(null);
         assertThat(validator.validate(game)).isEmpty();
 
-        // Test maxPlayers constraints
         game.setFinishDate(LocalDateTime.now());
         game.setMaxPlayers(0);
         assertThat(validator.validate(game)).isEmpty();
 
-        // Test mode constraints
         game.setMaxPlayers(1);
         game.setMode(null);
         assertThat(validator.validate(game)).isNotEmpty();
 
-        // Test phase constraints
         game.setMode(Mode.UNI_CLASS);
-        //game.setPhase(null);
         assertThat(validator.validate(game)).isEmpty();
 
-        // Test accessibility constraints
-        //game.setPhase(Phase.START);
         game.setAccessibility(null);
         assertThat(validator.validate(game)).isEmpty();
     }
 
     @Test
     public void testGameLifecycle() {
-        // Test saving a game
         gameService.saveGame(game);
         assertThat(game.getId()).isNotNull();
 
-        // Test updating an existing game
         game.setName("Updated Game");
         gameService.saveGame(game);
         assertThat(game.getName()).isEqualTo("Updated Game");
@@ -134,28 +121,22 @@ public class GameTest {
 
     @Test
     public void testGameQueries() {
-        // Test finding all games
         gameService.saveGame(game);
         assertThat(gameService.getAllGames()).isNotEmpty();
 
-        // Test finding a game by ID
         assertThatThrownBy(() -> gameService.getGameById(0)).isInstanceOf(NotFoundException.class);
         assertThat(gameService.getGameById(game.getId())).isEqualTo(game);
     }
 
     @Test
     public void testFullGameException() throws FullGameException {
-        // Añade dos jugadores
-        System.out.println("players" + game.getPlayers());
         game.addPlayer(new Player());
 
-        // Verifica que se lanza una excepción al intentar añadir un tercer jugador
         assertThatThrownBy(() ->game.addPlayer(new Player())).isInstanceOf(FullGameException.class);
     }
 
     @Test
     public void testAddPlayerWithNewHero_duplicateHero() throws FullGameException, RoleAlreadyChosenException, HeroAlreadyChosenException {
-        // Se crean dos jugadores y se añade al primero el héroe.
         Player player1 = game.getPlayers().get(0);
         Hero hero = heroService.getHeroById(1);
         HeroInGame heroInGame1 = HeroInGame.createHeroInGame(hero, player1);
@@ -166,7 +147,6 @@ public class GameTest {
         player2.setHeroes(Lists.newArrayList());
         HeroInGame heroInGame2 = HeroInGame.createHeroInGame(hero, player2);
 
-        // Se espera que se lance la excepción HeroAlreadyChosenException
         assertThatThrownBy(() -> game.addPlayerWithNewHero(player2, heroInGame2)).isInstanceOf(HeroAlreadyChosenException.class);
     }
 

@@ -78,7 +78,6 @@ public class UserTest {
 
     @Test
     void testUserConstraints() {
-        // Test username constraints
         user.setUsername(null);
         assertThat(validator.validate(user)).isNotEmpty();
         user.setUsername("");
@@ -88,15 +87,12 @@ public class UserTest {
         user.setUsername("user");
         assertThat(validator.validate(user)).isEmpty();
 
-        // Test password constraints
         user.setPassword(null);
         assertThat(validator.validate(user)).isNotEmpty();
         user.setPassword(" ");
         assertThat(validator.validate(user)).isEmpty();
         user.setPassword("pass");
         assertThat(validator.validate(user)).isEmpty();
-
-        // Test enable constraints
         user.setEnable(null);
         assertThat(validator.validate(user)).isEmpty();
         user.setEnable("");
@@ -105,8 +101,6 @@ public class UserTest {
         assertThat(validator.validate(user)).isEmpty();
         user.setEnable("true");
         assertThat(validator.validate(user)).isEmpty();
-
-        // Test avatar constraints
         user.setAvatar(null);
         assertThat(validator.validate(user)).isEmpty();
         user.setAvatar("");
@@ -116,13 +110,11 @@ public class UserTest {
         user.setAvatar("http://example.com/avatar");
         assertThat(validator.validate(user)).isEmpty();
 
-        // Test tier constraints
         user.setTier(null);
         assertThat(validator.validate(user)).isEmpty();
         user.setTier(Tier.BRONZE);
         assertThat(validator.validate(user)).isEmpty();
 
-        // Test description constraints
         user.setDescription(null);
         assertThat(validator.validate(user)).isNotEmpty();
         user.setDescription("");
@@ -134,7 +126,6 @@ public class UserTest {
         user.setDescription("Description");
         assertThat(validator.validate(user)).isEmpty();
 
-        // Test authority constraints
         user.setAuthority(null);
         assertThat(validator.validate(user)).isEmpty();
         user.setAuthority("");
@@ -147,7 +138,6 @@ public class UserTest {
         assertThat(validator.validate(user)).isEmpty();
 
 
-        // Test birthDate constraints
         user.setBirthDate(null);
         assertThat(validator.validate(user)).isNotEmpty();
         user.setBirthDate(LocalDate.of(2000, 1, 1));
@@ -156,30 +146,24 @@ public class UserTest {
 
     @Test
     void testUserLifecycle() {
-        // Test saving a user
         userService.saveUser(user);
         assertThat(userService.getUserById(user.getId())).isNotNull();
 
-        // Test updating an existing user
         user.setUsername("newUsername");
         userService.saveUser(user);
         assertThat(userService.getUserById(user.getId()).getUsername()).isEqualTo("newUsername");
 
-        // Test deleting an existing user
         userService.deleteUser(user);
         assertThatThrownBy(() -> userService.getUserById(user.getId())).isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void testUserQueries() {
-        // Test finding all users
         userService.saveUser(user);
         assertThat(userService.getAllUsers()).isNotEmpty();
 
-        // Test finding a user by username
         assertThat(userService.getUserByUsername(user.getUsername())).isNotNull();
 
-        // Test finding a user by id
         assertThat(userService.getUserById(user.getId())).isNotNull();
     }
 }

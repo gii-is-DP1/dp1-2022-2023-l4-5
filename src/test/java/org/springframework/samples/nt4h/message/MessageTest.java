@@ -52,7 +52,6 @@ public class MessageTest {
 
     @Test
     public void testMessageConstraints() {
-        // Test content constraints
         message.setContent(null);
         assertThat(validator.validate(message)).isNotEmpty();
         message.setContent("");
@@ -65,16 +64,13 @@ public class MessageTest {
 
     @Test
     public void testMessageLifecycle() {
-        // Test saving a message
         messageService.saveMessage(message);
         assertThat(message.getId()).isNotNull();
 
-        // Test updating an existing message
         message.setContent("This is an updated test message");
         messageService.saveMessage(message);
         assertThat(message.getContent()).isEqualTo("This is an updated test message");
 
-        // Test deleting an existing message
         assertThat(messageService.getMessageBySenderWithReceiver(sender.getUsername(), receiver.getUsername()).size()).isEqualTo(2);
         messageService.deleteMessage(message);
         assertThat(messageService.getMessageBySenderWithReceiver(sender.getUsername(), receiver.getUsername()).size()).isEqualTo(1);
@@ -82,7 +78,6 @@ public class MessageTest {
 
     @Test
     public void testMessageQueries() {
-        // Test finding messages by sender and receiver
         assertThat(messageService.getMessageBySenderWithReceiver(sender.getUsername(), receiver.getUsername())).isNotEmpty();
         assertThat(messageService.getMessageBySenderWithReceiver("nonexistent", receiver.getUsername())).isEmpty();
         assertThat(messageService.getMessageBySenderWithReceiver(sender.getUsername(), "nonexistent")).isEmpty();
