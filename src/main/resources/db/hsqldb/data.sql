@@ -238,7 +238,7 @@ VALUES (3, 1),
 
 -- Creación de logros.
 
-INSERT INTO achievements(name, description, image, threshold, AchievementType)
+INSERT INTO achievements(name, description, image, threshold, achievement_type)
 VALUES ('Peleador novato', 'Se le otorga un logro al usuario cuando inflije 10 de daño en total. ', 'awanakimkum', '10',4),
        ('Peleador de barrio', 'Se le otorga un logro al usuario cuando inflije 40 de daño en total. ', 'awanakimkum', '40',4),
        ('Bruce Lee', 'Se le otorga un logro al usuario cuando inflije 100 de daño en total. ', 'awanakimkum', '100',4),
