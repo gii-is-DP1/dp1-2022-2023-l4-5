@@ -49,26 +49,22 @@ public class AbilityTest {
 
     @Test
     public void testAbilityConstraints() {
-        // Test name constraints
         ability.setName("");
         assertThat(validator.validate(ability)).isNotEmpty();
         ability.setName("A");
         assertThat(validator.validate(ability)).isNotEmpty();
         ability.setName("This is a very long name that exceeds the maximum length of 255 characters. This is a very long name that exceeds the maximum length of 255 characters. This is a very long name that exceeds the maximum length of 255 characters. This is a very long name that exceeds the maximum length of 255 characters. This is a very long name that exceeds the maximum length of 255 characters. This is a very long name that exceeds the maximum length of 255 characters. This is a very long name that exceeds the maximum length of 255 characters.");
 
-        // Test role constraints
         ability.setName("Test Ability");
         ability.setRole(null);
         assertThat(validator.validate(ability)).isNotEmpty();
 
-        // Test attack constraints
         ability.setRole(Role.EXPLORER);
         ability.setAttack(-1);
         assertThat(validator.validate(ability)).isNotEmpty();
         ability.setAttack(5);
         assertThat(validator.validate(ability)).isNotEmpty();
 
-        // Test quantity constraints
         ability.setAttack(3);
         ability.setQuantity(0);
         assertThat(validator.validate(ability)).isNotEmpty();
@@ -76,27 +72,22 @@ public class AbilityTest {
 
     @Test
     public void testAbilityLifecycle() {
-        // Test saving a new ability
         ability = abilityRepository.save(ability);
         assertThat(ability.getId()).isNotNull();
 
-        // Test updating an existing ability
         ability.setName("Updated Test Ability");
         ability = abilityRepository.save(ability);
         assertThat(ability.getName()).isEqualTo("Updated Test Ability");
 
-        // Test deleting an ability
         abilityRepository.delete(ability);
         assertThat(abilityRepository.findById(ability.getId())).isEmpty();
     }
 
     @Test
     public void testAbilityQueries() {
-        // Test finding all abilities
         abilityRepository.save(ability);
         assertThat(abilityRepository.findAll().size()).isEqualTo(34);
 
-        // Test finding an ability by ID
         assertThat(abilityRepository.findById(ability.getId()).get()).isEqualTo(ability);
     }
 }

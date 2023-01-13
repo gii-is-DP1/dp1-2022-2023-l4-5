@@ -51,7 +51,6 @@ public class EnemyTest {
 
     @Test
     public void testEnemyConstraints() {
-        // Test health constraints
         enemy.setHealth(1);
         assertThat(validator.validate(enemy)).isNotEmpty();
         enemy.setHealth(11);
@@ -61,7 +60,6 @@ public class EnemyTest {
         enemy.setHealth(5);
         assertThat(validator.validate(enemy)).isEmpty();
 
-        // Test glory constraints
         enemy.setHiddenGlory(-1);
         assertThat(validator.validate(enemy)).isNotEmpty();
         enemy.setHiddenGlory(5);
@@ -71,7 +69,6 @@ public class EnemyTest {
         enemy.setHiddenGlory(2);
         assertThat(validator.validate(enemy)).isEmpty();
 
-        // Test gold constraints
         enemy.setHiddenGold(-1);
         assertThat(validator.validate(enemy)).isNotEmpty();
         enemy.setHiddenGold(5);
@@ -81,19 +78,16 @@ public class EnemyTest {
         enemy.setHiddenGold(1);
         assertThat(validator.validate(enemy)).isEmpty();
 
-        // Test hasCure constraint
         enemy.setHasCure(null);
         assertThat(validator.validate(enemy)).isNotEmpty();
         enemy.setHasCure(true);
         assertThat(validator.validate(enemy)).isEmpty();
 
-        // Test lessDamageWizard constraint
         enemy.setLessDamageWizard(null);
         assertThat(validator.validate(enemy)).isNotEmpty();
         enemy.setLessDamageWizard(true);
         assertThat(validator.validate(enemy)).isEmpty();
 
-        // Test isNightLord constraint
         enemy.setIsNightLord(null);
         assertThat(validator.validate(enemy)).isNotEmpty();
         enemy.setIsNightLord(true);
@@ -102,26 +96,21 @@ public class EnemyTest {
 
     @Test
     public void testEnemyLifecycle() {
-        // Test saving a new enemy
         enemyRepository.save(enemy);
         assertThat(enemy.getId()).isNotNull();
 
-        // Test updating an existing enemy
         enemy.setHealth(10);
         enemyRepository.save(enemy);
         assertThat(enemyRepository.findById(enemy.getId()).get().getHealth()).isEqualTo(10);
 
-        // Test deleting an existing enemy
         enemyRepository.delete(enemy);
         assertThat(enemyRepository.findById(enemy.getId())).isEmpty();
     }
 
     @Test
     public void testCapacityQueries() {
-        // Test finding all enemies
         assertThat(enemyRepository.findAll()).isNotEmpty();
 
-        // Test finding an enemy by id
         enemyRepository.save(enemy);
         assertThat(enemyRepository.findById(enemy.getId())).isNotEmpty();
     }

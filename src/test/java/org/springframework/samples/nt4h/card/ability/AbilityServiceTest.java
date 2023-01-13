@@ -36,14 +36,11 @@ class AbilityServiceTest {
 
     @Test
     void getAbilityById_whenAbilityExists_returnsAbility() {
-        // given
         Ability expected = new Ability();
         given(abilityRepository.findById(1)).willReturn(java.util.Optional.of(expected));
 
-        // when
         Ability actual = abilityService.getAbilityById(1);
 
-        // then
         assertThat(actual).isEqualTo(expected);
         verify(abilityRepository).findById(1);
         verifyNoMoreInteractions(abilityRepository);
@@ -51,10 +48,8 @@ class AbilityServiceTest {
 
     @Test
     void getAbilityById_whenAbilityDoesNotExist_throwsNotFoundException() {
-        // given
         given(abilityRepository.findById(1)).willReturn(java.util.Optional.empty());
 
-        // then
         assertThatExceptionOfType(NotFoundException.class)
             .isThrownBy(() -> abilityService.getAbilityById(1))
             .withMessage("Ability not found");
@@ -64,14 +59,10 @@ class AbilityServiceTest {
 
     @Test
     void getAllAbilities_returnsAllAbilities() {
-        // given
         List<Ability> expected = Arrays.asList(new Ability(), new Ability(), new Ability());
         given(abilityRepository.findAll()).willReturn(expected);
 
-        // when
         List<Ability> actual = abilityService.getAllAbilities();
-
-        // then
         assertThat(actual).isEqualTo(expected);
         verify(abilityRepository).findAll();
         verifyNoMoreInteractions(abilityRepository);
@@ -79,14 +70,11 @@ class AbilityServiceTest {
 
     @Test
     void getAbilityByName_whenAbilityExists_returnsAbility() {
-        // given
         Ability expected = new Ability();
         given(abilityRepository.findByName("Ability 1")).willReturn(java.util.Optional.of(expected));
 
-        // when
         Ability actual = abilityService.getAbilityByName("Ability 1");
 
-        // then
         assertThat(actual).isEqualTo(expected);
         verify(abilityRepository).findByName("Ability 1");
         verifyNoMoreInteractions(abilityRepository);
@@ -94,10 +82,8 @@ class AbilityServiceTest {
 
     @Test
     void getAbilityByName_whenAbilityDoesNotExist_throwsNotFoundException() {
-        // given
         given(abilityRepository.findByName("Ability 1")).willReturn(java.util.Optional.empty());
 
-        // then
         assertThatExceptionOfType(NotFoundException.class)
             .isThrownBy(() -> abilityService.getAbilityByName("Ability 1"))
             .withMessage("Ability not found");
@@ -107,13 +93,10 @@ class AbilityServiceTest {
 
     @Test
     void abilityExists_whenAbilityExists_returnsTrue() {
-        // given
         given(abilityRepository.existsById(1)).willReturn(true);
 
-        // when
         boolean result = abilityService.abilityExists(1);
 
-        // then
         assertThat(result).isTrue();
         verify(abilityRepository).existsById(1);
         verifyNoMoreInteractions(abilityRepository);
@@ -121,13 +104,8 @@ class AbilityServiceTest {
 
     @Test
     void abilityExists_whenAbilityDoesNotExist_returnsFalse() {
-        // given
         given(abilityRepository.existsById(1)).willReturn(false);
-
-        // when
         boolean result = abilityService.abilityExists(1);
-
-        // then
         assertThat(result).isFalse();
         verify(abilityRepository).existsById(1);
         verifyNoMoreInteractions(abilityRepository);
@@ -135,14 +113,11 @@ class AbilityServiceTest {
 
     @Test
     void getAbilityInGameById_whenAbilityInGameExists_returnsAbilityInGame() {
-        // given
         AbilityInGame expected = new AbilityInGame();
         given(abilityInGameRepository.findById(1)).willReturn(java.util.Optional.of(expected));
 
-        // when
         AbilityInGame actual = abilityService.getAbilityInGameById(1);
 
-        // then
         assertThat(actual).isEqualTo(expected);
         verify(abilityInGameRepository).findById(1);
         verifyNoMoreInteractions(abilityInGameRepository);
@@ -150,10 +125,8 @@ class AbilityServiceTest {
 
     @Test
     void getAbilityInGameById_whenAbilityInGameDoesNotExist_throwsNotFoundException() {
-        // given
         given(abilityInGameRepository.findById(1)).willReturn(java.util.Optional.empty());
 
-        // then
         assertThatExceptionOfType(NotFoundException.class)
             .isThrownBy(() -> abilityService.getAbilityInGameById(1))
             .withMessage("AbilityInGame not found");
@@ -163,14 +136,11 @@ class AbilityServiceTest {
 
     @Test
     void getAllAbilityInGame_returnsAllAbilityInGame() {
-        // given
         List<AbilityInGame> expected = Arrays.asList(new AbilityInGame(), new AbilityInGame(), new AbilityInGame());
         given(abilityInGameRepository.findAll()).willReturn(expected);
 
-        // when
         List<AbilityInGame> actual = abilityService.getAllAbilityInGame();
 
-        // then
         assertThat(actual).isEqualTo(expected);
         verify(abilityInGameRepository).findAll();
         verifyNoMoreInteractions(abilityInGameRepository);
@@ -178,15 +148,12 @@ class AbilityServiceTest {
 
     @Test
     void getAbilitiesByRole_returnsAbilities() {
-        // given
         Role role = Role.KNIGHT;
         List<Ability> expected = Arrays.asList(new Ability(), new Ability(), new Ability());
         given(abilityRepository.findAllByIds(role.getAbilities())).willReturn(expected);
 
-        // when
         List<Ability> actual = abilityService.getAbilitiesByRole(role);
 
-        // then
         assertThat(actual).isEqualTo(expected);
         verify(abilityRepository).findAllByIds(role.getAbilities());
         verifyNoMoreInteractions(abilityRepository);
@@ -194,23 +161,18 @@ class AbilityServiceTest {
 
     @Test
     void saveAbilityInGame_savesAbilityInGame() {
-        // given
         AbilityInGame abilityInGame = new AbilityInGame();
 
-        // when
         abilityService.saveAbilityInGame(abilityInGame);
 
-        // then
         verify(abilityInGameRepository).save(abilityInGame);
         verifyNoMoreInteractions(abilityInGameRepository);
     }
 
     @Test
     void deleteAbilityInGame_deletesAbilityInGame() {
-        // when
         abilityService.deleteAbilityInGame(abilityInGame);
 
-        // then
         verify(abilityInGame).onDeleteSetNull();
         verify(abilityInGameRepository).save(abilityInGame);
         verify(abilityInGameRepository).delete(abilityInGame);
@@ -219,13 +181,10 @@ class AbilityServiceTest {
 
     @Test
     void deleteAbilityInGameById_deletesAbilityInGameById() {
-        // given
         given(abilityInGameRepository.findById(1)).willReturn(java.util.Optional.of(abilityInGame));
 
-        // when
         abilityService.deleteAbilityInGameById(1);
 
-        // then
         verify(abilityInGame).onDeleteSetNull();
         verify(abilityInGameRepository).save(abilityInGame);
         verify(abilityInGameRepository).delete(abilityInGame);
@@ -234,26 +193,20 @@ class AbilityServiceTest {
 
     @Test
     void deleteAllAbilityInGame_deletesAllAbilityInGame() {
-        // given
         List<AbilityInGame> abilityInGame = Arrays.asList(new AbilityInGame(), new AbilityInGame(), new AbilityInGame());
 
-        // when
         abilityService.deleteAllAbilityInGame(abilityInGame);
 
-        // then
         verify(abilityInGameRepository).deleteAll(abilityInGame);
         verifyNoMoreInteractions(abilityInGameRepository);
     }
 
     @Test
     void abilityInGameExists_whenAbilityInGameExists_returnsTrue() {
-        // given
         given(abilityInGameRepository.existsById(1)).willReturn(true);
 
-        // when
         boolean result = abilityService.abilityInGameExists(1);
 
-        // then
         assertThat(result).isTrue();
         verify(abilityInGameRepository).existsById(1);
         verifyNoMoreInteractions(abilityInGameRepository);
@@ -261,13 +214,10 @@ class AbilityServiceTest {
 
     @Test
     void abilityInGameExists_whenAbilityInGameDoesNotExist_returnsFalse() {
-        // given
         given(abilityInGameRepository.existsById(1)).willReturn(false);
 
-        // when
         boolean result = abilityService.abilityInGameExists(1);
 
-        // then
         assertThat(result).isFalse();
         verify(abilityInGameRepository).existsById(1);
         verifyNoMoreInteractions(abilityInGameRepository);
