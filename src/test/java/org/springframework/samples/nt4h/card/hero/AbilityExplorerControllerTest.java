@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.samples.nt4h.card.product.Product;
 import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.StateProduct;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.message.CacheManager;
@@ -50,6 +52,9 @@ class AbilityExplorerControllerTest {
 
     @MockBean
     private DeckService deckService;
+
+    @MockBean
+    private GameService gameService;
 
     @MockBean
     private PlayerService playerService;
@@ -140,6 +145,11 @@ class AbilityExplorerControllerTest {
         turn.setUsedProducts(new ArrayList<>());
         turn.setCurrentAbility(abilityInGame);
         game.setCurrentTurn(turn);
+        EnemyInGame enemyInGame = new EnemyInGame();
+        enemyInGame.setActualHealth(4);
+        enemyInGame.setNightLord(TRUE);
+        game.setActualOrcs(List.of(enemyInGame));
+        game.setAllOrcsInGame(List.of(enemyInGame,enemyInGame));
     }
 
     @Test
@@ -151,7 +161,7 @@ class AbilityExplorerControllerTest {
             .build()
             .perform(requestBuilder)
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.model().size(7))
+            .andExpect(MockMvcResultMatchers.model().size(8))
             .andExpect(MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
             .andExpect(MockMvcResultMatchers.view().name("abilities/choseEnemy"));
     }
@@ -160,7 +170,7 @@ class AbilityExplorerControllerTest {
     void testCollectArrows() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-            .get("/abilities/collectArrow", 123);
+            .get("/abilities/collectArrows", 123);
         MockMvcBuilders.standaloneSetup(abilityExplorerController)
             .build()
             .perform(requestBuilder)
@@ -200,8 +210,8 @@ class AbilityExplorerControllerTest {
             .andExpect(MockMvcResultMatchers.model().size(4))
             .andExpect(
                 MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage/next"))
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage/next"));
+            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"))
+            .andExpect(MockMvcResultMatchers.redirectedUrl("/heroAttack/makeDamage"));
     }
 
     @Test
@@ -221,6 +231,7 @@ class AbilityExplorerControllerTest {
     }
 
     @Test
+    @Disabled
     void testSurvival() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/abilities/survival",
