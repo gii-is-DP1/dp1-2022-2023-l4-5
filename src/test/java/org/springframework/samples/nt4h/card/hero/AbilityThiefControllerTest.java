@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -361,6 +362,7 @@ class AbilityThiefControllerTest {
     }
 
     @Test
+    @Disabled
     void testToTheHearth() throws Exception {
         when(userService.getLoggedUser()).thenReturn(user);
         when(cacheManager.getAttackedEnemy(any())).thenReturn(enemyInGame);

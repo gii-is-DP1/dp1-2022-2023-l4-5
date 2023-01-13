@@ -300,10 +300,10 @@ class GameControllerTest {
         UserService userService = new UserService(mock(UserRepository.class));
         PlayerRepository playerRepository = mock(PlayerRepository.class);
         PlayerService playerService = new PlayerService(playerRepository, new TurnService(mock(TurnRepository.class)),
-            mock(UserRepository.class));
+            mock(UserRepository.class),new Advise(new MessageService(mock(MessageRepository.class)), new UserService(mock(UserRepository.class))));
 
         GameController gameController = new GameController(gameService, heroService, userService, playerService,
-            new Advise(new MessageService(mock(MessageRepository.class))));
+            new Advise(new MessageService(mock(MessageRepository.class)), new UserService(mock(UserRepository.class))));
         ModelMap model = new ModelMap();
         assertEquals("games/gamesList", gameController.showGames(1, model, new MockHttpSession()));
         verify(gameService).getAllGames();

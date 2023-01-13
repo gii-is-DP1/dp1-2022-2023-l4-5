@@ -48,7 +48,6 @@ public class PlayerTest {
         player = Player.createPlayer(user, game, true);
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        //game.setPhase(Phase.START);
         /*
         player = Player.createPlayer(userService.getUserById(1), Game.createGame("Test Game", Mode.MULTI_CLASS, 2, "test123"), true);
         player.setName("player1");
@@ -85,7 +84,7 @@ public class PlayerTest {
     public void testPlayerProperties() {
         // Se comprueba que el objeto Player se ha creado correctamente
         assertThat(player.getName()).isEqualTo("alesanfe");
-        assertThat(player.getBirthDate()).isEqualTo(LocalDate.of(2002, 2, 1));
+        assertThat(player.getBirthDate()).isEqualTo(LocalDate.of(1999, 2, 1));
         assertThat(player.getHasEvasion()).isEqualTo(true);
         assertThat(player.getSequence()).isEqualTo(-1);
         assertThat(player.getNextPhase()).isEqualTo(Phase.START);

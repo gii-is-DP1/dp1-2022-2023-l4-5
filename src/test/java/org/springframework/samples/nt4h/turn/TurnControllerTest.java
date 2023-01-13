@@ -1,13 +1,9 @@
 package org.springframework.samples.nt4h.turn;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;

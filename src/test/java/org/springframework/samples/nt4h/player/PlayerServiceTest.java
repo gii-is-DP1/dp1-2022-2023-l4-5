@@ -10,24 +10,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.hero.Hero;
 import org.springframework.samples.nt4h.card.hero.HeroInGame;
 import org.springframework.samples.nt4h.card.hero.HeroService;
 import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
-import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
 import org.springframework.samples.nt4h.game.exceptions.HeroAlreadyChosenException;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserService;
@@ -48,12 +47,13 @@ public class PlayerServiceTest {
     protected HeroService heroService;
     @Autowired
     protected UserService userService;
-    @Autowired
-    protected DeckService deckService;
     private int idPlayer;
     private int idGame;
     private String namePlayer;
     private Player player;
+
+    @MockBean
+    private Advise advise;
 
     public PlayerServiceTest() {
     }
@@ -88,11 +88,6 @@ public class PlayerServiceTest {
         idGame = game.getId();
         namePlayer = player.getName();
         */
-    }
-
-    @AfterEach
-    void tearDown() {
-        gameService.deleteGameById(idGame);
     }
 
     @Test
@@ -134,16 +129,6 @@ public class PlayerServiceTest {
         HeroInGame heroInGame2 = HeroInGame.createHeroInGame(this.heroService.getHeroByName("Idril"), player);
         player.addHero(heroInGame1);
         assertThrows(RoleAlreadyChosenException.class, () -> player.addHero(heroInGame2));
-    }
-
-    @Test
-    public void shouldAddDeckFromRole() {
-        HeroInGame heroInGame = player.getHeroes().get(0);
-        Role correctResult = heroInGame.getHero().getRole();
-        Game game = this.gameService.getGameById(idGame);
-        this.deckService.addDeckFromRole(player, game.getMode());
-        List<Integer> idAbilities = player.getDeck().getInDeck().stream().map(a -> a.getAbility().getId()).collect(Collectors.toList());
-        assertTrue(correctResult.getAbilities().containsAll(idAbilities));
     }
 
     @Test

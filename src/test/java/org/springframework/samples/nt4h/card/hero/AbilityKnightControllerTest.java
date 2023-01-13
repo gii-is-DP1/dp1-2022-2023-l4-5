@@ -298,7 +298,7 @@ class AbilityKnightControllerTest {
             .andExpect(MockMvcResultMatchers.model().size(4))
             .andExpect(
                 MockMvcResultMatchers.model().attributeExists("currentPlayer", "game", "loggedPlayer", "loggedUser"))
-            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/next"));
+            .andExpect(MockMvcResultMatchers.view().name("redirect:/heroAttack/makeDamage"));
     }
 
     @Test

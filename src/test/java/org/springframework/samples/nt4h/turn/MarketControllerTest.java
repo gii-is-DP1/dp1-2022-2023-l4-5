@@ -272,7 +272,7 @@ class MarketControllerTest {
         when(userService.getLoggedUser()).thenReturn(user);
         when(turnService.getTurnsByPhaseAndPlayerId(any(),anyInt())).thenReturn(turn);
         doNothing().when(turnService).saveTurn(any());
-        doNothing().when(advise).buyProduct(any(),any());
+        doNothing().when(advise).buyProduct(any());
         assertEquals("redirect:/market", marketController.buyProduct(turn));
 
     }

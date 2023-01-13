@@ -42,6 +42,7 @@ import org.springframework.samples.nt4h.game.GameRepository;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.message.Advise;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.message.MessageRepository;
 import org.springframework.samples.nt4h.message.MessageService;
 import org.springframework.samples.nt4h.player.Player;
@@ -78,6 +79,9 @@ class AbilityControllerTest {
 
     @MockBean
     private GameService gameService;
+
+    @MockBean
+    private CacheManager cacheManager;
 
     @MockBean
     private PlayerService playerService;

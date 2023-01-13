@@ -232,7 +232,6 @@ class AbilityServiceTest {
         verifyNoMoreInteractions(abilityInGameRepository);
     }
 
-
     @Test
     void deleteAllAbilityInGame_deletesAllAbilityInGame() {
         // given

@@ -52,6 +52,7 @@ public class AchievementController {
         return VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM;
     }
 
+    //falta una redireccion a /achievement
     @PostMapping("/new")
     public String saveAchievement(@Valid Achievement achievement, BindingResult br, ModelMap model) {
         if(br.hasErrors())
@@ -68,6 +69,7 @@ public class AchievementController {
         return VIEW_ACHIEVEMENTS_CREATE_OR_UPDATE_FORM;
     }
 
+    //falta una redireccion a /achievement
     @PostMapping("/{achievementId}/edit")
     public String saveAchievement(@PathVariable int achievementId,@Valid Achievement actualAchievement, BindingResult br, ModelMap model) {
         if(br.hasErrors())
@@ -79,6 +81,7 @@ public class AchievementController {
         return showAllAchievements();
     }
 
+    //falta una redireccion a /achievement
     @GetMapping(value = "{achievementId}/delete")
     public String deleteAchievement(@PathVariable int achievementId, ModelMap model) {
         achievementService.deleteAchievementById(achievementId);
