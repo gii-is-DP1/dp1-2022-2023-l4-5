@@ -224,23 +224,25 @@ VALUES (3, 1),
        (9, 4);
 
 -- Creación de logros.
-INSERT INTO achievements(name, description, image, threshold)
-VALUES ('Primera partida', 'Se le otorga un logro al usuario cuando completa su primera partida. ', 'awanakimkum', '1'),
-       ('Primera victoria', 'Se le otorga un logro al usuario cuando gana su primera partida. ', 'awanakimkum', '1'),
-       ('Última Sangre', 'Se le otorga un logro al usuario cuando gana su primera partida.', 'awanakimkum', '1'),
-       ('Aficionado', 'Se le otorga un logro al usuario cuando mata a 10 orcos. ', 'awanakimkum', '10'),
-       ('Veterano', 'Se le otorga un logro al usuario cuando mata a 50 orcos. ', 'awanakimkum', '50'),
-       ('Maestro', 'Se le otorga un logro al usuario cuando mata a 100 orcos. ', 'awanakimkum', '100'),
-       ('Exterminador', 'Se le otorga un logro al usuario cuando mata a 200 orcos. ', 'awanakimkum', '200'),
-       ('Asesino', 'Se le otorga un logro al usuario cuando mata a 500 orcos. ', 'awanakimkum', '500'),
-       ('Mataorcos', 'Se le otorga un logro al usuario cuando mata a 1000 orcos. ', 'awanakimkum', '1000'),
-       ('Primeros pasos', 'Se le otorga un logro al usuario cuando compra su primer producto. ', 'awanakimkum', '1'),
-       ('Héroe', 'Se le otorga un logro al usuario cuando vence su primer señor de la guerra. ', 'awanakimkum', '1'),
-       ('Campeón', 'Se le otorga un logro al usuario cuando vence a 5 señores de la guerra. ', 'awanakimkum', '5'),
-       ('Comisario Yarrick', 'Se le otorga un logro al usuario cuando vence a 10 señores de la guerra. ', 'awanakimkum', '10'),
-       ('Touch Some Grass', 'Se le otorga un logro al usuario cuando juega 20 partidas.', 'awanakimkum', '20'),
-       ('Un poco de todo', 'Se le otorga un logro al usuario cuando completa su primera partida en modo multiclase.',
-        'awanakimkum', '1');
+
+INSERT INTO achievements(name, description, image, threshold, AchievementType)
+VALUES ('Peleador novato', 'Se le otorga un logro al usuario cuando inflije 10 de daño en total. ', 'awanakimkum', '10',4),
+       ('Peleador de barrio', 'Se le otorga un logro al usuario cuando inflije 40 de daño en total. ', 'awanakimkum', '40',4),
+       ('Bruce Lee', 'Se le otorga un logro al usuario cuando inflije 100 de daño en total. ', 'awanakimkum', '100',4),
+       ('MariconaUwU', 'Se le otorga un logro al usuario cuando inflije 200 de daño en total. ', 'awanakimkum', '200',4),
+
+       ('Aficionado', 'Se le otorga un logro al usuario cuando mata a 10 orcos. ', 'awanakimkum', '10',5),
+       ('Veterano', 'Se le otorga un logro al usuario cuando mata a 50 orcos. ', 'awanakimkum', '50',5),
+       ('Maestro', 'Se le otorga un logro al usuario cuando mata a 100 orcos. ', 'awanakimkum', '100',5),
+       ('Asesino', 'Se le otorga un logro al usuario cuando mata a 200 orcos. ', 'awanakimkum', '200',5),
+       ('Mataorcos', 'Se le otorga un logro al usuario cuando mata a 500 orcos. ', 'awanakimkum', '500',5),
+       ('Exterminador', 'Se le otorga un logro al usuario cuando mata a 1000 orcos. ', 'awanakimkum', '1000',5),
+
+       ('Money', 'Se le otorga un logro al usuario cuando tiene 10 de oro. ', 'awanakimkum', '10',0),
+       ('Economista', 'Se le otorga un logro al usuario cuando tiene 20 de oro. ', 'awanakimkum', '20',0),
+       ('Catalan', 'Se le otorga un logro al usuario cuando tiene 50 de oro. ', 'awanakimkum', '50',0),
+       ('Elon Musk', 'Se le otorga un logro al usuario cuando tiene 100 de oro. ', 'awanakimkum', '10',0),
+       ('Tio Gilito', 'Se le otorga un logro al usuario cuando tiene 1000 de oro. ', 'awanakimkum', '1000',0);
 
 -- Habilidades de los heroes
 INSERT INTO heroes_abilities(hero_id, abilities_id)
