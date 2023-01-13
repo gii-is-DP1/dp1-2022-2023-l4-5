@@ -49,43 +49,36 @@ public class StatisticTest {
 
     @Test
     public void testStatisticConstraints() {
-        // Test gold constraint
         statistic.setGold(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setGold(100);
         assertThat(validator.validate(statistic)).isEmpty();
 
-        // Test glory constraint
         statistic.setGlory(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setGlory(100);
         assertThat(validator.validate(statistic)).isEmpty();
 
-        // Test numOrcsKilled constraint
         statistic.setNumOrcsKilled(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setNumOrcsKilled(100);
         assertThat(validator.validate(statistic)).isEmpty();
 
-        // Test numWarLordKilled constraint
         statistic.setNumWarLordKilled(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setNumWarLordKilled(100);
         assertThat(validator.validate(statistic)).isEmpty();
 
-        // Test numWonGames constraint
         statistic.setNumWonGames(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setNumWonGames(100);
         assertThat(validator.validate(statistic)).isEmpty();
 
-        // Test numPlayedGames constraint
         statistic.setNumPlayedGames(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setNumPlayedGames(100);
         assertThat(validator.validate(statistic)).isEmpty();
 
-        // Test damageDealt constraint
         statistic.setDamageDealt(-1);
         assertThat(validator.validate(statistic)).isNotEmpty();
         statistic.setDamageDealt(100);
@@ -94,26 +87,21 @@ public class StatisticTest {
 
     @Test
     public void testStatisticLifecycle() {
-        // Test saving a statistic
         statisticService.saveStatistic(statistic);
         assertThat(statistic.getId()).isNotNull();
 
-        // Test updating an existing statistic
         statistic.setGold(100);
         statisticService.saveStatistic(statistic);
 
-        // Test deleting an existing statistic
         statisticService.deleteStatistic(statistic);
         assertThatThrownBy(() -> statisticService.getStatisticById(statistic.getId())).isInstanceOf(NotFoundException.class);
     }
 
     @Test
     public void testStatisticQueries() {
-        // Test finding all statistics
         statisticService.saveStatistic(statistic);
         assertThat(statisticService.getAllStatistics()).isNotEmpty();
 
-        // Test finding a statistic by id
         statisticService.saveStatistic(statistic);
         assertThat(statisticService.getStatisticById(statistic.getId())).isEqualTo(statistic);
     }

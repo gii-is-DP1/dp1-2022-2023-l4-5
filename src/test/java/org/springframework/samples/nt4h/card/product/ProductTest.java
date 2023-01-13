@@ -47,7 +47,6 @@ public class ProductTest {
 
     @Test
     void testProductConstraints() {
-        // Test price constraints
         product.setPrice(0);
         assertThat(validator.validate(product)).isNotEmpty();
         product.setPrice(100);
@@ -59,7 +58,6 @@ public class ProductTest {
         product.setPrice(4);
         assertThat(validator.validate(product)).isEmpty();
 
-        // Test attack constraints
         product.setAttack(-1);
         assertThat(validator.validate(product)).isNotEmpty();
         product.setAttack(100);
@@ -69,7 +67,6 @@ public class ProductTest {
         product.setAttack(1);
         assertThat(validator.validate(product)).isEmpty();
 
-        // Test capacity constraints
         product.setCapacity(null);
         assertThat(validator.validate(product)).isNotEmpty();
         product.setCapacity(Lists.newArrayList());
@@ -77,14 +74,12 @@ public class ProductTest {
         product.setCapacity(Lists.newArrayList(new Capacity()));
         assertThat(validator.validate(product)).isEmpty();
 
-        // Test name constraints
         product.setName("");
         assertThat(validator.validate(product)).isNotEmpty();
         product.setName("a".repeat(71));
         assertThat(validator.validate(product)).isNotEmpty();
         product.setName("Product name");
 
-        // Test quantity constraints
         product.setQuantity(-1);
         assertThat(validator.validate(product)).isNotEmpty();
         product.setQuantity(100);
@@ -93,30 +88,24 @@ public class ProductTest {
 
     @Test
     void testProductLifecycle() {
-        // Test saving a product
         productRepository.save(product);
         assertThat(product.getId()).isNotNull();
 
-        // Test updating an existing product
         product.setName("New name");
         productRepository.save(product);
         assertThat(productRepository.findById(product.getId()).get().getName()).isEqualTo("New name");
 
-        // Test deleting an existing product
         productRepository.delete(product);
         assertThat(productRepository.findById(product.getId())).isEmpty();
     }
 
     @Test
     void testProductQueries() {
-        // Test finding all products
         productRepository.save(product);
         assertThat(productRepository.findAll()).isNotEmpty();
 
-        // Test finding a product by id
         assertThat(productRepository.findById(product.getId())).isNotEmpty();
 
-        // Test finding a product by name
         assertThat(productRepository.findByName(product.getName())).isNotEmpty();
     }
 

@@ -53,19 +53,6 @@ class HeroServiceTest {
         idGame = game.getId();
         nameHero = hero.getName();
 
-        /*
-        User user = userService.getUserById(1);
-        Hero hero = heroService.getHeroById(idHero);
-        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
-        Game game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
-        user.createPlayer(game);
-        Player player = user.getPlayer();
-        player.addHero(heroInGame);
-        game.addPlayer(player);
-        gameService.saveGame(game);
-        idGame = game.getId();
-        nameHero = hero.getName();
-         */
     }
 
     @AfterEach

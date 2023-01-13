@@ -49,19 +49,6 @@ public class GameServiceTest {
         gameService.saveGame(game);
         idGame = game.getId();
         numGames = gameService.getAllGames().size();
-        /*
-        User user = userService.getUserById(1);
-        Hero hero = heroService.getHeroById(1);
-        HeroInGame heroInGame = HeroInGame.createHeroInGame(hero, user.getPlayer());
-        game = Game.createGame("Prueba", Accessibility.PUBLIC, Mode.UNI_CLASS, 4, null);
-        user.createPlayer(game);
-        Player player = user.getPlayer();
-        player.addHero(heroInGame);
-        game.addPlayer(player);
-        gameService.saveGame(game);
-        idGame = game.getId();
-        numGames = gameService.getAllGames().size();
-         */
     }
 
     @Test
@@ -77,13 +64,4 @@ public class GameServiceTest {
         assertEquals(numGames, gameService.getAllGames().size());
     }
 
-    /*@Test
-    public void testUpdate() {
-        Game oldGame = this.gameService.getGameById(idGame);
-        Game newGame = oldGame.toBuilder().phase(Phase.ENEMY_ATTACK).build();
-        newGame.setId(idGame);
-        newGame.setName(oldGame.getName());
-        this.gameService.saveGame(newGame);
-        assertEquals(newGame.getPhase(), this.gameService.getGameById(idGame).getPhase());
-    }*/
 }
