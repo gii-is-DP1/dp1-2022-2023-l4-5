@@ -64,7 +64,7 @@ public class AbilityController {
     }
 
     @PostMapping("/loseCard")
-    private String loseCard(Turn turn) {
+    public String loseCard(Turn turn) {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
@@ -73,7 +73,7 @@ public class AbilityController {
     }
 
     @PostMapping("/chooseEnemy")
-    private String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
+    public String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
         EnemyInGame enemyInGame = turn.getCurrentEnemy();
         String nextUrl = session.getAttribute("nextUrl").toString();
         if (name != null) {
@@ -98,7 +98,7 @@ public class AbilityController {
     }
 
     @GetMapping("/findInDiscard")
-    private String findInDiscard(Turn turn, HttpSession session) {
+    public String findInDiscard(Turn turn, HttpSession session) {
         // Cogemos la carta elegida de la pila de descarte.
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         // La colocamos en la mano.
@@ -111,7 +111,7 @@ public class AbilityController {
     }
 
     @PostMapping("/chooseAbilityFromDeck")
-    private String chooseAbilityFromDeck(Turn turn, HttpSession session) {
+    public String chooseAbilityFromDeck(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inDeck", abilityInGame.getId());
         String nextUrl = session.getAttribute("nextUrl").toString();
@@ -119,7 +119,7 @@ public class AbilityController {
     }
 
     @PostMapping("/exchangeCards")
-    private String exchangeCards(Turn turn, HttpSession session) {
+    public String exchangeCards(Turn turn, HttpSession session) {
         AbilityInGame inDeck = abilityService.getAbilityInGameById(((Integer)session.getAttribute("inDeck")));
         AbilityInGame inHand = turn.getCurrentAbility();
         Deck deck = getCurrentPlayer().getDeck();
@@ -132,7 +132,7 @@ public class AbilityController {
     }
 
     @PostMapping("/chooseProductFromMarket")
-    private String chooseProductFromMarket(Turn turn, HttpSession session) {
+    public String chooseProductFromMarket(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inMarket", abilityInGame.getId());
         String nextUrl = session.getAttribute("nextUrl").toString();
@@ -140,7 +140,7 @@ public class AbilityController {
     }
 
     @PostMapping("/exchangeProducts")
-    private String exchangeProducts(Turn turn, HttpSession session) {
+    public String exchangeProducts(Turn turn, HttpSession session) {
         ProductInGame inMarket = productService.getProductInGameById(((Integer) session.getAttribute("inMarket")));
         ProductInGame inSale = turn.getCurrentProduct();
         Integer id = inSale.getId();
@@ -152,7 +152,7 @@ public class AbilityController {
     }
 
     @GetMapping
-    private String findEffect() {
+    public String findEffect() {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (currentPlayer != loggedPlayer)

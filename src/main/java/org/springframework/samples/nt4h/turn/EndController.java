@@ -73,7 +73,7 @@ public class EndController {
     }
 
     @GetMapping
-    private String showEnd(ModelMap model) {
+    public String showEnd(ModelMap model) {
         List<Player> players = getGame().getPlayers();
         List<Pair<Player, Integer>> pairs = new ArrayList<>();
         for (Player player : players) {
@@ -93,7 +93,7 @@ public class EndController {
     }
 
     @GetMapping("/finish")
-    private String finishGame() {
+    public String finishGame() {
         Game game = getGame();
         gameService.deleteGameById(game.getId());
         return "redirect:/";

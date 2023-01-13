@@ -37,7 +37,7 @@ import javax.servlet.http.HttpSession;
  * - Trampa.
  */
 @Controller
-@RequestMapping("/abilityies")
+@RequestMapping("/abilities")
 public class AbilityThiefController {
 
     private final String PAGE_MAKE_DAMAGE = "redirect:/heroAttack/makeDamage";
@@ -164,7 +164,7 @@ public class AbilityThiefController {
     }
 
     // Saqueo1
-    @GetMapping("/loot1/{cardId}")
+    @GetMapping("/loot1")
     private String loot1() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas dos monedas por cada enemigo vivo.
