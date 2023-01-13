@@ -57,10 +57,6 @@ class HeroInGameTest {
         Hero hero = new Hero();
         hero.setHealth(1);
 
-
-
-
-
         HeroInGame actualCreateHeroInGameResult = HeroInGame.createHeroInGame(hero, player);
         assertEquals(1, actualCreateHeroInGameResult.getHealth().intValue());
         assertSame(player, actualCreateHeroInGameResult.getPlayer());
