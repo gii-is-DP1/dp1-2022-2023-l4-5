@@ -189,6 +189,7 @@ public class StatisticService {
         saveStatistic(statistic);
     }
 
+    /*
     @Transactional(rollbackFor = Exception.class)
     public void damageDealt(Player player, Integer damage) {
         Statistic playerStatistic = player.getStatistic();
@@ -199,4 +200,5 @@ public class StatisticService {
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
     }
+    */
 }
