@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -127,10 +128,10 @@ public class Game extends NamedEntity implements Jsonable {
         allOrcsInGame.forEach(EnemyInGame::onDeleteSetNull);
     }
 
-    public Player getNextPlayer() {
+    public Optional<Player> getNextPlayer() {
         int totalPlayers = players.size();
         Integer nextSequence = (currentPlayer.getSequence()+1) % totalPlayers;
-        return players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).findFirst().get();
+        return players.stream().filter(p -> Objects.equals(p.getSequence(), nextSequence)).filter(Player::getAlive).findFirst();
     }
 
     @Override

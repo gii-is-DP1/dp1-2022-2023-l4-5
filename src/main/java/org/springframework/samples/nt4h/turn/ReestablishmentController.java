@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/reestablishment")
@@ -121,12 +122,17 @@ public class ReestablishmentController {
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer == currentPlayer) {
             deckService.moveCardsFromDeckToHand(currentPlayer, currentPlayer.getDeck());
-            Player nextPlayer = game.getNextPlayer();
-            game.setCurrentPlayer(nextPlayer);
-            game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));
-            gameService.saveGame(game);
-            advise.changePlayer(loggedPlayer, game);
-            hasAddedEnemies = false;
+            Optional<Player> nextPlayer = game.getNextPlayer();
+            if (nextPlayer.isPresent()) {
+                Player next = nextPlayer.get();
+                game.setCurrentPlayer(next);
+                game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, next.getId()));
+                gameService.saveGame(game);
+                advise.changePlayer(loggedPlayer, game);
+                hasAddedEnemies = false;
+            } else
+                return "turns/end";
+
         }
         return NEXT_TURN;
     }
