@@ -68,14 +68,14 @@ public class AbilityController {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
-        deck.discardCardOnHand(abilityInGame); // Esto debe de ser un efecto
+        deck.discardCardOnHand(abilityInGame);
         return PAGE_MAKE_DAMAGE;
     }
 
     @PostMapping("/chooseEnemy")
     public String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
         EnemyInGame enemyInGame = turn.getCurrentEnemy();
-        String nextUrl = session.getAttribute("nextUrl").toString();
+        Object nextUrl = session.getAttribute("nextUrl");
         if (name != null) {
             String action = session.getAttribute("name").toString();
             List<Integer> enemies = (List<Integer>) session.getAttribute(action);
@@ -94,11 +94,11 @@ public class AbilityController {
                 enemies.add(enemyInGame.getId());
         }
 
-        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
+        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl.toString();
     }
 
     @GetMapping("/findInDiscard")
-    public String findInDiscard(Turn turn, HttpSession session) {
+    public String findInDiscard(Turn turn) {
         // Cogemos la carta elegida de la pila de descarte.
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         // La colocamos en la mano.

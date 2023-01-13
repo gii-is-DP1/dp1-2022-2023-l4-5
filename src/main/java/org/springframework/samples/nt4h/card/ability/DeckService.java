@@ -63,14 +63,6 @@ public class DeckService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void specificCardFromHandToDiscard(Deck deck, AbilityInGame inHand) {
-        abilityService.saveAbilityInGame(inHand);
-        deck.getInHand().remove(inHand);
-        deck.getInDiscard().add(inHand);
-        saveDeck(deck);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
     public void specificCardFromDiscardToDeck(Deck deck, AbilityInGame inDiscard) {
         abilityService.saveAbilityInGame(inDiscard);
         deck.getInDiscard().remove(inDiscard);
@@ -102,6 +94,56 @@ public class DeckService {
         saveDeck(deck);
     }
 
+    // De descarte a mano
+    @Transactional(rollbackFor = Exception.class)
+    public void fromDiscardToHand(Deck deck) {
+        System.out.println("fromDiscardToHand");
+        if (!deck.getInDiscard().isEmpty()) {
+            System.out.println("in fromDiscardToHand");
+            AbilityInGame inDiscard = deck.getInDiscard().get(0);
+            specificCardFromDiscardToHand(deck, inDiscard);
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void specificCardFromDiscardToHand(Deck deck, AbilityInGame inDiscard) {
+        System.out.println("specificCardFromDiscardToHand");
+        abilityService.saveAbilityInGame(inDiscard);
+        deck.getInDiscard().remove(inDiscard);
+        deck.getInHand().add(inDiscard);
+        saveDeck(deck);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void fromDiscardToHand(Deck deck, Integer times) {
+        for (int i = 0; i < times; i++) {
+            fromDiscardToHand(deck);
+        }
+    }
+
+    // De mano a descarte.
+    @Transactional(rollbackFor = Exception.class)
+    public void fromHandToDiscard(Deck deck) {
+        AbilityInGame inHand = deck.getInHand().get(0);
+        specificCardFromHandToDiscard(deck, inHand);
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public void specificCardFromHandToDiscard(Deck deck, AbilityInGame inHand) {
+        abilityService.saveAbilityInGame(inHand);
+        deck.getInHand().remove(inHand);
+        deck.getInDiscard().add(inHand);
+        saveDeck(deck);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void fromHandToDiscard(Deck deck, Integer times) {
+        for (int i = 0; i < times; i++) {
+            fromHandToDiscard(deck);
+        }
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void moveAllCardsFromDiscardToDeck(Player player, Deck deck) {
         List<AbilityInGame> tmp = new ArrayList<>(deck.getInDiscard());
@@ -111,6 +153,8 @@ public class DeckService {
         saveDeck(deck);
         playerService.inflictWounds(player, 1);
     }
+
+
 
     // Coloca la primera carta en la última posición.
     @Transactional(rollbackFor = Exception.class)

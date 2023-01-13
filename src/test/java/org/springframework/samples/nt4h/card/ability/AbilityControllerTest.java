@@ -271,7 +271,7 @@ class AbilityControllerTest {
     void testFindInDiscard() {
         MockHttpSession session=new MockHttpSession();
         when(userService.getLoggedUser()).thenReturn(user);
-        assertEquals("redirect:/heroAttack/makeDamage",abilityController.findInDiscard(turn, session));
+        assertEquals("redirect:/heroAttack/makeDamage",abilityController.findInDiscard(turn));
     }
 
     @Test

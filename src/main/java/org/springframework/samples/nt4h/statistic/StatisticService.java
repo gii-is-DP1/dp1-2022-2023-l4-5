@@ -1,6 +1,5 @@
 package org.springframework.samples.nt4h.statistic;
 
-import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.javatuples.Quartet;
 import org.springframework.samples.nt4h.achievement.Achievement;
@@ -56,33 +55,33 @@ public class StatisticService {
     }
 
     @Transactional(readOnly = true)
-    public Integer getNumGamesByUser(int userId) { return statisticRepository.numPlayedGamesByUserId(userId); }
+    public Integer getNumGamesByUser(int userId) { return statisticRepository.findNumPlayedGamesByUser(userId); }
 
     @Transactional
-    public Integer getNumMinutesPlayedByUser(int userId) { return statisticRepository.numMinutesPlayedByUserId(userId); }
+    public Integer getNumMinutesPlayedByUser(int userId) { return statisticRepository.findNumMinutesPlayedByUser(userId); }
 
     @Transactional
     public Integer getNumGamesByNumPlayers(int numP){
-        return statisticRepository.numPlayerPerGame(numP);
+        return statisticRepository.findnumGamesByNumPlayers(numP);
     }
 
     @Transactional
-    public Integer getNumGoldByNumPlayers(int userId) { return statisticRepository.numGoldByPlayerId(userId);}
+    public Integer getNumGoldByUser(int userId) { return statisticRepository.findNumGoldByUser(userId);}
 
     @Transactional
-    public Integer getNumGloryByNumPlayers(int userId) { return statisticRepository.numGloryByPlayerId(userId);}
+    public Integer getNumGloryByUser(int userId) { return statisticRepository.findNumGloryByUser(userId);}
 
     @Transactional
-    public Integer getNumOrcsByNumPlayers(int userId) { return statisticRepository.numOrcsByPlayerId(userId);}
+    public Integer getNumOrcsByUser(int userId) { return statisticRepository.findNumOrcsByUser(userId);}
 
     @Transactional
-    public Integer getNumWarLordByNumPlayers(int userId) { return statisticRepository.numWarLordByPlayerId(userId);}
+    public Integer getNumWarLordByUser(int userId) { return statisticRepository.findNumWarLordByUser(userId);}
 
     @Transactional
-    public Integer getDamageByNumPlayers(int userId) { return statisticRepository.numDamageByPlayerId(userId);}
+    public Integer getNumDamageByUser(int userId) { return statisticRepository.findNumDamageByUser(userId);}
 
     @Transactional
-    public Integer getWonGamesByNumPlayers(int userId) { return statisticRepository.numWonGamesByPlayerId(userId);}
+    public Integer getNumWonGamesByUser(int userId) { return statisticRepository.findNumWonGamesByUser(userId);}
 
     @Transactional
     public List<User> listAllUsers() {return userService.getAllUsers(); }
@@ -114,36 +113,36 @@ public class StatisticService {
 
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumGold() {
-        ToIntFunction<User> function = user -> getNumGoldByNumPlayers(user.getId());
+        ToIntFunction<User> function = user -> getNumGoldByUser(user.getId());
         return new Quartet<>("Most Gold",getAverage(function), getMin(function), getMax(function));
     }
 
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumGlory() {
-        ToIntFunction<User> function = user -> getNumGloryByNumPlayers(user.getId());
+        ToIntFunction<User> function = user -> getNumGloryByUser(user.getId());
         return new Quartet<>("Most Glory",getAverage(function), getMin(function), getMax(function));
     }
 
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumOrcs() {
-        ToIntFunction<User> function = user -> getNumOrcsByNumPlayers(user.getId());
+        ToIntFunction<User> function = user -> getNumOrcsByUser(user.getId());
         return new Quartet<>("Most Orcs",getAverage(function), getMin(function), getMax(function));
     }
 
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumWarLord() {
-        ToIntFunction<User> function = user -> getNumWarLordByNumPlayers(user.getId());
+        ToIntFunction<User> function = user -> getNumWarLordByUser(user.getId());
         return new Quartet<>("Most WarLord",getAverage(function), getMin(function), getMax(function));
     }
 
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumDamage() {
-        ToIntFunction<User> function = user -> getDamageByNumPlayers(user.getId());
+        ToIntFunction<User> function = user -> getNumDamageByUser(user.getId());
         return new Quartet<>("Most Damage",getAverage(function), getMin(function), getMax(function));
     }
     @Transactional
     public Quartet<String, Double, Integer, Integer> getStatisticNumWonGames() {
-        ToIntFunction<User> function = user -> getWonGamesByNumPlayers(user.getId());
+        ToIntFunction<User> function = user -> getNumWonGamesByUser(user.getId());
         return new Quartet<>("Most Won Games",getAverage(function), getMin(function), getMax(function));
     }
 
@@ -168,6 +167,7 @@ public class StatisticService {
         Statistic userStatistic = user.getStatistic();
         userStatistic.setGlory(userStatistic.getGlory() + glory);
         playerStatistic.setGlory(playerStatistic.getGlory() + glory);
+        System.out.println(playerStatistic.getGlory());
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
     }

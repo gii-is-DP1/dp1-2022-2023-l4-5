@@ -88,9 +88,10 @@ public class EnemyAttackController {
         Game game = getGame();
         if (getCurrentPlayer() == getLoggedPlayer() && damage == null) {
             int defendedDmg = cacheManager.getDefend(session);
+            System.out.println("Defended dmg: " + defendedDmg);
             Predicate<EnemyInGame> hasPreventedDamage = enemy -> !(cacheManager.hasPreventDamageFromEnemies(session, enemy));
             List<EnemyInGame> enemiesInATrap = cacheManager.getCapturedEnemies(session);
-            damage = enemyService.attackEnemyToActualPlayer(game, session, hasPreventedDamage, defendedDmg, enemiesInATrap);
+            damage = gameService.attackEnemyToActualPlayer(game, session, hasPreventedDamage, defendedDmg, enemiesInATrap);
             advise.playerIsAttacked(damage, game);
         }
         model.put("damage", damage);
@@ -99,7 +100,9 @@ public class EnemyAttackController {
     }
 
     @GetMapping("/next")
-    public String nextTurn() {
+    public String nextTurn(HttpSession session) {
+        cacheManager.deleteEndAttackEnemy(session);
+        cacheManager.deleteEndAttackHero(session);
         Player player = getLoggedPlayer();
         Game game = getGame();
         if(player == game.getCurrentPlayer()) {

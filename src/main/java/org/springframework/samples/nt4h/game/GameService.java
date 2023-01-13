@@ -6,7 +6,6 @@ import org.javatuples.Triplet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.nt4h.card.ability.DeckService;
-import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.statistic.StatisticService;
 import org.springframework.samples.nt4h.turn.Phase;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
@@ -30,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -194,11 +194,12 @@ public class GameService {
         for(int e=0; e < attackedEnemies.size(); e++) {
             EnemyInGame enemy = attackedEnemies.get(e);
             if (enemy.getActualHealth() <= 0) {
-                statisticService.killedOrcs(player);
+                System.out.println("Enemy " + enemy.getEnemy().getName() + " killed");
+                // statisticService.killedOrcs(player);
                 statisticService.gainGold(player, enemy.getEnemy().getGold());
                 statisticService.gainGlory(player, enemy.getEnemy().getGlory());
-                statisticService.getDamageByNumPlayers(userId);
-                statisticService.getNumOrcsByNumPlayers(userId);
+                statisticService.getNumDamageByUser(userId);
+                statisticService.getNumOrcsByUser(userId);
                 game.getActualOrcs().remove(enemy);
                 playerService.savePlayer(player);
                 saveGame(game);
@@ -222,6 +223,28 @@ public class GameService {
             enemyService.saveEnemyInGame(affectedEnemy);
         }
         deleteKilledEnemy(enemies, game, player, userId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Integer attackEnemyToActualPlayer(Game game, HttpSession session, Predicate<EnemyInGame> hasPreventedDamage, int defendedDmg, List<EnemyInGame> enemiesInATrap) {
+        Player currentPlayer = game.getCurrentPlayer();
+        if (game.getActualOrcs().isEmpty()) return 0;
+        int damage = game.getActualOrcs().stream()
+            .filter(hasPreventedDamage)
+            .mapToInt(EnemyInGame::getActualHealth).sum();
+        System.out.println("Damage: " + damage);
+        int finalDamage = (damage >= defendedDmg) ? (damage - defendedDmg):damage;
+        System.out.println("Final Damage: " + finalDamage);
+        deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), damage);
+        for (int i = 0; i < enemiesInATrap.size(); i++) {
+            EnemyInGame enemyInGame = enemiesInATrap.get(i);
+            enemyInGame.setActualHealth(0);
+            enemyService.saveEnemyInGame(enemyInGame);
+            game.getActualOrcs().remove(enemiesInATrap.get(i));
+            saveGame(game);
+
+        }
+        return finalDamage;
     }
 
 }

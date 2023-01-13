@@ -24,12 +24,12 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Las habilidades del caballero son.
- * - Ataque brutal.
+ * - Ataque brutal. Fufa
  * - Carga con escudo.
- * - Doble espadazo.
+ * - Doble espadazo. Fufa
  * - Escudo.
  * - Paso atrás.
- * - Todoo o nada.
+ * - Todoo o nada. Fufa
  * - Voz de aliento.
  */
 @Controller
@@ -101,8 +101,11 @@ public class AbilityKnightController {
     private String shield(HttpSession session) {
         // El enemigo seleccionado no podrá hacer daño.
         cacheManager.addPreventDamageFromEnemies(session);
+        System.out.println("Escudo" + cacheManager.getPreventDamageFromEnemies(session));
         // Termina el turno.
-        return PAGE_END_ATTACK;
+        cacheManager.setNextUrl(session, PAGE_END_ATTACK);
+        System.out.println("Escudo" + cacheManager.getNextUrl(session));
+        return PAGE_MAKE_DAMAGE;
     }
 
     // Espadazo.
@@ -110,10 +113,10 @@ public class AbilityKnightController {
     private String slash(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         // Comprueba si es el primer slash.
-        if (cacheManager.isFirstSlash(session)) {
+        if (Boolean.TRUE.equals(cacheManager.isFirstSlash(session))) {
             cacheManager.setFirstSlash(session);
             // Si lo es, roba una carta.
-            deckService.fromDiscardToDeck(currentPlayer.getDeck());
+            deckService.fromDeckToHand(currentPlayer, currentPlayer.getDeck());
         }
         return PAGE_MAKE_DAMAGE;
     }
@@ -123,7 +126,7 @@ public class AbilityKnightController {
     private String stepBack() {
         Player currentPlayer = getCurrentPlayer();
         // Roba dos cartas.
-        deckService.fromDiscardToDeck(currentPlayer.getDeck(), 2);
+        deckService.fromDeckToHand(currentPlayer, currentPlayer.getDeck(), 2);
         return PAGE_MAKE_DAMAGE;
     }
 
@@ -134,7 +137,7 @@ public class AbilityKnightController {
         // Roba una carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
-        deckService.specificCardFromDiscardToDeck(deck, abilityInGame);
+        deckService.specificCardFromDeckToHand(currentPlayer, deck, abilityInGame);
         // Agrega ese daño a la carta.
         cacheManager.addAttack(session, abilityInGame.getAttack());
         return PAGE_MAKE_DAMAGE;
@@ -146,10 +149,10 @@ public class AbilityKnightController {
         Player currentPlayer = getCurrentPlayer();
         // cada jugador roba dos cartas.
         for (Player player : getGame().getPlayers()) {
-            deckService.fromDiscardToDeck(player.getDeck(), 2);
+            deckService.fromDiscardToHand(player.getDeck(), 2);
         }
         // Roba una carta.
-        deckService.fromDiscardToDeck(currentPlayer.getDeck());
+        deckService.fromDeckToHand(currentPlayer, currentPlayer.getDeck());
         // Gana una ficha de gloria.
         statisticService.gainGlory(currentPlayer, 1);
         return PAGE_MAKE_DAMAGE;

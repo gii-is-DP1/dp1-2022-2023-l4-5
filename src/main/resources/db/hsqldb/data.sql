@@ -1,23 +1,36 @@
+-- Creación de estadísticas.
+INSERT INTO statistic(gold, glory, num_orcs_killed, num_war_lord_killed, num_won_games, num_played_games, time_played, num_players, damage_dealt)
+VALUES (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0),
+       (0, 0, 0, 0, 0, 0, 0, null, 0);
+
 -- Creación de usuarios.
-INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable, is_connected)
+INSERT INTO users(username, password, avatar, tier, description, authority, birth_date, enable, is_connected, statistic_id)
 VALUES ('alesanfe', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 'USER', '1999-02-01', 1, 0),
+        'I am a description', 'DOLKTOL', '1999-02-01', 1, 0, 1),
         ('antonio', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'I am a description', 'USER', '1999-02-01', 1, 0),
+        'I am a description', 'USER', '1999-02-01', 1, 0, 2),
        ('laurolmer', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'awanabumbambam', 'DOKTOL', '2002-08-21', 1, 0),
+        'awanabumbambam', 'DOKTOL', '2002-08-21', 1, 0, 3),
        ('alvhidrod', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'drakorion', 'USER', '2002-02-23', 1, 0),
+        'drakorion', 'USER', '2002-02-23', 1, 0, 4),
        ('ismruijur', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'er jefe brrr', 'USER', '2002-10-27', 1, 0),
+        'er jefe brrr', 'USER', '2002-10-27', 1, 0, 5),
        ('ivasansan1', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'bético encubierto', 'DOKTOL', '2002-11-12', 1, 0),
+        'bético encubierto', 'DOKTOL', '2002-11-12', 1, 0, 6),
        ('pedruiagu', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'sácame del bolsillo', 'USER', '2002-10-01', 1, 0),
+        'sácame del bolsillo', 'USER', '2002-10-01', 1, 0, 7),
         ('lapaqui', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'vivo en una simulación', 'USER', '2003-05-11', 1, 0),
+        'vivo en una simulación', 'USER', '2003-05-11', 1, 0, 8),
         ('pepe', '$2a$10$Qag.ujgwDcKY3gBsY08/L.ZeH.BUplw9pjCdgFT7TR3B9Y0FgxPIG', 'https://i.pinimg.com/736x/bd/33/43/bd3343e3e4e13c58e408c79f0e029b75.jpg', 0,
-        'pepito de carne mechá', 'USER', '2004-07-14', 1, 0);
+        'pepito de carne mechá', 'USER', '2004-07-14', 1, 0, 9);
 
 -- Creación de mensajes.
 INSERT INTO messages(content, time, receiver_id, sender_id, read, type)
@@ -104,8 +117,8 @@ VALUES ('Compañero Lobo', '/resources/images/abilities/wolf_abilities_front.png
         '/resources/images/abilities/ability_back.png', -1, 'WIZARD', 0, 1, 'reconstitution'),
        ('Torrente de luz', '/resources/images/abilities/torrentedeluz_ability_front.png',
         '/resources/images/abilities/ability_back.png', -1, 'WIZARD', 2, 1, 'lightTorrent'),
-       ('Al corazón', '/resources/images/abilities/alcorazon_ability_front.png',
-        '/resources/images/abilities/ability_back.png', -1, 'THIEF', 4, 2, 'toTheHearth'),
+       ('Al corazon', '/resources/images/abilities/alcorazon_ability_front.png',
+        '/resources/images/abilities/ability_back.png', -1, 'THIEF', 4, 2, 'toTheHeart'),
        ('Ataque furtivo', '/resources/images/abilities/ataquefurtivo_ability_front.png',
         '/resources/images/abilities/ability_back.png', -1, 'THIEF', 2, 3, 'stealthAttack'),
        ('Ballesta precisa', '/resources/images/abilities/ballestaprecisa_ability_front.png',
@@ -225,7 +238,7 @@ VALUES (3, 1),
 
 -- Creación de logros.
 
-INSERT INTO achievements(name, description, image, threshold, AchievementType)
+INSERT INTO achievements(name, description, image, threshold, achievement_type)
 VALUES ('Peleador novato', 'Se le otorga un logro al usuario cuando inflije 10 de daño en total. ', 'awanakimkum', '10',4),
        ('Peleador de barrio', 'Se le otorga un logro al usuario cuando inflije 40 de daño en total. ', 'awanakimkum', '40',4),
        ('Bruce Lee', 'Se le otorga un logro al usuario cuando inflije 100 de daño en total. ', 'awanakimkum', '100',4),
