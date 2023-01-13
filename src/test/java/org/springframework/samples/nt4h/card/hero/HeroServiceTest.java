@@ -1,16 +1,16 @@
 package org.springframework.samples.nt4h.card.hero;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
-import org.springframework.samples.nt4h.game.Accessibility;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
 import org.springframework.samples.nt4h.user.User;
@@ -36,6 +36,8 @@ class HeroServiceTest {
     private final int idHero = 1;
     private String nameHero;
 
+    @MockBean
+    private Advise advise;
 
     @BeforeEach
     void setUp() throws FullGameException, RoleAlreadyChosenException {

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.samples.nt4h.capacity.Capacity;
 import org.springframework.samples.nt4h.capacity.StateCapacity;
@@ -27,6 +28,7 @@ import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
 import org.springframework.samples.nt4h.game.Mode;
 import org.springframework.samples.nt4h.game.exceptions.FullGameException;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.player.exceptions.RoleAlreadyChosenException;
@@ -53,6 +55,9 @@ public class ProductServiceTest {
     private Integer idProductInGame;
     private Integer idGame;
     private Integer idPlayer;
+
+    @MockBean
+    private Advise advise;
 
     @BeforeEach
     void setUp() throws FullGameException {

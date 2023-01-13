@@ -6,9 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,14 +20,12 @@ import org.springframework.samples.nt4h.message.MessageService;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.Tier;
 import org.springframework.samples.nt4h.statistic.Statistic;
-import org.springframework.samples.nt4h.turn.Turn;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.ModelMap;
 
 @ContextConfiguration(classes = {FriendController.class})
 @ExtendWith(SpringExtension.class)

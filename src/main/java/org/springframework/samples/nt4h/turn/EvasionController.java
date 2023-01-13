@@ -100,7 +100,7 @@ public class EvasionController {
         turnService.saveTurn(oldTurn);
         player.getDeck().discardCardOnHand(currentAbility);
         playerService.savePlayer(player);
-        advise.discardCard(currentAbility, game);
+        advise.discardCard(currentAbility);
         return PAGE_EVASION;
     }
 

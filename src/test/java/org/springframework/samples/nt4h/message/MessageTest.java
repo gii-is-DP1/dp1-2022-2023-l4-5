@@ -75,9 +75,9 @@ public class MessageTest {
         assertThat(message.getContent()).isEqualTo("This is an updated test message");
 
         // Test deleting an existing message
-        assertThat(messageService.getMessageBySenderWithReceiver(sender.getUsername(), receiver.getUsername()).size()).isEqualTo(3);
-        messageService.deleteMessage(message);
         assertThat(messageService.getMessageBySenderWithReceiver(sender.getUsername(), receiver.getUsername()).size()).isEqualTo(2);
+        messageService.deleteMessage(message);
+        assertThat(messageService.getMessageBySenderWithReceiver(sender.getUsername(), receiver.getUsername()).size()).isEqualTo(1);
     }
 
     @Test

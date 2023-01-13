@@ -274,7 +274,7 @@ class EvasionControllerTest {
     @Test
     void testGetEvasion() {
         EvasionController evasionController = new EvasionController(userService, turnService, playerService, gameService,
-            new Advise(new MessageService(mock(MessageRepository.class))));
+            new Advise(new MessageService(mock(MessageRepository.class)), new UserService(mock(UserRepository.class))));
         MockHttpSession mockHttpSession = new MockHttpSession();
         ModelMap modelMap = new ModelMap();
         assertEquals("turns/evasionPhase",

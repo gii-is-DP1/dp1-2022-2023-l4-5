@@ -61,7 +61,6 @@ public class GameTest {
         assertThat(game.getPassword()).isEqualTo("test123");
         assertThat(game.getStartDate()).isEqualTo(LocalDateTime.of(2020, 1, 1, 0, 0));
         assertThat(game.getFinishDate()).isEqualTo(LocalDateTime.of(2020, 1, 2, 0, 0));
-        //assertThat(game.getPhase()).isEqualTo(Phase.START);
     }
 
     @Test
@@ -131,7 +130,6 @@ public class GameTest {
         game.setName("Updated Game");
         gameService.saveGame(game);
         assertThat(game.getName()).isEqualTo("Updated Game");
-
     }
 
     @Test

@@ -42,8 +42,8 @@ public class EnemyTest {
     @Test
     public void testEnemyProperties() {
         assertThat(enemy.getHealth()).isEqualTo(5);
-        assertThat(enemy.getGlory()).isEqualTo(2);
-        assertThat(enemy.getGold()).isEqualTo(1);
+        assertThat(enemy.getHiddenGlory()).isEqualTo(2);
+        assertThat(enemy.getHiddenGold()).isEqualTo(1);
         assertThat(enemy.getHasCure()).isTrue();
         assertThat(enemy.getLessDamageWizard()).isTrue();
         assertThat(enemy.getIsNightLord()).isFalse();
@@ -74,7 +74,7 @@ public class EnemyTest {
         // Test gold constraints
         enemy.setHiddenGold(-1);
         assertThat(validator.validate(enemy)).isNotEmpty();
-        enemy.setHiddenGold(3);
+        enemy.setHiddenGold(5);
         assertThat(validator.validate(enemy)).isNotEmpty();
         enemy.setHiddenGold(null);
         assertThat(validator.validate(enemy)).isEmpty();

@@ -33,6 +33,7 @@ public class ProductTest {
         product.setQuantity(3);
         product.setCapacity(Lists.newArrayList());
         product.setMaxUses(1);
+        product.setPathName("nerd");
     }
 
     @Test
@@ -74,10 +75,6 @@ public class ProductTest {
         product.setCapacity(Lists.newArrayList());
         assertThat(validator.validate(product)).isEmpty();
         product.setCapacity(Lists.newArrayList(new Capacity()));
-        assertThat(validator.validate(product)).isEmpty();
-
-        // Test ability constraints
-        assertThat(validator.validate(product)).isEmpty();
         assertThat(validator.validate(product)).isEmpty();
 
         // Test name constraints

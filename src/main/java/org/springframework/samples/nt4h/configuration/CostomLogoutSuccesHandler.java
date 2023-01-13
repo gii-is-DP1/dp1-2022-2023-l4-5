@@ -20,7 +20,7 @@ public class CostomLogoutSuccesHandler implements LogoutSuccessHandler {
     private UserService userService;
 
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         User user = userService.getUserByUsername(principal.getUsername());
         user.setIsConnected(false);
