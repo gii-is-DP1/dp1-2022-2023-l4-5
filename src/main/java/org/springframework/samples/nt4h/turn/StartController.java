@@ -84,7 +84,6 @@ public class StartController {
     public String chooseEvasion(HttpSession session, ModelMap modelMap, HttpServletRequest request) {
         advise.getMessage(session, modelMap);
         advise.keepUrl(session, request);
-        System.out.println("sdfsdf" + cacheManager);
         cacheManager.deleteEndAttackHero(session);
         cacheManager.deleteEndAttackEnemy(session);
         if (!isChosen) {

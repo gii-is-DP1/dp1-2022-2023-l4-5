@@ -28,9 +28,9 @@ import java.util.List;
 public class AbilityNightLordController {
 
 
+
     private final static String PAGE_HERO_ATTACK = "redirect:/heroAttack";
     private final static String PAGE_ABILITIES = "redirect:/abilities/";
-
     private final UserService userService;
     private final AbilityService abilityService;
     private final EnemyService enemyService;
