@@ -53,8 +53,6 @@ public class CacheManager extends BaseCacheManager {
         removeCapturedEnemies(session);
         removeHasAddedLifeToOrcs(session);
         removeDefend(session);
-
-
     }
 
 
@@ -177,6 +175,7 @@ public class CacheManager extends BaseCacheManager {
 
     // Permite anular el ataque de varios enemigos.
     public void addPreventDamageFromEnemies(HttpSession session) {
+        System.out.println("addPreventDamageFromEnemies " + getAttackedEnemy(session).getId());
         addEnemies(session, PREVENT_DAMAGE_FROM_ENEMIES, getAttackedEnemy(session), enemy -> hasPreventDamageFromEnemies(session));
     }
 

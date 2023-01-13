@@ -25,12 +25,12 @@ import javax.servlet.http.HttpSession;
 /**
  * Las habilidades del caballero son.
  * - Ataque brutal. Fufa
- * - Carga con escudo.
+ * - Carga con escudo. Fufa
  * - Doble espadazo. Fufa
  * - Escudo.
- * - Paso atrás.
+ * - Paso atrás. Fufa
  * - Todoo o nada. Fufa
- * - Voz de aliento.
+ * - Voz de aliento. Fufa
  */
 @Controller
 @RequestMapping("/abilities")

@@ -6,6 +6,7 @@ import org.springframework.samples.nt4h.card.product.ProductInGame;
 import org.springframework.samples.nt4h.card.product.ProductService;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.GameService;
+import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.player.PlayerService;
 import org.springframework.samples.nt4h.turn.Phase;
@@ -33,14 +34,16 @@ public class AbilityController {
     private final AbilityService abilityService;
     private final ProductService productService;
     private final TurnService turnService;
+    private final CacheManager cacheManager;
 
-    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService) {
+    public AbilityController(UserService userService, GameService gameService, PlayerService playerService, AbilityService abilityService, ProductService productService, TurnService turnService, CacheManager cacheManager) {
         this.userService = userService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.abilityService = abilityService;
         this.productService = productService;
         this.turnService = turnService;
+        this.cacheManager = cacheManager;
     }
 
     @ModelAttribute("loggedUser")
@@ -64,18 +67,17 @@ public class AbilityController {
     }
 
     @PostMapping("/loseCard")
-    private String loseCard(Turn turn) {
+    private String loseCard(Turn turn, HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         Deck deck = currentPlayer.getDeck();
         deck.discardCardOnHand(abilityInGame); // Esto debe de ser un efecto
-        return PAGE_MAKE_DAMAGE;
+        return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
 
     @PostMapping("/chooseEnemy")
     private String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
         EnemyInGame enemyInGame = turn.getCurrentEnemy();
-        String nextUrl = session.getAttribute("nextUrl").toString();
         if (name != null) {
             String action = session.getAttribute("name").toString();
             List<Integer> enemies = (List<Integer>) session.getAttribute(action);
@@ -93,12 +95,11 @@ public class AbilityController {
             else
                 enemies.add(enemyInGame.getId());
         }
-
-        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
+        return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
 
     @GetMapping("/findInDiscard")
-    private String findInDiscard(Turn turn) {
+    private String findInDiscard(Turn turn, HttpSession session) {
         // Cogemos la carta elegida de la pila de descarte.
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         // La colocamos en la mano.
@@ -107,15 +108,14 @@ public class AbilityController {
         deck.getInDiscard().remove(abilityInGame);
         deck.getInHand().add(abilityInGame);
         playerService.savePlayer(currentPlayer);
-        return PAGE_MAKE_DAMAGE;
+        return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
 
     @PostMapping("/chooseAbilityFromDeck")
     private String chooseAbilityFromDeck(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inDeck", abilityInGame.getId());
-        String nextUrl = session.getAttribute("nextUrl").toString();
-        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
+        return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
 
     @PostMapping("/exchangeCards")
@@ -128,15 +128,15 @@ public class AbilityController {
         deck.getInDeck().remove(inDeck);
         deck.getInDeck().add(inHand);
         playerService.savePlayer(getCurrentPlayer());
-        return PAGE_MAKE_DAMAGE;
+        return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
 
     @PostMapping("/chooseProductFromMarket")
     private String chooseProductFromMarket(Turn turn, HttpSession session) {
         AbilityInGame abilityInGame = turn.getCurrentAbility();
         session.setAttribute("inMarket", abilityInGame.getId());
-        String nextUrl = session.getAttribute("nextUrl").toString();
-        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl;
+        Object nextUrl = session.getAttribute("nextUrl");
+        return nextUrl == null ? PAGE_MAKE_DAMAGE : nextUrl.toString();
     }
 
     @PostMapping("/exchangeProducts")
@@ -148,7 +148,7 @@ public class AbilityController {
         inMarket.setId(id);
         productService.saveProductInGame(inSale);
         productService.saveProductInGame(inMarket);
-        return PAGE_MAKE_DAMAGE;
+        return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
 
     @GetMapping

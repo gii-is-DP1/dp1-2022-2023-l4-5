@@ -41,10 +41,10 @@ public class Enemy extends Card {
     private Boolean isNightLord;
 
     public Integer getGlory() {
-        return hiddenGlory + notHiddenGlory;
+        return notHiddenGlory;
     }
 
     public Integer getGold() {
-        return hiddenGold + notHiddenGold;
+        return notHiddenGold;
     }
 }
