@@ -6,7 +6,7 @@
 
 <nt4h:layout pageName="detailedStatistics">
     <h1>${name}</h1>
-    <c:out value="<b>Min:</b> ${min}">
-    <c:out value="<b>Max:</b> ${max}">
-    <c:out value="<b>Average:</b> ${average}">
+    <br><c:out value="Min: ${min}"/></br>
+    <br><c:out value="Max: ${max}"/></br>
+    <br><c:out value="Average: ${average}"/></br>
 </nt4h:layout>
