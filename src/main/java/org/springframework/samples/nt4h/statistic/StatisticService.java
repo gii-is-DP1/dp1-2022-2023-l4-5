@@ -64,7 +64,7 @@ public class StatisticService {
 
     @Transactional
     public Integer getNumGamesByNumPlayers(int numP){
-        return statisticRepository.findnumGamesByNumPlayers(numP);
+        return statisticRepository.findNumGamesByNumPlayers(numP);
     }
 
     @Transactional
