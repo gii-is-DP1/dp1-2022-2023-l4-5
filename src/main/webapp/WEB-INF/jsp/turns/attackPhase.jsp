@@ -38,8 +38,14 @@
                             <div class="row">
                                 <div class="col-8">
                                     <p style="font-size:2rem">
-                                        <img src="/resources/images/heart_orc.gif" width="50"
-                                             height="50"> ${enemyInGame.actualHealth}
+                                        <c:if test="${enemyInGame.isNightLord}">
+                                            <img src="/resources/images/heart_orc.gif" width="50"
+                                                 height="50"> ${enemyInGame.actualHealth}>
+                                        </c:if>
+                                        <c:if test="${!enemyInGame.isNightLord}">
+                                            <img src="/resources/images/heart_nightlord.gif" width="50"
+                                                 height="50"> ${enemyInGame.actualHealth}>
+                                        </c:if>
                                     </p>
                                 </div>
                             </div>
@@ -94,11 +100,11 @@
                                 <p style="font-size:2rem">
                                     <c:if test="${enemyInGame.isNightLord}">
                                         <img src="/resources/images/heart_orc.gif" width="50"
-                                             height="50"> ${enemyInGame.actualHealth}
+                                             height="50"> ${enemyInGame.actualHealth}>
                                     </c:if>
                                     <c:if test="${!enemyInGame.isNightLord}">
                                         <img src="/resources/images/heart_nightlord.gif" width="50"
-                                             height="50"> ${enemyInGame.actualHealth}
+                                             height="50"> ${enemyInGame.actualHealth}>
                                     </c:if>
                                 </p>
                             </div>
@@ -122,7 +128,7 @@
                     <c:forEach var="i" begin="0" end="${currentPlayer.deck.inHand.size()-1}">
                         <c:set var="abilityInGame" value="${currentPlayer.deck.inHand[i]}" scope="page"/>
                         <div class="col-sm-2">
-                            <img src="${abilityInGame.ability.frontImage}">
+                            <img src="${abilityInGame.ability.frontImage}" width="90%" height="90%">
                         </div>
                     </c:forEach>
                 </c:if>
@@ -142,6 +148,9 @@
             <form:form modelAttribute="chat" class="form-horizontal" action="/messages/game">
                 <nt4h:inputField label="Content" name="content"/>
             </form:form>
+        </c:if>
+        <c:if test="${loggedPlayer.isNew()}">
+            <a href="/turns">Reload</a>
         </c:if>
     </div>
     <div class="nextTurn"></div>
