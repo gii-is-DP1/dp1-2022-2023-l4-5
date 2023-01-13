@@ -5,6 +5,7 @@ import org.springframework.samples.nt4h.card.ability.Deck;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.message.CacheManager;
 import org.springframework.samples.nt4h.message.Message;
 import org.springframework.samples.nt4h.player.Player;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -25,11 +25,11 @@ import java.util.List;
 
 /**
  * Las habilidades de explorador son:
- * - Compañero lobo.
+ * - Compañero lobo. Fufa
  * - Disparo certero. Fufa
- * - Disparo rápido.
- * - En la diana.
- * - Lluvia de flechas.
+ * - Disparo rápido. Fufa
+ * - En la diana. Fufa
+ * - Lluvia de flechas. Fufa
  * - Recoger flechas. Fufa
  * - Supervivencia.
  */
@@ -101,8 +101,7 @@ public class AbilityExplorerController {
         // Tomo una primera carta.
         Deck deck = currentPlayer.getDeck();
         AbilityInGame abilityInGame = deck.getInDeck().get(0);
-        System.out.println("abilityInGame = " + abilityInGame.getAbility().getName());
-        while (abilityInGame.getAbility().getName().equals("Disparo rápido")) {
+        while (abilityInGame.getAbility().getName().equals("Disparo Rápido")) {
             // Añade el daño.
             cacheManager.addAttack(session, abilityInGame.getAbility().getAttack());
             // Elimina la carta.
@@ -112,7 +111,6 @@ public class AbilityExplorerController {
                 deckService.moveAllCardsFromDiscardToDeck(currentPlayer, deck);
             // Tomo una nueva carta.
             abilityInGame = deck.getInDeck().get(0);
-
         }
         // Coloco la carta al fondo del deck.
         deckService.putFirstCardAtBottomOfDeck(deck);
@@ -163,13 +161,12 @@ public class AbilityExplorerController {
     private String survival(ModelMap model) {
         // Gana una carta de supervivencia.
 
-        List<EnemyInGame> enemies = getGame().getAllOrcsInGame();
-        if (enemies.size() == 0)
-            return PAGE_MAKE_DAMAGE;
-        model.put("name", "getOutEnemy");
-        model.put("enemies", enemies);
-        model.put("newTurn", new Turn());
-        model.put("chat", new Message());
+        List<EnemyInGame> enemies = getGame().getActualOrcs();
+        //EnemyInGame lastOne = game.getAllOrcsInGame().get(game.getAllOrcsInGame().size() - 1);
+        //game.getAllOrcsInGame().set(game.getAllOrcsInGame().size() - 1, enemyInGame);
+        //int index = game.getActualOrcs().indexOf(enemyInGame);
+        //game.getActualOrcs().set(index, lastOne);
+        //gameService.saveGame(game);
         return VIEW_CHOSE_ENEMY;
 
 

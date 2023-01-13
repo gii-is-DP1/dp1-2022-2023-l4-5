@@ -92,7 +92,7 @@ public class EnemyAttackController {
             Predicate<EnemyInGame> hasPreventedDamage = enemy -> !(cacheManager.hasPreventDamageFromEnemies(session, enemy));
             List<EnemyInGame> enemiesInATrap = cacheManager.getCapturedEnemies(session);
             damage = gameService.attackEnemyToActualPlayer(game, session, hasPreventedDamage, defendedDmg, enemiesInATrap);
-            advise.playerIsAttacked(damage, game);
+            advise.playerIsAttacked(damage);
         }
         model.put("damage", damage);
         advise.keepUrl(session, request);

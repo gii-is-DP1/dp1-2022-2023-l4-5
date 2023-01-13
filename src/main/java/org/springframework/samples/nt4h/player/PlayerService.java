@@ -7,6 +7,7 @@ import org.springframework.samples.nt4h.card.hero.Role;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
 import org.springframework.samples.nt4h.game.Game;
 import org.springframework.samples.nt4h.game.Mode;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.turn.TurnService;
 import org.springframework.samples.nt4h.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class PlayerService {
     private final PlayerRepository playerRepository;
     private final TurnService turnService;
     private final UserRepository userRepository;
+    private final Advise advise;
 
 
     @Transactional(readOnly = true, rollbackFor = NotFoundException.class)
@@ -86,8 +88,12 @@ public class PlayerService {
     @Transactional(rollbackFor = Exception.class)
     public void inflictWounds(Player player, int i) {
         player.setWounds(player.getWounds() + i);
-        if (player.getHealth() <= 0)
+        advise.getOneWound();
+        if (player.getHealth() <= 0) {
+            advise.playerIsDead();
             player.setAlive(false);
+        }
+
         savePlayer(player);
 
     }

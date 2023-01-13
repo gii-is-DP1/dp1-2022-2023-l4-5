@@ -89,7 +89,7 @@ public class GameService {
         user.setGame(game);
         user.setPlayer(newPlayer);
         userService.saveUser(user);
-        advise.playerJoinGame(newPlayer, game);
+        advise.playerJoinGame();
     }
 
     @Transactional(rollbackFor = FullGameException.class)
@@ -104,7 +104,7 @@ public class GameService {
         game.getAllOrcsInGame().add(0, enemyService.addNightLordToGame());
         game.setActualOrcs(orcsInGame.subList(0, 3));
         productService.addProduct(game);
-        advise.createGame(user, game);
+        advise.createGame(game);
     }
 
 
@@ -119,7 +119,7 @@ public class GameService {
         deckService.addDeckFromRole(player, game.getMode());
         playerService.createTurns(player);
         saveGame(game);
-        advise.chosenHero(player, heroInGame, game);
+        advise.chosenHero(heroInGame);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -160,7 +160,7 @@ public class GameService {
         user.setGame(game);
         userService.saveUser(user);
         saveGame(game);
-        advise.spectatorJoinGame(user, game);
+        advise.spectatorJoinGame();
     }
 
     @Transactional

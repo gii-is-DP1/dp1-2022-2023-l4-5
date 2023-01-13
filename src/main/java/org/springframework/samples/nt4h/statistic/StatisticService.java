@@ -6,6 +6,7 @@ import org.springframework.samples.nt4h.achievement.Achievement;
 import org.springframework.samples.nt4h.achievement.AchievementService;
 import org.springframework.samples.nt4h.achievement.AchievementType;
 import org.springframework.samples.nt4h.exceptions.NotFoundException;
+import org.springframework.samples.nt4h.message.Advise;
 import org.springframework.samples.nt4h.player.Player;
 import org.springframework.samples.nt4h.user.User;
 import org.springframework.samples.nt4h.user.UserRepository;
@@ -23,6 +24,7 @@ public class StatisticService {
     private final UserService userService;
     private final AchievementService achievementService;
     private final UserRepository userRepository;
+    private final Advise advise;
 
     @Transactional(readOnly = true)
     public Statistic getStatisticById(int id) {
@@ -170,6 +172,7 @@ public class StatisticService {
         System.out.println(playerStatistic.getGlory());
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
+        advise.addGlory(glory);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -181,11 +184,12 @@ public class StatisticService {
         playerStatistic.setGold(playerStatistic.getGold() + gold);
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
-
+        advise.addGold(gold);
         //=============================================================\\
       List<Achievement> list= achievementService.getAllAchievementsByType(AchievementType.TOTAL_GOLD);
         for(int i=0; i< list.size(); i++){
             if(gold >= list.get(i).getThreshold()) {
+                advise.addAchievement(list.get(i));
             user.getAchievements().add(list.get(i));
             userRepository.save(user);
             }
@@ -196,12 +200,14 @@ public class StatisticService {
     @Transactional
     public void loseGold(Statistic statistic, Integer gold) {
         statistic.setGold(Math.max(statistic.getGold() - gold, 0));
+        advise.loseGold(gold);
         saveStatistic(statistic);
     }
 
     @Transactional
     public void loseGlory(Statistic statistic, Integer glory) {
         statistic.setGlory(Math.max(statistic.getGlory() - glory, 0));
+        advise.loseGlory(glory);
         saveStatistic(statistic);
     }
 
@@ -214,11 +220,11 @@ public class StatisticService {
         playerStatistic.setDamageDealt(playerStatistic.getDamageDealt() + damage);
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
-
         //=============================================================\\
         List<Achievement> list= achievementService.getAllAchievementsByType(AchievementType.DMG_TO_ORCS);
         for(int i=0; i < list.size(); i++){
             if(userStatistic.getDamageDealt()>= list.get(i).getThreshold()) {
+                advise.addAchievement(list.get(i));
                 user.getAchievements().add(list.get(i));
                 userRepository.save(user);
             }
@@ -235,11 +241,11 @@ public class StatisticService {
         playerStatistic.setGlory(playerStatistic.getNumOrcsKilled() + 1);
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
-
         //=============================================================\\
         List<Achievement> list= achievementService.getAllAchievementsByType(AchievementType.KILLED_ORCS);
         for(int i=0; i< list.size(); i++){
             if(userStatistic.getNumOrcsKilled() >= list.get(i).getThreshold()) {
+                advise.addAchievement(list.get(i));
                 user.getAchievements().add(list.get(i));
                 userRepository.save(user);
             }

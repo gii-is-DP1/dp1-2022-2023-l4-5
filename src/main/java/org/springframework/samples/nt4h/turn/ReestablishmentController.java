@@ -126,7 +126,7 @@ public class ReestablishmentController {
         Player currentPlayer = getCurrentPlayer();
         Player loggedPlayer = getLoggedPlayer();
         if (loggedPlayer == currentPlayer) {
-            advise.addAbilityInHand(deckService.moveCardsFromDeckToHand(currentPlayer.getDeck()), game);
+            deckService.moveCardsFromDeckToHand(currentPlayer, currentPlayer.getDeck());
             Player nextPlayer = game.getNextPlayer();
             game.setCurrentPlayer(nextPlayer);
             game.setCurrentTurn(turnService.getTurnsByPhaseAndPlayerId(Phase.START, nextPlayer.getId()));

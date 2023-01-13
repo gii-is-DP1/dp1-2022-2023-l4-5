@@ -81,9 +81,8 @@ public class AbilityController {
     public String chooseEnemy(Turn turn, @RequestParam("name") String name, HttpSession session) {
         EnemyInGame enemyInGame = turn.getCurrentEnemy();
         if (name != null) {
-            String action = session.getAttribute("name").toString();
-            List<Integer> enemies = (List<Integer>) session.getAttribute(action);
-            if (Objects.equals(action, "getOutEnemy")) {
+
+            if (Objects.equals(name, "getOutEnemy")) {
                 Game game = getGame();
                 // Colocar el enemigo por el último.
                 EnemyInGame lastOne = game.getAllOrcsInGame().get(game.getAllOrcsInGame().size() - 1);
@@ -92,10 +91,16 @@ public class AbilityController {
                 game.getActualOrcs().set(index, lastOne);
                 gameService.saveGame(game);
             }
-            else if (enemies == null)
-                session.setAttribute(name, Lists.newArrayList(enemyInGame.getId()));
-            else
-                enemies.add(enemyInGame.getId());
+            else {
+                Object enemies = session.getAttribute(name);
+                if (enemies == null)
+                    session.setAttribute(name, enemyInGame.getId());
+                else {
+                    session.setAttribute(name, enemies.toString() + "," + enemyInGame.getId());
+                }
+
+            }
+
         }
         return cacheManager.getNextUrl(session).orElse(PAGE_MAKE_DAMAGE);
     }
