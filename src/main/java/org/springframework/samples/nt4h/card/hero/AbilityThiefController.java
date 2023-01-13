@@ -96,7 +96,7 @@ public class AbilityThiefController {
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstToTheHeart(session)) {
             cacheManager.setFirstToTheHeart(session);
             // Gana uno de oro.
-            statisticService.gainGlory(currentPlayer, 1);
+            statisticService.gainGold(currentPlayer, 1);
         }
         // Pierde 1 carta.
         deckService.fromDeckToDiscard(currentPlayer, currentPlayer.getDeck());

@@ -201,16 +201,14 @@ public class StatisticService {
         saveStatistic(statistic);
     }
 
-    /*
     @Transactional(rollbackFor = Exception.class)
     public void damageDealt(Player player, Integer damage) {
         Statistic playerStatistic = player.getStatistic();
         User user = userService.getUserByUsername(player.getName());
         Statistic userStatistic = user.getStatistic();
-        userStatistic.setGlory(userStatistic.getDamageDealt() + damage);
-        playerStatistic.setGlory(playerStatistic.getDamageDealt() + damage);
+        userStatistic.setDamageDealt(userStatistic.getDamageDealt() + damage);
+        playerStatistic.setDamageDealt(playerStatistic.getDamageDealt() + damage);
         saveStatistic(userStatistic);
         saveStatistic(playerStatistic);
     }
-    */
 }

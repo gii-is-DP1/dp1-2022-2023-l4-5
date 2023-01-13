@@ -219,7 +219,7 @@ public class GameService {
             Integer extraDamage = enemiesMoreDamage.get(e);
             Integer initialEnemyHealth = affectedEnemy.getActualHealth();
             affectedEnemy.setActualHealth(initialEnemyHealth - (damageToEnemy + extraDamage));
-            // statisticService.damageDealt(player, (damageToEnemy + extraDamage));
+            statisticService.damageDealt(player, (damageToEnemy + extraDamage));
             enemyService.saveEnemyInGame(affectedEnemy);
         }
         deleteKilledEnemy(enemies, game, player, userId);
