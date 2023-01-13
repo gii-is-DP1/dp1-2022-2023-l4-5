@@ -41,11 +41,9 @@ public class CapacityTest {
 
     @Test
     public void testCapacityConstraints() {
-        // Test stateCapacity constraints
         capacity.setStateCapacity(null);
         assertThat(validator.validate(capacity)).isNotEmpty();
 
-        // Test lessDamage constraints
         capacity.setStateCapacity(StateCapacity.MAGIC);
         capacity.setLessDamage(null);
         assertThat(validator.validate(capacity)).isNotEmpty();
@@ -53,27 +51,22 @@ public class CapacityTest {
 
     @Test
     public void testCapacityLifecycle() {
-        // Test saving a new capacity
         capacityRepository.save(capacity);
         assertThat(capacity.getId()).isNotNull();
 
-        // Test updating an existing capacity
         capacity.setLessDamage(false);
         capacityRepository.save(capacity);
         assertThat(capacity.getLessDamage()).isFalse();
 
-        // Test deleting a capacity
         capacityRepository.delete(capacity);
         assertThat(capacityRepository.findById(capacity.getId())).isEmpty();
     }
 
     @Test
     public void testCapacityQueries() {
-        // Test finding all capacities
         capacityRepository.save(capacity);
         assertThat(capacityRepository.findAll().size()).isEqualTo(9);
 
-        // Test finding capacity by stateCapacity
         assertThat(capacityRepository.findByStateCapacity(StateCapacity.MAGIC).size()).isEqualTo(3);
         assertThat(capacityRepository.findByStateCapacity(StateCapacity.MELEE).size()).isEqualTo(2);
     }

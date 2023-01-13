@@ -58,7 +58,6 @@ public class HeroTest {
 
     @Test
     public void testHeroConstraints() {
-        // Test name constraints
         hero.setName("");
         assertThat(validator.validate(hero)).isNotEmpty();
         hero.setName("A");
@@ -66,13 +65,11 @@ public class HeroTest {
         hero.setName("This is a valid name");
         assertThat(validator.validate(hero)).isEmpty();
 
-        // Test health constraints
         hero.setHealth(null);
         assertThat(validator.validate(hero)).isEmpty();
         hero.setHealth(0);
         assertThat(validator.validate(hero)).isEmpty();
 
-        // Test role constraints
         hero.setRole(null);
         assertThat(validator.validate(hero)).isEmpty();
         hero.setRole(Role.EXPLORER);
@@ -81,27 +78,22 @@ public class HeroTest {
 
     @Test
     public void testHeroLifecycle() {
-        // Test saving a new hero
         hero = heroRepository.save(hero);
         assertThat(hero.getId()).isNotNull();
 
-        // Test updating an existing hero
         hero.setName("Updated Hero");
         hero = heroRepository.save(hero);
         assertThat(hero.getName()).isEqualTo("Updated Hero");
 
-        // Test deleting an existing hero
         heroRepository.delete(hero);
         assertThat(heroRepository.findById(hero.getId())).isEmpty();
     }
 
     @Test
     public void testHeroQueries() {
-        // Test finding all heroes
         heroRepository.save(hero);
         assertThat(heroRepository.findAll()).isNotEmpty();
 
-        // Test finding a hero by name
         assertThat(heroRepository.findByName("Test Hero")).isNotNull();
     }
 }

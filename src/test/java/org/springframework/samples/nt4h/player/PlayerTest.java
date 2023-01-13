@@ -48,41 +48,10 @@ public class PlayerTest {
         player = Player.createPlayer(user, game, true);
         game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        /*
-        player = Player.createPlayer(userService.getUserById(1), Game.createGame("Test Game", Mode.MULTI_CLASS, 2, "test123"), true);
-        player.setName("player1");
-        player.setBirthDate(LocalDate.of(1990, 1, 1));
-        player.setHasEvasion(true);
-        player.setSequence(1);
-        player.setNextPhase(Phase.EVADE);
-        player.setReady(true);
-        player.setHost(true);
-        player.setWounds(0);
-        player.setDamageProtect(0);
-        player.setHeroes(Lists.newArrayList());
-        User user = userService.getUserById(1);
-        Game game = new Game();
-        Deck deck = new Deck();
-        deck.setInDeck(Lists.newArrayList());
-        deck.setInHand(Lists.newArrayList());
-        deck.setInDiscard(Lists.newArrayList());
-        player.setDeck(deck);
-        player.setHeroes(Lists.newArrayList());
-        game = Game.createGame("Test Game",  Mode.MULTI_CLASS, 2, "test123");
-        game.setPlayers(Lists.newArrayList(player));
-        game.setStartDate(LocalDateTime.of(2020, 1, 1, 0, 0));
-        game.setFinishDate(LocalDateTime.of(2020, 1, 2, 0, 0));
-        game.setPhase(Phase.START);
-        game.setHasStages(true);
-        System.out.println("Game: " + game);
-        player.setGame(game);
-        System.out.println("Player: " + player.getGame());
-         */
     }
 
     @Test
     public void testPlayerProperties() {
-        // Se comprueba que el objeto Player se ha creado correctamente
         assertThat(player.getName()).isEqualTo("alesanfe");
         assertThat(player.getBirthDate()).isEqualTo(LocalDate.of(1999, 2, 1));
         assertThat(player.getHasEvasion()).isEqualTo(true);
@@ -96,7 +65,6 @@ public class PlayerTest {
 
     @Test
     public void testPlayerConstraints() {
-        // Test name constraint
         player.setName("");
         assertThat(validator.validate(player)).isNotEmpty();
         player.setName(" ");
@@ -107,41 +75,33 @@ public class PlayerTest {
 
     @Test
     public void testPlayerLifecycles() {
-        // Test saving a new player
         playerService.savePlayer(player);
         assertThat(player.getId()).isNotNull();
 
-        // Test updating an existing player
         player.setName("player2");
         playerService.savePlayer(player);
         assertThat(player.getName()).isEqualTo("player2");
 
-        // Test deleting an player
         playerService.deletePlayer(player);
         assertThatThrownBy(() -> playerService.getPlayerById(player.getId())).isInstanceOf(NotFoundException.class);
     }
 
     @Test
     public void testPlayerQueries() {
-        // Test finding all players
         playerService.savePlayer(player);
         assertThat(playerService.getAllPlayers()).isNotEmpty();
 
-        // Test finding a player by id
         assertThat(playerService.getPlayerById(player.getId())).isNotNull();
 
-        // Test finding a player by name
         assertThat(playerService.getPlayerByName(player.getName())).isNotNull();
     }
 
     @Test
     public void testAddHero_roleAlreadyChosenException() throws RoleAlreadyChosenException {
-        // Creating hero
         HeroInGame h1 = HeroInGame.createHeroInGame(heroService.getHeroById(1), player);
         HeroInGame h2 = HeroInGame.createHeroInGame(heroService.getHeroById(2), player);
         player.addHero(h1);
 
-        // Test adding a hero to a player
         assertThatThrownBy(() -> player.addHero(h2)).isInstanceOf(RoleAlreadyChosenException.class);
     }
 }
