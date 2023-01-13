@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
  * - Ataque brutal. Fufa
  * - Carga con escudo. Fufa
  * - Doble espadazo. Fufa
- * - Escudo.
+ * - Escudo. Fufa
  * - Paso atrás. Fufa
  * - Todoo o nada. Fufa
  * - Voz de aliento. Fufa
