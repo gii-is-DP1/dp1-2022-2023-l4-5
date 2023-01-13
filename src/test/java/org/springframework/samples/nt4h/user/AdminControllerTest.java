@@ -195,7 +195,7 @@ class AdminControllerTest {
         when(gameRepository.findAll((Pageable) any())).thenReturn(new PageImpl<>(new ArrayList<>()));
         UserService userService1 = new UserService(mock(UserRepository.class));
         AdminController adminController = new AdminController(userService1, gameService,
-            new Advise(new MessageService(mock(MessageRepository.class))));
+            new Advise(new MessageService(mock(MessageRepository.class)), new UserService(mock(UserRepository.class))));
         ModelMap model = new ModelMap();
         assertEquals("admins/games", adminController.showGames(1, model, new MockHttpSession()));
         verify(gameRepository).findAll();

@@ -46,7 +46,7 @@ public class StatisticServiceTest {
 
     @Test
     public void findAll(){
-        assertEquals(1,statisticService.getAllStatistics().size());
+        assertEquals(11,statisticService.getAllStatistics().size());
     }
 
     @Test
