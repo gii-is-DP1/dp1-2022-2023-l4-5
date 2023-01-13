@@ -28,7 +28,7 @@ import java.util.List;
  * - Shriekknifer
  */
 @Controller
-@RequestMapping("/abilities/nightLord")
+@RequestMapping("/abilities")
 public class AbilityNightLordController {
 
 
