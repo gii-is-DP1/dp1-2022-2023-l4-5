@@ -40,6 +40,6 @@
     <spring:url value="/" var="goToLobby"></spring:url>
     <a href="${fn:escapeXml(goToLobby)}" class="btn btn-default">Go to Menu</a>
 
-    <spring:url value="/statistics" var="Statistics"></spring:url>
+    <spring:url value="/statistics/allStatistics" var="Statistics"></spring:url>
     <a href="${fn:escapeXml(Statistics)}" class="btn btn-default">Go to Statistics</a>
 </nt4h:layout>
