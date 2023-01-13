@@ -76,7 +76,7 @@ public class AbilityThiefController {
         return getLoggedUser().getPlayer();
     }
 
-    // Al corazón.
+    // Al corazón. (fufa)
     @GetMapping("/toTheHeart")
     private String toTheHeart(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
@@ -104,7 +104,7 @@ public class AbilityThiefController {
         return PAGE_MAKE_DAMAGE;
     }
 
-    // Ataque furtivo.
+    // Ataque furtivo. (fufa)
     @GetMapping("/stealthAttack")
     private String stealthAttack(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
@@ -114,21 +114,18 @@ public class AbilityThiefController {
         Integer extraDamage = cacheManager.getEnemiesThatReceiveMoreDamageForEnemy(session, attackedEnemy);
         Ability ability = abilityService.getAbilityByName("Ataque furtivo");
         int attack = cacheManager.getAttack(session) + ability.getAttack() + sharpeningStone + extraDamage;
-        System.out.println(attack >= attackedEnemy.getActualHealth());
-        System.out.println(cacheManager.isFirstStealthAttack(session));
         if (attack >= attackedEnemy.getActualHealth() && cacheManager.isFirstStealthAttack(session)) {
             cacheManager.setFirstStealthAttack(session);
             // Gana uno de oro.
             statisticService.gainGold(currentPlayer, 1);
-            System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         }
         return PAGE_MAKE_DAMAGE;
     }
 
-    // Ballesta precisa.
+    // Ballesta precisa. (fufa)
     @GetMapping("/preciseBow")
     private String preciseBow(HttpSession session) {
-        // Si ya ha sido atacado con golpe de bastón, realiza más daño.
+        // Si ya ha sido atacado con ballesta precisa, realiza más daño.
         if (cacheManager.hasAlreadyAttackedWithPreciseBow(session))
             cacheManager.addAttack(session,  1);
         else
@@ -136,7 +133,7 @@ public class AbilityThiefController {
         return PAGE_MAKE_DAMAGE;
     }
 
-    // En las sombras.
+    // En las sombras. (fufa)
     @GetMapping("/inTheShadows")
     private String inTheShadows(HttpSession session) {
         // Previene dos puntos de daño.
@@ -144,7 +141,7 @@ public class AbilityThiefController {
         return PAGE_MAKE_DAMAGE;
     }
 
-    // Engañar
+    // Engañar. (fufa)
     @GetMapping("/deceive")
     private String deceive(HttpSession session) {
         Player currentPlayer = getCurrentPlayer();
@@ -157,7 +154,7 @@ public class AbilityThiefController {
         return PAGE_MAKE_DAMAGE;
     }
 
-    // Robar bolsillos.
+    // Robar bolsillos. (fufa)
     @GetMapping("/stealPockets")
     private String stealPockets() {
         Player currentPlayer = getCurrentPlayer();
@@ -167,32 +164,28 @@ public class AbilityThiefController {
             if (statistic.getGold() > 0 && player != currentPlayer) {
                 statisticService.loseGold(statistic, 1);
                 statisticService.gainGold(currentPlayer, 1);
-                System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
             }
         }
         return PAGE_MAKE_DAMAGE;
     }
 
-    // Saqueo1
+    // Saqueo1 (fufa)
     @GetMapping("/loot1")
     private String loot1() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas dos monedas por cada enemigo vivo.
         statisticService.gainGold(currentPlayer, 2 * getGame().getActualOrcs().size());
-        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         return PAGE_MAKE_DAMAGE;
     }
 
-    // Saqueo2
+    // Saqueo2 (fufa)
     @GetMapping("/loot2")
     public String loot2() {
         Player currentPlayer = getCurrentPlayer();
         // Ganas una moneda por cada enemigo vivo.
         statisticService.gainGold(currentPlayer, getGame().getActualOrcs().size());
-        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         // Gana un punto de gloria.
         statisticService.gainGlory(currentPlayer, 1);
-        System.out.println("Actualización del oro?" + getLoggedUser().getStatistic().getGold());
         return PAGE_MAKE_DAMAGE;
     }
 
