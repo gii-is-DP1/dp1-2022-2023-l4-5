@@ -193,12 +193,12 @@ VALUES ('Honda', '/resources/images/orcs/0-0_orc_back.png',
         '/resources/images/orcs/axe_orc_front.png', -1, 6, 4, 0, 0, 0, FALSE, FALSE, FALSE),
        ('Terminator', '/resources/images/orcs/0-0_orc_back.png',
         '/resources/images/orcs/axe_orc_front.png', -1, 6, 4, 1, 0, 0, FALSE, FALSE, FALSE),
-       ('Gurdrug', '/resources/images/orcs/nightlord_back.png',
-        '/resources/images/orcs/gur_nightlord_front.png', -1, 8, 0, 0, 0, 0, FALSE, FALSE, TRUE),
+       ('Gurdrug', '/resources/images/nightlords/nightlord_back.png',
+        '/resources/images/nightlords/gur_nightlord_front.png', -1, 8, 0, 0, 0, 0, FALSE, FALSE, TRUE),
        ('Roghkiller', '/resources/images/orcs/nightlord_back.png',
-        '/resources/images/orcs/rogh_nightlord_front.png', -1, 9, 0, 0, 0, 0, FALSE, FALSE, TRUE),
-       ('Shriekknifer', '/resources/images/orcs/nightlord_back.png',
-        '/resources/images/orcs/shriek_nightlord_front.png', -1, 10, 0, 0, 0, 0, FALSE, FALSE, TRUE);
+        '/resources/images/nightlords/rogh_nightlord_front.png', -1, 9, 0, 0, 0, 0, FALSE, FALSE, TRUE),
+       ('Shriekknifer', '/resources/images/nightlords/nightlord_back.png',
+        '/resources/images/nightlords/shriek_nightlord_front.png', -1, 10, 0, 0, 0, 0, FALSE, FALSE, TRUE);
 
 -- Productos
 INSERT INTO products(name, front_image, back_image, max_uses, price, attack, quantity, path_name)

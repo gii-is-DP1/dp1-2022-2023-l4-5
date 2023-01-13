@@ -3,7 +3,6 @@ package org.springframework.samples.nt4h.turn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.nt4h.card.ability.AbilityInGame;
 import org.springframework.samples.nt4h.card.ability.AbilityRepository;
-import org.springframework.samples.nt4h.card.ability.AbilityService;
 import org.springframework.samples.nt4h.card.ability.DeckService;
 import org.springframework.samples.nt4h.card.enemy.EnemyInGame;
 import org.springframework.samples.nt4h.game.Game;
@@ -37,17 +36,15 @@ public class ReestablishmentController {
     private final GameService gameService;
     private final TurnService turnService;
     private final Advise advise;
-    private final AbilityService abilityService;
 
     public final String VIEW_REESTABLISHMENT = "turns/reestablishmentPhase";
     private final String PAGE_REESTABLISHMENT = "redirect:/reestablishment";
     private final String NEXT_TURN = "redirect:/turns";
     private boolean hasAddedEnemies = false;
-    private final AbilityRepository abilityRepository;
 
 
     @Autowired
-    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise, AbilityService abilityService,
+    public ReestablishmentController(UserService userService, PlayerService playerService, DeckService deckService, GameService gameService, TurnService turnService, Advise advise,
                                      AbilityRepository abilityRepository) {
         this.playerService = playerService;
         this.userService = userService;
@@ -55,8 +52,6 @@ public class ReestablishmentController {
         this.gameService = gameService;
         this.turnService = turnService;
         this.advise = advise;
-        this.abilityService = abilityService;
-        this.abilityRepository = abilityRepository;
     }
 
     @ModelAttribute("loggedUser")
@@ -97,7 +92,7 @@ public class ReestablishmentController {
         if ((getLoggedPlayer() == currentPlayer) && !hasAddedEnemies) {
             List<EnemyInGame> enemiesInBattle = game.getActualOrcs();
             gameService.restoreEnemyLife(enemiesInBattle);
-            List<EnemyInGame> added = gameService.addNewEnemiesToBattle(enemiesInBattle, game.getAllOrcsInGame(), game);
+            List<EnemyInGame> added = gameService.addNewEnemiesToBattle(game);
             advise.addEnemies(added, game);
             hasAddedEnemies = true;
             playerService.savePlayer(currentPlayer);
@@ -115,7 +110,7 @@ public class ReestablishmentController {
         Turn oldTurn = turnService.getTurnsByPhaseAndPlayerId(Phase.REESTABLISHMENT, currentPlayer.getId());
         oldTurn.addAbility(currentAbility);
         turnService.saveTurn(oldTurn);
-        deckService.specificCardFromDeckToDiscard(currentPlayer, currentPlayer.getDeck(), currentAbility);
+        deckService.specificCardFromHandToDiscard(currentPlayer.getDeck(), currentAbility);
         advise.discardAbilityInHand(currentAbility, game);
         return PAGE_REESTABLISHMENT;
     }

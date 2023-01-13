@@ -121,8 +121,9 @@ public class HeroAttackController {
         oldTurn.setCurrentAbility(usedAbility);
         turnService.saveTurn(oldTurn);
         advise.heroAttack(usedAbility, attackedEnemy);
-        Optional<Enemy> nighLord = game.getActualOrcs().stream().map(EnemyInGame::getEnemy).filter(enemy -> enemy.getName().equals("Nigh Lord")).findFirst();
+        Optional<Enemy> nighLord = game.getActualOrcs().stream().map(EnemyInGame::getEnemy).filter(Enemy::getIsNightLord).findFirst();
         cacheManager.setAttackedEnemy(session, attackedEnemy.getId());
+
         return nighLord.map(enemy -> PAGE_ABILITY + "/" + enemy.getName().toLowerCase() + "/" + usedAbility.getId()).orElse(PAGE_ABILITY);
     }
 
