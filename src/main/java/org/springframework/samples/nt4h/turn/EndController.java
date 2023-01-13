@@ -28,16 +28,12 @@ public class EndController {
     private final String VIEW_END = "turns/endPhase";
 
     private final UserService userService;
-    private final TurnService turnService;
     private final GameService gameService;
-    private final PlayerService playerService;
     private final Advise advise;
 
     public EndController(UserService userService, TurnService turnService, GameService gameService, PlayerService playerService, Advise advise) {
         this.userService = userService;
-        this.turnService = turnService;
         this.gameService = gameService;
-        this.playerService = playerService;
         this.advise = advise;
     }
 
