@@ -41,7 +41,7 @@ En este juego hay cinco tipos de cartas:
 </div>
 
 
-- **Escenarios**(no están implmentados): Escenarios (no implementados): Estas cartas representan el lugar donde se librará la batalla épica entre los héroes y los orcos. Cada uno de estos escenarios poseerá su propia ambientación, condiciones y desafíos únicos, que agregarán una dimensión adicional al juego, y que harán que cada partida sea una experiencia distinta y emocionante.
+- **Escenarios**(no implementados): Estas cartas representan el lugar donde se librará la batalla épica entre los héroes y los orcos. Cada uno de estos escenarios poseerá su propia ambientación, condiciones y desafíos únicos, que agregarán una dimensión adicional al juego, y que harán que cada partida sea una experiencia distinta y emocionante.
 
 ![Escenario](https://user-images.githubusercontent.com/72869496/212862427-f2004a32-e821-409d-9eb0-9631d03e62a7.png)
 
@@ -51,7 +51,7 @@ Al inicio del juego, cada participante elegirá a los héroes que desea utilizar
 
 Tras el comienzo de la partida, cada turno se divide en varias fases:
 
-- **Elección estratégica**: Durante esta fase, el jugador deberá elegir entre evitar el embate de los orcos (esto sólo será posible en una ocasión durante el juego) o emprender una acción ofensiva contra ellos.
+- **Elección estratégica**: Durante esta fase, el jugador deberá elegir entre evitar el combate contra los orcos (esto sólo será posible en una ocasión durante el juego) o emprender una acción ofensiva contra ellos.
 
 ![Elección estratégica](https://user-images.githubusercontent.com/72869496/212870266-12c16f7e-f669-40f7-9e16-030db8bed6f6.png)
 
