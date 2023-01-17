@@ -12,7 +12,7 @@
 - Pedro Jesús Ruiz Aguilar
 - Ismael Ruiz Jurado
 - Laura Roldán Merat
-- Iván Sánchez Sanjose
+- Iván Sánchez Sanjosé
 - Alejandro Santiago Félix
 
 # Descripción del Juego
