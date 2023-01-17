@@ -1,117 +1,86 @@
-# Spring PetClinic Sample Application 
+![Logo](src/main/resources/static/resources/images/LogoNT4H.png)
 
-This is a fork of https://github.com/spring-projects/spring-petclinic to be used for the DP1 course. The main changes that have been performed were:
-- Trimming several parts of the application to keep the example low
-- Reorganize some parts of the code according to best practices introduced in the course
+# Enlaces Importantes
 
-## Understanding the Spring Petclinic application with a few diagrams
-<a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
+- URL al video de explicación de normas del juego: 
 
-## Running petclinic locally
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
+- URL al video de demostración de la aplicación: 
 
+# Participantes del Proyecto
 
-```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
-cd spring-petclinic
-./mvnw package
-java -jar target/*.jar
-```
+- Álvaro Hidalgo Rodríguez
+- Pedro Jesús Ruiz Aguilar
+- Ismael Ruiz Jurado
+- Laura Roldán Merat
+- Iván Sánchez Sanjose
+- Alejandro Santiago Félix
 
-You can then access petclinic here: http://localhost:8080/
+# Descripción del Juego
 
-<img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
+"No Time For Heroes" es un juego estratégico de cartas con una dinámica de juego para dos a cuatro jugadores (incluyendo también un modo solitario no implementado), cuyas partidas tienen una duración aproximada de entre 20 y 40 minutos. El objetivo del juego es alcanzar la máxima gloria posible, ya sea a través de la eliminación de orcos o la acumulación de riquezas.
 
-Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this it will pick up changes that you make in the project immediately (changes to Java source files require a compile as well - most people use an IDE for this):
+En este juego hay cinco tipos de cartas:
 
-```
-./mvnw spring-boot:run
-```
+- **Héroes**: Estas cartas representan a los valerosos personajes que los jugadores pueden seleccionar para sus partidas. Cada uno de estos héroes cuenta con una serie de efectos y capacidades, que no solo afectarán al cálculo de daño final en batalla contra los orcos, sino también a las decisiones que los jugadores tomarán en relación a las compras en la tienda. Los jugadores pueden elegir uno o dos héroes para cada partida.
 
-## In case you find a bug/suggested improvement for Spring Petclinic
-Our issue tracker is available here: https://github.com/gii-is-DP1/spring-petclinic/issues
+![Héroe](https://user-images.githubusercontent.com/72869496/212858190-44737448-75ba-44ab-9be6-4850a828ea0f.png)
 
+- **Habilidades**: Estas cartas representan el arsenal de técnicas y habilidades que cada héroe posee, son una manifestación de su valentía y astucia en batalla, diseñadas para causar un impacto devastador en los orcos enemigos y cuyos efectos son de gran importancia en el desarrollo de la partida, pudiendo ser el factor crucial que determina la victoria sobre la derrota.
 
-## Database configuration
+![Habilidad](https://user-images.githubusercontent.com/72869496/212858903-d11e3f6c-a798-4b71-9eaa-2fdf53e255b9.png)
 
-In its default configuration, Petclinic uses an in-memory database (H2) which
-gets populated at startup with data. 
+- **Productos**: Estas cartas representan los objetos y armamentos que pueden ser adquiridos en la tienda en el transcurso de la partida, siempre y cuando el héroe posea las capacidades necesarias para hacerlo. Al igual que las habilidades, estos productos poseen una serie de efectos y habilidades que pueden ser utilizadas para causar daño a los orcos, pero deben ser adquiridos durante el desarrollo de la partida, y no se encuentran disponibles desde el comienzo del juego.
 
-## Working with Petclinic in your IDE
+![Producto](https://user-images.githubusercontent.com/72869496/212860521-ffbbf695-d9a4-4764-819b-9f19ddcb7e7f.png)
 
-### Prerequisites
-The following items should be installed in your system:
-* Java 8 or newer.
-* git command line tool (https://help.github.com/articles/set-up-git)
-* Your preferred IDE 
-  * Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, just follow the install process here: https://www.eclipse.org/m2e/
-  * [Spring Tools Suite](https://spring.io/tools) (STS)
-  * IntelliJ IDEA
-  * [VS Code](https://code.visualstudio.com)
+- **Enemigos**: Estas cartas representan a las entidades hostiles que los héroes deben enfrentar en su aventura, cuyo objetivo es eliminar a los héroes. Entre estos enemigos, se pueden distinguir a los orcos comunes y a los señores de la guerra, los cuales se diferencian entre sí en cuanto a su vitalidad, efectos durante la partida y recompensa al ser vencidos. Los señores de la guerra, al ser los últimos enemigos a enfrentar, poseen una mayor vitalidad, aplican efectos durante la partida, y su recompensa se da por cada carta utilizada en su derrota en lugar de darla al morir, como es el caso de los orcos comunes.
 
-### Steps:
-
-1) On the command line
-```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
-```
-2) Inside Eclipse or STS
-```
-File -> Import -> Maven -> Existing Maven project
-```
-
-Then either build on the command line `./mvnw generate-resources` or using the Eclipse launcher (right click on project and `Run As -> Maven install`) to generate the css. Run the application main method by right clicking on it and choosing `Run As -> Java Application`.
-
-3) Inside IntelliJ IDEA
-
-In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
-
-CSS files are generated from the Maven build. You can either build them on the command line `./mvnw generate-resources`
-or right click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
-
-A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate
-version. Otherwise, run the application by right clicking on the `PetClinicApplication` main class and choosing
-`Run 'PetClinicApplication'`.
-
-4) Navigate to Petclinic
-
-Visit [http://localhost:8080](http://localhost:8080) in your browser.
+<div style="display: flex;">
+  <img src="https://user-images.githubusercontent.com/72869496/212861639-2a0d71d8-ed7a-4d62-942a-b66328ae2b88.png" alt="Orco" style="width: 25%;">
+  <img src="https://user-images.githubusercontent.com/72869496/212861745-e3bf82fb-9988-44cb-a18f-0b770a378234.png" alt="Señor de la guerra" style="width: 25%;">
+</div>
 
 
-## Looking for something in particular?
+- **Escenarios**(no están implmentados): Escenarios (no implementados): Estas cartas representan el lugar donde se librará la batalla épica entre los héroes y los orcos. Cada uno de estos escenarios poseerá su propia ambientación, condiciones y desafíos únicos, que agregarán una dimensión adicional al juego, y que harán que cada partida sea una experiencia distinta y emocionante.
 
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources) |
-|Caching | [CacheConfiguration](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
+![Escenario](https://user-images.githubusercontent.com/72869496/212862427-f2004a32-e821-409d-9eb0-9631d03e62a7.png)
 
-## Interesting Spring Petclinic branches and forks
+Al inicio del juego, cada participante elegirá a los héroes que desea utilizar (ya sea uno o dos) y asignará las habilidades correspondientes de acuerdo a los roles de cada uno de los héroes. Posteriormente, se procederá a seleccionar aleatoriamente dos cartas, y el jugador que cause mayor daño iniciará el juego. En caso de empate, el jugador con mayor edad tendrá prioridad.
 
-The Spring Petclinic master branch in the main [spring-projects](https://github.com/spring-projects/spring-petclinic)
-GitHub org is the "canonical" implementation, currently based on Spring Boot and Thymeleaf. There are
-[quite a few forks](https://spring-petclinic.github.io/docs/forks.html) in a special GitHub org
-[spring-petclinic](https://github.com/spring-petclinic). If you have a special interest in a different technology stack
-that could be used to implement the Pet Clinic then please join the community there.
+![Selección de héroe](https://user-images.githubusercontent.com/72869496/212869943-9880875f-bf8e-4e68-bacb-87c6fcfeafc6.png)
 
-# Contributing
+Tras el comienzo de la partida, cada turno se divide en varias fases:
 
-The [issue tracker](https://github.com/gii-is-DP1/spring-petclinic/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
+- **Elección estratégica**: Durante esta fase, el jugador deberá elegir entre evitar el embate de los orcos (esto sólo será posible en una ocasión durante el juego) o emprender una acción ofensiva contra ellos.
 
-For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. If you have not previously done so, please fill out and submit the [Contributor License Agreement](https://cla.pivotal.io/sign/spring).
+![Elección estratégica](https://user-images.githubusercontent.com/72869496/212870266-12c16f7e-f669-40f7-9e16-030db8bed6f6.png)
 
-# License
+- **Evasión**: Durante este turno, el jugador deberá sacrificar al menos dos cartas con el objetivo de eludir el ataque de los orcos, accediendo de manera directa a la fase del mercado.
 
-The Spring PetClinic sample application is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
+![Evasión](https://user-images.githubusercontent.com/72869496/212870467-e7975708-9be5-43ee-82e0-a8b7ed41cdeb.png)
 
-[spring-petclinic]: https://github.com/spring-projects/spring-petclinic
-[spring-framework-petclinic]: https://github.com/spring-petclinic/spring-framework-petclinic
-[spring-petclinic-angularjs]: https://github.com/spring-petclinic/spring-petclinic-angularjs 
-[javaconfig branch]: https://github.com/spring-petclinic/spring-framework-petclinic/tree/javaconfig
-[spring-petclinic-angular]: https://github.com/spring-petclinic/spring-petclinic-angular
-[spring-petclinic-microservices]: https://github.com/spring-petclinic/spring-petclinic-microservices
-[spring-petclinic-reactjs]: https://github.com/spring-petclinic/spring-petclinic-reactjs
-[spring-petclinic-graphql]: https://github.com/spring-petclinic/spring-petclinic-graphql
-[spring-petclinic-kotlin]: https://github.com/spring-petclinic/spring-petclinic-kotlin
-[spring-petclinic-rest]: https://github.com/spring-petclinic/spring-petclinic-rest
+
+- **Ataque de los héroes**: Durante este turno, el personaje principal tendrá la opción de emplear las cartas de habilidad para infligir daño a los orcos y, en consecuencia, adquirir riquezas y gloria.
+
+![Ataque de los héroes](https://user-images.githubusercontent.com/72869496/212874949-1a1d96a8-2599-4060-8be5-20d36865b469.png)
+
+
+- **Ataque de los orcos**: Durante este turno, los orcos embestirán contra el jugador que los haya atacado en la fase ofensiva, utilizando la vida que aún les quede.
+
+![Ataque de los orcos](https://user-images.githubusercontent.com/72869496/212875103-e7abd8fa-5bf4-4fa1-b56a-81927b85869f.png)
+
+
+- **Mercado**: Durante este turno, el jugador tendrá la posibilidad de adquirir artículos en la tienda, siempre y cuando cuente con las capacidades necesarias para su uso.
+
+![Mercado](https://user-images.githubusercontent.com/72869496/212871407-9364921a-6e7d-4ebb-a1b5-db9e032f13e2.png)
+
+- **Reestablecimiento**: En este turno, el participante que tenga el mando de juego, será responsable de incorporar a la arena de combate los orcos que falteen y, además, si cuenta con una cantidad superior a 5 cartas, deberá descartar algunas hasta alcanzar la cantidad de 5, en caso contrario, deberá recoger cartas hasta llegar a esa cifra.
+
+![Reestablecimiento](https://user-images.githubusercontent.com/72869496/212874751-64b964df-3b84-433b-98af-f6d3efb5d9ce.png)
+
+El juego concluirá cuando el señor de la guerra sea derrotado, en ese momento se llevará a cabo el cálculo de las puntuaciones y aquel que haya alcanzado una mayor gloria será declarado ganador.
+
+
+
+
+
